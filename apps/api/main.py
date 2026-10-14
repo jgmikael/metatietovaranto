@@ -1,4 +1,4 @@
-"""Phase 2A catalogue: migrations and organizations, no authentication workflow."""
+"""Phase 2B catalogue: OIDC sessions and organization-scoped editing."""
 import os
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
@@ -16,6 +16,7 @@ from sqlalchemy.orm import Session
 from apps.api.public_url import public_base_url
 from apps.api.models import Base, Product, Organization, DemoInitialization
 from apps.api.migrate import upgrade_database
+from apps.api.auth import build_router, seed_memberships, require_session, require_editor
 
 ROOT = Path(__file__).resolve().parents[2]
 BASE_URL = public_base_url()
@@ -92,7 +93,7 @@ def jsonld(product):
 @asynccontextmanager
 async def lifespan(app):
     if os.getenv("DEMO_MODE") != "true":
-        raise RuntimeError("Vaihe 1 vaatii DEMO_MODE=true; vain paikalliseen demokäyttöön")
+        raise RuntimeError("Demo vaatii DEMO_MODE=true; vain paikalliseen demokäyttöön")
     # Fail startup before readiness/fixtures if adoption or upgrade is unsafe.
     upgrade_database(engine)
     with Session(engine) as session:
@@ -116,10 +117,20 @@ async def lifespan(app):
                 assign(product, ProductInput(**payload), session)
                 session.add(product)
             session.add(DemoInitialization(name="phase-1-fixtures"))
+        seed_memberships(session)
         session.commit()
     yield
 
 app = FastAPI(title="Metatietovaranto — paikallinen demo", lifespan=lifespan)
+app.include_router(build_router(engine, BASE_URL))
+
+@app.middleware("http")
+async def private_auth_responses(request, call_next):
+    response = await call_next(request)
+    if request.url.path.startswith(("/auth/", "/identity/")):
+        response.headers["Cache-Control"] = "no-store"
+        response.headers["Referrer-Policy"] = "no-referrer"
+    return response
 
 def serialize_organization(organization):
     return {"id": str(organization.id), "legalName": organization.legal_name,
@@ -190,8 +201,10 @@ def detail(product_id: UUID):
         return serialize(get_product(session, product_id))
 
 @app.post("/api/v1/products", status_code=201)
-def create(data: ProductInput, response: Response):
+def create(data: ProductInput, response: Response, request: Request):
     with Session(engine) as session:
+        identity = require_session(request, session)
+        require_editor(session, identity, data.providerOrganizationId)
         product = Product()
         assign(product, data, session)
         session.add(product)
@@ -200,17 +213,23 @@ def create(data: ProductInput, response: Response):
         return serialize(product)
 
 @app.put("/api/v1/products/{product_id}")
-def update(product_id: UUID, data: ProductInput):
+def update(product_id: UUID, data: ProductInput, request: Request):
     with Session(engine) as session:
+        identity = require_session(request, session)
         product = get_product(session, product_id)
+        require_editor(session, identity, product.provider_organization_id)
+        require_editor(session, identity, data.providerOrganizationId)
         assign(product, data, session)
         session.commit()
         return serialize(product)
 
 @app.delete("/api/v1/products/{product_id}", status_code=204)
-def delete(product_id: UUID):
+def delete(product_id: UUID, request: Request):
     with Session(engine) as session:
-        session.delete(get_product(session, product_id))
+        identity = require_session(request, session)
+        product = get_product(session, product_id)
+        require_editor(session, identity, product.provider_organization_id)
+        session.delete(product)
         session.commit()
 
 @app.get("/api/v1/products/{product_id}/export")

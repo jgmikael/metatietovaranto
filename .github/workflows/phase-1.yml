@@ -26,21 +26,20 @@ jobs:
       - run: uv sync --locked
       - run: npm ci --prefix apps/web
       - run: npm run build --prefix apps/web
-      - run: .venv/bin/pytest tests/test_api.py tests/test_migrations.py tests/test_public_url.py -q
+      - run: .venv/bin/pytest tests/test_api.py tests/test_auth.py tests/test_migrations.py tests/test_public_url.py -q
       - run: .venv/bin/playwright install --with-deps chromium
-      - name: Run live browser tests
+      - name: Run live OIDC browser tests
         env:
-          DEMO_MODE: 'true'
-          DATABASE_URL: postgresql+psycopg://demo:demo@localhost:5432/catalog_test
-          BROWSER_BASE_URL: http://127.0.0.1:8000
+          BROWSER_BASE_URL: http://localhost:8000
         run: |
-          .venv/bin/uvicorn apps.api.main:app --host 127.0.0.1 --port 8000 > /tmp/api.log 2>&1 &
-          API_PID=$!
-          trap 'kill "$API_PID"' EXIT
-          for attempt in $(seq 1 30); do
-            if curl --fail http://127.0.0.1:8000/health/ready; then break; fi
-            sleep 1
-          done
+          # Unit/integration PostgreSQL service owns 5432; only the live Compose DB uses a different host port.
+          cat > /tmp/compose-browser.yaml <<'YAML'
+          services:
+            db:
+              ports: !override
+                - "127.0.0.1:5433:5432"
+          YAML
+          export COMPOSE_FILE=compose.yaml:/tmp/compose-browser.yaml
+          docker compose up --build -d --wait
+          trap 'docker compose logs app keycloak; docker compose down' EXIT
           .venv/bin/pytest tests/test_browser.py -q
-      - run: docker build -t metatietovaranto-app .
-

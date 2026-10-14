@@ -86,7 +86,7 @@ def test_legacy_upgrade_preserves_every_field_and_does_not_merge_names(migration
 def test_empty_upgrade_and_repeat_start_seed_only_once(migration_database):
     upgrade_database(engine)
     with engine.connect() as connection:
-        assert connection.scalar(text('SELECT version_num FROM alembic_version'))=='0002_organizations'
+        assert connection.scalar(text('SELECT version_num FROM alembic_version'))=='0003_auth'
         assert connection.scalar(text('SELECT count(*) FROM products'))==0
     with TestClient(app) as client:
         products = client.get('/api/v1/products').json()['items']
@@ -131,4 +131,30 @@ def test_initial_revision_matches_phase1_and_can_be_upgraded(migration_database)
     upgrade_database(engine, '0001_phase1')
     upgrade_database(engine)
     with engine.connect() as connection:
-        assert connection.scalar(text('SELECT version_num FROM alembic_version'))=='0002_organizations'
+        assert connection.scalar(text('SELECT version_num FROM alembic_version'))=='0003_auth'
+
+
+def test_phase2a_upgrade_preserves_organizations_and_products(migration_database):
+    from uuid import uuid4
+    upgrade_database(engine,'0002_organizations')
+    organization_id,product_id=uuid4(),uuid4()
+    with engine.begin() as connection:
+        connection.execute(text('''INSERT INTO organizations (id,legal_name,country,identifiers,synthetic)
+            VALUES (:id,'Aiempi organisaatio','FI','[{"scheme":"demo","value":"säilyvä-tunniste"}]',true)'''),{'id':organization_id})
+        connection.execute(text('''INSERT INTO products (id,title,description,provider,theme,metadata,modified_at,provider_organization_id)
+            VALUES (:id,'Muokattu 2A-tuote','Säilytettävä kuvaus','Aiempi organisaatio','Testi',
+            CAST(:metadata AS JSONB),'2026-01-02T03:04:05Z',:org)'''),{'id':product_id,'org':organization_id,'metadata':json.dumps({'synthetic':True,'extra':{'important':42}})})
+        connection.execute(text("INSERT INTO demo_initialization VALUES ('phase-1-fixtures')"))
+    before=legacy_rows(engine)
+    with engine.connect() as connection:
+        organization_before=dict(connection.execute(text('SELECT * FROM organizations')).mappings().one())
+    upgrade_database(engine)
+    upgrade_database(engine)
+    with TestClient(app) as client:
+        assert client.get('/api/v1/products').json()['total']==1
+        assert client.get(f'/api/v1/products/{product_id}').json()['providerOrganizationId']==str(organization_id)
+    assert legacy_rows(engine)==before
+    with engine.connect() as connection:
+        assert dict(connection.execute(text('SELECT * FROM organizations')).mappings().one())==organization_before
+        # Custom organizations never receive demo rights solely because their names or fields look familiar.
+        assert connection.scalar(text('SELECT count(*) FROM organization_memberships'))==0

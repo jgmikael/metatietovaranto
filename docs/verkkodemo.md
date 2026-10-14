@@ -8,7 +8,7 @@ Tämä käynnistää nykyisen vaiheen 1 demon GitHub Codespacesissa. Paikallisia
 2. Tarkista Branch `demo/codespaces`, valitse 2-core-kone ja **Create codespace**. Tarkista GitHubin näyttämä käyttö- ja laskutustieto ennen luontia.
 3. Odota konttien ensimmäistä rakennusta. Tähän voi kulua useita minuutteja. Sovellus ja tietokanta käynnistyvät automaattisesti; terminaalikomentoja ei tarvita tavallisessa käynnistyksessä.
 4. Demo pyritään avaamaan automaattisesti uuteen selainvälilehteen. Jos selain estää avaamisen, avaa editorin alaosan **PORTS**-välilehti. Etsi portti **8000**, jonka nimi on **Avaa Metatietovarannon demo**, ja valitse maapallokuvake **Open in Browser**.
-5. Säilytä portin näkyvyys arvossa **Private**. GitHub-kirjautuminen suojaa pääsyn; sovelluksen oma kirjautuminen kuuluu myöhempään vaiheeseen.
+5. Säilytä portin näkyvyys arvossa **Private**. GitHub-kirjautuminen suojaa pääsyn; vaiheessa 2B sovelluksen tuoteylläpito vaatii lisäksi OIDC-kirjautumisen.
 
 Selaimen osoite on GitHubin luoma `https://<codespacen-nimi>-8000.app.github.dev`. Lopullinen osoite syntyy vasta codespacea luotaessa, eikä sitä voi päätellä etukäteen repositorion nimestä. Älä vaihda protokollaa HTTPS:ksi PORTS-asetuksissa: sisäinen sovellus käyttää HTTP:tä ja GitHub huolehtii ulkoisesta HTTPS-yhteydestä.
 
@@ -17,7 +17,7 @@ Selaimen osoite on GitHubin luoma `https://<codespacen-nimi>-8000.app.github.dev
 - Hae `verovelka` ja avaa löytynyt tuote.
 - Tutustu kuvaukseen ja tietoelementteihin; avaa JSON- ja JSON-LD-viennit.
 - Lisää oma synteettinen tietotuote, muokkaa sitä ja lataa sivu uudelleen.
-- Poista oma testituotteesi tarvittaessa. Kaikki tähän demoon pääsevät voivat muuttaa sen tietoja, joten pidä portti yksityisenä.
+- Poista oma testituotteesi tarvittaessa. Ylläpito on rajattu kirjautuneen organisaation muokkaajille. Pidä portti silti yksityisenä.
 
 Kolme alkuperäistä esimerkkiä ovat verovelkatieto, yrityksen perustiedot ja ammattipätevyys. Älä lisää aitoja rekisteritietoja tai henkilötietoja.
 
@@ -33,6 +33,6 @@ Kopioi **Creation log** -näkymän virhe ja pyydä korjaamaan se. Älä tee port
 
 Tämän toimituksen paikallinen tarkistus ei yksin todista, että oman tilisi Codespaces-luonti onnistuu. Ensimmäinen oikea käynnistys vahvistetaan tililläsi, jossa ovat repositorion ja Codespacesin käyttöoikeudet.
 
-## Vaiheen 2A kokeilu ennen yhdistämistä
+## Vaiheen 2B selainkokeilu
 
-Valitse Codespaces-luonnissa haara `feat/phase-2a-organizations` tai käytä READMEn erillistä kokeilulinkkiä. Uusi Codespace saa oman tyhjän tietokantansa. Kokeile Organisaatiot-linkkiä ja tuotteen Tarjoaja-valintaa. Säilytä portti 8000 **Private**-tilassa. Nykyinen automaattinen selainavaus säilyy. Vanhan kannan päivitys-, varmuuskopio- ja Rebuild Container -ohjeet ovat READMEssä; tavallinen uudelleenkäynnistys ei poista muokkauksia eikä siemennä fixtureitä uudelleen.
+Valitse haara `feat/phase-2b-auth` READMEn linkistä ja luo uusi Codespace. Portti 8000 avautuu kuten aiemmin; Keycloak toimii saman osoitteen /identity-polun kautta. Haku ja viennit toimivat anonyymisti, mutta ylläpitoon tarvitaan demotunnus: `vero` / `demo-vero`, `yritys` / `demo-yritys` tai vain lukuun `lukija` / `demo-lukija`. Uloskirjautuminen päättää sovellusistunnon ja pyytää Keycloakin Log out -vahvistuksen. Säilytä portti Private-tilassa.

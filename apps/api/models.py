@@ -1,4 +1,4 @@
-"""Persistent phase 2A models. Schema changes belong in Alembic revisions."""
+"""Persistent catalogue, membership and session models. Schema changes belong in Alembic revisions."""
 from datetime import datetime
 from uuid import UUID, uuid4
 
@@ -39,3 +39,29 @@ class Product(Base):
 class DemoInitialization(Base):
     __tablename__ = "demo_initialization"
     name: Mapped[str] = mapped_column(String(100), primary_key=True)
+
+
+class OrganizationMembership(Base):
+    __tablename__ = "organization_memberships"
+    subject: Mapped[str] = mapped_column(String(255), primary_key=True)
+    organization_id: Mapped[UUID] = mapped_column(
+        PGUUID(as_uuid=True), ForeignKey("organizations.id", ondelete="RESTRICT"), primary_key=True)
+    role: Mapped[str] = mapped_column(String(20))
+
+
+class WebSession(Base):
+    __tablename__ = "web_sessions"
+    token_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    subject: Mapped[str] = mapped_column(String(255))
+    username: Mapped[str] = mapped_column(String(255))
+    csrf_token: Mapped[str] = mapped_column(String(64))
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+
+
+class OAuthFlow(Base):
+    __tablename__ = "oauth_flows"
+    state_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    flow_hash: Mapped[str] = mapped_column(String(64))
+    verifier: Mapped[str] = mapped_column(String(128))
+    nonce: Mapped[str] = mapped_column(String(128))
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
