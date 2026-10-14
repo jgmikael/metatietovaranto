@@ -42,7 +42,7 @@ Kehityksen aikaiset epäonnistumiset korjattiin: migraatiotestien siivoukseen j�
 
 ## Toimitus
 
-Pull requestin kuvaus: docs/pull-request.md. Haaran push ja PR:n avaustulos kirjataan seuraavaksi. Mainiin ei yhdistetä automaattisesti.
+Haara `feat/phase-2c-publication` on pushattu GitHubiin. Pull requestia **ei luotu**: sekä `gh pr create --base main --head feat/phase-2c-publication --title ... --body-file docs/pull-request.md` että REST-varayritys `gh api --method POST repos/jgmikael/metatietovaranto/pulls --input /tmp/phase2c-pr.json` palauttivat `Post https://api.github.com/...: Forbidden`. Tämä on ympäristön GitHub API -pääsyn este; Git-push onnistui. Valmis kuvaus on docs/pull-request.md. PR:n voi avata selaimessa https://github.com/jgmikael/metatietovaranto/compare/main...feat/phase-2c-publication . Main-haaraan ei yhdistetty mitään.
 
 ---
 
