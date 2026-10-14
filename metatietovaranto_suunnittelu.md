@@ -1,8 +1,8 @@
 # Metatietovarannon toteutussuunnitelma ja tekoälykoodauksen kehote
 
-Versio 1.1 · 14.10.2026 · Toteutusehdotus Suomen julkishallinnon käyttöön
+Versio 1.2 · 14.10.2026 · Toteutusehdotus Suomen julkishallinnon käyttöön
 
-Version 1.1 täsmennys: tietotuotteen semanttinen perusta on Tietomallit-työkalun soveltamisprofiili. Katso sitova periaate luvusta 1.3 ja tarkennus `docs/semanttinen-periaate-1.md`. Toista suunnitteluolettamaa ei ole vielä käsitelty.
+Version 1.2 täsmennykset: semanttinen perusta on Tietomallit-soveltamisprofiili (luku 1.3). Ensisijainen toimitusmuoto on W3C VC ja tuotesivu ohjaa erilliseen myöntäjäpalveluun pysyvällä asiointilinkillä (luku 1.4). Tarkat päätökset ovat `docs/semanttinen-periaate-1.md` ja `docs/vc-periaate-2.md`.
 
 ## 1 Tarkoitus ja käyttöohje
 
@@ -31,6 +31,14 @@ Jokaisen tietotuotteen semanttinen tietomalli perustuu Yhteentoimivuusalustan Ti
 JSON-LD, RDF kuten RDF/XML ja Turtle ovat RDF/SHACL-aineiston esityksiä. OpenAPI ja JSON Schema ovat profiilista tuotettuja johdannaisia; ne eivät yksin korvaa SHACL-perustaa. JSON-exportin rooli ja skeemadialekti tunnistetaan sisällöstä. Pelkkä JSON-LD-konteksti ei ole soveltamisprofiili. Kaikkia exportteja ei vaadita jokaiselle tuotteelle.
 
 Tietotuoteversio sitoutuu yksilöityyn profiiliversioon tai lukittuun snapshotiin. Linkin ja tiedoston tulee olla vaihtoehtoisia toimitustapoja; palvelu voi säilyttää linkistä noudetun kopion. Tietoelementtiluettelo johdetaan profiilista. Profiilin ja sitä käyttävän tuotteen metatiedot, katalogin vienti sekä todistuksen kuori ovat eri asioita. Täsmälliset kentät ja hyväksymisehdot ovat dokumentissa `docs/semanttinen-periaate-1.md`. Tämä periaate on ensisijainen suhteessa tämän suunnitelman yleisempiin muotoiluihin.
+
+### 1.4 W3C VC ensisijaisena toimitusmuotona
+
+Tietotuotteen ensisijainen toimitusmuoto on W3C VC; tavoiteprofiili käyttää W3C VCDM 2.0:aa ja JSON-LD:tä. Metatietovaranto kuvaa tuotteen, sisältöprofiilin, todistusprofiilin ja myöntämispalvelun. Tuotesivun ensisijainen toiminto on **Pyydä todistus lompakkoon**, joka avaa myöntäjän pysyvän HTTPS-asiointiosoitteen oikean tuotteen kohdalla. REST/JSON on vaihtoehtoinen jakelu. Suunnitteilla oleva VC-jakelu merkitään näkyvästi.
+
+Myöntäjäpalvelu vastaa pyynnön käsittelystä, hakijan ja kohteen tunnistamisesta, edustamisoikeudesta, lähdetiedon hankinnasta, myöntämispäätöksestä, sisällön validoinnista, VC:n suojaamisesta ja toimittamisesta lompakkoon. Katalogiin ei tallenneta henkilökohtaisia myöntämistarjouksia tai käyttöoikeustokeneita eikä se välitä varsinaisia todistuksia. Pysyvä asiointilinkki erotetaan myöntäjän muodostamasta Credential Offer -linkistä tai QR-koodista. OpenID4VCI 1.0 on ensisijainen tavoiteprotokolla; sen tai VC-formaatin tuki ei yksin takaa EUDIW-/EBW-yhteensopivuutta.
+
+Lompakkojakelu yksilöi myöntäjän, teknisen palvelun, asiointilinkin, todistuskonfiguraatiot sekä sisältöprofiilin version. Todistuksen kohde, hakija ja lompakon haltija erotetaan. Oikeudellinen todistusluokka arvioidaan teknisestä muodosta erillään. Kentät, käyttäjäpolku ja hyväksymisehdot ovat `docs/vc-periaate-2.md`:ssä. Periaatteet 1 ja 2 täydentävät toisiaan ja ovat ensisijaisia suhteessa suunnitelman yleisempiin esimerkkimuotoiluihin.
 
 ## 2 Käyttötapaukset ja käyttäjät
 
@@ -262,6 +270,7 @@ Suunniteltu jakelu voidaan julkaista vain, jos se on näkyvästi `planned`, muka
 | qualificationEvidenceIds | E Vahvistetulle QEAA- tai julkisen toimijan erityisluokalle luottamusnäyttö. |
 | supportedRepresentations | P Formaattikohtaiset adapterit ja metatiedot. |
 | issuanceServiceId | P Kuvattu myöntämispalvelu. |
+| issuanceInitiationUrl | E Käytettävissä olevan jakelun pysyvä myöntäjän HTTPS-asiointilinkki; erillään henkilökohtaisista Credential Offer -linkeistä. |
 | subjectIdentification ja holderBinding | P Kohteen yksilöintitapa ja haltijasidonnan vaatimus tai perusteltu soveltumattomuus. |
 | validityPolicy | P Voimassaolon määräytyminen, enimmäiskesto ja uusiutuminen. |
 | statusPolicy | P Voimassaolon tai peruutuksen tarkistusmenetelmä, ohjeen URL ja yksityisyysominaisuudet. |
@@ -270,7 +279,7 @@ Suunniteltu jakelu voidaan julkaista vain, jos se on näkyvästi `planned`, muka
 | revocationTriggers ja incidentContact | P Peruutuksen syyt ja häiriöyhteys. |
 | assuranceAssessment | P assessed, unassessed tai expired, arvioija, ajankohta ja perustelu. |
 
-`supportedRepresentations` kuvaa esimerkiksi W3C VC JSON-LD-, SD-JWT VC- tai mdoc-esityksen, mutta toteutus ei oleta niiden olevan kaikissa lompakoissa keskenään vaihdettavia. Adapterissa ovat `format`, `formatVersion`, `schemaArtifactId`, `semanticMappingArtifactId`, `credentialTypeIdentifiers`, `cryptographicSuiteReferences`, `walletProfileReferences` ja `interoperabilityEvidence`. W3C VCDM on semanttisen demoprofiilin lähtökohta; tuotannon sallittu formaatti määräytyy käytettävän eIDAS- ja lompakkoprofiilin mukaan. [S10]
+`supportedRepresentations` kuvaa ensisijaisesti W3C VC:n VCDM-version, JSON-LD-kontekstin ja suojausmekanismin. Adapterissa ovat `format`, `formatVersion`, `schemaArtifactId`, `semanticMappingArtifactId`, `credentialTypeIdentifiers`, `cryptographicSuiteReferences`, `walletProfileReferences` ja `interoperabilityEvidence`. W3C VCDM 2.0 ja JSON-LD ovat tavoiteprofiili; nimetyn EUDIW-/EBW-lompakkoprofiilin tuki on todennettava erikseen. SD-JWT VC ja mdoc eivät ole automaattisesti W3C VC:n keskenään vaihdettavia esityksiä. Mahdolliset muut formaatit edellyttävät erillistä kartoitusta ja todennusta. [S10]
 
 OpenID4VCI-palvelun kuvauksessa `credentialIssuer` yksilöi issuer-metadataa tarjoavan tahon ja `credentialConfigurationIds` sen tukemat nimetyt konfiguraatiot. Lisää valtuutuspalvelimen metatieto-URL ja dokumentaatioviite. Älä rakenna tuotannon myöntämisprotokollaa itse ensimmäiseen versioon. [S11]
 
@@ -360,7 +369,7 @@ Toteuta suomenkielinen responsiivinen käyttöliittymä. Koodipohja tukee fi-, s
 
 Julkinen haku sisältää vapaan tekstin, teeman, tarjoajan, kohteen tyypin, semanttisen termin, jakelutavan, maantieteellisen alueen, saatavuustilan ja todennetun todistusluokan suodattimet. Hakutulos näyttää myös metatiedon tarkistusajan. Luottamusmerkinnöissä käytetään tekstiselitettä värin lisäksi.
 
-Tuotesivun ensisijaiset osat ovat sisältö ja käyttötarkoitus, tietoelementit, tarjoaja ja lähteet, käyttöönoton ehdot, jakelutavat sekä laatu ja voimassaolo. Tekniset skeemat, JSON-LD, Turtle ja versiovertailu ovat avattavissa. Lompakkopainike ”Myöntämispalvelun ohjeet” avaa dokumentoidun palvelun; se ei väitä myöntävänsä todistusta suoraan katalogista.
+Tuotesivun ensisijaiset osat ovat sisältö ja käyttötarkoitus, tietoelementit, tarjoaja ja lähteet, käyttöönoton ehdot, jakelutavat sekä laatu ja voimassaolo. Tekniset skeemat, JSON-LD, Turtle ja versiovertailu ovat avattavissa. Lompakkopainike ”Pyydä todistus lompakkoon” avaa käytettävissä olevan myöntäjän pysyvän HTTPS-asiointilinkin. Myöntäjä hoitaa varsinaisen myöntämisen. Suunnitteilla oleva jakelu näytetään tekstillä ”Lompakkotodistus suunnitteilla”.
 
 Ylläpitonäkymässä on omat tuotteet, keskeneräiset tarkistukset, palautteet, versiovertailu ja tarkistusajan ylittäneet kuvaukset. Muokkauslomake on jaettu samoihin tietoryhmiin kuin luvut 5–7. Kenttien pakollisuus päivittyy valintojen mukaan. Automaattitallennus koskee vain luonnosta ja käyttää optimistista lukitusta.
 
@@ -606,4 +615,5 @@ Lähteet tarkistettu 14.10.2026. Lähdeversiot ovat tässä suunnitelmassa valit
 - **S12 Asetus EU 2023/2854.** Data Act, artikla 33. https://eur-lex.europa.eu/eli/reg/2023/2854/oj
 
 Tämä dokumentti määrittelee toteutuksen ja vaatimusten tarkistukset. Se ei korvaa valvontaviranomaisen ratkaisua, QTSP-vaatimustenmukaisuuden arviointia, organisaation tiedonluovutuspäätöstä tai tuotannon tietoturva-arviointia.
+
 
