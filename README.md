@@ -4,26 +4,76 @@ Viranomaisten tietotuotteiden metatietohakemiston vaihe 1. Sovellus sisältää 
 
 **Vain paikalliseen synteettiseen demokäyttöön.** Kirjautuminen, organisaatiorajat, hyväksyntä, julkaisuversiot ja SHACL kuuluvat vaiheeseen 2. Ulkoiset lompakko-, QEAA- ja data-avaruusintegraatiot kuuluvat vaiheeseen 3. `ROADMAP.md` rajaa toteutuksen; `metatietovaranto_suunnittelu.md` säilyy tavoitearkkitehtuurina.
 
-## Käynnistä Docker Composella
+## Windows: Docker Desktop ja PowerShell
 
-Tarvitset Docker Enginen ja Compose v2:n. Aja repositorion juuresta:
+1. Asenna Git sekä Docker Desktop Windowsille. Käynnistä Docker Desktop ja käytä **Linux containers** -tilaa (suositus: WSL 2 -taustajärjestelmä). Odota, että Docker Engine on käynnissä.
+2. Avaa PowerShell. Hae demohaara ja siirry hakemistoon:
 
-```bash
-docker compose up --build -d --wait
-curl --fail http://127.0.0.1:8000/health/ready
+```powershell
+git clone --branch feat/phase-1-local-demo https://github.com/jgmikael/metatietovaranto.git
+cd metatietovaranto
 ```
 
-Avaa paikallisella koneellasi `http://localhost:8000`. API-dokumentaatio on polussa `/docs`. Compose sitoo sovelluksen portin 8000 ja PostgreSQL:n portin 5432 vain loopbackiin. Demossa ei ole käyttäjätunnuksia: kaikki paikallisen demon käyttäjät voivat muuttaa kaikkia tuotteita.
+Jos repositorio on jo koneellasi, käytä sen hakemistossa `git switch feat/phase-1-local-demo` ja `git pull --ff-only`. Säilytä omat paikalliset muutoksesi ennen haaran vaihtoa.
 
-Ensimmäinen käynnistys luo alkuperäisskeeman ja kolme synteettistä tuotetta: verovelkatiedon, yrityksen perustiedot ja ammattipätevyyden. Tavallinen uudelleenkäynnistys säilyttää lisäykset, muokkaukset ja poistot eikä korvaa sisältöä fixtureillä.
+3. Tarkista Docker ja käynnistä repositorion juuresta:
 
-```bash
-docker compose logs app
-docker compose stop
-docker compose up -d --wait
+```powershell
+docker compose version
+docker compose up --build
 ```
 
-Tietokanta on `pgdata`-volumessa. Pelkkä `docker compose down` säilyttää datan. **Vain tarkoituksellinen demodatan nollaus:** `docker compose down -v` poistaa koko tietokantavolumen. Seuraava käynnistys luo alkuperäiset esimerkit uudelleen.
+Docker rakentaa käyttöliittymän ja palvelimen sekä käynnistää PostgreSQL:n. Windowsiin ei tarvitse asentaa Pythonia, Node.js:ää tai uv:tä. `.env`-tiedostoa tai pilven shell-skriptiä ei tarvita. Ensimmäinen build tarvitsee internetyhteyden konttien ja riippuvuuksien lataamiseen. Komento jää näyttämään palveluiden lokit; pidä PowerShell-ikkuna auki.
+
+4. Kun appin lokissa näkyy `Application startup complete`, avaa selaimessa täsmälleen **http://localhost:8000/**. API-dokumentaatio on **http://localhost:8000/docs**.
+
+Voit tarkistaa valmiuden toisessa PowerShell-ikkunassa saman repositorion hakemistossa:
+
+```powershell
+docker compose ps
+Invoke-RestMethod http://localhost:8000/health/ready
+```
+
+Molempien palvelujen pitäisi näkyä healthy-tilassa ja readiness-vastauksessa `status: ready`, `database: postgresql`. Compose sitoo sovelluksen portin 8000 ja PostgreSQL:n portin 5432 vain paikalliseen koneeseen. Jos jompikumpi portti on varattu, pysäytä sitä käyttävä toinen paikallinen palvelu ennen demon käynnistystä. Yritysverkon proxy-/varmenneongelmat on ratkaistava Docker Desktopin asetuksissa; älä poista TLS-varmennusta käytöstä.
+
+### Demotunnukset ja kolme esimerkkituotetta
+
+**Käyttöliittymään ei kirjauduta eikä demotunnuksia tarvita.** Kaikki paikallisen demon käyttäjät voivat lisätä, muokata ja poistaa tuotteita. Tietokannan paikalliset demoasetukset ovat käyttäjä `demo`, salasana `demo`, tietokanta `catalog`; näitä ei syötetä selaimeen.
+
+Ensimmäinen käynnistys luo alkuperäisskeeman ja seuraavat kolme synteettistä tuotetta tiedostosta `fixtures/products.json`:
+
+| Tuote | Teema | Tarjoaja |
+| --- | --- | --- |
+| Verovelkatieto — synteettinen demo | Verotus | Demo-veroviranomainen |
+| Yrityksen perustiedot — synteettinen demo | Yritykset | Demo-yritysrekisteri |
+| Ammattipätevyys — synteettinen demo | Pätevyydet | Demo-pätevyysviranomainen |
+
+Esimerkit eivät sisällä aitoja henkilö-, yritys- tai rekisteritietoja. Tavallinen uudelleenkäynnistys säilyttää lisäykset, muokkaukset ja poistot eikä korvaa sisältöä fixtureillä.
+
+### Pysäytys ja uudelleenkäynnistys
+
+Paina loki-ikkunassa **Ctrl+C**. Normaali Compose-toiminta pysäyttää kontit ja säilyttää tietokantadatan. Varmista pysäytys ja poista kontit ajamalla repositorion juuresta (tarvittaessa toisessa PowerShell-ikkunassa):
+
+```powershell
+docker compose down
+```
+
+`down` poistaa kontit ja projektin verkon, mutta säilyttää `pgdata`-volumen. Käynnistä uudelleen samalla komennolla `docker compose up --build`. Jos haluat demon taustalle loki-ikkunan sijaan, vaihtoehto on `docker compose up --build -d --wait`; pysäytä se komennolla `docker compose down`.
+
+### Palauta alkuperäinen testidata
+
+**Seuraava poistaa kaikki tässä demossa lisäämäsi tuotteet ja muokkaukset sekä koko projektin PostgreSQL-volumen, myös mahdollisen testikannan.** Käytä sitä vain, kun haluat palauttaa lähtötilanteen. Aja samasta repositorion hakemistosta:
+
+```powershell
+docker compose down --volumes
+docker compose up --build
+```
+
+Uusi tyhjä volume alustetaan automaattisesti kolmella yllä luetellulla esimerkkituotteella. Tarkista selaimessa http://localhost:8000/, että haussa näkyy kolme tuotetta. Tavalliseen pysäytykseen ei käytetä `--volumes`-valintaa.
+
+### Mitä käynnistyksestä on varmennettu?
+
+Tämä toimitus on testattu Linux-pilviympäristössä, ei Windows-koneessa tai Docker Desktopissa. Tarkka ajoloki, testitulokset ja pilven proxyrajoitus on raportoitu `STATUS.md`:ssä. Windows/WSL 2:n asennusta, koneesi palomuuria, vapaita portteja tai yritysverkon asetuksia ei ole voitu testata. Linuxin onnistunut konttiajo ei yksin todista näitä Windowsin edellytyksiä.
 
 ### Pilviympäristön konttikäännös
 
