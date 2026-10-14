@@ -282,6 +282,7 @@ dependencies = [
     { name = "httpx" },
     { name = "psycopg", extra = ["binary"] },
     { name = "pyjwt", extra = ["crypto"] },
+    { name = "rdflib" },
     { name = "sqlalchemy" },
     { name = "uvicorn" },
 ]
@@ -290,7 +291,6 @@ dependencies = [
 dev = [
     { name = "playwright" },
     { name = "pytest" },
-    { name = "rdflib" },
 ]
 
 [package.metadata]
@@ -300,6 +300,7 @@ requires-dist = [
     { name = "httpx", specifier = ">=0.28,<1" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.2,<4" },
     { name = "pyjwt", extras = ["crypto"], specifier = ">=2.10,<3" },
+    { name = "rdflib", specifier = ">=7,<8" },
     { name = "sqlalchemy", specifier = ">=2.0,<3" },
     { name = "uvicorn", specifier = ">=0.34,<1" },
 ]
@@ -308,7 +309,6 @@ requires-dist = [
 dev = [
     { name = "playwright", specifier = ">=1.50,<2" },
     { name = "pytest", specifier = ">=8,<10" },
-    { name = "rdflib", specifier = ">=7,<8" },
 ]
 
 [[package]]

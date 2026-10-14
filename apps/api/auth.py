@@ -56,6 +56,19 @@ def seed_memberships(session):
     session.add(DemoInitialization(name="phase-2b-memberships"))
 
 
+def seed_review_memberships(session):
+    """Demo-only additional review assignments; preserve all existing roles and IdP users."""
+    from uuid import NAMESPACE_URL, uuid5
+    from apps.api.models import DemoInitialization
+    if session.get(DemoInitialization,'phase-2c-reviewers') is not None:return
+    for subject,product_id in [(DEMO_MEMBERS[1][0],DEMO_MEMBERS[0][1]),(DEMO_MEMBERS[0][0],DEMO_MEMBERS[1][1])]:
+        org=uuid5(NAMESPACE_URL,f'https://example.org/metatietovaranto/legacy-provider/{product_id}')
+        organization=session.get(Organization,org)
+        if organization and organization.synthetic and session.get(OrganizationMembership,(subject,org)) is None:
+            session.add(OrganizationMembership(subject=subject,organization_id=org,role='publisher'))
+    session.add(DemoInitialization(name='phase-2c-reviewers'))
+
+
 def current_session(request, session):
     token = request.cookies.get(SESSION_COOKIE, "")
     if not token or len(token) > 128:

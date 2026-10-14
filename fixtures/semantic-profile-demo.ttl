@@ -1,0 +1,9 @@
+# SYNTHETIC TEST FIXTURE. Not exported from or verified against Tietomallit.
+@prefix demo: <https://example.org/metatietovaranto/demo/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+demo:profile a owl:Ontology .
+demo:ProductShape a sh:NodeShape ; sh:targetClass demo:Company ; sh:property demo:NameShape .
+demo:NameShape a sh:PropertyShape ; sh:path demo:companyName ; sh:name "Yrityksen nimi" ;
+    sh:description "Synteettinen yrityksen nimi" ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 .

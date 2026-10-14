@@ -1,198 +1,145 @@
-# Metatietovaranto — paikallinen demo
+# Metatietovaranto — synteettinen demo, vaihe 2C
 
-## Kokeile ilman asennuksia
+Suomenkielinen React/TypeScript-käyttöliittymä, FastAPI, PostgreSQL ja Keycloak. Toteutettu: organisaatiokohtainen ylläpito, yksityiset luonnokset, erillinen hyväksyntä, muuttumattomat julkaisuversiot, haku, JSON-/JSON-LD-vienti ja sisältöprofiilin snapshotit. [ROADMAP](ROADMAP.md) rajaa toteutuksen, [STATUS](STATUS.md) kertoo todella ajetut tarkistukset.
 
-Avaa [GitHub Codespaces -käynnistys](https://codespaces.new/jgmikael/metatietovaranto?ref=main), tarkista haara `main` ja valitse **Create codespace**. Sovellus, PostgreSQL ja Keycloak käynnistyvät automaattisesti. Avaa portti **8000** editorin **PORTS → Open in Browser** -toiminnolla, jos demo ei avaudu automaattisesti. Säilytä portin näkyvyys **Private**.
+Vain synteettiseen demokäyttöön. Katalogi ei myönnä todistuksia eikä toteuta lompakkoprotokollaa, QEAA-palvelua tai tuotannon tunnistamista. Tavoitearkkitehtuuri on `metatietovaranto_suunnittelu.md`. PR:ien 5 ja 6 sitovat [semanttinen periaate](docs/semanttinen-periaate-1.md) ja [VC-periaate](docs/vc-periaate-2.md) on huomioitu [vaiheen 2C ratkaisussa](docs/phase-2c.md).
 
-Ohjeet, kokeilupolku, pysäyttäminen ja käyttökiintiöt: [Verkkodemon ohje](docs/verkkodemo.md). Tämä on yksityinen selainkokeilu; se ei julkaise avointa ylläpitoa internetiin.
+## Kokeile selaimessa ennen yhdistämistä
 
-Viranomaisten tietotuotteiden metatietohakemiston vaihe 2B (aiemmat haku- ja vientitoiminnot säilyvät). Sovellus sisältää suomenkielisen React/TypeScript-käyttöliittymän, FastAPI-rajapinnan, PostgreSQL-tallennuksen, haun, tuotesivun, organisaatiokohtaisen ylläpidon ja JSON-/JSON-LD-viennit.
+Avaa [vaiheen 2C uusi Codespace](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2c-publication), valitse haara **feat/phase-2c-publication** ja **Create codespace**. Uusi Codespace pitää main-haaran kokeiludatan erillään. Sovellus, PostgreSQL ja Keycloak käynnistyvät automaattisesti. Selain avautuu automaattisesti tai valitse **PORTS → 8000 → Open in Browser**. Säilytä portin näkyvyys **Private**. Keycloak toimii saman osoitteen `/identity`-polussa; muita portteja ei tarvitse avata.
 
-**Vain paikalliseen synteettiseen demokäyttöön.** OIDC-kirjautuminen ja organisaatiokohtaiset kirjoitusoikeudet kuuluvat vaiheeseen 2B. Hyväksyntä, julkaisuversiot ja SHACL jäävät myöhemmiksi. Ulkoiset lompakko-, QEAA- ja data-avaruusintegraatiot kuuluvat vaiheeseen 3. `ROADMAP.md` rajaa toteutuksen; `metatietovaranto_suunnittelu.md` säilyy tavoitearkkitehtuurina.
-
-## Kokeile vaihetta 2B selaimessa ennen yhdistämistä
-
-Avaa [vaiheen 2B oma Codespace](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2b-auth). Valitse haaraksi **feat/phase-2b-auth** ja **Create codespace**. Uusi Codespace säilyttää main-haaran kokeiludatan erillisessä ympäristössä. Odota PostgreSQL:n, Keycloakin ja sovelluksen käynnistystä; ensimmäinen kerta kestää aiempaa kauemmin. Selain avautuu automaattisesti tai valitse **PORTS → 8000 → Open in Browser**. Säilytä portti **Private**-tilassa. Kirjautuminenkin käyttää samaa selainosoitetta, joten Keycloakin porttia ei tarvitse avata selaimelle.
+Osoite on `https://<codespacen-nimi>-8000.app.github.dev`; täsmällinen oman ympäristön osoite näkyy PORTS-näkymässä. Älä vaihda portin sisäistä protokollaa HTTPS:ksi. [Verkkodemon ohje](docs/verkkodemo.md) kertoo pysäyttämisestä ja kiintiöistä.
 
 ### Demotunnukset
 
-| Käyttäjä | Salasana | Oikeudet |
-| --- | --- | --- |
-| `vero` | `demo-vero` | Muokkaaja alkuperäisen verotuotteen organisaatiossa. |
-| `yritys` | `demo-yritys` | Muokkaaja alkuperäisen yritystuotteen organisaatiossa. |
-| `lukija` | `demo-lukija` | Lukija; ei kirjoitusoikeuksia. |
+| Käyttäjä | Salasana | Muokkaus | Tarkastus ja julkaisu |
+| --- | --- | --- | --- |
+| `vero` | `demo-vero` | Alkuperäinen verotuotteen organisaatio | Yritystuotteen organisaatio |
+| `yritys` | `demo-yritys` | Alkuperäinen yritystuotteen organisaatio | Verotuotteen organisaatio |
+| `lukija` | `demo-lukija` | Ei | Ei; alkuperäisen verotuotteen organisaation luku |
 
-Nämä ovat julkisia **synteettisiä demotunnuksia**. Älä käytä niitä tuotannossa tai lisää aitoja tietoja. Keycloak toimii tässä kehitystilassa. Anonyymi käyttäjä voi lukea tämän demon metatietoja, mutta tuoteylläpito vaatii kirjautumisen. Julkaisutilojen ja rajattujen tietotuotteiden toteutus kuuluu seuraavaan vaiheeseen.
+Julkisia synteettisiä demotunnuksia, eivät tuotantosalaisuuksia. Samassa organisaatiossa kirjoittaja ei saa hyväksyä omaa muutostaan. Tarkastaja voi myös julkaista hyväksymänsä version. Julkaisijarooli ei anna muokkausoikeutta. Lisäjäsenyydet annetaan kerran vain tunnettuihin synteettisiin organisaatio-UUID:ihin; olemassa olevia jäsenyyksiä ei korvata. Kolmannen pätevyysorganisaation tuote säilyy kannassa, mutta sille ei ole valmista muokkaajatunnusta. Jäsenyyksien hallinta: [authentication.md](docs/authentication.md).
 
-1. Kokeile hakua, tuotesivua ja JSON-/JSON-LD-vientejä ilman sovelluskirjautumista.
-2. Valitse **Kirjaudu sisään**. Syötä esimerkiksi `vero` / `demo-vero` Keycloakin lomakkeelle. Käyttöliittymä näyttää käyttäjän ja organisaatiojäsenyydet.
-3. Lisää oma synteettinen tuote tai muokkaa verotuotetta. Tarjoajavalikossa näkyvät vain käyttäjän omat muokkaajaorganisaatiot.
-4. Yritystuotteen muokkaus- ja poistopainikkeet eivät näy `vero`-käyttäjälle. Myös suora API-kutsu estetään palvelimella.
-5. Valitse **Kirjaudu ulos** ja vahvista Keycloakin **Log out** -sivulla. Sovellusistunto poistuu heti ensimmäisessä vaiheessa; vahvistus päättää myös Keycloakin SSO-istunnon. Kirjaudu sen jälkeen `yritys`- tai `lukija`-tunnuksella ja vertaa oikeuksia.
+### Kokeilupolku
 
-### Päivitys vaiheesta 2A
+1. Uuden demon julkinen haku on aluksi tyhjä. Kolme synteettistä esimerkkiä (verovelka, yrityksen perustiedot, ammattipätevyys) säilyvät keskeneräisinä yksityisinä luonnoksina. Niille ei keksitä virallista profiilia tai hyväksyntää.
+2. Kirjaudu `vero`-käyttäjänä ja avaa **Omat luonnokset → Verovelkatieto → Muokkaa**. Voit myös lisätä oman synteettisen tuotteen. Tarjoajavalikossa ovat vain omat muokkaajaorganisaatiot.
+3. Avaa **Tuo Tietomallit-soveltamisprofiili**. Valitse tiedosto `fixtures/semantic-profile-demo.ttl`, profiili-IRI `https://example.org/metatietovaranto/demo/profile` ja OWL-sanaston nimiavaruus `https://example.org/metatietovaranto/demo/`. Kirjaa lähdeilmoitukseksi **Synteettinen testifixture; ei oikea Tietomallit-export, vain ohjelmistodemo.** Tuo profiili ja tallenna tuote. Fixture ei ole Tietomallit-alustan vahvistama profiili. Oikea profiili voidaan antaa vaihtoehtoisesti koneluettavan exportin linkkinä.
+4. Tietoelementit johdetaan profiilista. VC-jakelun oletus on `planned`, jolloin tuotesivu näyttää **Lompakkotodistus suunnitteilla**. Lähetä luonnos tarkastukseen.
+5. Kirjaudu ulos ja vahvista Keycloakin **Log out**. Kirjaudu `yritys`-käyttäjänä, avaa sama luonnos, tarkasta profiili ja lähdeilmoitus, kirjoita perustelu ja merkitse tarkastuksen valintaruutu. Hyväksy ja julkaise esimerkiksi versiona `1.0.0`.
+6. Julkaisu löytyy nyt julkisesta hausta ja sen JSON-/JSON-LD-viennit toimivat. Historiassa on pysyvä version URI ja tarkiste. Profiilin tarkastus on ihmisen arvio lähdeilmoituksesta; se ei ole automaattinen alustatodistus tai myönnetyn VC:n SHACL-validointi.
+7. `vero` voi luoda julkaistun rinnalle uuden työkopion. Muokkaus ei muuta aiempaa julkaisua. Uusi julkaisu tarvitsee uuden hyväksynnän ja aiempaa suuremman `major.minor.patch`-numeron. Julkaistua tai tarkastushistoriaa sisältävää tuotetta ei poisteta.
 
-Ota varmuuskopio alla olevalla ohjeella. Säilytä sama PostgreSQL-volume ja Compose-projektinimi, vaihda kokeiluhaaraan ja rakenna app uudelleen (`docker compose up --build -d --wait` tai Codespacesin **Rebuild Container**). Migraatio `0003_auth` lisää vain jäsenyys- ja istuntotaulut. Vanhoja tuotteita, organisaatioita ja tunnisteita ei muuteta. Startup tuo Keycloakin demorealmin ensimmäiseen omaan `keycloakdata`-volumeen ja lisää demojäsenyydet vain kerran.
+## Windows ja Docker Desktop
 
-Demojäsenyydet viittaavat vain tunnettuihin alkuperäisiin synteettisiin organisaatio-UUID:ihin. Muille aiemmin luoduille tai samannimisille organisaatioille ei anneta oikeuksia automaattisesti. Myöskään kolmannelle eli pätevyysorganisaatiolle ei ole valmista muokkaajatunnusta tässä rajauksessa. Tietoja voi yhä lukea ja viedä. Jäsenyyksien hallintakäyttöliittymä on myöhempi työ; ylläpitäjä voi myöntää lisäjäsenyyden tietokantaan eksplisiittisellä käyttäjän subject- ja organisaatio-UUID-parilla (ohje: `docs/authentication.md`).
+Tarvitset Docker Desktopin käynnissä Linux-konteilla, Compose v2:n ja Gitin. Kloonaa repo tai avaa nykyinen checkout PowerShellissä:
 
-## Vaiheen 1 tietokannan päivitys uusimpaan versioon
+```powershell
+git fetch origin
+git switch feat/phase-2c-publication
+docker compose up --build
+```
 
-**Älä poista volumea, älä käytä `down -v` / `--volumes` -komentoa päivityksen yhteydessä.** Pysäytä vanha app ennen varmuuskopiota; tietokanta saa jäädä käyntiin. Esimerkiksi paikallisessa Compose-käytössä ota kopio ennen haaran vaihtoa ja uudelleenrakennusta:
+Avaa selaimessa **http://localhost:8000**. API-kuvaus: **http://localhost:8000/docs**, readiness: **http://localhost:8000/health/ready**. Käytä localhost-osoitetta myös kirjautumisessa. Ensimmäinen käynnistys voi kestää useita minuutteja. Vaihtoehto taustalle: `docker compose up --build -d --wait`.
+
+Pysäytä etualan ajo **Ctrl+C**:llä tai aja toisessa terminaalissa `docker compose stop`. Jatka `docker compose up -d --wait`. `docker compose down` säilyttää voluumit. Tuotteet, luonnokset ja versiot ovat `pgdata`-volumessa, Keycloak omassa `keycloakdata`-volumessaan. Tavallinen käynnistys ei palauta fixtureitä tai muutettuja oikeuksia.
+
+**Testidatan tarkoituksellinen palautus (poistaa kaikki oman demon muutokset, julkaisut ja käyttäjäistunnot):**
+
+```powershell
+docker compose down -v
+docker compose up --build
+```
+
+Tätä nollausta ei käytetä päivityksessä. Portit 8000, 5432 ja 8080 sidotaan paikalliseen loopbackiin. Vain 8000 tarvitaan selaimelle. PostgreSQL-tunnukset `demo/demo` ja Keycloakin kehitystila ovat demokäyttöä varten.
+
+## Päivitys vanhasta kannasta
+
+Ota ensin varmuuskopio. Säilytä sama hakemisto, Compose-projektinimi ja voluumit. Pysäytä kirjoittava sovellus, tietokanta jää käyntiin:
 
 ```bash
 docker compose stop app
 docker compose exec -T db sh -c 'pg_dump -U demo -d catalog > /tmp/before-update.sql'
 docker compose cp db:/tmp/before-update.sql ./before-update.sql
-```
-
-SQL-kopio siirretään tiedostona, joten myös PowerShell säilyttää sen merkistön. Säilytä varmuuskopio turvallisessa paikassa. Vaihda tämän jälkeen kokeiluhaaraan ja rakenna **samassa hakemistossa ja samalla Compose-projektinimellä**:
-
-```bash
 git fetch origin
-git switch feat/phase-2b-auth
+git switch feat/phase-2c-publication
 docker compose up --build -d --wait
 docker compose exec -T app .venv/bin/alembic current
 ```
 
-Odotettu versio on `0003_auth (head)`. Sovelluksen startup suorittaa migraatiot PostgreSQL-transaktiossa advisory-lukon alla. Sama startup on käytössä Docker Composessa, Codespacesissa ja host-kehityksessä. Jos päivitys epäonnistuu, sovellus ei siirry ready-tilaan eikä aja fixtureitä. Tuntematon/puutteellinen vanha rakenne pysäyttää päivityksen sen sijaan, että sitä leimattaisiin oikeaksi.
+Tiedoston kopiointi säilyttää merkistön myös PowerShellissä. Odotettu head on `0004_publication`. Käynnistys ajaa migraatiot transaktiossa advisory-lukon alla ennen readinessia sekä Composessa että Codespacesissa. Virhe estää käynnistymisen ja fixtureiden ajon. Toistuva ajo on sallittu: `docker compose exec -T app .venv/bin/alembic upgrade head`.
 
-- `0001_phase1` kuvaa main-haaran alkuperäiset `products`- ja `demo_initialization`-taulut. Tyhjässä kannassa se luo ne. Vanhan kannan olemassa olevat sarakkeet, tyypit, pääavaimet ja indeksit tarkistetaan ennen käyttöönottoa; tuotteita ei kirjoiteta uudelleen.
-- `0003_auth` lisää tämän jälkeen istunto- ja jäsenyystaulut tuotteita muuttamatta.
-- `0002_organizations` luo organisaatiot ja tuotteille pakollisen vierasavaimen `provider_organization_id`. Se säilyttää vanhan UUID:n, tarjoajanimen, kaikki metatiedot ja muokkausajan.
-- **Samannimisiä tarjoajia ei yhdistetä.** Jokainen vanha tuote saa oman organisaatiotietueen ja deterministisen UUID:n. `legacyProductId` kertoo alkuperän. Sama nimi voi siis näkyä useita kertoja; valikossa näytetään myös organisaation koko UUID ja maa. Mahdollinen organisaatioiden yhdistäminen vaatii erillisen, tunnisteisiin perustuvan päätöksen.
-- Vanhan aineiston maa on `ZZ` (ei tiedossa), tunnisteet `[]`; maata tai virallista tunnistetta ei arvata nimestä. Synteettisyys siirtyy alkuperäisestä metatiedosta, muuten se on `false` eli vahvistamatta. Uuden tyhjän demon kolme organisaatiota ovat synteettisiä, maa `FI` ja tunnistejärjestelmä `demo`.
-- Vanhan skeeman olemassaolo merkitään jo alustetuksi myös silloin, kun tuotteet on poistettu tai alustusmerkintä puuttuu. Päivitys tai tavallinen uudelleenkäynnistys ei palauta poistettuja fixtureitä. Vain aidosti uusi kanta siemennetään.
+- `0001_phase1` tunnistaa ja tarkistaa alkuperäisen skeeman tai luo tyhjän kannan. Tuntematonta skeemaa ei hyväksytä stampilla.
+- `0002_organizations` säilyttää tuotteiden UUID:t, kaikki metatiedot ja aikaleimat. Jokainen vanha tarjoaja saa erillisen organisaation; samannimisiä ei yhdistetä. Tuntematon maa on `ZZ`, tunnisteet `[]`, alkuperä näkyy `legacyProductId`-kentässä.
+- `0003_auth` lisää organisaatiojäsenyydet ja OIDC-istunnot.
+- `0004_publication` säilyttää alkuperäiset tuoterivit, kopioi kuvaukset luonnoksiksi ja lisää muuttumattomat profiili-/julkaisusnapshotit, tarkastukset, auditoinnin ja outboxin. Omistajaorganisaatio lukitaan alkuperäiseen tarjoajaan. Vanhoja tuotteita ei julkaista automaattisesti; anonyymi näkyvyys muuttuu tarkoituksella. Vanhat käsin annetut tietoelementit säilyvät demotietona, kunnes profiili liitetään.
 
-Migraatioiden toistuva ajo on sallittu. Myös käsiajo onnistuu `docker compose exec -T app .venv/bin/alembic upgrade head`. Migraatiot tarvitsevat elävän PostgreSQL-yhteyden, eikä offline-SQL-ajoa tai automaattista downgradea tueta tässä toimituksessa. Vanhaan koodiin palaaminen ei peru päivitystä; tietokannan palautus tehdään hallitusti varmuuskopiosta. Älä palauta kopiota käytössä olevan kannan päälle kokeilun vuoksi.
+Vain aidosti uusi kanta saa kolme fixtureä. Vanha tyhjä kanta tai poistettu fixture ei palaudu. Migraatio ei tarjoa tuhoavaa downgradea tai offline-SQL-ajoa; palautuminen vaatii testatun varmuuskopion palautuksen erilliseen kantaan. Älä poista vanhaa Codespacea tietoja säilyttävässä päivityksessä. **Rebuild Container** rakentaa haaran imagen uudelleen; pelkkä tiedostojen haaranvaihto ei päivitä ajossa olevaa imagea. Keycloak-realmiä ei tarvitse nollata.
 
-Codespacesissa **Rebuild Container** rakentaa nykyisen haaran imagen uudelleen ja käynnistää saman migraatiopolun. Pelkkä tiedostojen haaranvaihto ei päivitä jo rakennettua app-imagea. Ota olemassa olevasta Codespaces-kannasta varmuuskopio ennen päivitystä; älä poista codespacea tai volumea tiedot säilyttävässä päivityksessä.
+## Rajapinta ja profiilit
 
-### Organisaatioiden API ja yhteensopivuus
+Julkiset luku-API:t palauttavat vain julkaistuja snapshotteja. Haku kohdistuu nimeen, kuvaukseen ja tarjoajaan; teema/tarjoaja ovat tarkkoja rajauksia, `limit` oletuksena 20 (enintään 100), `offset` sivuttaa. Haku suodattaa pienessä demossa uusimmat julkaisut muistissa; kuormitustavoitetta ei ole mitattu.
 
-`GET /api/v1/organizations` palauttaa `items`-listan, ja `GET /api/v1/organizations/{uuid}` yhden organisaation. Kentät ovat `id`, `legalName`, `country`, `identifiers` (`scheme`/`value`-parit), `synthetic` ja `legacyProductId`. Tässä vaiheessa organisaatioita vain luetaan; niiden ylläpitoprosessi ei kuulu vaiheeseen 2A.
+| Pyyntö | Merkitys |
+| --- | --- |
+| `GET /api/v1/products` | Julkinen haku |
+| `GET /api/v1/products/{id}` | Viimeisin julkaisu; julkaisematon 404 |
+| `GET /api/v1/products/{id}/versions` | Versiohistoria |
+| `GET /api/v1/products/{id}/versions/{semver}` | Muuttumaton versio ja ETag |
+| `GET /api/v1/products/{id}/export?format=jsonld&version=1.0.0` | Nimetyn version vienti; ilman version-parametria uusin |
+| `GET /api/v1/catalog/export?format=json` | Uusimpien julkisten versioiden katalogi |
+| `GET /id/products/{id}` | JSON/JSON-LD tai 303 HTML-tuotesivuun; Vary: Accept |
+| `GET /id/products/{id}/versions/{semver}` | Pysyvä version URI; samat esitykset |
+| `GET /api/v1/my/products` | Omien organisaatioiden luonnokset, myös tarkastajalle |
+| `POST /api/v1/products` | Luo yksityinen luonnos, 201, Location ja ETag |
+| `GET /api/v1/products/{id}/draft` | Yksityinen työkopio ja ETag |
+| `PUT /api/v1/products/{id}` | Muokkaa vain työkopiota |
+| `POST /api/v1/products/{id}/drafts` | Uusi työkopio julkaisun rinnalle |
+| `POST /api/v1/drafts/{id}/submit` | Tarkastukseen |
+| `POST /api/v1/drafts/{id}/reviews` | Hyväksy tai palauta perustelulla |
+| `POST /api/v1/drafts/{id}/publish` | Atominen julkaisu |
+| `POST /api/v1/drafts/{id}/validate` | Julkaisuedellytysten tarkistus, ei SHACL-instanssivalidointi |
+| `DELETE /api/v1/products/{id}` | Poista vain luonnos, jolla ei ole julkaisu-/tarkastushistoriaa |
+| `GET /api/v1/products/{id}/audit-events` | Organisaation muokkaajan/tarkastajan tapahtumat |
+| `GET /api/v1/organizations`, `GET /api/v1/organizations/{id}` | Organisaatioiden perustiedot |
+| `POST /api/v1/profile-snapshots` | Profiilin tuonti editorin organisaatioon |
+| `GET /api/v1/profile-snapshots/{id}` | Snapshotin manifesti, alkuperä ja tarkisteet |
+| `GET /api/v1/profile-snapshots/{id}/artifacts/{artifactId}` | Alkuperäinen UTF-8-artefakti |
 
-POST/PUT/DELETE vaativat palvelinistuntoevästeen ja `/auth/me`-vastauksen `csrfToken`-arvon `X-CSRF-Token`-otsakkeessa. Kirjautunut muokkaaja lähettää POST/PUT-tuotepyynnössä pakollisen `providerOrganizationId`, jonka on viitattava olemassa olevaan organisaatioon. Vanha vapaatekstinen `provider` **ei enää ole kirjoitusparametri**. Tuotteen vastauksissa, haussa ja JSON-viennissä `provider`-nimi säilyy yhteensopivasti, ja mukana on uusi `providerOrganizationId`. JSON-LD:n `dct:publisher` säilyttää tarjoajanimen ja saa organisaation URI-tunnisteen. Nimi synkronoidaan valitusta organisaatiosta tuotetta tallennettaessa.
+Kirjoitus tarvitsee palvelinistunnon ja `/auth/me`-vastauksen `csrfToken`-arvon `X-CSRF-Token`-otsakkeessa. Luonti ja julkaisu vaativat lisäksi `Idempotency-Key`-otsakkeen (24 h, sama avain eri sisällölle 409). Työkopion muuttaminen/tilasiirtymä/poisto tarvitsee sen nykyisen `If-Match`-ETagin: puuttuva 428, vanhentunut 412. Käyttöliittymä lähettää nämä. Omistajaorganisaatio ei vaihdu tarjoajavalinnasta; vaihto edellyttää editor-oikeutta myös uuteen tarjoajaan.
 
-## Käynnistä Docker Composella
+POST/PUT ei hyväksy asiakkaan `provider`-, `dataElements`-, tila- tai hyväksyntäkenttiä. Käytä `/docs`-sopimusta ja `providerOrganizationId`-kenttää. Tarjoajanimi säilyy vastauksissa ja vienneissä. Profiilin tuonti tukee Turtlea, RDF/XML:ää ja paikalliskontekstista JSON-LD:tä, enintään 1 MB/artefakti, 2 MB/pyyntö ja 10 000 RDF-kolmikkoa. Linkkituonti hyväksyy vain `tietomallit.suomi.fi` / `iri.suomi.fi` HTTPS-exportit ilman redirecteja. Muut lähteet annetaan tiedostona. HTML-sivulinkki ei ole export.
 
-Tarvitset Docker Enginen ja Compose v2:n. Aja repositorion juuresta:
+API tukee riippuvuuksia, ulkoisia OWL-viitteitä ja JSON Schema/OpenAPI -johdannaisia. Käyttöliittymän yksinkertainen tuonti käsittelee yhden pääartefaktin ja yhden sanastoviitteen; moniosainen tuonti tehdään API:lla. Alkuperäiset IRI:t ja koko graafi säilyvät, tietoelementtinäkymä on johdettu osajoukko. Etäkonteksteja tai riippuvuuksia ei noudeta jäsennyksen aikana. Puuttuva lähde/SHACL/riippuvuus estää julkaisun. Pelkkä johdannainen ei riitä. RDF-esitysten ekvivalenssi tarkistetaan graafina; tavutarkisteet ovat erikseen. JSON-LD-katalogivienti on eri asia kuin sisältöprofiili tai myönnetty VC. DCAT-AP-vaatimustenmukaisuutta ei väitetä.
 
-```bash
-docker compose up --build -d --wait
-curl --fail http://127.0.0.1:8000/health/ready
-```
+VC-metatietojen editori on tässä vaiheessa JSON-kenttä. `planned`/`suspended` ei näytä toimivaa linkkiä. Käytettävä jakelu tarvitsee myöntäjä-/operaattori-/lähdeorganisaatiot, VC-profiilin ja kartoituksen, pysyvän HTTPS-linkin sekä saatavuus- ja käyttöehdot. Henkilökohtaisia tarjouksia, koodeja tai tokeneita ei tallenneta. Esimerkkiverkkotunnuksia ei hyväksytä toimivaksi myöntämispalveluksi. EUDIW-/EBW-`tested` vaatii nimetyn profiilin, version, näytön ja testipäivän. Demo ei vahvista QEAA-luokkaa.
 
-Avaa paikallisella koneellasi `http://localhost:8000`. API-dokumentaatio on polussa `/docs`. Compose sitoo sovelluksen portin 8000 ja PostgreSQL:n portin 5432 vain loopbackiin. Haku ja lukeminen onnistuvat ilman sovellustunnusta. Ylläpitoon kirjaudutaan yllä mainituilla demotunnuksilla. Käytä osoitetta `http://localhost:8000` myös kirjautumisessa; se vastaa OIDC-paluuosoitetta. Keycloakin portti 8080 on sidottu paikalliseen koneeseen host-kehitystä varten; Codespacesissa sitä ei avata selaimelle.
-
-Ensimmäinen käynnistys ajaa Alembic-migraatiot ja luo kolme synteettistä tuotetta sekä niiden tarjoajaorganisaatiot: verovelkatiedon, yrityksen perustiedot ja ammattipätevyyden. Tavallinen uudelleenkäynnistys säilyttää lisäykset, muokkaukset ja poistot eikä korvaa sisältöä fixtureillä.
-
-```bash
-docker compose logs app
-docker compose stop
-docker compose up -d --wait
-```
-
-Tuotteet ja sovelluksen istunnot ovat `pgdata`-volumessa, Keycloakin synteettiset käyttäjät ja SSO-istunnot `keycloakdata`-volumessa. Pelkkä `docker compose down` säilyttää datan. **Vain tarkoituksellinen demodatan nollaus:** `docker compose down -v` poistaa sekä tuote- että Keycloak-volumen ja kaikki niihin tehdyt muutokset. Seuraava käynnistys luo alkuperäiset esimerkit uudelleen.
-
-### Pilviympäristön konttikäännös
-
-Tässä Codex-ympäristössä konttikäännöksen DNS ja luottamusketju tarvitsevat alustan välityspalvelimen asetukset. Käytä repositorion juuresta:
-
-```bash
-./scripts/cloud-build.sh
-DOCKER_CONFIG=/workspace/.cache/docker docker compose up -d --no-build --wait
-curl --fail http://127.0.0.1:8000/health/ready
-```
-
-Skripti välittää nykyiset proxy-asetukset Dockerin build-argumentteina ja nykyisen julkisen CA-varmenteen BuildKit-mounttina. Varmenteen tarkistusta ei ohiteta eikä varmennetta tai tunnuksia tallenneta repoon tai imageen. Käynnissä olevat prosessit on käynnistettävä uudelleen uudessa pilvitehtävässä.
-
-## Kehitä ilman sovelluskonttia
-
-Tarvitset Python 3.12:n, uv:n, Node.js 24:n, npm:n ja Dockerin PostgreSQL:ää varten. Riippuvuudet ovat lukittuina `uv.lock`- ja `package-lock.json`-tiedostoissa.
+## Kehitys ja testit
 
 ```bash
-docker compose up -d db keycloak --wait
 uv sync --locked
 npm ci --prefix apps/web
 npm run build --prefix apps/web
+docker compose up -d db keycloak --wait
 DEMO_MODE=true .venv/bin/uvicorn apps.api.main:app --host 127.0.0.1 --port 8000 --no-access-log
 ```
 
-Käyttöliittymä palvellaan rakennetusta `apps/web/dist`-hakemistosta. Rakenna se uudelleen muutosten jälkeen. API:n kehityksessä voit lisätä `--reload`-valinnan. Älä käynnistä hostin API:a ja Compose-appia samaan porttiin yhtä aikaa.
+Älä aja hostin API:a ja Compose-appia samaan porttiin. Hostin `DATABASE_URL` on `postgresql+psycopg://demo:demo@localhost:5432/catalog`, `KEYCLOAK_INTERNAL_URL` on `http://localhost:8080/identity`, `PUBLIC_BASE_URL` on `http://localhost:8000`. `DEMO_MODE=true` on pakollinen. Compose asettaa omat sisäiset osoitteensa.
 
-Jos pilviympäristön kotihakemisto on kirjoitussuojattu, aseta ennen asennusta:
-
-```bash
-export UV_CACHE_DIR=/workspace/.cache/uv
-export npm_config_cache=/workspace/.cache/npm
-export DOCKER_CONFIG=/workspace/.cache/docker
-```
-
-| Asetus | Oletus / käyttö |
-| --- | --- |
-| `DEMO_MODE` | Vaaditaan arvolla `true`; muu arvo estää käynnistyksen. |
-| `KEYCLOAK_INTERNAL_URL` | Host-kehityksessä `http://localhost:8080/identity`; Compose käyttää hostia `keycloak`. |
-| `DATABASE_URL` | Host-kehityksessä `postgresql+psycopg://demo:demo@localhost:5432/catalog`; Compose käyttää hostia `db`. |
-| `PUBLIC_BASE_URL` | `http://localhost:8000`, tuotetunnisteiden paikallinen perusosoite. |
-| `TEST_DATABASE_URL` | Erillinen `postgresql+psycopg://demo:demo@localhost:5432/catalog_test`. |
-| `BROWSER_BASE_URL` | Käynnissä olevan demon osoite selaintesteille. |
-| `CHROMIUM_EXECUTABLE` | Valinnainen paikallisen Chromiumin polku, esimerkiksi `/usr/bin/chromium`. |
-
-PostgreSQL:n Compose-tunnukset `demo/demo` ovat vain paikallista synteettistä demoa varten.
-
-## Demopolku
-
-1. Hae esimerkiksi `verovelka`, tai rajaa tarkalla teemalla `Yritykset`.
-2. Avaa tuotesivu: sisältö, tarjoaja, synteettinen lähde, käyttötarkoitus, rajaukset, käyttöehdot ja tietoelementit.
-3. Avaa JSON- tai JSON-LD-vienti.
-4. Kirjaudu `vero`-käyttäjänä, palaa hakuun ja valitse **Lisää tietotuote**. Täytä pakolliset kentät ja tallenna.
-5. Muokkaa tuotetta tuotesivulla; lataa sivu uudelleen ja varmista tallennus. Poisto pyytää vahvistuksen.
-
-Tekstihaku kohdistuu nimeen, kuvaukseen ja tarjoajaan kirjainkoosta riippumatta. Teema ja tarjoajarajaus ovat täsmällisiä. API sivuttaa `limit`-/`offset`-parametreilla (oletus 20, enintään 100). Kaikki tuotteet näkyvät heti: vaihe 1 ei sisällä luonnos- tai julkaisutiloja.
-
-## Rajapinta ja viennit
-
-| Pyyntö | Toiminto |
-| --- | --- |
-| `GET /api/v1/products?q=verovelka&theme=Verotus` | Haku: items, total, limit, offset. |
-| `POST /api/v1/products` | Lisää tietotuote; 201 ja Location. |
-| `GET /api/v1/products/{uuid}` | Tuotteen kuvaus. |
-| `PUT /api/v1/products/{uuid}` | Korvaa muokattavat metatiedot. |
-| `DELETE /api/v1/products/{uuid}` | Poista; 204. |
-| `GET /api/v1/products/{uuid}/export?format=jsonld` | Tuotteen JSON-LD; `format=json` palauttaa JSONin. |
-| `GET /api/v1/catalog/export?format=jsonld` | Koko demon katalogivienti, ei hakurajausta. |
-| `GET /id/products/{uuid}` | Accept: JSON / JSON-LD tai 303-ohjaus selaimen tuotesivulle. |
-| `GET /health/live`, `GET /health/ready` | Prosessin ja PostgreSQL-taulun toimintatarkistus. |
-
-POST/PUT-runko noudattaa `/docs`-sopimusta. Fixturestä voit ottaa muut kuvauskentät ilman `id`- ja `provider`-kenttiä; lisää niiden tilalle `providerOrganizationId` organisaatioiden API:n palauttamasta UUID:stä. JSON-LD käyttää DCAT-/Dublin Core -termejä ja selvästi paikallisia demotermejä. **DCAT-AP-vaatimustenmukaisuutta tai SHACL-validointia ei väitetä.** Koko katalogin vienti on tarkoitettu pienelle paikalliselle demolle.
-
-## Testit (vaiheet 1, 2A ja 2B)
-
-API-testit käyttävät oikeaa PostgreSQL:ää ja erillistä `catalog_test`-kantaa. Luo kanta kerran:
+Testit käyttävät oikeaa PostgreSQL:ää ja tuhoavaa erillistä `catalog_test`-kantaa; eivät `catalog`-kantaa. Luo testikanta kerran (ohita createdb jos jo olemassa):
 
 ```bash
-docker compose up -d db --wait
 docker compose exec -T db createdb -U demo catalog_test
-uv sync --locked
-.venv/bin/pytest tests/test_api.py tests/test_auth.py tests/test_migrations.py tests/test_public_url.py -q
+.venv/bin/pytest tests/test_api.py tests/test_publication.py tests/test_profiles.py tests/test_auth.py tests/test_migrations.py tests/test_public_url.py -q
 ```
 
-Jos kanta on jo olemassa, älä suorita `createdb`-komentoa uudelleen. API-testit tyhjentävät **vain testikannan** tuotteet, organisaatiot, jäsenyydet ja istunnot jokaisen testin jälkeen. Migraatiotestit luovat ja poistavat kaikki testikannan taulut ja estävät muun kantanimen käytön. Ne eivät koske `catalog`-kantaan.
-
-Selaintestit käyttävät käynnissä olevaa demoa ja oikeaa Keycloak-kirjautumista. `BROWSER_BASE_URL`-osoitteen tulee vastata `PUBLIC_BASE_URL`-osoitetta (paikallisesti localhost, ei 127.0.0.1). Ne lisäävät yksilöidyn synteettisen testituotteen ja poistavat sen, eivät muuta siementuotteita. Jos Chromium on jo asennettu, sitä käytetään automaattisesti; muuten asenna Playwrightin selain:
+Älä aja tätä testikantaa käyttäviä pytest-ajoja rinnakkain. `TEST_DATABASE_URL` voi muuttaa yhteysosoitetta mutta kannan pitää olla `catalog_test`. Selaintestit käyttävät erikseen käynnistettyä demoa ja oikeaa Keycloak-kirjautumista:
 
 ```bash
 .venv/bin/playwright install --with-deps chromium
 BROWSER_BASE_URL=http://localhost:8000 .venv/bin/pytest tests/test_browser.py -q
 ```
 
-API, Keycloak ja käyttöliittymä täytyy käynnistää edellä kuvatusti ennen selaintestejä. Täysi testi- ja build-tarkistus:
+Valmista paikallista Chromiumia käytetään automaattisesti; `CHROMIUM_EXECUTABLE` voi nimetä sen. Selaintestit luovat yksilöidyn testituotteen; julkaisutesti jättää muuttumattoman synteettisen julkaisun historiaan. Alkuperäisiä kolmea demotuotetta ei muuteta. Ilman `BROWSER_BASE_URL`-asetusta seitsemän selaintestiä ohitetaan. Täysi ajo: `BROWSER_BASE_URL=http://localhost:8000 .venv/bin/pytest -q`. GitHub Actionsin etätulos varmistetaan erikseen.
 
-```bash
-npm run build --prefix apps/web
-BROWSER_BASE_URL=http://localhost:8000 .venv/bin/pytest -q
-```
-
-Ilman `BROWSER_BASE_URL`-asetusta kuusi selaintestiä ohitetaan tarkoituksellisesti; sellainen ajo ei todista käyttöliittymän toimivuutta. Testien tulokset ja rajoitukset ovat `STATUS.md`:ssä. GitHub Actions määrittelee vastaavat API-, selain- ja konttibuild-tarkistukset; etä-CI:n tulos raportoidaan vasta sen ajamisen jälkeen.
-
+Tässä pilviympäristössä Docker-build käyttää alustan proxy-/CA-reittiä: `./scripts/cloud-build.sh`, sitten `docker compose up -d --no-build --wait`. Tavallisen Docker Desktopin komento on yllä oleva `docker compose up --build`. Kirjoitussuojatun kotihakemiston yhteydessä aseta `UV_CACHE_DIR=/workspace/.cache/uv`, `npm_config_cache=/workspace/.cache/npm`, `DOCKER_CONFIG=/workspace/.cache/docker`. Nämä eivät kuulu Windowsin normaaliin käynnistykseen.

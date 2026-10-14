@@ -20,7 +20,7 @@ Keycloakin hostname ja realm-importin paluuosoite saavat Codespacesin nimen Comp
 
 ## Jäsenyydet ja vanhat tiedot
 
-`organization_memberships` sitoo varmennetun OIDC-subjectin organisaation UUID:hen ja editor/reader-rooliin. Jokainen kirjoitus tarkistaa jäsenyyden tietokannasta. PUT tarkistaa sekä nykyisen että pyydetyn tarjoajan organisaation: tuotetta ei voi siirtää toiseen organisaatioon oikeuksien kiertämiseksi. GET-reitit ja viennit pysyvät tämän vaiheen demon luettavina metatietoina. Luonnokset, julkaisuversiot ja näkyvyysrajat toteutetaan myöhemmin.
+`organization_memberships` sitoo varmennetun OIDC-subjectin organisaation UUID:hen ja editor/reader/reviewer/publisher-rooliin. Jokainen kirjoitus tarkistaa jäsenyyden tietokannasta. PUT tarkistaa sekä nykyisen että pyydetyn tarjoajan organisaation: tuotetta ei voi siirtää toiseen organisaatioon oikeuksien kiertämiseksi. Vaiheessa 2C vain julkaisuversiot näkyvät julkisissa luku-API:issa ja vienneissä. Luonnoksen lukeminen vaatii pysyvän omistajaorganisaation jäsenyyden; tarkastus reviewer/publisher-roolin ja julkaisu publisher-roolin. Julkaisija ei automaattisesti ole editor. Katso docs/phase-2c.md.
 
 Demojäsenyydet lisätään kerran `phase-2b-memberships`-merkinnän avulla. Startup ei palauta poistettuja tai muutettuja jäsenyyksiä. Vain tunnetut alkuperäiset synteettiset organisaatio-UUID:t saavat oletusjäsenyyden; samannimisyys ei myönnä oikeuksia. Muut vanhat tuotteet säilyvät kokonaan, mutta niiden muokkaamiseen tarvitaan eksplisiittinen jäsenyys.
 
@@ -47,4 +47,8 @@ Uusi Alembic-revisio on `0003_auth`. Vanhoja 0001/0002-revisioita ei muuteta. Uu
 
 ## Rajat
 
-Tämä on yksityinen Codespaces-/paikallisdemoympäristö, ei tuotannon tunnistusjärjestelmä. MFA, tuotannon IdP-liitäntä, hallintakäyttöliittymä, kokonainen auditointi, hyväksyntä ja julkaisu eivät kuulu tähän toimitukseen. Tuotantoon tarvitaan erillinen realm-, käyttäjä-, salaisuus- ja käyttöoikeuskonfiguraatio. DEMO_MODE=true-vaatimus säilyy eikä oikeaa OIDC-ketjua voi ohittaa demo-otsakkeella.
+Tämä on yksityinen Codespaces-/paikallisdemoympäristö, ei tuotannon tunnistusjärjestelmä. MFA, tuotannon IdP-liitäntä, hallintakäyttöliittymä ja koko tunnistusjärjestelmän auditointi eivät kuulu tähän toimitukseen. Tuotteiden hyväksyntä, julkaisu ja tapahtumaloki kuuluvat vaiheeseen 2C. Tuotantoon tarvitaan erillinen realm-, käyttäjä-, salaisuus- ja käyttöoikeuskonfiguraatio. DEMO_MODE=true-vaatimus säilyy eikä oikeaa OIDC-ketjua voi ohittaa demo-otsakkeella.
+
+## Vaiheen 2C lisäjäsenyydet
+
+Kertaluonteinen `phase-2c-reviewers`-alustus lisää yritys-subjectille publisher-jäsenyyden alkuperäiseen verotuotteen organisaatioon ja vero-subjectille publisher-jäsenyyden yritystuotteen organisaatioon. Se ei korvaa olemassa olevaa jäsenyyttä eikä palauta poistettua restartissa. Keycloak-realmiä ei muuteta tai tuoda uudelleen; samat kolme tunnusta toimivat vanhassa volumessa. Omat luonnokset näyttää myös tarkastettavat tuotteet, mutta muokkaus- ja hyväksyntäoikeudet ovat erillisiä. Kaikki luonnokseen kirjoittaneet subjectit estetään sen hyväksynnästä. Sama tarkastaja saa toimia julkaisijana.

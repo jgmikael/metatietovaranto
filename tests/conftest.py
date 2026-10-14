@@ -8,7 +8,7 @@ import secrets
 from uuid import uuid4
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import delete, select
+from sqlalchemy import delete, select, text, inspect
 from sqlalchemy.orm import Session
 from apps.api.main import app, engine
 from apps.api.models import Product, DemoInitialization, Organization, OrganizationMembership, WebSession, OAuthFlow
@@ -22,8 +22,8 @@ def anonymous_client():
     with TestClient(app) as client:
         yield client
     with engine.begin() as connection:
-        for model in (OAuthFlow, WebSession, OrganizationMembership, Product, DemoInitialization, Organization):
-            connection.execute(delete(model))
+        tables=[name for name in inspect(connection).get_table_names() if name!='alembic_version']
+        connection.execute(text('TRUNCATE '+', '.join('"'+name+'"' for name in tables)+' CASCADE'))
 
 
 def authenticate(client, subject, organization_ids=(), role='editor'):

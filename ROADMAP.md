@@ -29,23 +29,31 @@ Tämä tehtävä on tilattu erikseen nykyisen main-haaran pohjalta.
 - Keycloak OIDC authorization code + PKCE; ei demokäyttäjän identiteetin oikopolkua.
 - Opaque palvelinistunto PostgreSQL:ssä, HttpOnly/SameSite-eväste, HTTPS:ssä Secure ja kirjoituspyyntöjen CSRF-tarkistus.
 - Eksplisiittiset organisaatiojäsenyydet ja editor/reader-roolit. Muokkaaja ylläpitää vain omien organisaatioidensa tuotteita; palvelin tarkistaa myös vaihdettavan tarjoajan.
-- Anonyymi haku, tuotesivut ja viennit säilyvät tämän demon julkisina metatietoina. Julkaisutiloja ja rajattua näkyvyyttä ei vielä ole.
+- Vaiheen 2B toimituksessa metatiedot näkyivät anonyymisti; vaihe 2C rajaa julkiset haut, sivut ja viennit julkaistuihin snapshotteihin.
 - Kolme synteettistä demokäyttäjää (kaksi eri organisaation muokkaajaa, yksi lukija) ja oikean OIDC-ketjun selaintestit.
 - Yksi selainportti 8000: rajattu saman alkuperän kirjautumisproxy Keycloakille. Codespacesin Private-portti ja automaattinen selainavaus säilyvät.
 - Migraatio 0003_auth lisää istunnot, OIDC-tilat ja jäsenyydet; aiempia migraatioita tai tuotetietoja ei kirjoiteta uudelleen.
 
+## Vaihe 2C — luonnokset, hyväksyntä ja lukitut julkaisut
+
+Tilattu käyttäjän toimeksiannolla PR:ien 5 ja 6 yhdistämisen jälkeen. Toteutus perustuu mainin commitiin `0dd6555`.
+
+- Omistajaorganisaation yksityinen työkopio, draft → inReview → approved → published; perusteltu palautus tarkastuksesta.
+- Eri käyttäjän hyväksyntä sidottuna sisältötarkisteeseen ja revisioon. Kaikki kirjoittajat huomioidaan; muokkaus mitätöi hyväksynnän.
+- Optimistinen If-Match-lukitus, PostgreSQL-rivilukitus, luonnin/julkaisun idempotenssi.
+- Muuttumaton semver-julkaisu, version URI, vanhojen versioiden vienti ja julkinen haku vain julkaisuista.
+- Julkaisu, hyväksyntäviite, audit ja outbox samassa transaktiossa. Tietokantatriggerit estävät historian muuttamisen.
+- PR 5: Tietomallit SHACL-profiili linkillä TAI tiedostona, alkuperäiset IRI:t/graafi ja lukitut riippuvuudet, johdetut tietoelementit, esitysten graafiekvivalenssi. Alkuperä tarkastetaan ihmisen arviona, ei automaattisena alustatodistuksena.
+- PR 6: W3C VC ensisijaisena suunniteltuna/käytettävänä jakeluna, versioon ja profiiliin sidotut metatiedot, pysyvä myöntäjän HTTPS-linkki ja nimetyn lompakkoprofiilin näyttö. Ei myöntämistä katalogissa.
+- Migraatio 0004 säilyttää vanhat tiedot luonnoksina; mitään ei julkaista automaattisesti. Kaksi nykyistä synteettistä editoria toimivat ristikkäin toisen organisaation tarkastajana/julkaisijana.
+- Codespacesin Private-portti 8000, automaattinen selainavaus ja vanhojen tietojen säilyminen jatkuvat.
+
 ## Vaiheen 2 myöhemmät osat — erillinen toimeksianto
 
-Ennen 2C:n julkaisuversioiden rakenteen lukitsemista huomioi `docs/semanttinen-periaate-1.md`: tietotuote kytketään Tietomallit-työkalun versioituun SHACL-soveltamisprofiiliin linkillä tai tiedostolla. Sisällön auktoritatiivinen lähde ja sen OWL-viitteet suunnitellaan nyt; SHACL-validointipalvelu voidaan toteuttaa myöhemmin. Nykyinen käsin ylläpidettävä dataElements-luettelo on väliaikainen. Periaatteen kirjaaminen ei vielä tilaa toteutusta.
-
-Toinen periaate on `docs/vc-periaate-2.md`: ensisijainen toimitusmuoto on W3C VC. Tuotesivu ohjaa erillisen myöntäjän asiointiin pysyvällä HTTPS-linkillä. Todistusprofiilin, myöntäjän, konfiguraation, lompakkoprofiilin ja saatavuuden metatiedot otetaan huomioon ennen julkaisurakenteen lukitsemista. Varsinainen lompakkoprotokolla, myöntäjäsimulaattori ja tuotantomyöntäjän integraatio kuuluvat erikseen tilattavaan vaiheeseen 3.
-
-Seuraava ehdotettu rajaus on 2C: luonnokset, hyväksyntäprosessi, muuttumattomat julkaisuversiot, optimistinen lukitus ja auditointi. Sen jälkeen semanttinen validointi/SHACL ja vientien vaatimustenmukaisuus voidaan toteuttaa omana rajauksenaan. Myös organisaatiojäsenyyksien hallintakäyttöliittymä, tuotantotunnistautuminen ja kielituen laajennukset suunnitellaan erikseen. Näitä ei toteuteta vaiheessa 2B.
+SHACL-instanssivalidointipalvelu ja kattava profiilivalidointi, DCAT-AP-vientien vaatimustenmukaisuus, retired/withdrawn/deprecated/archived-elinkaaret, useat rinnakkaiset VC-jakelut ja niiden valinta, jäsenyyksien hallintakäyttöliittymä, tuotannon IdP, kielituen laajennukset ja kuormitusvaatimukset. Vaiheen 2C ihmistarkastus ja rakenne-/riippuvuustarkistukset eivät korvaa näitä.
 
 ## Vaihe 3 — ulkoiset integraatiot
 
-Ulkoiset lompakko-, QEAA- ja data-avaruusintegraatiot sekä niiden adapterit ja oikeita vertaispalveluja vastaan tehtävä todennus.
+Erillinen myöntäjäsimulaattori, oikeat OpenID4VCI/lompakko-, QEAA- ja data-avaruuspalvelut, linkkien saavutettavuuden ja luottamuksen todennus sekä nimetyt EUDIW-/EBW-yhteentoimivuuskokeet. Katalogi ei toteuta Credential Endpointia tai tallenna henkilökohtaisia myöntämisistuntoja.
 
-Vaiheen 2B jälkeen jatketaan vain erillisellä toimeksiannolla. Työhaaroja ei yhdistetä automaattisesti main-haaraan.
-
-
+Seuraavaan vaiheeseen siirrytään vain erillisellä toimeksiannolla. Työhaaroja ei yhdistetä automaattisesti main-haaraan.

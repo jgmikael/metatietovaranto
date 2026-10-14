@@ -2,7 +2,7 @@
 
 ## Rajaus
 
-Lue `ROADMAP.md`, `STATUS.md` ja `metatietovaranto_suunnittelu.md`. Suunnitelma kuvaa tavoitearkkitehtuurin. Nykyinen toimitus kattaa ROADMAPin vaiheen 1 sekä vaiheet 2A (Alembic ja organisaatiot) ja 2B (OIDC ja organisaatiokohtainen ylläpito). Älä toteuta hyväksyntää, julkaisuversioita, SHACL:ia tai ulkoisia integraatioita ilman erillistä toimeksiantoa. Älä yhdistä main-haaraan automaattisesti.
+Lue `ROADMAP.md`, `STATUS.md` ja `metatietovaranto_suunnittelu.md`. Suunnitelma kuvaa tavoitearkkitehtuurin. Nykyinen toimitus kattaa ROADMAPin vaiheet 1, 2A, 2B ja 2C (luonnokset, riippumaton hyväksyntä, lukitut profiili-/julkaisusnapshotit, VC-metatiedot ja auditointi). Lue myös docs/phase-2c.md. Älä toteuta SHACL-instanssivalidointipalvelua, laajempaa elinkaarta tai ulkoisia integraatioita ilman erillistä toimeksiantoa. Älä yhdistä main-haaraan automaattisesti.
 
 ## Sitova semanttinen suunnitteluperiaate
 
@@ -20,7 +20,7 @@ Käytä nykyistä checkoutia: pilvitehtävät ovat jo eristettyjä. Älä luo wo
 
 Täsmälliset komennot ovat READMEssä. Sovellus käyttää aina PostgreSQL:ää, myös API-testeissä. Testit käyttävät erillistä `catalog_test`-kantaa; älä aja tyhjentäviä testejä `catalog`-kantaan. Aja muutoksen mukaan `uv sync --locked`, `npm ci --prefix apps/web`, `npm run build --prefix apps/web` ja API-, migraatio- ja osoitteenmuodostustestit. Älä aja samaa tyhjentävää testikantaa käyttäviä pytest-ajoja rinnakkain. Käyttöliittymämuutoksissa aja myös `BROWSER_BASE_URL=http://localhost:8000 .venv/bin/pytest tests/test_browser.py -q` käynnistettyä demoa vasten. Raportoi ajamattomat ja ohitetut testit erikseen. Päivitä STATUS toteutuksen muuttuessa.
 
-Kirjoitus-API vaatii palvelinistunnon, CSRF-tarkistuksen ja editor-jäsenyyden tuotteen organisaatioon. Älä lisää testejä tai demoa varten autentikoinnin ohitusreittiä. Käytä selaintesteissä oikeaa Keycloak-kirjautumista. Säilytä `DEMO_MODE=true`-käynnistysvaatimus ja Compose-porttien sidonta loopbackiin. Älä poista PostgreSQL-volumea tavallisen käynnistyksen yhteydessä.
+Kirjoitus-API vaatii palvelinistunnon ja CSRF-tarkistuksen. Luonnoksen muokkaus tarvitsee editor-jäsenyyden pysyvään omistajaorganisaatioon; tarkastus reviewer/publisher- ja julkaisu publisher-roolin. Älä anna kirjoittajan hyväksyä omaa sisältöään. Säilytä ETag/If-Match ja idempotenssi. Julkinen haku ja vienti käyttävät vain muuttumattomia julkaisuja. Älä lisää testejä tai demoa varten autentikoinnin ohitusreittiä. Käytä selaintesteissä oikeaa Keycloak-kirjautumista. Säilytä `DEMO_MODE=true`-käynnistysvaatimus ja Compose-porttien sidonta loopbackiin. Älä poista PostgreSQL-volumea tavallisen käynnistyksen yhteydessä.
 
 ## Migraatiot
 
