@@ -37,7 +37,7 @@ Testikehityksessä korjattiin puuttunut auth-routerin rekisteröinti, Keycloakin
 - Windows/Docker Desktop, ensimmäinen build tyhjällä välimuistilla ja GitHub Actions -etäajo jäivät ajamatta. CI päivitettiin käynnistämään oikea Keycloak/Compose-demo selaintesteille erillisellä tietokannalla.
 - Keycloak toimii development-konfiguraatiolla synteettisillä salasanoilla. Tuotannon IdP, MFA, jäsenyyksien hallinta-UI, sessionhallinnan UI ja back-channel logout eivät kuulu tähän rajaukseen. IdP-tilin poistaminen ei yksin peru jo myönnettyä kahdeksan tunnin sovellusistuntoa; organisaatiojäsenyyden peruminen estää kirjoittamisen heti.
 - Hyväksyntä, julkaisuversiot, auditointi, optimistinen lukitus, SHACL ja ulkoiset integraatiot jäävät erillisiksi vaiheiksi. Julkisista metatiedoista ei tehdä tässä vaiheessa organisaatiolle piilotettuja luonnoksia.
-- GitHub API -lukukokeilu palautti Forbidden; PR:n varsinainen luontitulos kirjataan toimituksessa. Kuvaus valmistellaan docs/pull-request.md-tiedostoon.
+- Haara `feat/phase-2b-auth` on pushattu GitHubiin. Pull requestia **ei luotu**: `gh pr create --base main --head feat/phase-2b-auth --title "Vaihe 2B: OIDC-kirjautuminen ja organisaatiokohtainen ylläpito" --body-file docs/pull-request.md` palautti `Post https://api.github.com/graphql: Forbidden`. Valmis kuvaus on docs/pull-request.md ja PR:n voi avata selaimessa osoitteesta https://github.com/jgmikael/metatietovaranto/compare/main...feat/phase-2b-auth . Main-haaraan ei yhdistetty mitään.
 
 ---
 
