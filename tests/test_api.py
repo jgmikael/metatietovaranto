@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from uuid import uuid4
+from uuid import uuid4, uuid5, NAMESPACE_URL
 
 from rdflib import Graph, URIRef, Literal
 from rdflib.namespace import DCTERMS, RDF, DCAT
@@ -12,7 +12,9 @@ FIXTURES = json.loads(Path('fixtures/products.json').read_text())
 ID = FIXTURES[0]['id']
 
 def payload():
-    return json.loads(json.dumps({k:v for k,v in FIXTURES[0].items() if k != 'id'}))
+    data = json.loads(json.dumps({k:v for k,v in FIXTURES[0].items() if k not in ('id','provider')}))
+    data['providerOrganizationId'] = str(uuid5(NAMESPACE_URL, f'https://example.org/metatietovaranto/legacy-provider/{ID}'))
+    return data
 
 def test_seed_and_health(client):
     assert client.get('/health/ready').json() == {'status':'ready','database':'postgresql'}
@@ -47,10 +49,10 @@ def test_crud_persistence(client):
     assert client.get(f'/api/v1/products/{product_id}').status_code==404
 
 def test_validation(client):
-    for field in ('title','description','provider','theme','source','purpose','limitations','accessConditions'):
+    for field in ('title','description','theme','source','purpose','limitations','accessConditions'):
         data=payload();data[field]='  '
         assert client.post('/api/v1/products',json=data).status_code==422
-    for field,value in [('synthetic',False),('dataElements',[]),('availability','production'),('title','x'*201)]:
+    for field,value in [('providerOrganizationId',str(uuid4())),('providerOrganizationId',''),('synthetic',False),('dataElements',[]),('availability','production'),('title','x'*201)]:
         data=payload();data[field]=value
         assert client.post('/api/v1/products',json=data).status_code==422
     data=payload();data['dataElements'][0]['semanticUri']='javascript:alert(1)'
@@ -96,3 +98,38 @@ def test_seed_is_idempotent_and_preserves_edits(client):
         assert restarted.get('/api/v1/products').json()['total']==2
         assert restarted.get(f'/api/v1/products/{ID}').json()['title']=='Säilyvä muokkaus'
         assert restarted.get(f"/api/v1/products/{FIXTURES[1]['id']}").status_code==404
+
+
+def test_organization_api_and_provider_selection(client):
+    organizations=client.get('/api/v1/organizations').json()['items']
+    assert len(organizations)==3
+    for organization in organizations:
+        assert organization['country']=='FI'
+        assert organization['synthetic'] is True
+        assert organization['identifiers'][0]['scheme']=='demo'
+        assert client.get(f"/api/v1/organizations/{organization['id']}").json()==organization
+    assert client.get(f'/api/v1/organizations/{uuid4()}').status_code==404
+    assert client.get('/api/v1/organizations/not-a-uuid').status_code==422
+    data=payload();data['providerOrganizationId']=organizations[0]['id']
+    created=client.post('/api/v1/products',json=data).json()
+    assert created['provider']==organizations[0]['legalName']
+    assert created['providerOrganizationId']==organizations[0]['id']
+    data['providerOrganizationId']=organizations[1]['id']
+    updated=client.put(f"/api/v1/products/{created['id']}",json=data).json()
+    assert updated['provider']==organizations[1]['legalName']
+    assert client.get(f"/api/v1/products/{created['id']}/export?format=json").json()['provider']==organizations[1]['legalName']
+    graph=Graph().parse(data=client.get(f"/api/v1/products/{created['id']}/export?format=jsonld").text,format='json-ld')
+    publisher=graph.value(URIRef(updated['uri']),DCTERMS.publisher)
+    assert str(publisher).endswith(organizations[1]['id'])
+    assert graph.value(publisher,DCTERMS.title)==Literal(organizations[1]['legalName'])
+
+
+def test_database_rejects_missing_or_unknown_provider_fk(client):
+    from sqlalchemy import text
+    from sqlalchemy.exc import IntegrityError
+    import pytest
+    for value in (None,uuid4()):
+        with pytest.raises(IntegrityError):
+            with engine.begin() as connection:
+                connection.execute(text('UPDATE products SET provider_organization_id=:value WHERE id=:id'),
+                                   {'value':value,'id':ID})

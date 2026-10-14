@@ -12,12 +12,24 @@
 - Palvelimen validointi, API-/PostgreSQL-testit, RDF-jäsentämistestit ja selaintestit.
 - Suomenkielinen responsiivinen demo, näkyvä demomerkintä ja dokumentoitu käynnistys.
 
-## Vaihe 2 — hallittu ylläpito ja semanttinen validointi
+## Vaihe 2A — migraatiot ja tarjoajaorganisaatiot
 
-Kirjautuminen/OIDC, organisaatiokohtaiset oikeudet, hyväksyntäprosessi, muuttumattomat julkaisuversiot, optimistinen lukitus, auditointi ja SHACL-validointi. Ennen tietomallin ensimmäistä muutosta lisää Alembic-migraatiohistoria nykyisen alkuperäisskeeman pohjalta. Laajenna tämän jälkeen kielituki, tietomalli ja vientien profiilit tavoitearkkitehtuurin mukaisiksi; varmista DCAT-AP-vaatimustenmukaisuus erikseen.
+Tämä tehtävä on tilattu erikseen nykyisen main-haaran pohjalta.
+
+- Alembic: ensimmäinen migraatio kuvaa alkuperäisen skeeman ja ottaa tarkistetun vaiheen 1 kannan käyttöön ilman tiedonmenetystä.
+- Toinen migraatio lisää Organization-mallin ja pakollisen tuote–tarjoajaorganisaatio-vierasavaimen. Samannimisiä vanhoja tarjoajia ei yhdistetä nimen perusteella.
+- Organisaation UUID, virallinen nimi, maa, tunnistejärjestelmä/tunniste-parit ja synteettisyys; luku-API ja yksinkertainen näkymä.
+- Tuotteen ylläpidossa organisaatiovalinta; tarjoajanimi säilyy haussa, tuotesivulla ja vienneissä.
+- Migraatiot ennen readiness-tilaa samalla käynnistyspolulla Composessa ja Codespacesissa; fixtureitä ei palauteta vanhaan kantaan.
+- Vanhan muokatun kannan, tyhjän kannan ja toistuvien migraatioiden PostgreSQL-testit sekä aiempien selainpolkujen säilyttäminen.
+- Codespacesin automaattinen selainavaus ja Private-portti säilyvät.
+
+## Vaiheen 2 myöhemmät osat — erillinen toimeksianto
+
+Kirjautuminen/OIDC, organisaatiokohtaiset käyttöoikeudet, hyväksyntäprosessi, muuttumattomat julkaisuversiot, optimistinen lukitus, auditointi ja SHACL-validointi. Laajenna tämän jälkeen kielituki, tietomalli ja vientien profiilit tavoitearkkitehtuurin mukaisiksi; varmista DCAT-AP-vaatimustenmukaisuus erikseen. Näitä ei toteuteta vaiheessa 2A.
 
 ## Vaihe 3 — ulkoiset integraatiot
 
 Ulkoiset lompakko-, QEAA- ja data-avaruusintegraatiot sekä niiden adapterit ja oikeita vertaispalveluja vastaan tehtävä todennus.
 
-Vaiheisiin 2 ja 3 siirrytään erillisellä toimeksiannolla. Vaiheen 1 työhaaraa ei yhdistetä automaattisesti main-haaraan.
+Vaiheen 2A jälkeen jatketaan vain erillisellä toimeksiannolla. Työhaaroja ei yhdistetä automaattisesti main-haaraan.

@@ -35,8 +35,9 @@ def test_search_detail_edit_create_delete(page):
         assert page.get_by_role('link',name='JSON-LD',exact=True).get_attribute('href').endswith('format=jsonld')
         page.get_by_role('link',name='← Takaisin hakuun').click()
         page.get_by_role('button',name='Lisää tietotuote',exact=True).click()
-        for label,value in [('Nimi',title),('Kuvaus','<script>window.injected=true</script>'),('Tarjoaja','Demo-testitarjoaja'),('Teema','Testit'),('Synteettinen lähde','Synteettinen fixture'),('Käyttötarkoitus','Selaimen tallennustesti'),('Rajaukset — mitä tuote ei todista','Ei aitoja tietoja'),('Elementin nimi','test'),('Elementin kuvaus','Synteettinen elementti')]:
+        for label,value in [('Nimi',title),('Kuvaus','<script>window.injected=true</script>'),('Teema','Testit'),('Synteettinen lähde','Synteettinen fixture'),('Käyttötarkoitus','Selaimen tallennustesti'),('Rajaukset — mitä tuote ei todista','Ei aitoja tietoja'),('Elementin nimi','test'),('Elementin kuvaus','Synteettinen elementti')]:
             page.get_by_label(label,exact=True).fill(value)
+        page.get_by_label('Tarjoaja',exact=True).select_option(index=1)
         page.get_by_role('button',name='Tallenna',exact=True).click()
         expect(page.get_by_role('heading',name=title,exact=True)).to_be_visible()
         created_id=page.url.split('#')[1]
@@ -60,3 +61,18 @@ def test_mobile_search(page):
     page.goto(os.environ['BROWSER_BASE_URL'])
     expect(page.get_by_role('heading',name='Löydä tietotuote')).to_be_visible()
     assert page.evaluate('document.documentElement.scrollWidth <= window.innerWidth')
+
+
+def test_organization_navigation_and_provider_link(page):
+    page.goto(os.environ['BROWSER_BASE_URL'])
+    page.get_by_role('link',name='Organisaatiot',exact=True).click()
+    expect(page.get_by_role('heading',name='Organisaatiot',exact=True)).to_be_visible()
+    page.get_by_role('link',name='Demo-veroviranomainen',exact=True).click()
+    expect(page.get_by_role('heading',name='Demo-veroviranomainen',exact=True)).to_be_visible()
+    expect(page.get_by_text('Organisaatiotunnisteet',exact=True)).to_be_visible()
+    page.reload()
+    expect(page.get_by_role('heading',name='Demo-veroviranomainen',exact=True)).to_be_visible()
+    page.get_by_role('link',name='← Takaisin hakuun').click()
+    page.get_by_role('link',name='Verovelkatieto — synteettinen demo',exact=True).click()
+    page.get_by_role('link',name='Demo-veroviranomainen',exact=True).click()
+    expect(page.get_by_role('heading',name='Demo-veroviranomainen',exact=True)).to_be_visible()

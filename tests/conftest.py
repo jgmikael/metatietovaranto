@@ -6,7 +6,7 @@ os.environ['DEMO_MODE'] = 'true'
 
 import pytest
 from fastapi.testclient import TestClient
-from apps.api.main import app, engine, Product, DemoInitialization
+from apps.api.main import app, engine, Product, DemoInitialization, Organization
 from sqlalchemy import delete
 
 @pytest.fixture
@@ -18,3 +18,4 @@ def client():
     with engine.begin() as connection:
         connection.execute(delete(Product))
         connection.execute(delete(DemoInitialization))
+        connection.execute(delete(Organization))

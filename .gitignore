@@ -6,3 +6,5 @@ dist/
 .env
 *.log
 test-results/
+
+/before-2a.sql
