@@ -6,7 +6,11 @@ Lue `ROADMAP.md`, `STATUS.md` ja `metatietovaranto_suunnittelu.md`. Suunnitelma 
 
 ## Sitova semanttinen suunnitteluperiaate
 
-Lue `docs/semanttinen-periaate-1.md` ennen tietotuotteen sisällön, soveltamisprofiilien, skeematuonnin tai julkaisuversioiden suunnittelua. Sisältö perustuu Tietomallit-työkalun SHACL-soveltamisprofiiliin, joka annetaan linkkinä tai alustalta ladattuna tiedostona. OWL voi sijaita alustalla tai ulkoisessa nimiavaruudessa. JSON Schema/OpenAPI ovat johdannaisia; tietoelementtien käsin ylläpidettävä rinnakkaismalli ei ole tavoiteratkaisu. Nykyiset dataElements ovat väliaikaista demoa eivätkä vahvistettu profiilikytkentä. Tämä täsmennys ei tilaa toiminnallisuuden toteutusta tai toisen perusoletuksen käsittelyä.
+Lue `docs/semanttinen-periaate-1.md` ennen tietotuotteen sisällön, soveltamisprofiilien, skeematuonnin tai julkaisuversioiden suunnittelua. Sisältö perustuu Tietomallit-työkalun SHACL-soveltamisprofiiliin, joka annetaan linkkinä tai alustalta ladattuna tiedostona. OWL voi sijaita alustalla tai ulkoisessa nimiavaruudessa. JSON Schema/OpenAPI ovat johdannaisia; tietoelementtien käsin ylläpidettävä rinnakkaismalli ei ole tavoiteratkaisu. Nykyiset dataElements ovat väliaikaista demoa eivätkä vahvistettu profiilikytkentä. Periaatteen kirjaaminen ei vielä tilaa toteutusta.
+
+## Sitova VC toimitusperiaate
+
+Lue `docs/vc-periaate-2.md`. Ensisijainen toimitusmuoto on W3C VC. Tuotesivu tarjoaa pysyvän myöntäjän HTTPS-asiointilinkin **Pyydä todistus lompakkoon**. Myöntäjä vastaa henkilön/yrityksen tunnistamisesta, edustamisoikeudesta, lähdetiedosta, myöntämisestä, VC:n suojaamisesta ja lompakkoprotokollasta. Katalogi ei säilytä henkilökohtaisia tarjouksia tai tokeneita. Katalogin Keycloak-istunto ei ole myöntäjän pääsyoikeus. EUDIW-/EBW-yhteensopivuus kuvataan ja todennetaan erikseen. Tämä suunnittelupäätös ei vielä tilaa myöntämispalvelun tai lompakkointegraation toteutusta.
 
 ## Työskentelyn käytännöt
 
@@ -25,4 +29,5 @@ Muuta skeemaa uusilla Alembic-revisioilla; älä muokkaa jo toimitettuja revisio
 ## Kirjautuminen
 
 Lue docs/authentication.md. Keycloakin tunnukset ovat synteettisiä demotunnuksia, eivät tuotantosalaisuuksia. Älä lokita koodeja, tokeneita, evästeitä tai salasanoja. Säilytä --no-access-log deployatussa Uvicornissa. Älä myönnä oikeuksia organisaation nimen tai käyttäjän lähettämän organisaatiotiedon perusteella. Älä muuta vanhoja jäsenyyksiä fixtureiden perusteella uudelleenkäynnistyksissä.
+
 

@@ -36,7 +36,9 @@ Tämä tehtävä on tilattu erikseen nykyisen main-haaran pohjalta.
 
 ## Vaiheen 2 myöhemmät osat — erillinen toimeksianto
 
-Ennen 2C:n julkaisuversioiden rakenteen lukitsemista huomioi `docs/semanttinen-periaate-1.md`: tietotuote kytketään Tietomallit-työkalun versioituun SHACL-soveltamisprofiiliin linkillä tai tiedostolla. Sisällön auktoritatiivinen lähde ja sen OWL-viitteet suunnitellaan nyt; SHACL-validointipalvelu voidaan toteuttaa myöhemmin. Nykyinen käsin ylläpidettävä dataElements-luettelo on väliaikainen. Periaatteen 1 kirjaaminen ei vielä tilaa toteutusta. Toista suunnitteluolettamaa ei ole käsitelty.
+Ennen 2C:n julkaisuversioiden rakenteen lukitsemista huomioi `docs/semanttinen-periaate-1.md`: tietotuote kytketään Tietomallit-työkalun versioituun SHACL-soveltamisprofiiliin linkillä tai tiedostolla. Sisällön auktoritatiivinen lähde ja sen OWL-viitteet suunnitellaan nyt; SHACL-validointipalvelu voidaan toteuttaa myöhemmin. Nykyinen käsin ylläpidettävä dataElements-luettelo on väliaikainen. Periaatteen kirjaaminen ei vielä tilaa toteutusta.
+
+Toinen periaate on `docs/vc-periaate-2.md`: ensisijainen toimitusmuoto on W3C VC. Tuotesivu ohjaa erillisen myöntäjän asiointiin pysyvällä HTTPS-linkillä. Todistusprofiilin, myöntäjän, konfiguraation, lompakkoprofiilin ja saatavuuden metatiedot otetaan huomioon ennen julkaisurakenteen lukitsemista. Varsinainen lompakkoprotokolla, myöntäjäsimulaattori ja tuotantomyöntäjän integraatio kuuluvat erikseen tilattavaan vaiheeseen 3.
 
 Seuraava ehdotettu rajaus on 2C: luonnokset, hyväksyntäprosessi, muuttumattomat julkaisuversiot, optimistinen lukitus ja auditointi. Sen jälkeen semanttinen validointi/SHACL ja vientien vaatimustenmukaisuus voidaan toteuttaa omana rajauksenaan. Myös organisaatiojäsenyyksien hallintakäyttöliittymä, tuotantotunnistautuminen ja kielituen laajennukset suunnitellaan erikseen. Näitä ei toteuteta vaiheessa 2B.
 
@@ -45,4 +47,5 @@ Seuraava ehdotettu rajaus on 2C: luonnokset, hyväksyntäprosessi, muuttumattoma
 Ulkoiset lompakko-, QEAA- ja data-avaruusintegraatiot sekä niiden adapterit ja oikeita vertaispalveluja vastaan tehtävä todennus.
 
 Vaiheen 2B jälkeen jatketaan vain erillisellä toimeksiannolla. Työhaaroja ei yhdistetä automaattisesti main-haaraan.
+
 

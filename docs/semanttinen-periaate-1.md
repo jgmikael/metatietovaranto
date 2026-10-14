@@ -1,6 +1,6 @@
 # Suunnitteluperiaate 1 Tietomallit soveltamisprofiili sisällön perustana
 
-Päiväys 14.10.2026. Käyttäjän täsmennys Metatietovarannon suunnitteluun. Tämä päätös koskee ensimmäistä suunnitteluolettamaa; toista olettamaa ei ole vielä käsitelty. Dokumentti täsmentää tavoitearkkitehtuuria eikä väitä ominaisuuden olevan toteutettu vaiheessa 2B.
+Päiväys 14.10.2026. Käyttäjän täsmennys Metatietovarannon suunnitteluun. Tämä päätös koskee ensimmäistä suunnitteluolettamaa. Toinen, VC-toimitusta ja myöntäjäpalvelua koskeva päätös on `docs/vc-periaate-2.md`:ssä. Dokumentit täsmentävät tavoitearkkitehtuuria eivätkä väitä ominaisuuksien olevan toteutettu vaiheessa 2B.
 
 ## Sitova lähtökohta
 
@@ -88,3 +88,4 @@ Suunnitteluperiaate kirjataan nyt. Soveltamisprofiilikytkentä ja tuonnin perusr
 - W3C SHACL: https://www.w3.org/TR/shacl/
 
 Tietomallit-ohje vahvistaa exportit JSON-LD, RDF ja Turtle sekä soveltamisprofiileille OpenAPI ja JSON Schema. Ulkoisten nimiavaruuksien hyödyntäminen on dokumentoitu. Linkki-/tiedostoreitit, pakollisuus, snapshotit ja hyväksymisehdot ovat tämän Metatietovaranto-hankkeen suunnitteluratkaisuja.
+
