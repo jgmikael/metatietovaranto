@@ -4,7 +4,7 @@ Tämä käynnistää nykyisen vaiheen 1 demon GitHub Codespacesissa. Paikallisia
 
 ## Ensimmäinen käynnistys
 
-1. Avaa https://codespaces.new/jgmikael/metatietovaranto?ref=demo%2Fcodespaces . Kirjaudu GitHubiin samalla tilillä, jolla pääset yksityiseen repositorioon.
+1. Avaa https://codespaces.new/jgmikael/metatietovaranto?ref=main . Kirjaudu GitHubiin samalla tilillä, jolla pääset yksityiseen repositorioon.
 2. Tarkista Branch `demo/codespaces`, valitse 2-core-kone ja **Create codespace**. Tarkista GitHubin näyttämä käyttö- ja laskutustieto ennen luontia.
 3. Odota konttien ensimmäistä rakennusta. Tähän voi kulua useita minuutteja. Sovellus ja tietokanta käynnistyvät automaattisesti; terminaalikomentoja ei tarvita tavallisessa käynnistyksessä.
 4. Demo pyritään avaamaan automaattisesti uuteen selainvälilehteen. Jos selain estää avaamisen, avaa editorin alaosan **PORTS**-välilehti. Etsi portti **8000**, jonka nimi on **Avaa Metatietovarannon demo**, ja valitse maapallokuvake **Open in Browser**.
@@ -32,3 +32,7 @@ GitHubin henkilökohtaisiin tileihin sisältyy rajallinen Codespaces-käyttökii
 Kopioi **Creation log** -näkymän virhe ja pyydä korjaamaan se. Älä tee portista julkista virheen kiertämiseksi. Sovelluksen terveystarkistus on `/health/ready`. README:n paikallinen Compose-käynnistys on edelleen käytettävissä, mutta sitä ei tarvitse suorittaa omalla koneella tämän verkkodemon vuoksi.
 
 Tämän toimituksen paikallinen tarkistus ei yksin todista, että oman tilisi Codespaces-luonti onnistuu. Ensimmäinen oikea käynnistys vahvistetaan tililläsi, jossa ovat repositorion ja Codespacesin käyttöoikeudet.
+
+## Vaiheen 2A kokeilu ennen yhdistämistä
+
+Valitse Codespaces-luonnissa haara `feat/phase-2a-organizations` tai käytä READMEn erillistä kokeilulinkkiä. Uusi Codespace saa oman tyhjän tietokantansa. Kokeile Organisaatiot-linkkiä ja tuotteen Tarjoaja-valintaa. Säilytä portti 8000 **Private**-tilassa. Nykyinen automaattinen selainavaus säilyy. Vanhan kannan päivitys-, varmuuskopio- ja Rebuild Container -ohjeet ovat READMEssä; tavallinen uudelleenkäynnistys ei poista muokkauksia eikä siemennä fixtureitä uudelleen.

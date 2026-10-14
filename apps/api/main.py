@@ -1,41 +1,25 @@
-"""Phase 1 local catalogue. No authentication or publication workflow."""
+"""Phase 2A catalogue: migrations and organizations, no authentication workflow."""
 import os
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal
-from uuid import UUID, uuid4
+from uuid import UUID, NAMESPACE_URL, uuid5
 import json
 
 from fastapi import FastAPI, HTTPException, Query, Response, Request
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator
-from sqlalchemy import DateTime, String, create_engine, func, or_, select, text
-from sqlalchemy.dialects.postgresql import JSONB, UUID as PGUUID
-from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
+from sqlalchemy import create_engine, func, or_, select, text
+from sqlalchemy.orm import Session
 from apps.api.public_url import public_base_url
+from apps.api.models import Base, Product, Organization, DemoInitialization
+from apps.api.migrate import upgrade_database
 
 ROOT = Path(__file__).resolve().parents[2]
 BASE_URL = public_base_url()
 engine = create_engine(os.getenv("DATABASE_URL", "postgresql+psycopg://demo:demo@localhost:5432/catalog"), pool_pre_ping=True)
-
-class Base(DeclarativeBase):
-    pass
-
-class Product(Base):
-    __tablename__ = "products"
-    id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
-    title: Mapped[str] = mapped_column(String(200), index=True)
-    description: Mapped[str] = mapped_column(String(5000))
-    provider: Mapped[str] = mapped_column(String(200), index=True)
-    theme: Mapped[str] = mapped_column(String(100), index=True)
-    metadata_: Mapped[dict] = mapped_column("metadata", JSONB)
-    modified_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
-
-class DemoInitialization(Base):
-    __tablename__ = "demo_initialization"
-    name: Mapped[str] = mapped_column(String(100), primary_key=True)
 
 class Element(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
@@ -47,7 +31,7 @@ class ProductInput(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
     title: str = Field(min_length=1, max_length=200)
     description: str = Field(min_length=1, max_length=5000)
-    provider: str = Field(min_length=1, max_length=200)
+    providerOrganizationId: UUID
     theme: str = Field(min_length=1, max_length=100)
     source: str = Field(min_length=1, max_length=500)
     purpose: str = Field(min_length=1, max_length=2000)
@@ -57,16 +41,22 @@ class ProductInput(BaseModel):
     dataElements: list[Element] = Field(min_length=1, max_length=50)
     synthetic: Literal[True] = True
 
-    @field_validator("title", "description", "provider", "theme", "source", "purpose", "limitations", "accessConditions")
+    @field_validator("title", "description", "theme", "source", "purpose", "limitations", "accessConditions")
     @classmethod
     def not_blank(cls, value):
         if not value.strip():
             raise ValueError("Kenttä ei saa olla tyhjä")
         return value
 
-def assign(product, data):
+def assign(product, data, session):
     values = data.model_dump(mode="json")
-    for key in ("title", "description", "provider", "theme"):
+    organization_id = values.pop("providerOrganizationId")
+    organization = session.get(Organization, UUID(organization_id))
+    if organization is None:
+        raise HTTPException(422, "Tarjoajaorganisaatiota ei löydy")
+    product.provider_organization_id = organization.id
+    product.provider = organization.legal_name
+    for key in ("title", "description", "theme"):
         setattr(product, key, values.pop(key))
     product.metadata_ = values
     product.modified_at = datetime.now(timezone.utc)
@@ -74,7 +64,7 @@ def assign(product, data):
 def serialize(product):
     return {"id": str(product.id), "uri": f"{BASE_URL}/id/products/{product.id}",
             "title": product.title, "description": product.description,
-            "provider": product.provider, "theme": product.theme,
+            "provider": product.provider, "providerOrganizationId": str(product.provider_organization_id), "theme": product.theme,
             **product.metadata_, "modifiedAt": product.modified_at.isoformat(), "demo": True}
 
 def get_product(session, product_id):
@@ -90,7 +80,7 @@ def jsonld(product):
             "@id": p["uri"], "@type": "dcat:Dataset",
             "dct:title": {"@value": p["title"], "@language": "fi"},
             "dct:description": {"@value": p["description"], "@language": "fi"},
-            "dct:publisher": {"@type": "dct:Agent", "dct:title": p["provider"]},
+            "dct:publisher": {"@id": f"{BASE_URL}/id/organizations/{p['providerOrganizationId']}", "@type": "dct:Agent", "dct:title": p["provider"]},
             "dcat:keyword": p["theme"], "dct:source": p["source"],
             "dct:modified": {"@value": p["modifiedAt"], "@type": "xsd:dateTime"},
             "dct:accessRights": p["accessConditions"], "demo:synthetic": True,
@@ -103,8 +93,8 @@ def jsonld(product):
 async def lifespan(app):
     if os.getenv("DEMO_MODE") != "true":
         raise RuntimeError("Vaihe 1 vaatii DEMO_MODE=true; vain paikalliseen demokäyttöön")
-    # Phase 1 has one initial schema; migration history is introduced before schema evolution.
-    Base.metadata.create_all(engine)
+    # Fail startup before readiness/fixtures if adoption or upgrade is unsafe.
+    upgrade_database(engine)
     with Session(engine) as session:
         # Transaction lock makes first initialization safe even with concurrent starts.
         session.execute(text("SELECT pg_advisory_xact_lock(17294001)"))
@@ -113,14 +103,43 @@ async def lifespan(app):
                 product_id = UUID(fixture["id"])
                 if session.get(Product, product_id) is not None:
                     continue
+                organization_id = uuid5(NAMESPACE_URL, f"https://example.org/metatietovaranto/legacy-provider/{product_id}")
+                organization = session.get(Organization, organization_id)
+                if organization is None:
+                    session.add(Organization(id=organization_id, legal_name=fixture["provider"],
+                                country="FI", identifiers=[{"scheme": "demo", "value": str(product_id)}],
+                                synthetic=True, legacy_product_id=None))
+                    session.flush()
                 product = Product(id=product_id)
-                assign(product, ProductInput(**{k: v for k, v in fixture.items() if k != "id"}))
+                payload = {k: v for k, v in fixture.items() if k not in ("id", "provider")}
+                payload["providerOrganizationId"] = organization_id
+                assign(product, ProductInput(**payload), session)
                 session.add(product)
             session.add(DemoInitialization(name="phase-1-fixtures"))
         session.commit()
     yield
 
 app = FastAPI(title="Metatietovaranto — paikallinen demo", lifespan=lifespan)
+
+def serialize_organization(organization):
+    return {"id": str(organization.id), "legalName": organization.legal_name,
+            "country": organization.country, "identifiers": organization.identifiers,
+            "synthetic": organization.synthetic,
+            "legacyProductId": str(organization.legacy_product_id) if organization.legacy_product_id else None}
+
+@app.get("/api/v1/organizations")
+def organizations():
+    with Session(engine) as session:
+        items = session.scalars(select(Organization).order_by(Organization.legal_name, Organization.id)).all()
+        return {"items": [serialize_organization(item) for item in items]}
+
+@app.get("/api/v1/organizations/{organization_id}")
+def organization_detail(organization_id: UUID):
+    with Session(engine) as session:
+        organization = session.get(Organization, organization_id)
+        if organization is None:
+            raise HTTPException(404, "Organisaatiota ei löydy")
+        return serialize_organization(organization)
 
 @app.get("/id/products/{product_id}")
 def product_uri(product_id: UUID, request: Request):
@@ -174,7 +193,7 @@ def detail(product_id: UUID):
 def create(data: ProductInput, response: Response):
     with Session(engine) as session:
         product = Product()
-        assign(product, data)
+        assign(product, data, session)
         session.add(product)
         session.commit()
         response.headers["Location"] = f"/api/v1/products/{product.id}"
@@ -184,7 +203,7 @@ def create(data: ProductInput, response: Response):
 def update(product_id: UUID, data: ProductInput):
     with Session(engine) as session:
         product = get_product(session, product_id)
-        assign(product, data)
+        assign(product, data, session)
         session.commit()
         return serialize(product)
 
