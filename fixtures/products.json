@@ -1,0 +1,77 @@
+[
+  {
+    "id": "00000000-0000-4000-8000-000000000001",
+    "title": "Verovelkatieto — synteettinen demo",
+    "description": "Kuvaa kuvitteellisen yrityksen verovelan määrän ja tarkistusajan.",
+    "provider": "Demo-veroviranomainen",
+    "theme": "Verotus",
+    "source": "Synteettinen verovelka-aineisto",
+    "purpose": "Havainnollistaa hankintojen kelpoisuustarkastuksen tietotarpeita.",
+    "limitations": "Ei ratkaise hankintalain mukaista poissulkemista eikä sisällä aitoja verotietoja.",
+    "accessConditions": "Vain synteettiseen demokäyttöön. Ei tuotannollista tiedonluovutusta.",
+    "availability": "sandbox",
+    "synthetic": true,
+    "dataElements": [
+      {
+        "name": "taxDebtAmount",
+        "description": "Synteettinen verovelan määrä euroina",
+        "semanticUri": "https://example.org/metatietovaranto/demo/taxDebtAmount"
+      },
+      {
+        "name": "checkedAt",
+        "description": "Synteettisen tiedon tarkistushetki",
+        "semanticUri": "https://example.org/metatietovaranto/demo/checkedAt"
+      }
+    ]
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000000002",
+    "title": "Yrityksen perustiedot — synteettinen demo",
+    "description": "Kuvaa kuvitteellisen yrityksen nimen, rekisteritilan ja kotipaikan.",
+    "provider": "Demo-yritysrekisteri",
+    "theme": "Yritykset",
+    "source": "Synteettinen yritysaineisto",
+    "purpose": "Havainnollistaa yrityksen perustietojen löytämistä.",
+    "limitations": "Ei todista edustamisoikeutta eikä sisällä aitoja yritystietoja.",
+    "accessConditions": "Vain synteettiseen demokäyttöön. Ei tuotannollista tiedonluovutusta.",
+    "availability": "sandbox",
+    "synthetic": true,
+    "dataElements": [
+      {
+        "name": "companyName",
+        "description": "Kuvitteellisen yrityksen nimi",
+        "semanticUri": "https://example.org/metatietovaranto/demo/companyName"
+      },
+      {
+        "name": "registrationStatus",
+        "description": "Synteettinen rekisteritila",
+        "semanticUri": "https://example.org/metatietovaranto/demo/registrationStatus"
+      }
+    ]
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000000003",
+    "title": "Ammattipätevyys — synteettinen demo",
+    "description": "Kuvaa kuvitteellisen ammattipätevyyden alan ja voimassaolon.",
+    "provider": "Demo-pätevyysviranomainen",
+    "theme": "Pätevyydet",
+    "source": "Synteettinen pätevyysaineisto",
+    "purpose": "Havainnollistaa pätevyyden tietosisällön kuvaamista.",
+    "limitations": "Ei myönnä pätevyyttä, henkilötodistusta tai QEAA-todistusta.",
+    "accessConditions": "Vain synteettiseen demokäyttöön. Ei tuotannollista tiedonluovutusta.",
+    "availability": "sandbox",
+    "synthetic": true,
+    "dataElements": [
+      {
+        "name": "qualification",
+        "description": "Synteettisen pätevyyden nimi",
+        "semanticUri": "https://example.org/metatietovaranto/demo/qualification"
+      },
+      {
+        "name": "validUntil",
+        "description": "Synteettisen pätevyyden päättymispäivä",
+        "semanticUri": "https://example.org/metatietovaranto/demo/validUntil"
+      }
+    ]
+  }
+]
