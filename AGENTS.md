@@ -4,7 +4,11 @@
 
 Lue `ROADMAP.md`, `STATUS.md` ja `metatietovaranto_suunnittelu.md`. Suunnitelma kuvaa tavoitearkkitehtuurin. Nykyinen toimitus kattaa ROADMAPin vaiheen 1 sekä vaiheet 2A (Alembic ja organisaatiot) ja 2B (OIDC ja organisaatiokohtainen ylläpito). Älä toteuta hyväksyntää, julkaisuversioita, SHACL:ia tai ulkoisia integraatioita ilman erillistä toimeksiantoa. Älä yhdistä main-haaraan automaattisesti.
 
-## Työskentely
+## Sitova semanttinen suunnitteluperiaate
+
+Lue `docs/semanttinen-periaate-1.md` ennen tietotuotteen sisällön, soveltamisprofiilien, skeematuonnin tai julkaisuversioiden suunnittelua. Sisältö perustuu Tietomallit-työkalun SHACL-soveltamisprofiiliin, joka annetaan linkkinä tai alustalta ladattuna tiedostona. OWL voi sijaita alustalla tai ulkoisessa nimiavaruudessa. JSON Schema/OpenAPI ovat johdannaisia; tietoelementtien käsin ylläpidettävä rinnakkaismalli ei ole tavoiteratkaisu. Nykyiset dataElements ovat väliaikaista demoa eivätkä vahvistettu profiilikytkentä. Tämä täsmennys ei tilaa toiminnallisuuden toteutusta tai toisen perusoletuksen käsittelyä.
+
+## Työskentelyn käytännöt
 
 Käytä nykyistä checkoutia: pilvitehtävät ovat jo eristettyjä. Älä luo worktreea ilman käyttäjän pyyntöä. Säilytä käyttäjän muutokset. Kaikki fixturet ovat synteettisiä. Älä lisää salaisuuksia, aitoja rekisteritietoja tai väitteitä QEAA-/DCAT-AP-vaatimustenmukaisuudesta.
 
@@ -21,3 +25,4 @@ Muuta skeemaa uusilla Alembic-revisioilla; älä muokkaa jo toimitettuja revisio
 ## Kirjautuminen
 
 Lue docs/authentication.md. Keycloakin tunnukset ovat synteettisiä demotunnuksia, eivät tuotantosalaisuuksia. Älä lokita koodeja, tokeneita, evästeitä tai salasanoja. Säilytä --no-access-log deployatussa Uvicornissa. Älä myönnä oikeuksia organisaation nimen tai käyttäjän lähettämän organisaatiotiedon perusteella. Älä muuta vanhoja jäsenyyksiä fixtureiden perusteella uudelleenkäynnistyksissä.
+
