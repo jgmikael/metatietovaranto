@@ -1,6 +1,8 @@
 # Metatietovarannon toteutussuunnitelma ja tekoälykoodauksen kehote
 
-Versio 1.0 · 14.10.2026 · Toteutusehdotus Suomen julkishallinnon käyttöön
+Versio 1.1 · 14.10.2026 · Toteutusehdotus Suomen julkishallinnon käyttöön
+
+Version 1.1 täsmennys: tietotuotteen semanttinen perusta on Tietomallit-työkalun soveltamisprofiili. Katso sitova periaate luvusta 1.3 ja tarkennus `docs/semanttinen-periaate-1.md`. Toista suunnitteluolettamaa ei ole vielä käsitelty.
 
 ## 1 Tarkoitus ja käyttöohje
 
@@ -21,6 +23,14 @@ Palveluun tallennetaan metatietoja, skeemoja ja synteettisiä esimerkkejä. Vars
 Ensimmäinen versio toteuttaa keskitetyn metatietohakemiston ja hajautetut ylläpitovastuut. Viranomainen vastaa omista kuvauksistaan. Tietotuotteiden toimitus tapahtuu viranomaisen tai muun nimetyn palveluntarjoajan palveluista. Ratkaisu ei edellytä yhteistä keskitettyä henkilötietokantaa.
 
 Metatietovaranto ei itse myönnä tuotannollisia QEAA-todistuksia, tee luovutuspäätöksiä eikä toteuta koko data-avaruuden sopimusneuvottelua. Se kuvaa näihin tarvittavat toimijat, ehdot, todistustyypit, palvelut ja tekniset liittymät. Ensimmäiseen versioon sisältyy paikallinen todistuspalvelun simulaattori vain demokäyttöön.
+
+### 1.3 Tietomallit soveltamisprofiili sisällön ensisijaisena lähteenä
+
+Jokaisen tietotuotteen semanttinen tietomalli perustuu Yhteentoimivuusalustan Tietomallit-työkalussa laadittuun soveltamisprofiiliin. Se tuodaan linkkinä tai alustalta ladattuna tiedostona. Profiili on SHACL-graafi, joka hyödyntää alustalla sijaitsevaa OWL-ydintietomallia tai ulkoisen nimiavaruuden OWL-sanastoa, tarvittaessa useita. Alkuperäiset tunnisteet ja riippuvuudet säilytetään. Metatietovaranto ei luo rinnakkaista käsin ylläpidettävää sisältömallia.
+
+JSON-LD, RDF kuten RDF/XML ja Turtle ovat RDF/SHACL-aineiston esityksiä. OpenAPI ja JSON Schema ovat profiilista tuotettuja johdannaisia; ne eivät yksin korvaa SHACL-perustaa. JSON-exportin rooli ja skeemadialekti tunnistetaan sisällöstä. Pelkkä JSON-LD-konteksti ei ole soveltamisprofiili. Kaikkia exportteja ei vaadita jokaiselle tuotteelle.
+
+Tietotuoteversio sitoutuu yksilöityyn profiiliversioon tai lukittuun snapshotiin. Linkin ja tiedoston tulee olla vaihtoehtoisia toimitustapoja; palvelu voi säilyttää linkistä noudetun kopion. Tietoelementtiluettelo johdetaan profiilista. Profiilin ja sitä käyttävän tuotteen metatiedot, katalogin vienti sekä todistuksen kuori ovat eri asioita. Täsmälliset kentät ja hyväksymisehdot ovat dokumentissa `docs/semanttinen-periaate-1.md`. Tämä periaate on ensisijainen suhteessa tämän suunnitelman yleisempiin muotoiluihin.
 
 ## 2 Käyttötapaukset ja käyttäjät
 
@@ -136,9 +146,9 @@ Organisaatiotietue sisältää vähintään `id`, `legalName`, `identifiers`, `c
 | profile.vocabularies | VersionedResource[] 1..n | P Käytetyt sanastot kuten EU Core tai EBWV; täsmälliset versiot. |
 | profile.conceptSchemes | VersionedResource[] | V SKOS-käsitejärjestelmät ja terminologiset viitteet. |
 | profile.subjectClassUri | URI 1 | P Tiedon kohteen luokka; OWL-sanaston olemassa oleva termi. |
-| profile.elements | DataElement[] 1..n | P Tietoelementtien luettelo seuraavan luvun mukaan. |
+| profile.elements | DataElement[] 1..n | P Lähdeprofiilista johdettu tietoelementtinäkymä; ei erillinen käsin ylläpidettävä malli. |
 | profile.shaclArtifactId | UUID 1 | P Sisällön RDF-validointiprofiili. |
-| profile.jsonSchemaArtifactId | UUID 1 | P JSON-sisällön JSON Schema 2020-12. |
+| profile.jsonSchemaArtifactId | UUID 0..1 | E JSON-jakelun validointia varten. Johdettu samasta lähdeprofiilista; lähdeskeeman ilmoittama draft/dialekti säilytetään. |
 | profile.jsonLdContextArtifactId | UUID 0..1 | E Vaaditaan JSON-LD-jakelussa. |
 | profile.mappingArtifactIds | UUID[] | E Vaaditaan, jos jakelut tai lähderakenne poikkeavat sisältöprofiilista. |
 | profile.exampleArtifactIds | UUID[] 1..n | P Vähintään yksi synteettinen validi sisältöesimerkki. |
@@ -279,6 +289,8 @@ Vahvistettu luottamusmerkintä lasketaan dynaamisesti voimassa olevasta näytös
 Metatietoprofiilin JSON Schema ja SHACL validoivat tietotuotteen kuvausta. Tuotteen sisältöprofiilin JSON Schema ja SHACL validoivat puolestaan luovutettavaa tietosisältöä. Näitä ei yhdistetä yhdeksi skeemaksi. Todistuksen kuori, kuten myöntäjä ja voimassaolo, on vielä oma rakenteensa suhteessa credentialSubject-sisältöön.
 
 Sisältöketju on SKOS-käsitteet → OWL-sanasto → SHACL-soveltamisprofiili → JSON-esitys ja JSON-LD-konteksti → todistuksen formaattiadapteri. Tämä kuvaa hallittuja riippuvuuksia; SHACL ei yksin tuota täydellistä JSON Schemaa, eikä JSON-LD-konteksti validoi tietojen oikeellisuutta. Muunnoksissa tarvitaan eksplisiittisiä kartoituksia ja esimerkkien testejä.
+
+Tietomallit-soveltamisprofiili on tämän ketjun ensisijainen sisältösopimus. Metatietovaranto lukee SHACL-graafin ja sen OWL-viitteet linkistä tai tiedostosta sekä liittää samaan lähdeversioon saatavilla olevat JSON Schema- ja OpenAPI-johdannaiset. Sisältöprofiilin omaa skeemadialektia ei korvata katalogin metatietoskeeman dialektilla. Täysi SHACL-graafi säilytetään, vaikka käyttöliittymä näyttäisi siitä vain osan.
 
 ### 8.2 DCAT-vienti
 
@@ -594,3 +606,4 @@ Lähteet tarkistettu 14.10.2026. Lähdeversiot ovat tässä suunnitelmassa valit
 - **S12 Asetus EU 2023/2854.** Data Act, artikla 33. https://eur-lex.europa.eu/eli/reg/2023/2854/oj
 
 Tämä dokumentti määrittelee toteutuksen ja vaatimusten tarkistukset. Se ei korvaa valvontaviranomaisen ratkaisua, QTSP-vaatimustenmukaisuuden arviointia, organisaation tiedonluovutuspäätöstä tai tuotannon tietoturva-arviointia.
+
