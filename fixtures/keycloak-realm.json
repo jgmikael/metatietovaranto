@@ -1,0 +1,78 @@
+{
+  "realm": "metatietovaranto",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "resetPasswordAllowed": false,
+  "loginWithEmailAllowed": false,
+  "bruteForceProtected": true,
+  "clients": [
+    {
+      "clientId": "catalogue-demo",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": [
+        "${DEMO_PUBLIC_BASE_URL}/auth/callback"
+      ],
+      "webOrigins": [
+        "${DEMO_PUBLIC_BASE_URL}"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "${DEMO_PUBLIC_BASE_URL}/"
+      }
+    }
+  ],
+  "users": [
+    {
+      "id": "10000000-0000-4000-8000-000000000001",
+      "username": "vero",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Demo",
+      "lastName": "vero",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "demo-vero",
+          "temporary": false
+        }
+      ],
+      "email": "vero@example.invalid"
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000002",
+      "username": "yritys",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Demo",
+      "lastName": "yritys",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "demo-yritys",
+          "temporary": false
+        }
+      ],
+      "email": "yritys@example.invalid"
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000003",
+      "username": "lukija",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Demo",
+      "lastName": "lukija",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "demo-lukija",
+          "temporary": false
+        }
+      ],
+      "email": "lukija@example.invalid"
+    }
+  ]
+}

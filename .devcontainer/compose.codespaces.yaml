@@ -1,5 +1,9 @@
 # Merge with ../compose.yaml. Reuse the existing application and database.
 services:
+  keycloak:
+    environment:
+      KC_HOSTNAME: https://${CODESPACE_NAME}-8000.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN:-app.github.dev}/identity
+      DEMO_PUBLIC_BASE_URL: https://${CODESPACE_NAME}-8000.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN:-app.github.dev}
   app:
     environment:
       CODESPACE_NAME: ${CODESPACE_NAME:-}

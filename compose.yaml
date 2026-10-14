@@ -14,15 +14,39 @@ services:
       interval: 2s
       timeout: 3s
       retries: 30
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.4.7@sha256:9409c59bdfb65dbffa20b11e6f18b8abb9281d480c7ca402f51ed3d5977e6007
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KC_HTTP_RELATIVE_PATH: /identity
+      KC_HOSTNAME: http://localhost:8000/identity
+      KC_PROXY_HEADERS: xforwarded
+      KC_HEALTH_ENABLED: "true"
+      JAVA_OPTS_KC_HEAP: -Xms128m -Xmx512m
+      DEMO_PUBLIC_BASE_URL: http://localhost:8000
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - keycloakdata:/opt/keycloak/data
+      - ./fixtures/keycloak-realm.json:/opt/keycloak/data/import/realm.json:ro
+    healthcheck:
+      test: ["CMD", "bash", "-ec", "exec 3<>/dev/tcp/127.0.0.1/9000; printf 'GET /identity/health/ready HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n' >&3; grep -q '200 OK' <&3"]
+      interval: 5s
+      timeout: 3s
+      retries: 40
+      start_period: 30s
   app:
     build: .
     environment:
       DEMO_MODE: "true"
+      KEYCLOAK_INTERNAL_URL: http://keycloak:8080/identity
       DATABASE_URL: postgresql+psycopg://demo:demo@db:5432/catalog
       PUBLIC_BASE_URL: http://localhost:8000
     ports:
       - "127.0.0.1:8000:8000"
     depends_on:
+      keycloak:
+        condition: service_healthy
       db:
         condition: service_healthy
     healthcheck:
@@ -32,3 +56,4 @@ services:
       retries: 20
 volumes:
   pgdata:
+  keycloakdata:

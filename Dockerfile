@@ -20,4 +20,4 @@ COPY --chown=1000:1000 fixtures/ fixtures/
 COPY --from=web --chown=1000:1000 /build/dist/ apps/web/dist/
 USER 1000:1000
 EXPOSE 8000
-CMD [".venv/bin/uvicorn", "apps.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD [".venv/bin/uvicorn", "apps.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--no-access-log"]

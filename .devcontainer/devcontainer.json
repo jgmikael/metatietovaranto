@@ -2,7 +2,7 @@
   "name": "Metatietovaranto verkkodemo",
   "dockerComposeFile": ["../compose.yaml", "compose.codespaces.yaml"],
   "service": "workspace",
-  "runServices": ["db", "app", "workspace"],
+  "runServices": ["db", "keycloak", "app", "workspace"],
   "workspaceFolder": "/workspaces/metatietovaranto",
   "shutdownAction": "stopCompose",
   "remoteUser": "vscode",

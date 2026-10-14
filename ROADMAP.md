@@ -24,12 +24,22 @@ Tämä tehtävä on tilattu erikseen nykyisen main-haaran pohjalta.
 - Vanhan muokatun kannan, tyhjän kannan ja toistuvien migraatioiden PostgreSQL-testit sekä aiempien selainpolkujen säilyttäminen.
 - Codespacesin automaattinen selainavaus ja Private-portti säilyvät.
 
+## Vaihe 2B — kirjautuminen ja organisaatiokohtainen ylläpito
+
+- Keycloak OIDC authorization code + PKCE; ei demokäyttäjän identiteetin oikopolkua.
+- Opaque palvelinistunto PostgreSQL:ssä, HttpOnly/SameSite-eväste, HTTPS:ssä Secure ja kirjoituspyyntöjen CSRF-tarkistus.
+- Eksplisiittiset organisaatiojäsenyydet ja editor/reader-roolit. Muokkaaja ylläpitää vain omien organisaatioidensa tuotteita; palvelin tarkistaa myös vaihdettavan tarjoajan.
+- Anonyymi haku, tuotesivut ja viennit säilyvät tämän demon julkisina metatietoina. Julkaisutiloja ja rajattua näkyvyyttä ei vielä ole.
+- Kolme synteettistä demokäyttäjää (kaksi eri organisaation muokkaajaa, yksi lukija) ja oikean OIDC-ketjun selaintestit.
+- Yksi selainportti 8000: rajattu saman alkuperän kirjautumisproxy Keycloakille. Codespacesin Private-portti ja automaattinen selainavaus säilyvät.
+- Migraatio 0003_auth lisää istunnot, OIDC-tilat ja jäsenyydet; aiempia migraatioita tai tuotetietoja ei kirjoiteta uudelleen.
+
 ## Vaiheen 2 myöhemmät osat — erillinen toimeksianto
 
-Kirjautuminen/OIDC, organisaatiokohtaiset käyttöoikeudet, hyväksyntäprosessi, muuttumattomat julkaisuversiot, optimistinen lukitus, auditointi ja SHACL-validointi. Laajenna tämän jälkeen kielituki, tietomalli ja vientien profiilit tavoitearkkitehtuurin mukaisiksi; varmista DCAT-AP-vaatimustenmukaisuus erikseen. Näitä ei toteuteta vaiheessa 2A.
+Seuraava ehdotettu rajaus on 2C: luonnokset, hyväksyntäprosessi, muuttumattomat julkaisuversiot, optimistinen lukitus ja auditointi. Sen jälkeen semanttinen validointi/SHACL ja vientien vaatimustenmukaisuus voidaan toteuttaa omana rajauksenaan. Myös organisaatiojäsenyyksien hallintakäyttöliittymä, tuotantotunnistautuminen ja kielituen laajennukset suunnitellaan erikseen. Näitä ei toteuteta vaiheessa 2B.
 
 ## Vaihe 3 — ulkoiset integraatiot
 
 Ulkoiset lompakko-, QEAA- ja data-avaruusintegraatiot sekä niiden adapterit ja oikeita vertaispalveluja vastaan tehtävä todennus.
 
-Vaiheen 2A jälkeen jatketaan vain erillisellä toimeksiannolla. Työhaaroja ei yhdistetä automaattisesti main-haaraan.
+Vaiheen 2B jälkeen jatketaan vain erillisellä toimeksiannolla. Työhaaroja ei yhdistetä automaattisesti main-haaraan.

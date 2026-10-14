@@ -52,7 +52,7 @@ def test_validation(client):
     for field in ('title','description','theme','source','purpose','limitations','accessConditions'):
         data=payload();data[field]='  '
         assert client.post('/api/v1/products',json=data).status_code==422
-    for field,value in [('providerOrganizationId',str(uuid4())),('providerOrganizationId',''),('synthetic',False),('dataElements',[]),('availability','production'),('title','x'*201)]:
+    for field,value in [('providerOrganizationId',''),('synthetic',False),('dataElements',[]),('availability','production'),('title','x'*201)]:
         data=payload();data[field]=value
         assert client.post('/api/v1/products',json=data).status_code==422
     data=payload();data['dataElements'][0]['semanticUri']='javascript:alert(1)'

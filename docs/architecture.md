@@ -1,4 +1,4 @@
-# Vaiheen 1 arkkitehtuuri
+# Demon arkkitehtuuri (vaiheet 1–2B)
 
 React/TypeScript rakennetaan Viten avulla. FastAPI palvelee rakennetun käyttöliittymän ja REST API:n samasta alkuperästä. Näin ei tarvita CORS-asetuksia. Tuotesivut käyttävät hash-reititystä; `/id/products/{uuid}` neuvottelee JSON-/JSON-LD-esityksen tai ohjaa selaimen tuotesivulle (303, `Vary: Accept`). Paikallisen demon URI on HTTP; tuotannon HTTPS-tunnisteet kuuluvat myöhempään käyttöönottoon.
 
@@ -8,6 +8,8 @@ Vaiheessa 2A skeemaa hallitaan Alembic-migraatioilla. Alkuperäinen vaihe 1 -rak
 
 JSON-LD käyttää DCAT Dataset-/Catalog-termejä, Dublin Core -kuvauksia ja paikallista `https://example.org/metatietovaranto/demo/`-nimiavaruutta. Konteksti on inline eikä jäsentäminen edellytä ulkoisten kontekstien noutamista. Semanttiset URI:t ovat näkyvästi paikallisia demotermejä. Viennissä kuvataan metatiedot, ei varsinaisia rekisteritietueita. DCAT-AP:n koko profiilia tai SHACL-validointia ei toteuteta tässä vaiheessa.
 
-Demon API on avoin, muutokset tulevat heti näkyviin eikä tuotteella ole julkaisuversiota. Avoin ylläpito ei sovellu tuotantoon. Compose sitoo portit vain paikalliseen koneeseen ja palvelin edellyttää eksplisiittistä DEMO_MODE-asetusta. React käsittelee tekstit tekstinä; käyttäjän HTML:ää ei renderöidä. Palvelin ei nouda käyttäjän syöttämiä URI:eja. Kirjoitusten oikeudet, auditointi ja samanaikaisten muokkausten hallinta kuuluvat vaiheeseen 2.
+Demon luku-API on avoin, muutokset tulevat heti näkyviin eikä tuotteella ole julkaisuversiota. Kirjoitukset vaativat vaiheesta 2B alkaen OIDC-istunnon, CSRF-tarkistuksen ja organisaation editor-jäsenyyden. Compose sitoo portit vain paikalliseen koneeseen ja palvelin edellyttää eksplisiittistä DEMO_MODE-asetusta. React käsittelee tekstit tekstinä; käyttäjän HTML:ää ei renderöidä. Palvelin ei nouda käyttäjän syöttämiä URI:eja. Kirjoitusten organisaatio-oikeudet on toteutettu vaiheessa 2B; auditointi ja samanaikaisten muokkausten hallinta kuuluvat myöhempään vaiheeseen.
 
 Organisaatiot säilytetään relaatiotaulussa; organisaatiotunnisteiden järjestelmä/arvo-parit ovat JSONB-lista. Tuotteen provider-sarake säilyy yhteensopivana näyttönimenä, ja provider_organization_id on NOT NULL -vierasavain (ON DELETE RESTRICT). Vanhoille tarjoajille luodaan tietoisesti erilliset organisaatiot per tuote; nimi ei ole identiteetti. Migraatioiden transaction advisory lock sarjallistaa käynnistykset, ja siemennyksen oma lukko estää rinnakkaiset fixture-lisäykset. Tarkemmat päivitysrajat ja maiden/tunnisteiden tuntemattomat arvot on dokumentoitu READMEssä.
+
+Vaiheen 2B tunnistus on kuvattu docs/authentication.md-tiedostossa. Keycloak toimii erillisessä palvelussa ja pysyvässä kehitysvolumessa, ja saman alkuperän /identity-proxy säilyttää yhden Codespaces-selainportin. OAuth-koodeja ja tokeneita ei kirjata Uvicornin access-lokiin.
