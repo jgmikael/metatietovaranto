@@ -1,5 +1,11 @@
 # Metatietovaranto — paikallinen demo
 
+## Kokeile ilman asennuksia
+
+Avaa [GitHub Codespaces -käynnistys](https://codespaces.new/jgmikael/metatietovaranto?ref=demo%2Fcodespaces), tarkista haara `demo/codespaces` ja valitse **Create codespace**. Sovellus ja PostgreSQL käynnistyvät automaattisesti. Avaa portti **8000** editorin **PORTS → Open in Browser** -toiminnolla, jos demo ei avaudu automaattisesti. Säilytä portin näkyvyys **Private**.
+
+Ohjeet, kokeilupolku, pysäyttäminen ja käyttökiintiöt: [Verkkodemon ohje](docs/verkkodemo.md). Tämä on yksityinen selainkokeilu; se ei julkaise avointa ylläpitoa internetiin.
+
 Viranomaisten tietotuotteiden metatietohakemiston vaihe 1. Sovellus sisältää suomenkielisen React/TypeScript-käyttöliittymän, FastAPI-rajapinnan, PostgreSQL-tallennuksen, haun, tuotesivun, avoimen ylläpidon ja JSON-/JSON-LD-viennit.
 
 **Vain paikalliseen synteettiseen demokäyttöön.** Kirjautuminen, organisaatiorajat, hyväksyntä, julkaisuversiot ja SHACL kuuluvat vaiheeseen 2. Ulkoiset lompakko-, QEAA- ja data-avaruusintegraatiot kuuluvat vaiheeseen 3. `ROADMAP.md` rajaa toteutuksen; `metatietovaranto_suunnittelu.md` säilyy tavoitearkkitehtuurina.
@@ -124,3 +130,4 @@ BROWSER_BASE_URL=http://127.0.0.1:8000 .venv/bin/pytest -q
 ```
 
 Ilman `BROWSER_BASE_URL`-asetusta kaksi selaintestiä ohitetaan tarkoituksellisesti; sellainen ajo ei todista käyttöliittymän toimivuutta. Testien tulokset ja rajoitukset ovat `STATUS.md`:ssä. GitHub Actions määrittelee vastaavat API-, selain- ja konttibuild-tarkistukset; etä-CI:n tulos raportoidaan vasta sen ajamisen jälkeen.
+

@@ -14,9 +14,10 @@ from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator
 from sqlalchemy import DateTime, String, create_engine, func, or_, select, text
 from sqlalchemy.dialects.postgresql import JSONB, UUID as PGUUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
+from apps.api.public_url import public_base_url
 
 ROOT = Path(__file__).resolve().parents[2]
-BASE_URL = os.getenv("PUBLIC_BASE_URL", "http://localhost:8000").rstrip("/")
+BASE_URL = public_base_url()
 engine = create_engine(os.getenv("DATABASE_URL", "postgresql+psycopg://demo:demo@localhost:5432/catalog"), pool_pre_ping=True)
 
 class Base(DeclarativeBase):
@@ -214,3 +215,4 @@ def catalog_export(format: Literal["json", "jsonld"] = "json"):
 WEB = ROOT / "apps/web/dist"
 if WEB.exists():
     app.mount("/", StaticFiles(directory=WEB, html=True), name="web")
+

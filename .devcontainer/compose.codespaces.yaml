@@ -1,0 +1,16 @@
+# Merge with ../compose.yaml. Reuse the existing application and database.
+services:
+  app:
+    environment:
+      CODESPACE_NAME: ${CODESPACE_NAME:-}
+      GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN: ${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN:-app.github.dev}
+  workspace:
+    image: mcr.microsoft.com/devcontainers/base:ubuntu-24.04
+    command: sleep infinity
+    volumes:
+      - .:/workspaces/metatietovaranto:cached
+    # Port 8000 in the editor container is the actual application port.
+    network_mode: service:app
+    depends_on:
+      app:
+        condition: service_healthy
