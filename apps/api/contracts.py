@@ -1,11 +1,11 @@
 """Phase 2C metadata contracts; no issuance transactions or wallet tokens."""
 from datetime import datetime
 import ipaddress
-from typing import Literal
+from typing import Literal, Annotated
 from urllib.parse import urlsplit, parse_qs
 import re
 from uuid import UUID
-from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator, model_validator, StringConstraints
 
 
 class Contract(BaseModel):
@@ -92,6 +92,19 @@ class Issuance(Contract):
         return initiation_url(value) if value else None
 
 
+class SyntheticExample(Contract):
+    serialization: Literal['turtle','rdfxml','jsonld'] = 'turtle'
+    content: Annotated[str, StringConstraints(strip_whitespace=False)] = Field(min_length=1, max_length=100_000)
+    synthetic: Literal[True]
+
+    @field_validator('content')
+    @classmethod
+    def bounded_utf8(cls, value):
+        if len(value.encode()) > 100_000:
+            raise ValueError('Synteettisen esimerkin raja on 100 kB')
+        return value
+
+
 class ProductWrite(Contract):
     title: str = Field(min_length=1,max_length=200)
     description: str = Field(min_length=1,max_length=5000)
@@ -105,3 +118,4 @@ class ProductWrite(Contract):
     synthetic: Literal[True] = True
     profileSnapshotId: UUID | None = None
     issuance: Issuance = Field(default_factory=Issuance)
+    syntheticExample: SyntheticExample | None = None

@@ -2,6 +2,7 @@
 import os
 import shutil
 import uuid
+import re
 import pytest
 import httpx
 from playwright.sync_api import sync_playwright, expect
@@ -142,8 +143,19 @@ def test_profile_import_separate_approval_publication_and_public_search(page):
     page.get_by_label('SHACL-tiedosto tai johdannainen',exact=True).set_input_files(str(Path('fixtures/semantic-profile-demo.ttl').resolve()))
     page.get_by_role('button',name='Tuo profiili',exact=True).click()
     expect(page.get_by_role('status')).to_contain_text('Profiilisnapshot tallennettu')
+    page.get_by_label('Esimerkin RDF-sisältö',exact=True).fill('<urn:unrelated> <urn:name> "Synteettinen kohdistamaton tieto".')
+    page.get_by_label('Vahvistan, että esimerkki on synteettinen eikä sisällä henkilötietoja tai salaisuuksia',exact=True).check()
+    page.get_by_role('button',name='Tallenna',exact=True).click()
+    expect(page.get_by_text('SHACL-tarkistus ei läpäissyt',exact=True)).to_be_visible()
+    page.get_by_role('button',name='Lähetä tarkastukseen',exact=True).click()
+    expect(page.get_by_role('alert')).to_contain_text('rdf:type')
+    page.get_by_role('button',name='Muokkaa',exact=True).click()
+    page.get_by_label('Esimerkkitiedosto',exact=True).set_input_files(str(Path('fixtures/semantic-example-demo.ttl').resolve()))
+    expect(page.get_by_label('Esimerkin RDF-sisältö',exact=True)).to_have_value(re.compile('Synteettinen Esimerkki Oy'))
+    page.get_by_label('Vahvistan, että esimerkki on synteettinen eikä sisällä henkilötietoja tai salaisuuksia',exact=True).check()
     page.get_by_role('button',name='Tallenna',exact=True).click()
     expect(page.get_by_role('heading',name=title,exact=True)).to_be_visible()
+    expect(page.get_by_text('Esimerkki läpäisee SHACL-tarkistuksen',exact=True)).to_be_visible()
     product_id=page.url.split('#draft/')[1]
     page.get_by_role('button',name='Lähetä tarkastukseen',exact=True).click()
     expect(page.get_by_text('Tarkastuksessa',exact=True)).to_be_visible()

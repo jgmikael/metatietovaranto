@@ -1,3 +1,51 @@
+# Vaihe 2D — offline SHACL Core ja synteettinen esimerkkisisältö
+
+Tarkistettu 15.10.2026. Pohjana main `61ca4ed` (PR #7, vaihe 2C, yhdistetty käyttäjän hyväksynnällä). Työhaara `feat/phase-2d-shacl`. PR:ien 5 ja 6 semanttinen ja VC-toimituksen periaate säilyvät sitovina. Mainiin ei yhdistetä automaattisesti.
+
+## Toteutettu
+
+- pySHACL 0.31: profiilin ja lukittujen riippuvuuksien meta-SHACL-rakennetarkistus sekä synteettisen RDF-esimerkin oikea SHACL Core -validointi. Tietotyypit, kardinaliteetit, sisäkkäiset muodot ja koodistorajoitteet tarkistuvat alkuperäisestä graafista, eivät litistetystä tietoelementtilistasta.
+- Yksi esimerkkigraafi (voi sisältää monta tietuetta), Turtle/RDFXML/paikalliskontekstinen JSON-LD. Pakollinen synthetic:true-ilmoitus, 100 kB/2 000 kolmikkoa. Käyttöliittymän tiedostotuonti ja tekstikenttä sekä erillinen synteettisyyden vahvistus.
+- Kohdistumaton/tyhjä esimerkki tai deaktivoitu aloitusmuoto ei tuota väärää onnistumista. Aloitusmuotojen kohdistus tarkistetaan; varsinaiset rajoitteet tarkistetaan koko graafista. Ei OWL-päättelyä.
+- Palvelimen semanticValidation: tulos, sääntö-IRI, JSON Pointer, RDF-polku, kohde/muoto, profiili-/esimerkkitarkiste, esitysmuoto, moottoriversio ja validointikäytäntö. Asiakas ei voi asettaa raporttia. Näyttö rajattu 100 havaintoon, mikä ei muuta epäonnistumista onnistumiseksi.
+- Esimerkki ja raportti sisältyvät luonnoksen/julkaisun sisältötarkisteeseen. Muutos mitätöi hyväksynnän; uusi julkaisu vaatii ajantasaisen läpäisseen raportin ja aiemman erillisen ihmishyväksynnän. Virheellisen esimerkin voi tallentaa korjattavaksi luonnokseksi. Validate-esikatselu on muuttamaton: uuden raportin tallennus tehdään editorin luonnostallennuksessa.
+- Resurssirajattu validointiprosessi: CPU 5 s, muisti 512 MiB, seinäkello 15 s, syvyys 20, verkkoyhteyksien esto. SPARQL/JS/AF/mukautetut komponentit ja tuntemattomat SHACL-predikaatit estävät hyväksynnän. Ulkoisia konteksteja, DTD/ENTITYjä tai riippuvuuksia ei noudeta.
+- Alkuperäisen UTF-8-sisällön alun/lopun tyhjää tilaa ei enää normalisoida uusissa tuonneissa; tavutarkiste vastaa tallennettua alkuperäistä tekstiä. Nimetyt JSON-LD-graafit hylätään eksplisiittisesti sen sijaan, että oletusgraafin ulkopuolisia rajoitteita/sisältöä katoaisi.
+- Ei uutta migraatiota: 2C:n JSONB-sisällöt riittävät. Head on 0004_publication. Vanhoihin julkaistuihin sisältöihin, profiilisnapshotteihin tai luonnoksiin ei tehdä automaattisia täydennyksiä. Vanhat julkaisut säilyvät; seuraava julkaisu tarvitsee esimerkin ja tallentamalla muodostuvan raportin.
+- Nykyinen OIDC, CSRF, organisaatiorajat, If-Match, idempotenssi ja erillinen hyväksyntä säilyvät. Codespacesin määrityksiin ei tehty muutoksia: portti 8000, openBrowser ja service:app-verkko ennallaan; ohje edellyttää Private-tilaa. Ei ulkoisia issuer/wallet-yhteyksiä.
+- README, ROADMAP, AGENTS, verkkodemon ja arkkitehtuurin ohjeet sekä CI-testilista päivitetty. Uusi synteettinen fixture fixtures/semantic-example-demo.ttl.
+
+## Tässä tehtävässä todella ajettu
+
+- `uv add` ja `UV_CACHE_DIR=/workspace/.cache/uv uv sync --locked`: runtime-riippuvuudet ja lukitus onnistuivat. `npm run build --prefix apps/web`: TypeScript ja Vite-tuotantobuild onnistuivat.
+- `./scripts/cloud-build.sh` rakensi Docker-imagen pilven proxy-/CA-reitillä TLS-tarkistuksia säilyttäen; `DOCKER_CONFIG=/workspace/.cache/docker docker compose up -d --no-build --wait` käynnisti app/db/keycloak-palvelut healthy-tilaan olemassa olevilla voluumeilla.
+- `.venv/bin/pytest tests/test_api.py tests/test_publication.py tests/test_profiles.py tests/test_semantic_validation.py tests/test_auth.py tests/test_migrations.py tests/test_public_url.py -q`: **55 läpäissyttä, 0 epäonnistunutta, 0 ohitettua**. Sisältää aiemmat 39 testiä ja 16 uutta SHACL-testiä. Vanhojen kantojen, muokattujen metatietojen/UUID:iden ja jäsenyyksien säilymistestit läpäisivät.
+- Uudet testit: puuttuva kenttä, väärä tietotyyppi, liikaa arvoja, kohdistamaton esimerkki, kolme RDF-esitystä, väärä profiilirakenne, estetty SPARQL/tuntematon rajoite, sisäkkäinen riippuvuus ja koodisto, etäkonteksti/DTD/ENTITY, synteettisyysvahvistus, raportin väärentämiskielto ja sidonta, muuttumaton vanha julkaisu, vanhan raportittoman luonnoksen uudelleentallennus, deaktivoitu muoto, raskaan regexin resurssiraja, UTF-8-tavujen säilyminen ja nimetyn graafin hylkäys.
+- `BROWSER_BASE_URL=http://localhost:8000 .venv/bin/pytest tests/test_browser.py -q`: **7 läpäissyttä, 0 epäonnistunutta, 0 ohitettua**. Oikea Chromium ja Keycloak; aiemmat CRUD/mobiili/organisaatiot/reader/eristys/session vanheneminen sekä virheellinen esimerkki → korjaus tiedostosta → raportti → toisen käyttäjän hyväksyntä → julkaisu → anonyymi haku. Ei kirjautumisen ohitusreittiä.
+- Yhteensä **62 eri testiä** läpäisi. Starlette/httpx- ja RDFLib-deprekaatiovaroitukset eivät ole ohituksia. Resurssirajan testin lisätarkistus läpäisi erikseen: VALIDATION_RESOURCE_LIMIT ja palvelimen readiness säilyivät, testikutsu kesti 6,12 s. Tämä ei ole lisätesti kokonaismäärään.
+- Olemassa olevasta oikeasta demokannasta tarkistettiin kolme aitoa 2C-julkaisua: sisältö vastaa alkuperäistä SHA-256:ta, version API palauttaa saman snapshotin eikä vanhaan JSON-LD-vientiin ilmesty puuttuvia 2D-kenttiä. Tietoja tai volumeita ei nollattu.
+- Alembic current: `0004_publication (head)`. Alembic check: `No new upgrade operations detected.` Sekä migrations- että .devcontainer-diff on tyhjä.
+- Codespacesin yhdistetty Compose validoitiin synteettisellä CODESPACE_NAME-arvolla: Keycloak samalla portilla 8000, workspace service:app-verkossa ja openBrowser ennallaan.
+- `git diff --check`: ei whitespace-virheitä. Tavallinen app-restart ja Compose-readiness läpäisivät. Ennen/jälkeen samat rivit ja tarkisteet: 8 tuotetta/luonnosta, 3 organisaatiota, 5 jäsenyyttä, 5 profiilisnapshotia, 4 julkaisua/tarkastusta/outboxia ja 33 audit-tapahtumaa. Selaintestien synteettiset julkaisut jäävät muuttumattomaan historiaan; epäonnistuneen kehitysajon keskeneräinen synteettinen luonnos säilytettiin.
+
+Selaintestin ensimmäinen uusi tiedostopolku paljasti tekstikentän label-kohdistuksen ongelman. Kentälle lisättiin eksplisiittinen label/htmlFor/id. Lopullinen seitsemän selaintestin ajo läpäisi korjauksen jälkeen.
+
+## Ajamattomat ja rajat
+
+- Oikea GitHub Codespace, GitHubin Private-portin pääsynvalvonta ja automaattinen selainvälilehti, Windows/Docker Desktop, tavallinen `docker compose up --build` ilman pilven build-wrapperia sekä GitHub Actions -etäajo jäivät ajamatta. Asetusten staattinen tarkistus ei todista näitä.
+- Elävän Tietomallit-palvelun linkkituontia ei ajettu. Oikea paikallinen tiedostotuonti sekä nykyinen hallitulla verkkovastauksella tehtävä linkkitesti ajettiin. Molemmat fixturet ovat synteettisiä eivätkä oikea Tietomallit-export tai rekisteriote.
+- SHACL-tulos ei todista lähdeprofiilin alkuperää, oikeudellista asemaa tai myöntämisoikeutta. Se ei tarkista VC-kuorta, allekirjoitusta, myönnettyä todistusta tai lompakkoyhteentoimivuutta. Ei vaihetta 3.
+- Vain offline Core, ei SPARQL/JS/AF- tai mukautettujen komponenttien tukea. Nimettyjä JSON-LD-graafeja ei tueta. JSON Schema/OpenAPI-johdannaisten validointi ja kattavuuskartoitus sekä DCAT-AP-vaatimustenmukaisuus jäävät jatkoon.
+- Synteettisyys on käyttäjän vahvistus, ei automaattinen henkilötieto-/salaisuustunnistin. Ei kuormitus-, tuotantoturvallisuus- tai saavutettavuusauditointia.
+
+## Toimitus
+
+Työhaara feat/phase-2d-shacl, valmis PR-kuvaus docs/pull-request.md. Push ja PR:n avaustulos kirjataan seuraavaksi. Mainiin ei yhdistetä automaattisesti.
+
+---
+
+# Aikaisemmat toimitukset (historia, eivät tämän ajon tuloksia)
+
 # Vaihe 2C — yksityiset luonnokset ja muuttumattomat julkaisut
 
 Tarkistettu 14.10.2026. Pohjana main `0dd6555`, joka sisältää PR:t 5 ja 6. Työhaara `feat/phase-2c-publication`. Mainiin ei yhdistetä automaattisesti. Alla olevat aiempien toimitusten PR-esteet/testimäärät ovat historiaa.

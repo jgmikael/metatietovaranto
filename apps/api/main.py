@@ -91,6 +91,8 @@ def jsonld(product):
             "demo:primaryDelivery": p.get("issuance", {}).get("primaryDelivery", "w3cVc"),
             "demo:serviceAvailability": p.get("issuance", {}).get("serviceAvailability", "planned"),
             "demo:vcMetadata": json.dumps(p.get("issuance",{}), ensure_ascii=False),
+            **({"demo:semanticValidation": json.dumps(p["semanticValidation"], ensure_ascii=False)} if "semanticValidation" in p else {}),
+            **({"demo:syntheticExample": json.dumps(p["syntheticExample"], ensure_ascii=False)} if "syntheticExample" in p else {}),
             "demo:purpose": p["purpose"], "demo:limitations": p["limitations"],
             "demo:availability": p["availability"],
             "demo:dataElement": [{"demo:name": e["name"], "dct:description": e["description"],

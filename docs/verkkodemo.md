@@ -1,11 +1,11 @@
 # Kokeile Metatietovarantoa selaimessa
 
-Tämä käynnistää nykyisen demon (vaiheet 1–2C) GitHub Codespacesissa. Paikallisia asennuksia tai uutta hosting-tiliä ei tarvita. GitHub käynnistää sovelluksen, PostgreSQL:n ja Keycloakin omassa kehitysympäristössäsi. Tämä ei ole jatkuvasti käynnissä oleva tuotantopalvelu.
+Tämä käynnistää nykyisen demon (vaiheet 1–2D) GitHub Codespacesissa. Paikallisia asennuksia tai uutta hosting-tiliä ei tarvita. GitHub käynnistää sovelluksen, PostgreSQL:n ja Keycloakin omassa kehitysympäristössäsi. Tämä ei ole jatkuvasti käynnissä oleva tuotantopalvelu.
 
 ## Ensimmäinen käynnistys
 
 1. Avaa https://codespaces.new/jgmikael/metatietovaranto?ref=main . Kirjaudu GitHubiin samalla tilillä, jolla pääset yksityiseen repositorioon.
-2. Tarkista Branch `main` (tai ennen yhdistämistä `feat/phase-2c-publication`), valitse 2-core-kone ja **Create codespace**. Tarkista GitHubin näyttämä käyttö- ja laskutustieto ennen luontia.
+2. Tarkista Branch `main` (tai ennen yhdistämistä `feat/phase-2d-shacl`), valitse 2-core-kone ja **Create codespace**. Tarkista GitHubin näyttämä käyttö- ja laskutustieto ennen luontia.
 3. Odota konttien ensimmäistä rakennusta. Tähän voi kulua useita minuutteja. Sovellus ja tietokanta käynnistyvät automaattisesti; terminaalikomentoja ei tarvita tavallisessa käynnistyksessä.
 4. Demo pyritään avaamaan automaattisesti uuteen selainvälilehteen. Jos selain estää avaamisen, avaa editorin alaosan **PORTS**-välilehti. Etsi portti **8000**, jonka nimi on **Avaa Metatietovarannon demo**, ja valitse maapallokuvake **Open in Browser**.
 5. Säilytä portin näkyvyys arvossa **Private**. GitHub-kirjautuminen suojaa pääsyn; vaiheessa 2B sovelluksen tuoteylläpito vaatii lisäksi OIDC-kirjautumisen.
@@ -14,7 +14,7 @@ Selaimen osoite on GitHubin luoma `https://<codespacen-nimi>-8000.app.github.dev
 
 ## Kokeile
 
-Vaiheen 2C tyhjällä kannalla julkinen haku on aluksi tyhjä: kolme synteettistä vanhaa esimerkkiä ovat keskeneräisiä yksityisiä luonnoksia. Kirjaudu `vero` / `demo-vero` ja avaa **Omat luonnokset**. [README](../README.md#kokeilupolku) kertoo profiilitiedoston tuonnin, toisen käyttäjän hyväksynnän ja julkaisun. `yritys` / `demo-yritys` tarkastaa verotuotteen; se ei voi muokata sitä. `lukija` / `demo-lukija` vain lukee oman organisaationsa luonnoksia. Keycloakin Log out -vahvistus tarvitaan käyttäjää vaihdettaessa.
+Vaiheen 2D tyhjällä kannalla julkinen haku on aluksi tyhjä: kolme synteettistä vanhaa esimerkkiä ovat keskeneräisiä yksityisiä luonnoksia. Kirjaudu `vero` / `demo-vero` ja avaa **Omat luonnokset**. [README](../README.md#kokeilupolku) kertoo profiilin ja synteettisen esimerkkitiedoston tuonnin, SHACL-raportin, toisen käyttäjän hyväksynnän ja julkaisun. `yritys` / `demo-yritys` tarkastaa verotuotteen; se ei voi muokata sitä. `lukija` / `demo-lukija` vain lukee oman organisaationsa luonnoksia. Keycloakin Log out -vahvistus tarvitaan käyttäjää vaihdettaessa.
 
 Vanhojen tuotteiden tunnisteet ja sisältö säilyvät. Älä lisää aitoja rekisteri- tai henkilötietoja. Julkaisu tulee hakuun ja vienteihin vasta hyväksynnän jälkeen. Katalogi ei myönnä todistuksia.
 
@@ -32,4 +32,4 @@ Tämän toimituksen paikallinen tarkistus ei yksin todista, että oman tilisi Co
 
 ## Muutoksen kokeilu ennen yhdistämistä
 
-Luo uusi Codespace [haarasta feat/phase-2c-publication](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2c-publication). Säilytä portti 8000 Private-tilassa. Käytä yllä olevaa kahden käyttäjän kokeilupolkua. Pysäytä Codespace kokeilun jälkeen. Vanhan Codespacen päivityksessä ota ensin READMEn varmuuskopio ja valitse Rebuild Container; älä poista sen volumea.
+Luo uusi Codespace [haarasta feat/phase-2d-shacl](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2d-shacl). Säilytä portti 8000 Private-tilassa. Käytä yllä olevaa kahden käyttäjän kokeilupolkua. Pysäytä Codespace kokeilun jälkeen. Vanhan Codespacen päivityksessä ota ensin READMEn varmuuskopio ja valitse Rebuild Container; älä poista sen volumea.

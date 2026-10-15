@@ -1,5 +1,7 @@
 # Vaiheen 2C ratkaisu ja suunnittelumuutosten vaikutukset
 
+Tämä kuvaa 2C-toimitusta. Vaihe 2D lisää offline SHACL Core -tarkistuksen ja synteettiset esimerkit uusille julkaisuille muuttamatta vanhoja julkaisuja. Ajantasainen rajaus ja päivitysohje ovat READMEssä.
+
 Pohja main `0dd6555`: PR 5 (`8146ed5`, semanttinen periaate 1) ja PR 6 (`0dd6555`, VC-periaate 2) on luettu ennen julkaisumallin toteutusta. Suunnitteludokumenttia ei muuteta jälkikäteen vastaamaan toteutuksen rajauksia. ROADMAP kertoo puuttuvat osat.
 
 ## PR 5: sisältömalli ja alkuperä

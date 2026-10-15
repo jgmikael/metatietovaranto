@@ -1,4 +1,4 @@
-# Demon arkkitehtuuri (vaiheet 1–2C)
+# Demon arkkitehtuuri (vaiheet 1–2D)
 
 React/TypeScript rakennetaan Vitellä ja FastAPI palvelee saman alkuperän käyttöliittymän sekä REST API:n. Hash-reititys erottaa julkisen version, yksityisen työkopion, organisaatiot ja profiilit. Keycloak OIDC + PKCE, palvelinistunto ja CSRF ovat ennallaan; katso [authentication.md](authentication.md). Codespaces käyttää Private-porttia 8000 ja automaattista selainavausta.
 
@@ -6,7 +6,7 @@ PostgreSQL ja SQLAlchemy sisältävät alkuperäisen tuotteiden/organisaatioiden
 
 Luonnoksen JSONB on työkopion lähde, julkaistun version JSONB on julkisen kuvauksen lähde. Julkinen haku ja kaikki julkiset viennit käyttävät vain viimeisimpiä julkaisuja; versioreitit osoittavat tiettyyn snapshotiin. Työkopion muokkaus ei muuta julkaistua sisältöä. Optimistinen ETag ja transaktion rivilukko torjuvat hukatut muutokset. Tarkastus on eri kirjoittajan tekemä ja sidottu revisioon sekä sisältötarkisteeseen. Julkaisu, audit ja outbox tallentuvat samassa transaktiossa. UPDATE/DELETE-triggerit suojaavat snapshotteja ja historiaa normaalilta DML:ltä; tietokannan pääkäyttäjän DDL-oikeuksia ne eivät estä. Outbox on paikallinen tapahtumatietue, ulkoista kuluttajaa ei ole.
 
-Tietotuotteen sisältömalli tulee Tietomallit SHACL-profiilista linkillä tai tiedostolla. Alkuperäiset artefaktit säilyvät manifestissa; tietoelementit ovat niistä johdettu näkymä. Rakenne-/riippuvuustarkistus ja lähdeilmoituksen ihmistarkastus ovat eri asioita kuin alustan alkuperän kryptografinen todistus tai myönnetyn VC:n SHACL-instanssivalidointi. RDF-jäsennys ja kanonisointi tapahtuvat rajatussa aliprosessissa. Riippuvuuksia tai etäkonteksteja ei noudeta jäsennyksen aikana.
+Tietotuotteen sisältömalli tulee Tietomallit SHACL-profiilista linkillä tai tiedostolla. Alkuperäiset artefaktit säilyvät manifestissa; tietoelementit ovat niistä johdettu näkymä. Vaihe 2D tarkistaa lisäksi profiilin SHACL Core -rakenteen ja eksplisiittisesti synteettisen esimerkin. Raportti sisältöineen sidotaan hyväksyntään ja julkaisun tarkisteeseen. Tämä on eri asia kuin lähdeilmoituksen ihmistarkastus, alustan alkuperätodistus tai myönnetyn VC:n kuoren/allekirjoituksen tarkistus. RDF-jäsennys, kanonisointi ja pySHACL-validointi tapahtuvat rajatuissa aliprosesseissa. Validointi sallii vain offline Coren; verkko, SPARQL, JavaScript ja AF estetään. Riippuvuuksia tai etäkonteksteja ei noudeta jäsennyksen aikana.
 
 JSON-LD-katalogivienti käyttää DCAT/Dublin Core -termejä ja paikallisia demotermejä inline-kontekstilla. Se ei ole sisältöprofiili tai myönnetty VC. W3C VC on tuotteen ensisijainen toimitusmuoto, oletuksena suunnitteilla. Katalogi kuvaa myöntäjän metatiedot ja mahdollisen pysyvän asiointilinkin; tunnistaminen, edustamisoikeus ja myöntäminen jäävät erilliselle palvelulle. DCAT-AP-, QEAA- tai lompakkoyhteensopivuutta ei päätellä muodosta.
 

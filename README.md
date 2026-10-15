@@ -1,12 +1,12 @@
-# Metatietovaranto — synteettinen demo, vaihe 2C
+# Metatietovaranto — synteettinen demo, vaihe 2D
 
-Suomenkielinen React/TypeScript-käyttöliittymä, FastAPI, PostgreSQL ja Keycloak. Toteutettu: organisaatiokohtainen ylläpito, yksityiset luonnokset, erillinen hyväksyntä, muuttumattomat julkaisuversiot, haku, JSON-/JSON-LD-vienti ja sisältöprofiilin snapshotit. [ROADMAP](ROADMAP.md) rajaa toteutuksen, [STATUS](STATUS.md) kertoo todella ajetut tarkistukset.
+Suomenkielinen React/TypeScript-käyttöliittymä, FastAPI, PostgreSQL ja Keycloak. Toteutettu: organisaatiokohtainen ylläpito, yksityiset luonnokset, erillinen hyväksyntä, muuttumattomat julkaisuversiot, haku, JSON-/JSON-LD-vienti ja sisältöprofiilin snapshotit sekä offline SHACL Core -validointi synteettisille esimerkeille. [ROADMAP](ROADMAP.md) rajaa toteutuksen, [STATUS](STATUS.md) kertoo todella ajetut tarkistukset.
 
-Vain synteettiseen demokäyttöön. Katalogi ei myönnä todistuksia eikä toteuta lompakkoprotokollaa, QEAA-palvelua tai tuotannon tunnistamista. Tavoitearkkitehtuuri on `metatietovaranto_suunnittelu.md`. PR:ien 5 ja 6 sitovat [semanttinen periaate](docs/semanttinen-periaate-1.md) ja [VC-periaate](docs/vc-periaate-2.md) on huomioitu [vaiheen 2C ratkaisussa](docs/phase-2c.md).
+Vain synteettiseen demokäyttöön. Katalogi ei myönnä todistuksia eikä toteuta lompakkoprotokollaa, QEAA-palvelua tai tuotannon tunnistamista. Tavoitearkkitehtuuri on `metatietovaranto_suunnittelu.md`. PR:ien 5 ja 6 sitovat [semanttinen periaate](docs/semanttinen-periaate-1.md) ja [VC-periaate](docs/vc-periaate-2.md) on huomioitu [vaiheen 2C perustassa](docs/phase-2c.md) ja alla kuvatussa 2D-validoinnissa.
 
 ## Kokeile selaimessa ennen yhdistämistä
 
-Avaa [vaiheen 2C uusi Codespace](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2c-publication), valitse haara **feat/phase-2c-publication** ja **Create codespace**. Uusi Codespace pitää main-haaran kokeiludatan erillään. Sovellus, PostgreSQL ja Keycloak käynnistyvät automaattisesti. Selain avautuu automaattisesti tai valitse **PORTS → 8000 → Open in Browser**. Säilytä portin näkyvyys **Private**. Keycloak toimii saman osoitteen `/identity`-polussa; muita portteja ei tarvitse avata.
+Avaa [vaiheen 2D uusi Codespace](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2d-shacl), valitse haara **feat/phase-2d-shacl** ja **Create codespace**. Uusi Codespace pitää main-haaran kokeiludatan erillään. Sovellus, PostgreSQL ja Keycloak käynnistyvät automaattisesti. Selain avautuu automaattisesti tai valitse **PORTS → 8000 → Open in Browser**. Säilytä portin näkyvyys **Private**. Keycloak toimii saman osoitteen `/identity`-polussa; muita portteja ei tarvitse avata.
 
 Osoite on `https://<codespacen-nimi>-8000.app.github.dev`; täsmällinen oman ympäristön osoite näkyy PORTS-näkymässä. Älä vaihda portin sisäistä protokollaa HTTPS:ksi. [Verkkodemon ohje](docs/verkkodemo.md) kertoo pysäyttämisestä ja kiintiöistä.
 
@@ -24,10 +24,10 @@ Julkisia synteettisiä demotunnuksia, eivät tuotantosalaisuuksia. Samassa organ
 
 1. Uuden demon julkinen haku on aluksi tyhjä. Kolme synteettistä esimerkkiä (verovelka, yrityksen perustiedot, ammattipätevyys) säilyvät keskeneräisinä yksityisinä luonnoksina. Niille ei keksitä virallista profiilia tai hyväksyntää.
 2. Kirjaudu `vero`-käyttäjänä ja avaa **Omat luonnokset → Verovelkatieto → Muokkaa**. Voit myös lisätä oman synteettisen tuotteen. Tarjoajavalikossa ovat vain omat muokkaajaorganisaatiot.
-3. Avaa **Tuo Tietomallit-soveltamisprofiili**. Codespacesissa lataa ensin Explorerista `fixtures/semantic-profile-demo.ttl` omalle koneellesi (hiiren oikea painike → **Download**). Valitse tämä tiedosto tuontilomakkeella, profiili-IRI `https://example.org/metatietovaranto/demo/profile` ja OWL-sanaston nimiavaruus `https://example.org/metatietovaranto/demo/`. Kirjaa lähdeilmoitukseksi **Synteettinen testifixture; ei oikea Tietomallit-export, vain ohjelmistodemo.** Tuo profiili ja tallenna tuote. Fixture ei ole Tietomallit-alustan vahvistama profiili. Oikea profiili voidaan antaa vaihtoehtoisesti koneluettavan exportin linkkinä.
+3. Avaa **Tuo Tietomallit-soveltamisprofiili**. Codespacesissa lataa ensin Explorerista `fixtures/semantic-profile-demo.ttl` omalle koneellesi (hiiren oikea painike → **Download**). Valitse tämä tiedosto tuontilomakkeella, profiili-IRI `https://example.org/metatietovaranto/demo/profile` ja OWL-sanaston nimiavaruus `https://example.org/metatietovaranto/demo/`. Kirjaa lähdeilmoitukseksi **Synteettinen testifixture; ei oikea Tietomallit-export, vain ohjelmistodemo.** Tuo profiili. Lataa Codespacesin Explorerista myös `fixtures/semantic-example-demo.ttl` omalle koneellesi ja valitse se **Esimerkkitiedosto**-kenttään. Vahvista esimerkin synteettisyys ja tallenna tuote. **Esimerkki läpäisee SHACL-tarkistuksen** kertoo onnistumisesta. Fixture ei ole Tietomallit-alustan vahvistama profiili. Oikea profiili voidaan antaa vaihtoehtoisesti koneluettavan exportin linkkinä.
 4. Tietoelementit johdetaan profiilista. VC-jakelun oletus on `planned`, jolloin tuotesivu näyttää **Lompakkotodistus suunnitteilla**. Lähetä luonnos tarkastukseen.
 5. Kirjaudu ulos ja vahvista Keycloakin **Log out**. Kirjaudu `yritys`-käyttäjänä, avaa sama luonnos, tarkasta profiili ja lähdeilmoitus, kirjoita perustelu ja merkitse tarkastuksen valintaruutu. Hyväksy ja julkaise esimerkiksi versiona `1.0.0`.
-6. Julkaisu löytyy nyt julkisesta hausta ja sen JSON-/JSON-LD-viennit toimivat. Historiassa on pysyvä version URI ja tarkiste. Profiilin tarkastus on ihmisen arvio lähdeilmoituksesta; se ei ole automaattinen alustatodistus tai myönnetyn VC:n SHACL-validointi.
+6. Julkaisu löytyy nyt julkisesta hausta ja sen JSON-/JSON-LD-viennit toimivat. Historiassa on pysyvä version URI ja tarkiste. Profiilin tarkastus on ihmisen arvio lähdeilmoituksesta; se ei ole automaattinen alustatodistus. Erillinen SHACL-tarkistus koskee tallennettua synteettistä RDF-sisältöä; VC:n kuorta, allekirjoitusta tai myöntämistä ei tarkisteta.
 7. `vero` voi luoda julkaistun rinnalle uuden työkopion. Muokkaus ei muuta aiempaa julkaisua. Uusi julkaisu tarvitsee uuden hyväksynnän ja aiempaa suuremman `major.minor.patch`-numeron. Julkaistua tai tarkastushistoriaa sisältävää tuotetta ei poisteta.
 
 ## Windows ja Docker Desktop
@@ -36,7 +36,7 @@ Tarvitset Docker Desktopin käynnissä Linux-konteilla, Compose v2:n ja Gitin. K
 
 ```powershell
 git fetch origin
-git switch feat/phase-2c-publication
+git switch feat/phase-2d-shacl
 docker compose up --build
 ```
 
@@ -62,7 +62,7 @@ docker compose stop app
 docker compose exec -T db sh -c 'pg_dump -U demo -d catalog > /tmp/before-update.sql'
 docker compose cp db:/tmp/before-update.sql ./before-update.sql
 git fetch origin
-git switch feat/phase-2c-publication
+git switch feat/phase-2d-shacl
 docker compose up --build -d --wait
 docker compose exec -T app .venv/bin/alembic current
 ```
@@ -98,7 +98,7 @@ Julkiset luku-API:t palauttavat vain julkaistuja snapshotteja. Haku kohdistuu ni
 | `POST /api/v1/drafts/{id}/submit` | Tarkastukseen |
 | `POST /api/v1/drafts/{id}/reviews` | Hyväksy tai palauta perustelulla |
 | `POST /api/v1/drafts/{id}/publish` | Atominen julkaisu |
-| `POST /api/v1/drafts/{id}/validate` | Julkaisuedellytysten tarkistus, ei SHACL-instanssivalidointi |
+| `POST /api/v1/drafts/{id}/validate` | Julkaisuedellytykset ja tallennetun esimerkin tuore SHACL-esikatselu; ei muuta luonnosta |
 | `DELETE /api/v1/products/{id}` | Poista vain luonnos, jolla ei ole julkaisu-/tarkastushistoriaa |
 | `GET /api/v1/products/{id}/audit-events` | Organisaation muokkaajan/tarkastajan tapahtumat |
 | `GET /api/v1/organizations`, `GET /api/v1/organizations/{id}` | Organisaatioiden perustiedot |
@@ -113,6 +113,26 @@ POST/PUT ei hyväksy asiakkaan `provider`-, `dataElements`-, tila- tai hyväksyn
 API tukee riippuvuuksia, ulkoisia OWL-viitteitä ja JSON Schema/OpenAPI -johdannaisia. Käyttöliittymän yksinkertainen tuonti käsittelee yhden pääartefaktin ja yhden sanastoviitteen; moniosainen tuonti tehdään API:lla. Alkuperäiset IRI:t ja koko graafi säilyvät, tietoelementtinäkymä on johdettu osajoukko. Etäkonteksteja tai riippuvuuksia ei noudeta jäsennyksen aikana. Puuttuva lähde/SHACL/riippuvuus estää julkaisun. Pelkkä johdannainen ei riitä. RDF-esitysten ekvivalenssi tarkistetaan graafina; tavutarkisteet ovat erikseen. JSON-LD-katalogivienti on eri asia kuin sisältöprofiili tai myönnetty VC. DCAT-AP-vaatimustenmukaisuutta ei väitetä.
 
 VC-metatietojen editori on tässä vaiheessa JSON-kenttä. `planned`/`suspended` ei näytä toimivaa linkkiä. Käytettävä jakelu tarvitsee myöntäjä-/operaattori-/lähdeorganisaatiot, VC-profiilin ja kartoituksen, pysyvän HTTPS-linkin sekä saatavuus- ja käyttöehdot. Henkilökohtaisia tarjouksia, koodeja tai tokeneita ei tallenneta. Esimerkkiverkkotunnuksia ei hyväksytä toimivaksi myöntämispalveluksi. EUDIW-/EBW-`tested` vaatii nimetyn profiilin, version, näytön ja testipäivän. Demo ei vahvista QEAA-luokkaa.
+
+## Vaihe 2D: esimerkit ja SHACL Core
+
+Uusi kirjoitusparametri on `syntheticExample`: `serialization` (`turtle`, `rdfxml` tai paikalliskontekstinen `jsonld`), `content` ja pakollinen `synthetic: true`. Yksi esimerkkigraafi voi sisältää useita synteettisiä tietueita. Kokoraja on 100 kB ja 2 000 kolmikkoa. Älä tuo henkilö-/rekisteritietoja, salaisuuksia tai myönnettyjä todistuksia; synteettisyyden vahvistus on käyttäjän ilmoitus, ei automaattinen henkilötietotunnistin. Esimerkki tulee julkiseksi vain hyväksytyn julkaisun mukana. UTF-8-sisältö, mukaan lukien alun/lopun tyhjä tila, säilyy tarkistetta varten sellaisenaan. Nimettyjä JSON-LD-graafeja ei tueta: ne hylätään, jotta rajoitteita tai sisältöä ei katoa oletusgraafin ulkopuolelle.
+
+Tallennus tarkistaa lukitun profiilin ja riippuvuuksien SHACL Core -rakenteen sekä esimerkin kaikki profiilin Core-rajoitteet. Ei OWL-päättelyä. Tyhjä tai kohdistamaton esimerkki ei läpäise. `entryShapeUris`-valinnan jokaisella aktiivisella aloitusmuodolla on oltava kohdetietue; ilman valintaa vaaditaan vähintään yksi aktiivisen luokkamuodon kohde. Tarkistus käy läpi koko graafin kohdistuvat muodot; aloitusmuodot eivät piilota muiden muotojen virheitä.
+
+Palvelin muodostaa `semanticValidation`-raportin: profiilin ja esimerkin tulos, kohdetietueiden määrä, säännön IRI, JSON Pointer, kohteen/polun/muodon tunnisteet, tarkisteet, moottoriversio ja validointikäytäntö. Asiakas ei saa asettaa raporttia. SHACL-havainnon `resultPath` on RDF-polku; `/syntheticExample` on API:n JSON Pointer. Kaikki virhe-, warning- ja info-havainnot estävät tämän demon uuden julkaisun. Raportin näyttö rajataan 100 havaintoon; raja ei muuta epäonnistumista onnistumiseksi.
+
+Esimerkki ja raportti sisältyvät luonnoksen sisältötarkisteeseen, hyväksyntään ja muuttumattomaan julkaisuun. JSON-vienti sisältää alkuperäiset oliot; JSON-LD-katalogiviennissä ne ovat selvästi paikallisten demotermien JSON-tekstiarvoja. Esimerkin tai profiilin muutos vaatii uuden tarkistuksen ja hyväksynnän. Virheellinen esimerkki säilyy luonnoksena korjattavaksi; sitä ei voi lähettää tarkastukseen. Pelkkä `/validate`-esikatselu ei tallenna uutta raporttia: tallenna luonnos päivittääksesi sen.
+
+Tuetut säännöt rajataan offline SHACL Coreen. SPARQL, SHACL-JS, säännöt, mukautetut constraint-komponentit ja tuntemattomat SHACL-predikaatit estävät hyväksynnän. Graafi säilyy alkuperäisenä, vaikka sen laajennuksia ei tueta. Validointiprosessi ei saa avata verkkoyhteyksiä; etäkonteksteja, DTD/ENTITY-määrittelyjä tai etäriippuvuuksia ei seurata. Prosessin rajat: CPU 5 s, muisti 512 MiB, seinäkello 15 s ja validointisyvyys 20. Aika-/resurssivirhe estää julkaisun.
+
+### Päivitys vaiheesta 2C
+
+Sama varmuuskopio-, rebuild- ja käynnistystapa toimii; head pysyy `0004_publication`-revisiona. Uutta migraatiota ei tarvita: esimerkki ja raportti käyttävät jo olemassa olevia luonnoksen/julkaisun JSONB-sisältöjä. Mitään vanhaa riviä, snapshotia tai julkaisua ei kirjoiteta uudelleen. Uudelleenkäynnistys ei lisää esimerkkejä automaattisesti.
+
+Aiempi julkaisu pysyy luettavana alkuperäisine tarkisteineen, vaikka sillä ei ole SHACL-raporttia. Sen rinnalle tehtävä uusi julkaisu sekä vanhat keskeneräiset luonnokset tarvitsevat esimerkin ja uudelleen tallennuksessa muodostuvan raportin. Aiemmin hyväksytty luonnos pitää muokata/tallentaa ja hyväksyä uudelleen. Myös moottorin tai validointikäytännön vaihtuessa vanhentunut raportti estää uuden julkaisun. Ihmisen tekemä lähdeilmoituksen tarkastus säilyy erillisenä vaatimuksena.
+
+Tämä ei vielä kata JSON Schema-/OpenAPI-johdannaisten validointia tai kattavuuskartoitusta, DCAT-AP-vaatimustenmukaisuutta, VC-kuorta ja allekirjoitusta tai ulkoisia palveluita. Ne jäävät jatkovaiheisiin.
 
 ## Kehitys ja testit
 
@@ -130,7 +150,7 @@ Testit käyttävät oikeaa PostgreSQL:ää ja tuhoavaa erillistä `catalog_test`
 
 ```bash
 docker compose exec -T db createdb -U demo catalog_test
-.venv/bin/pytest tests/test_api.py tests/test_publication.py tests/test_profiles.py tests/test_auth.py tests/test_migrations.py tests/test_public_url.py -q
+.venv/bin/pytest tests/test_api.py tests/test_publication.py tests/test_profiles.py tests/test_semantic_validation.py tests/test_auth.py tests/test_migrations.py tests/test_public_url.py -q
 ```
 
 Älä aja tätä testikantaa käyttäviä pytest-ajoja rinnakkain. `TEST_DATABASE_URL` voi muuttaa yhteysosoitetta mutta kannan pitää olla `catalog_test`. Selaintestit käyttävät erikseen käynnistettyä demoa ja oikeaa Keycloak-kirjautumista:

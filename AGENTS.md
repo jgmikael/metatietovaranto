@@ -2,7 +2,7 @@
 
 ## Rajaus
 
-Lue `ROADMAP.md`, `STATUS.md` ja `metatietovaranto_suunnittelu.md`. Suunnitelma kuvaa tavoitearkkitehtuurin. Nykyinen toimitus kattaa ROADMAPin vaiheet 1, 2A, 2B ja 2C (luonnokset, riippumaton hyväksyntä, lukitut profiili-/julkaisusnapshotit, VC-metatiedot ja auditointi). Lue myös docs/phase-2c.md. Älä toteuta SHACL-instanssivalidointipalvelua, laajempaa elinkaarta tai ulkoisia integraatioita ilman erillistä toimeksiantoa. Älä yhdistä main-haaraan automaattisesti.
+Lue `ROADMAP.md`, `STATUS.md` ja `metatietovaranto_suunnittelu.md`. Suunnitelma kuvaa tavoitearkkitehtuurin. Nykyinen toimitus kattaa ROADMAPin vaiheet 1, 2A, 2B, 2C ja 2D (luonnokset, riippumaton hyväksyntä, lukitut profiili-/julkaisusnapshotit, VC-metatiedot ja auditointi). Lue myös docs/phase-2c.md. Vaihe 2D tarkistaa synteettisen esimerkkisisällön offline SHACL Corella. Älä lisää SPARQL/JS/AF-laajennuksia, laajempaa elinkaarta tai ulkoisia integraatioita ilman erillistä toimeksiantoa. Älä yhdistä main-haaraan automaattisesti.
 
 ## Sitova semanttinen suunnitteluperiaate
 
@@ -31,3 +31,7 @@ Muuta skeemaa uusilla Alembic-revisioilla; älä muokkaa jo toimitettuja revisio
 Lue docs/authentication.md. Keycloakin tunnukset ovat synteettisiä demotunnuksia, eivät tuotantosalaisuuksia. Älä lokita koodeja, tokeneita, evästeitä tai salasanoja. Säilytä --no-access-log deployatussa Uvicornissa. Älä myönnä oikeuksia organisaation nimen tai käyttäjän lähettämän organisaatiotiedon perusteella. Älä muuta vanhoja jäsenyyksiä fixtureiden perusteella uudelleenkäynnistyksissä.
 
 
+
+## SHACL ja synteettiset esimerkit
+
+Lue README:n vaiheen 2D rajaus. Älä muuta 2C:n muuttumattomia julkaisuja tai snapshotteja taustapäivityksellä. Raportti on palvelimen tuottama ja sidottu profiiliin, esimerkkiin, moottoriin ja käytäntöön; älä hyväksy raporttia asiakkaalta. Esimerkin muokkaus mitätöi hyväksynnän. Säilytä prosessin CPU-/muisti-/aikarajat ja verkkoyhteyksien esto, älä suorita profiilin koodia tai nouda riippuvuuksia validoinnissa. Lisää tests/test_semantic_validation.py API-/migraatiotestien ajoon. Vain synteettistä esimerkkisisältöä, ei henkilötietoja tai allekirjoitettuja VC-todistuksia.
