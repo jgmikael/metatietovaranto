@@ -40,7 +40,7 @@ Selaintestin ensimmäinen uusi tiedostopolku paljasti tekstikentän label-kohdis
 
 ## Toimitus
 
-Työhaara feat/phase-2d-shacl, valmis PR-kuvaus docs/pull-request.md. Push ja PR:n avaustulos kirjataan seuraavaksi. Mainiin ei yhdistetä automaattisesti.
+Haara `feat/phase-2d-shacl` on pushattu GitHubiin. Pull requestia **ei luotu**: `gh pr create --base main --head feat/phase-2d-shacl --title ... --body-file docs/pull-request.md` palautti `Post https://api.github.com/graphql: Forbidden`, ja REST-varayritys `gh api --method POST repos/jgmikael/metatietovaranto/pulls --input /tmp/phase2d-pr.json` palautti saman Forbidden-esteen. Git-push onnistuu, GitHub API -pääsy on estynyt. Valmis kuvaus on docs/pull-request.md. Avaa PR selaimessa: https://github.com/jgmikael/metatietovaranto/compare/main...feat/phase-2d-shacl . Main-haaraan ei yhdistetty muutoksia.
 
 ---
 
