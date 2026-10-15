@@ -13,11 +13,12 @@ from apps.api.models import Product, OrganizationMembership, WebSession, OAuthFl
 from apps.api.auth import digest, now, SESSION_COOKIE
 
 
-def payload(client, index=0):
-    product=client.get('/api/v1/products').json()['items'][index]
-    fields=json.loads(Path('fixtures/products.json').read_text())[0].keys()
-    return product, {key:product[key] for key in fields if key not in ('id','provider')} | {
-        'providerOrganizationId':product['providerOrganizationId']}
+def payload(client,index=0):
+    from apps.api.models import Draft
+    with Session(engine) as session:
+        product=session.scalars(select(Draft).order_by(Draft.product_id)).all()[index]
+        raw=dict(product.content)|{'id':str(product.product_id),'etag':f'"{product.revision}"'}
+    return raw,{key:raw[key] for key in ('title','description','providerOrganizationId','theme','source','purpose','limitations','accessConditions','availability','synthetic')}
 
 
 def test_anonymous_reads_but_cannot_write(anonymous_client):
@@ -37,21 +38,22 @@ def test_cross_organization_read_only_and_forged_identity_denied(anonymous_clien
     own,data=payload(client,0)
     other,other_data=payload(client,1)
     authenticate(client,'editor-a',[UUID(own['providerOrganizationId'])])
-    assert client.put(f"/api/v1/products/{own['id']}",json=data).status_code==200
+    assert client.put(f"/api/v1/products/{own['id']}",json=data,headers={'If-Match':own['etag']}).status_code==200
+    current_etag=client.get(f"/api/v1/products/{own['id']}/draft").json()['etag']
     for method,path,body in [('POST','/api/v1/products',other_data),
         ('PUT',f"/api/v1/products/{other['id']}",data),
         ('PUT',f"/api/v1/products/{own['id']}",other_data),
         ('DELETE',f"/api/v1/products/{other['id']}",None)]:
-        response=client.request(method,path,json=body,headers={'X-Organization-ID':other['providerOrganizationId'],
+        response=client.request(method,path,json=body,headers={'If-Match':current_etag,'Idempotency-Key':'security-test','X-Organization-ID':other['providerOrganizationId'],
                                                               'X-User-ID':'admin'})
-        assert response.status_code==403
+        assert response.status_code in (403,404)
     # No denied request changes product ownership or contents.
-    assert client.get(f"/api/v1/products/{other['id']}").json()==other
-    assert client.get(f"/api/v1/products/{own['id']}").json()['providerOrganizationId']==own['providerOrganizationId']
+    assert client.get(f"/api/v1/products/{other['id']}").status_code==404
+    assert client.get(f"/api/v1/products/{own['id']}/draft").json()['providerOrganizationId']==own['providerOrganizationId']
     authenticate(client,'reader-a',[UUID(own['providerOrganizationId'])],role='reader')
     assert client.post('/api/v1/products',json=data).status_code==403
-    assert client.put(f"/api/v1/products/{own['id']}",json=data).status_code==403
-    assert client.delete(f"/api/v1/products/{own['id']}").status_code==403
+    assert client.put(f"/api/v1/products/{own['id']}",json=data,headers={'If-Match':'"2"'}).status_code==403
+    assert client.delete(f"/api/v1/products/{own['id']}",headers={'If-Match':'"2"'}).status_code==403
 
 
 def test_csrf_expiry_logout_and_revoked_membership(anonymous_client):
@@ -99,7 +101,7 @@ def test_memberships_are_not_restored_on_restart(anonymous_client):
     from apps.api.main import app
     with Session(engine) as session:
         count=len(session.scalars(select(OrganizationMembership)).all())
-        assert count==3
+        assert count==5
         for member in session.scalars(select(OrganizationMembership)).all():
             session.delete(member)
         session.commit()

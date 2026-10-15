@@ -1,3 +1,53 @@
+# Vaihe 2C — yksityiset luonnokset ja muuttumattomat julkaisut
+
+Tarkistettu 14.10.2026. Pohjana main `0dd6555`, joka sisältää PR:t 5 ja 6. Työhaara `feat/phase-2c-publication`. Mainiin ei yhdistetä automaattisesti. Alla olevat aiempien toimitusten PR-esteet/testimäärät ovat historiaa.
+
+## Toteutettu ja suunnittelumuutosten vaikutus
+
+- Luonnos → tarkastus → erillinen hyväksyntä → julkaisu. Muokkaus mitätöi hyväksynnän, kaikki luonnoksen kirjoittajat estetään sen hyväksynnästä. Julkaisija voi olla sama kuin erillinen tarkastaja.
+- Pysyvä omistajaorganisaatio erotetaan tarjoajasta. Editor muokkaa, reviewer/publisher tarkastaa, publisher julkaisee. Omat luonnokset vaatii jäsenyyden; julkinen haku, URI:t ja viennit palauttavat vain julkaisuja. Anonyymi tyhjä haku uuden kannan alussa on tarkoituksellinen muutos.
+- ETag/If-Match, PostgreSQL-rivilukko, luonnin/julkaisun 24 h idempotenssi. Julkaisu, profiiliviite, audit ja outbox samassa transaktiossa. Tietokantatriggerit estävät snapshot-/tarkastus-/tapahtumahistorian UPDATE/DELETE-operaatiot.
+- Semver-julkaisut, pysyvä version URI, vanhan version JSON-/JSON-LD-vienti ja uuden työkopion luonti aiemman julkaisun rinnalle. Vanhaa sisältöä ei muokata eikä julkaistua tuotetta poisteta.
+- PR 5: SHACL-profiilin tuonti linkillä TAI tiedostolla, lukitut alkuperäiset artefaktit, IRI:t, OWL-viitteet, riippuvuudet ja johdannaisdialektit. Tietoelementit johdetaan profiilista. Vanha dataElements säilyy keskeneräisenä legacy-demotietona. Kolmen RDF-esityksen graafiekvivalenssi tarkistetaan erikseen tavutarkisteista.
+- Rakenne-/riippuvuustarkistukset ja lähdeilmoituksen eksplisiittinen ihmistarkastus. Ei automaattista Tietomallit-alkuperän todistusta, ei SHACL-instanssivalidointipalvelua. Parserilla on tiedosto-, kolmikko-, CPU-, muisti- ja aikarajat. Etäkontekstien/DTD:n jäsennys estetään.
+- PR 6: W3C VC ensisijaisena toimitusmuotona, oletuksena näkyvästi planned. VC-/issuer-/wallet-metatiedot lukitaan tuoteversioon ja profiilisnapshotiin. Vain käytettävä palvelu saa pysyvän HTTPS-asiointilinkin, ei henkilökohtaisia tarjouksia/tokeneita. Esimerkkidomain tai planned/suspended ei saa toimivaa painiketta. Ei issuer/wallet-integraatiota tai QEAA-vahvistusta.
+- Uusi 0004_publication säilyttää vanhat tuoterivit, UUID:t, muokkausajat ja kaikki metatiedot yksityisissä luonnoksissa; vanhoja migraatioita ei muuteta. Kolme alkuperäistä tuotetta siemennetään vain uuteen kantaan. Ei automaattista julkaisua tai tietojen nollausta.
+- Keycloakin samoja käyttäjiä käytetään ristikkäiseen tarkastukseen: yritys julkaisee verotuotteita, vero yritystuotteita. Uudet jäsenyydet lisätään kerran tunnettuun synteettiseen organisaatioon; vanhaa realmiä tai oikeuksia ei korvata. Kolmannelle organisaatiolle ei keksitä oikeuksia.
+- Codespacesin määritykset säilyvät muuttumattomina: portti 8000, openBrowser ja sovelluksen verkon jakaminen. README ja verkkodemon ohje edellyttävät Private-näkyvyyttä. README, ROADMAP, AGENTS, arkkitehtuuri ja tunnistusohje päivitetty; ratkaisun yksityiskohdat docs/phase-2c.md.
+
+## Tässä tehtävässä todella ajettu
+
+- Lukittu uv-riippuvuuksien asennus onnistui; RDFLib siirrettiin runtime-riippuvuudeksi. TypeScript-tarkistus ja Vite-tuotantobuild `npm run build --prefix apps/web` onnistuivat.
+- `./scripts/cloud-build.sh` rakensi Docker-imagen pilven proxy-/CA-reitillä TLS-tarkistuksia säilyttäen. `DOCKER_CONFIG=/workspace/.cache/docker docker compose up -d --no-build --wait`: app, PostgreSQL ja Keycloak healthy olemassa olevilla voluumeilla.
+- `.venv/bin/pytest tests/test_api.py tests/test_publication.py tests/test_profiles.py tests/test_auth.py tests/test_migrations.py tests/test_public_url.py -q`: **39 läpäissyttä, 0 epäonnistunutta, 0 ohitettua**. Viimeisen auth-testin tiukennuksen jälkeen 8 auth-testiä ajettiin erikseen uudelleen onnistuneesti; kyse ei ole 8 lisätestistä.
+- `BROWSER_BASE_URL=http://localhost:8000 .venv/bin/pytest tests/test_browser.py -q`: **7 läpäissyttä, 0 epäonnistunutta, 0 ohitettua**. Oikea Chromium ja Keycloak, kaksi käyttäjää profiilitiedoston tuonnista tarkastuksen ja julkaisun kautta anonyymiin hakuun. Myös CRUD, mobiili, organisaationäkymä, reader/anonymous, organisaation muokkauseristys ja vanhentunut istunto.
+- Yhteensä **46 eri testiä** läpäisi. Kirjastojen Starlette/httpx- ja RDFLib-deprekaatiovaroitukset eivät ole ohitettuja testejä.
+- Vanhan phase 1 -DDL:n muokattu tuotetieto, koko metadata (myös tuntematon sisäkkäinen kenttä), UUID ja aikaleima säilyivät. Erilliset 2A- ja 2B-päivitykset säilyttivät organisaation ja 2B-jäsenyyden. Tyhjä alustus ja toistuva migraatio/restart testattu. Samannimisiä tarjoajia ei yhdistetty.
+- Oikeasti rinnakkaiset kaksi If-Match-muokkausta: yksi 200, toinen 412. Oman sisällön hyväksyntäkielto, hyväksynnän mitätöinti, idempotenssi, snapshot-/audit-triggerit ja outbox-virheen aiheuttama koko julkaisun rollback testattu.
+- RDF/XML/Turtle/JSON-LD tuottivat saman graafitunnisteen; alkuperäinen tiedosto ladattiin takaisin. Puuttuvat riippuvuudet, pelkkä OWL/konteksti/johdannainen, etäkonteksti, XML DTD/ENTITY, vieras organisaatio ja henkilökohtaisen koodin URL hylättiin odotetusti. Käytettävän VC-palvelun metadata- ja binding-polku testattiin synteettisenä, ilman yhteyttä kyseiseen palveluun.
+- Tavallinen app-restart ja Compose-readiness ajettiin. Ennen/jälkeen tarkistetut kaikki katalogirivit säilyivät samoina: 6 tuotetta/luonnosta, 3 organisaatiota, 5 jäsenyyttä, 3 profiilisnapshotia, 3 julkaisua/tarkastusta/outboxia ja 21 audit-tapahtumaa. Kolme lisäjulkaisua ovat selaintestin synteettisiä, tarkoituksella muuttumattomaan historiaan jääviä tietueita. PostgreSQL-/Keycloak-volumea ei poistettu.
+- Alembic current: `0004_publication (head)`. Alembic check: `No new upgrade operations detected.`
+- Codespacesin yhdistetty Compose validoitiin synteettisellä CODESPACE_NAME-arvolla: hostname/callback samalla portilla 8000, workspace service:app-verkossa, openBrowser ennallaan. `.devcontainer`-diff on tyhjä.
+- `git diff --check`: ei whitespace-virheitä.
+
+Kehityksen aikaiset epäonnistumiset korjattiin: migraatiotestien siivoukseen jäänyt PostgreSQL-funktio, versio-IRI:n muutosta vastaamattomat vientitestien oletukset ja pitkän julkaistun nimen mobiilirivitys. Lopulliset yllä raportoidut ajot läpäisivät korjausten jälkeen.
+
+## Ajamattomat tarkistukset ja rajat
+
+- Oikeaa GitHub Codespacea, GitHubin Private-portin pääsynvalvontaa ja automaattista selainvälilehteä ei ajettu tämän Linux-pilvikoneen sisältä. Asetusten staattinen tarkistus ei korvaa tätä. README sisältää ennen yhdistämistä käytettävän haaralinkin ja kokeilupolun.
+- Windows/Docker Desktop, tavallinen `docker compose up --build` ilman tämän pilven build-wrapperia, tyhjän välimuistin Windows-build ja GitHub Actions -etäajo jäivät ajamatta. Niiden onnistumista ei väitetä. Ohjeen Windows-komento on `docker compose up --build`, osoite http://localhost:8000.
+- Elävän Tietomallit-palvelun linkkituontia ei ajettu. Linkki/tiedosto-vaihtoehdon testissä verkkovastaus korvataan hallitulla fixturellä; todellinen tiedostotuonti ajettiin selaimessa. Synteettinen profiilifixture ei ole oikea Tietomallit-export.
+- Myöntämistä, todellista issuer-linkin saavutettavuutta, myöntäjän luottamusta, EUDIW/EBW-yhteentoimivuutta, SHACL-instanssivalidointia tai DCAT-AP-vaatimustenmukaisuutta ei todennettu. Ei vaihetta 3.
+- Yksi VC-jakelu/tuote; usean myöntäjän valinta, laajempi elinkaari ja jäsenyyksien hallinta jäävät jatkoon. Profiilin selainlomake on yksinkertainen; moniosaiset riippuvuudet/johdannaiset annetaan API:lla. VC-metatietoja ylläpidetään JSON-kentässä. Haku suodattaa demomäärän muistissa, suorituskykyä tai saavutettavuusvaatimusten täyttymistä ei ole auditoitu.
+
+## Toimitus
+
+Haara `feat/phase-2c-publication` on pushattu GitHubiin. Pull requestia **ei luotu**: sekä `gh pr create --base main --head feat/phase-2c-publication --title ... --body-file docs/pull-request.md` että REST-varayritys `gh api --method POST repos/jgmikael/metatietovaranto/pulls --input /tmp/phase2c-pr.json` palauttivat `Post https://api.github.com/...: Forbidden`. Tämä on ympäristön GitHub API -pääsyn este; Git-push onnistui. Valmis kuvaus on docs/pull-request.md. PR:n voi avata selaimessa https://github.com/jgmikael/metatietovaranto/compare/main...feat/phase-2c-publication . Main-haaraan ei yhdistetty mitään.
+
+---
+
+# Aikaisempien toimitusten historia (ei tämän ajon tuloksia)
+
 # Vaihe 2B — OIDC ja organisaatiokohtainen tuoteylläpito
 
 Tarkistettu 14.10.2026. Pohjana `origin/main` commit `0e6a2a2` (käyttäjän yhdistämä ja selaimessa toimivaksi vahvistama vaihe 2A). Työhaara `feat/phase-2b-auth`. Main-haaraan ei yhdistetä automaattisesti.

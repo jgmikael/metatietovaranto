@@ -2,7 +2,7 @@
 from datetime import datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, String
+from sqlalchemy import Boolean, DateTime, ForeignKey, String, UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSONB, UUID as PGUUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -25,6 +25,7 @@ class Organization(Base):
 class Product(Base):
     __tablename__ = "products"
     id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
+    owner_organization_id: Mapped[UUID] = mapped_column(ForeignKey("organizations.id"))
     title: Mapped[str] = mapped_column(String(200), index=True)
     description: Mapped[str] = mapped_column(String(5000))
     # Retained compatibility label, never used to resolve an organization identity.
@@ -65,3 +66,96 @@ class OAuthFlow(Base):
     verifier: Mapped[str] = mapped_column(String(128))
     nonce: Mapped[str] = mapped_column(String(128))
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+
+
+class SemanticProfile(Base):
+    __tablename__ = "semantic_profiles"
+    id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
+    profile_uri: Mapped[str | None] = mapped_column(String(2048), unique=True)
+
+
+class ProfileSnapshot(Base):
+    __tablename__ = "profile_snapshots"
+    id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
+    profile_id: Mapped[UUID] = mapped_column(ForeignKey("semantic_profiles.id"))
+    owner_organization_id: Mapped[UUID] = mapped_column(ForeignKey("organizations.id"))
+    manifest: Mapped[dict] = mapped_column(JSONB)
+    checksum: Mapped[str] = mapped_column(String(64))
+    graph_hash: Mapped[str | None] = mapped_column(String(128))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class Draft(Base):
+    __tablename__ = "drafts"
+    id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
+    product_id: Mapped[UUID] = mapped_column(ForeignKey("products.id"), unique=True)
+    content: Mapped[dict] = mapped_column(JSONB)
+    profile_snapshot_id: Mapped[UUID | None] = mapped_column(ForeignKey("profile_snapshots.id"))
+    revision: Mapped[int] = mapped_column(default=1)
+    status: Mapped[str] = mapped_column(String(30), default="draft")
+    checksum: Mapped[str] = mapped_column(String(64))
+    contributors: Mapped[list[str]] = mapped_column(JSONB)
+    approved_review_id: Mapped[UUID | None] = mapped_column(PGUUID(as_uuid=True))
+    modified_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class Review(Base):
+    __tablename__ = "reviews"
+    id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
+    draft_id: Mapped[UUID] = mapped_column(ForeignKey("drafts.id"))
+    revision: Mapped[int]
+    checksum: Mapped[str] = mapped_column(String(64))
+    reviewer: Mapped[str] = mapped_column(String(255))
+    decision: Mapped[str] = mapped_column(String(30))
+    reason: Mapped[str] = mapped_column(String(2000))
+    source_reviewed: Mapped[bool] = mapped_column(Boolean)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class ProductVersion(Base):
+    __tablename__ = "product_versions"
+    __table_args__ = (
+        UniqueConstraint('product_id', 'version'),
+        UniqueConstraint('product_id', 'sequence'),)
+    id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
+    product_id: Mapped[UUID] = mapped_column(ForeignKey("products.id"))
+    version: Mapped[str] = mapped_column(String(50))
+    sequence: Mapped[int]
+    content: Mapped[dict] = mapped_column(JSONB)
+    checksum: Mapped[str] = mapped_column(String(64))
+    profile_snapshot_id: Mapped[UUID] = mapped_column(ForeignKey("profile_snapshots.id"))
+    review_id: Mapped[UUID] = mapped_column(ForeignKey("reviews.id"))
+    publisher: Mapped[str] = mapped_column(String(255))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class AuditEvent(Base):
+    __tablename__ = "audit_events"
+    id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
+    organization_id: Mapped[UUID] = mapped_column(ForeignKey("organizations.id"))
+    product_id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True))
+    actor: Mapped[str] = mapped_column(String(255))
+    action: Mapped[str] = mapped_column(String(50))
+    before_hash: Mapped[str | None] = mapped_column(String(64))
+    after_hash: Mapped[str | None] = mapped_column(String(64))
+    reason: Mapped[str] = mapped_column(String(2000))
+    details: Mapped[dict] = mapped_column(JSONB)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class IdempotentOperation(Base):
+    __tablename__ = "idempotent_operations"
+    subject: Mapped[str] = mapped_column(String(255), primary_key=True)
+    operation: Mapped[str] = mapped_column(String(100), primary_key=True)
+    key: Mapped[str] = mapped_column(String(128), primary_key=True)
+    request_hash: Mapped[str] = mapped_column(String(64))
+    response: Mapped[dict] = mapped_column(JSONB)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class OutboxEvent(Base):
+    __tablename__ = "outbox_events"
+    id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
+    version_id: Mapped[UUID] = mapped_column(ForeignKey("product_versions.id"), unique=True)
+    payload: Mapped[dict] = mapped_column(JSONB)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))

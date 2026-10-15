@@ -1,25 +1,14 @@
-## Vaihe 2B: OIDC ja organisaatiokohtainen tuoteylläpito
+Vaihe 2C lisää organisaatioiden yksityiset luonnokset, eri kirjoittajan hyväksynnän ja muuttumattomat julkaisut. Julkinen haku ja JSON-/JSON-LD-viennit näyttävät vain julkaisuja; vanhat demotuotteet säilyvät tunnisteineen ja tietoineen keskeneräisinä luonnoksina. Työkopion muutokset eivät muuta vanhaa julkaisua.
 
-Vaiheen 2A main-haaran päälle lisätään Keycloak OIDC Authorization Code + PKCE -kirjautuminen, palvelinpuolinen PostgreSQL-istunto ja editor/reader-jäsenyydet organisaatioittain. Haku, tuotesivut ja JSON-/JSON-LD-viennit säilyvät luettavina. Kirjoitus vaatii istunnon, CSRF-tunnisteen ja palvelimen tarkistaman muokkaajaoikeuden sekä tuotteen vanhaan että mahdolliseen uuteen tarjoajaorganisaatioon.
+PR:ien 5 ja 6 suunnitteluperiaatteet huomioidaan ennen julkaisurakenteen lukitsemista: SHACL-sisältöprofiili annetaan linkkinä tai tiedostona, snapshot säilyttää alkuperäiset artefaktit/IRI:t/riippuvuudet, ja tietoelementit johdetaan profiilista. W3C VC on ensisijainen toimitusmuoto, oletuksena näkyvästi planned. Käytettävän palvelun kuvaus tarvitsee myöntäjän metatiedot ja pysyvän HTTPS-asiointilinkin. Katalogi ei myönnä todistuksia tai toteuta lompakkointegraatiota. Lähdeilmoituksen käsintarkastus on eri asia kuin alustan automaattinen alkuperätodistus tai SHACL-instanssivalidointi.
 
-Uusi migraatio 0003_auth lisää vain jäsenyys- ja istuntotaulut. Aiemmat migraatiot ja tuote-/organisaatiotiedot säilyvät. Demooikeuksia ei päätellä organisaation nimestä eikä poistettuja jäsenyyksiä palauteta käynnistyksessä. Mukana kaksi eri organisaation muokkaajaa ja yksi lukija julkisilla synteettisillä demotunnuksilla.
+- Alembic 0004 säilyttää vanhat tuotteet ja lisää profiili-/julkaisusnapshotit, tarkastukset, pysyvän omistajaorganisaation, auditin, idempotenssit ja outboxin. Vanhoja migraatioita ei muuteta.
+- If-Match, transaktion rivilukot, kirjoittajien oman hyväksynnän esto ja hyväksynnän mitätöinti muutoksessa. Julkaisu/snapshot/audit/outbox samassa transaktiossa; tietokantatriggerit suojaavat historiaa.
+- Sama Keycloak-realmi ja kolme tunnusta. vero/yritys muokkaavat omaa ja tarkastavat toisen organisaation sisältöä. Muokkaus ja julkaisu ovat erilliset oikeudet.
+- Codespacesin Private-portti 8000 ja automaattinen selainavaus säilyvät. README kertoo päivityksen, varmuuskopion ja koko kokeilupolun.
 
-Keycloak käyttää samaa selainporttia 8000 rajatun /identity-proxyn kautta. Codespacesin openBrowser säilyy ja portti pidetään Private-tilassa. Istuntoeväste on HttpOnly/SameSite ja HTTPS:ssä Secure; tunnistustokeneita ei tallenneta localStorageen. Uloskirjautuminen päättää sovellusistunnon ja jatkaa Keycloakin Log out -vahvistukseen, minkä jälkeen käyttäjää voi vaihtaa.
+Todennus: 39 API-/PostgreSQL-/migraatio-/osoitetestiä ja 7 oikean Chromiumin selaintestiä läpäissyt. Mukana muokatun phase 1/2A/2B-kannan säilyminen, tyhjä kanta, toistuvat päivitykset, todellinen rinnakkaismuokkaus, hyväksynnän mitätöinti, idempotenssi, muuttumattomat versiot ja julkaisun rollback. Kahden oikean Keycloak-käyttäjän selainketju tiedostotuonnista julkiseen hakuun toimii. TypeScript/Vite-build, pilven Docker-build, Compose-readiness ja Alembic check läpäisevät.
 
-## Todennus
+Ajamattomat: oikea GitHub Codespace/Private-portin pääsynvalvonta/automaattinen välilehti, Windows Docker Desktop, GitHub Actions -etäajo, elävän Tietomallit-palvelun linkkituonti ja oikeat myöntäjä/lompakkokokeet. Linkkituonnin testissä verkko korvataan hallitulla vastauksella. Tarkat tulokset ja rajat STATUSissa.
 
-- TypeScript-/Vite-build ja Docker-image onnistuvat; app/db/keycloak healthy.
-- 33 testiä läpäisee, ei ohituksia: 9 API/PostgreSQL/RDF, 8 auth, 7 migraatio, 3 osoitteenmuodostus ja 6 Chromium-selainkoetta oikealla Keycloakilla.
-- Palvelimen kielteiset oikeustestit kattavat anonyymin, lukijan, toisen organisaation, tarjoajan vaihdon, väärennetyt otsakkeet/evästeen, CSRF:n, istunnon vanhenemisen ja jäsenyyden poiston.
-- OIDC:n allekirjoitus/issuer/audience/nonce/azp/exp, state/PKCE/selainsidonta ja uusintakäytön esto testattu.
-- Migraatio 2A → 2B säilyttää olemassa olevat tuotteet, organisaatiot ja niiden tunnisteet. Alembic check ei löydä puuttuvia muutoksia.
-- Keycloakin rajatun Java-heapin jälkeen kuusi selaintestiä läpäisi uudelleen samoilla voluumeilla.
-- Codespacesin yhdistetty Compose validoitu paikallisesti. Oikeaa Codespacea, Windowsia tai etä-CI:tä ei tässä ajettu.
-
-Ei hyväksyntää, julkaisuversioita, SHACL:ia tai tuotantotunnistautumista. Jäsenyyksien hallinta-UI ja back-channel logout jäävät myöhemmiksi. Yksityiskohdat ja rajoitukset: docs/authentication.md, README ja STATUS.
-
-## Selainkokeilu ennen yhdistämistä
-
-Luo uusi Codespace haarasta feat/phase-2b-auth READMEn linkillä. Säilytä portti 8000 Private-tilassa. Hae tuotteita anonyymisti ja kokeile kirjautumista vero/demo-vero, yritys/demo-yritys ja lukija/demo-lukija. Vertaile muokkaus-/poistopainikkeita sekä tarjoajavalintaa. Uloskirjautumisessa vahvista Keycloakin Log out. Vanhan Codespacen päivitys tehdään varmuuskopioinnin ja Rebuild Containerin kautta ilman volumen poistoa.
-
-Ei automaattista mergeä main-haaraan.
+Kokeile ennen yhdistämistä: https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2c-publication → Create codespace → portti 8000 Private. README sisältää vero → profiili → yritys-hyväksyntä → julkaisu -polun. Älä yhdistä mainiin automaattisesti.

@@ -1,11 +1,11 @@
 # Kokeile Metatietovarantoa selaimessa
 
-Tämä käynnistää nykyisen vaiheen 1 demon GitHub Codespacesissa. Paikallisia asennuksia tai uutta hosting-tiliä ei tarvita. GitHub käynnistää sovelluksen ja PostgreSQL:n omassa kehitysympäristössäsi. Tämä ei ole jatkuvasti käynnissä oleva tuotantopalvelu.
+Tämä käynnistää nykyisen demon (vaiheet 1–2C) GitHub Codespacesissa. Paikallisia asennuksia tai uutta hosting-tiliä ei tarvita. GitHub käynnistää sovelluksen, PostgreSQL:n ja Keycloakin omassa kehitysympäristössäsi. Tämä ei ole jatkuvasti käynnissä oleva tuotantopalvelu.
 
 ## Ensimmäinen käynnistys
 
 1. Avaa https://codespaces.new/jgmikael/metatietovaranto?ref=main . Kirjaudu GitHubiin samalla tilillä, jolla pääset yksityiseen repositorioon.
-2. Tarkista Branch `demo/codespaces`, valitse 2-core-kone ja **Create codespace**. Tarkista GitHubin näyttämä käyttö- ja laskutustieto ennen luontia.
+2. Tarkista Branch `main` (tai ennen yhdistämistä `feat/phase-2c-publication`), valitse 2-core-kone ja **Create codespace**. Tarkista GitHubin näyttämä käyttö- ja laskutustieto ennen luontia.
 3. Odota konttien ensimmäistä rakennusta. Tähän voi kulua useita minuutteja. Sovellus ja tietokanta käynnistyvät automaattisesti; terminaalikomentoja ei tarvita tavallisessa käynnistyksessä.
 4. Demo pyritään avaamaan automaattisesti uuteen selainvälilehteen. Jos selain estää avaamisen, avaa editorin alaosan **PORTS**-välilehti. Etsi portti **8000**, jonka nimi on **Avaa Metatietovarannon demo**, ja valitse maapallokuvake **Open in Browser**.
 5. Säilytä portin näkyvyys arvossa **Private**. GitHub-kirjautuminen suojaa pääsyn; vaiheessa 2B sovelluksen tuoteylläpito vaatii lisäksi OIDC-kirjautumisen.
@@ -14,12 +14,9 @@ Selaimen osoite on GitHubin luoma `https://<codespacen-nimi>-8000.app.github.dev
 
 ## Kokeile
 
-- Hae `verovelka` ja avaa löytynyt tuote.
-- Tutustu kuvaukseen ja tietoelementteihin; avaa JSON- ja JSON-LD-viennit.
-- Lisää oma synteettinen tietotuote, muokkaa sitä ja lataa sivu uudelleen.
-- Poista oma testituotteesi tarvittaessa. Ylläpito on rajattu kirjautuneen organisaation muokkaajille. Pidä portti silti yksityisenä.
+Vaiheen 2C tyhjällä kannalla julkinen haku on aluksi tyhjä: kolme synteettistä vanhaa esimerkkiä ovat keskeneräisiä yksityisiä luonnoksia. Kirjaudu `vero` / `demo-vero` ja avaa **Omat luonnokset**. [README](../README.md#kokeilupolku) kertoo profiilitiedoston tuonnin, toisen käyttäjän hyväksynnän ja julkaisun. `yritys` / `demo-yritys` tarkastaa verotuotteen; se ei voi muokata sitä. `lukija` / `demo-lukija` vain lukee oman organisaationsa luonnoksia. Keycloakin Log out -vahvistus tarvitaan käyttäjää vaihdettaessa.
 
-Kolme alkuperäistä esimerkkiä ovat verovelkatieto, yrityksen perustiedot ja ammattipätevyys. Älä lisää aitoja rekisteritietoja tai henkilötietoja.
+Vanhojen tuotteiden tunnisteet ja sisältö säilyvät. Älä lisää aitoja rekisteri- tai henkilötietoja. Julkaisu tulee hakuun ja vienteihin vasta hyväksynnän jälkeen. Katalogi ei myönnä todistuksia.
 
 ## Lopeta ja jatka myöhemmin
 
@@ -33,6 +30,6 @@ Kopioi **Creation log** -näkymän virhe ja pyydä korjaamaan se. Älä tee port
 
 Tämän toimituksen paikallinen tarkistus ei yksin todista, että oman tilisi Codespaces-luonti onnistuu. Ensimmäinen oikea käynnistys vahvistetaan tililläsi, jossa ovat repositorion ja Codespacesin käyttöoikeudet.
 
-## Vaiheen 2B selainkokeilu
+## Muutoksen kokeilu ennen yhdistämistä
 
-Valitse haara `feat/phase-2b-auth` READMEn linkistä ja luo uusi Codespace. Portti 8000 avautuu kuten aiemmin; Keycloak toimii saman osoitteen /identity-polun kautta. Haku ja viennit toimivat anonyymisti, mutta ylläpitoon tarvitaan demotunnus: `vero` / `demo-vero`, `yritys` / `demo-yritys` tai vain lukuun `lukija` / `demo-lukija`. Uloskirjautuminen päättää sovellusistunnon ja pyytää Keycloakin Log out -vahvistuksen. Säilytä portti Private-tilassa.
+Luo uusi Codespace [haarasta feat/phase-2c-publication](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2c-publication). Säilytä portti 8000 Private-tilassa. Käytä yllä olevaa kahden käyttäjän kokeilupolkua. Pysäytä Codespace kokeilun jälkeen. Vanhan Codespacen päivityksessä ota ensin READMEn varmuuskopio ja valitse Rebuild Container; älä poista sen volumea.
