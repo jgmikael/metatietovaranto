@@ -45,7 +45,7 @@ Kehitysajoissa korjattiin vanhimmasta demokannasta puuttuvien maa-/organisaatiot
 
 ## Toimitus
 
-Haara feat/phase-2e-derived-validation. Valmis PR-kuvaus docs/pull-request.md. Push ja PR:n luontitulos kirjataan seuraavaksi. Mainiin ei yhdistetä automaattisesti.
+Haara `feat/phase-2e-derived-validation` on pushattu GitHubiin. Pull requestia **ei luotu**: `gh pr create --base main --head feat/phase-2e-derived-validation --title ... --body-file docs/pull-request.md` palautti `Post https://api.github.com/graphql: Forbidden`. Myös REST-varayritys `gh api --method POST repos/jgmikael/metatietovaranto/pulls --input /tmp/phase2e-pr.json` palautti Forbidden-vastauksen. Git-push onnistui; GitHub API -avaus estyi. Valmis kuvaus on docs/pull-request.md. PR:n voi avata selaimessa: https://github.com/jgmikael/metatietovaranto/compare/main...feat/phase-2e-derived-validation . Main-haaraan ei yhdistetty muutoksia.
 
 ---
 
