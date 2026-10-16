@@ -202,7 +202,7 @@ def coverage(graph, doc, schema, mappings, instance):
     return rows,problems
 
 
-def artifact_report(artifact,example,graph):
+def artifact_report(artifact,example,graph,*,include_coverage=True):
     report={'artifactId':artifact['id'],'sha256':artifact['sha256'],'kind':artifact['serialization'],
             'dialect':artifact.get('dialect'),'schemaPointer':artifact.get('schemaPointer',''),
             'status':'invalid','schemaValid':False,'exampleValid':False,'coverage':[],'results':[]}
@@ -237,7 +237,9 @@ def artifact_report(artifact,example,graph):
             errors.append(issue('JSON_SCHEMA_'+str(error.validator),'JSON-esimerkki rikkoo skeeman sääntöä: '+str(error.validator),instancePath='/'+'/'.join(str(part).replace('~','~0').replace('/','~1') for part in error.absolute_path)))
             if len(errors)>=MAX_RESULTS:break
         report['exampleValid']=not errors
-        report['coverage'],problems=coverage(graph,doc,schema,artifact.get('semanticMappings',[]),instance)
+        problems=[]
+        if include_coverage:
+            report['coverage'],problems=coverage(graph,doc,schema,artifact.get('semanticMappings',[]),instance)
         findings=errors+problems
         report['resultCount']=len(findings);report['truncated']=len(findings)>MAX_RESULTS or len(report['coverage'])>MAX_RESULTS
         report['results']=findings[:MAX_RESULTS];report['coverage']=report['coverage'][:MAX_RESULTS]

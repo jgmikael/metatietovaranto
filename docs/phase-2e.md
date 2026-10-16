@@ -59,3 +59,7 @@ Neljäs synteettinen esimerkkituote lisätään kertaluonteisella `phase-2e-dist
 - W3C VC:n JSON-LD-kontekstit ovat lukittuja. SD-JWT VC:n sisältö puretaan valitun SD-JWT VC -profiilin mukaisesti ja validoidaan sen erillisellä mappingilla ilman pakotettua JSON-LD-kontekstia. SHACL-moottorille ei anneta JWT-merkkijonoa.
 - Myöntäjän tunnistautuminen, asiointivaltuudet, configuration-valinta, myöntämispäätös, allekirjoitus/avaimet, haltijasidonta, valikoiva paljastaminen, statustieto ja OpenID4VCI/lompakkotoimitus testataan erikseen nimettyä palvelu-/lompakkoversiota vasten. Credential Offerit ja tokenit pysyvät myöntäjän prosessissa.
 - Kryptografinen, rakenteellinen ja semanttinen raportti erotetaan. QEAA- ja EUDIW-/EBW-väitteet edellyttävät erillistä näyttöä. Katalogin metatietovientiä ei esitetä toimivaksi lähdesisällön APIksi.
+
+## Vaiheen 2F jatko
+
+[2F](phase-2f.md) toteuttaa rajatun paikallisen JSON-sisältöolioiden RDF-esikatselun ja graafivertailun. Yllä integraatiolle asetetut oikean lähdepalvelun, todistusten kuorien, lukittujen kontekstien, SD-JWT-purun ja kryptografian vaatimukset säilyvät. 2E:n muuttumattomia raportteja/julkaisuja ei kirjoiteta uudelleen.

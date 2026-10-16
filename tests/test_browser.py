@@ -286,3 +286,32 @@ def test_parallel_distributions_edit_publish_and_format_specific_links(page):
     for label,href in [('Käytä JSON-rajapintaa','https://provider.fi/company'),('Tutustu rajapintakuvaukseen','https://provider.fi/docs'),('Pyydä W3C VC lompakkoon','https://issuer.fi/start?configuration=w3c'),('Pyydä SD-JWT VC lompakkoon','https://issuer.fi/start?configuration=sd-jwt')]:
         expect(page.get_by_role('link',name=label,exact=True)).to_have_attribute('href',href)
     # No external link is followed. Real active metadata gating is covered against catalog_test.
+
+
+def test_synthetic_json_rdf_preview_same_different_and_invalid_without_saving(page):
+    base=os.environ['BROWSER_BASE_URL']
+    login(page)
+    page.goto(base+'/#draft/00000000-0000-4000-8000-000000000004')
+    lab=page.get_by_role('region',name='JSON–RDF-muunnoskokeilu',exact=True)
+    expect(lab).to_be_visible()
+    before=page.request.get(base+'/api/v1/products/00000000-0000-4000-8000-000000000004/draft').json()
+    lab.get_by_role('button',name='Täytä synteettinen kolmen muodon esimerkki',exact=True).click()
+    confirmation=lab.get_by_label('Vahvistan muunnoksen esimerkit synteettisiksi ilman henkilötietoja tai salaisuuksia',exact=True)
+    action=lab.get_by_role('button',name='Muunna ja vertaa RDF-sisältöä',exact=True)
+    expect(action).to_be_disabled();confirmation.check();action.click()
+    expect(lab.get_by_text('Sama RDF-sisältö',exact=True)).to_be_visible()
+    expect(lab.get_by_text('JSON Schema/OpenAPI: Läpäissyt · Semanttinen SHACL: Läpäissyt',exact=True)).to_be_visible()
+    field=lab.get_by_label('SD-JWT VC — synteettinen JSON-sisältö',exact=True)
+    field.fill('{"company_name":"Toinen synteettinen arvo"}')
+    expect(lab.get_by_text('Sama RDF-sisältö',exact=True)).to_have_count(0)
+    expect(action).to_be_disabled();confirmation.check();action.click()
+    expect(lab.get_by_text('RDF-sisällöt eroavat',exact=True)).to_be_visible()
+    field.fill('{"company_name":null}');confirmation.check();action.click()
+    expect(lab.get_by_text('JSON_DATATYPE',exact=True)).to_be_visible()
+    expect(lab.get_by_text('Vertailua ei tehty',exact=True)).to_be_visible()
+    assert page.request.get(base+'/api/v1/products/00000000-0000-4000-8000-000000000004/draft').json()==before
+    page.reload();expect(lab).to_be_visible()
+    expect(field).to_have_value('')
+    logout(page)
+    assert page.request.post(base+'/api/v1/drafts/'+before['draftId']+'/conversion-preview',
+        data={'examples':[]}).status in (401,422)
