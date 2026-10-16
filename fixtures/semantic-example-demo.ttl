@@ -1,0 +1,3 @@
+# SYNTHETIC DATA ONLY. Not a register extract, issued VC or real company.
+@prefix demo: <https://example.org/metatietovaranto/demo/> .
+<urn:synthetic:company:1> a demo:Company ; demo:companyName "Synteettinen Esimerkki Oy" .

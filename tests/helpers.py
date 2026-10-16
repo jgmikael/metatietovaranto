@@ -11,7 +11,7 @@ ORG=str(uuid5(NAMESPACE_URL,f'https://example.org/metatietovaranto/legacy-provid
 
 def body():
     data=json.loads(Path('fixtures/products.json').read_text())[0]
-    return {k:v for k,v in data.items() if k not in ('id','provider','dataElements')}|{'providerOrganizationId':ORG}
+    return {k:v for k,v in data.items() if k not in ('id','provider','dataElements')}|{'providerOrganizationId':ORG,'syntheticExample':{'serialization':'turtle','synthetic':True,'content':Path('fixtures/semantic-example-demo.ttl').read_text()}}
 
 def profile_input():
     return {'organizationId':ORG,'profileUri':'https://example.org/metatietovaranto/demo/profile',

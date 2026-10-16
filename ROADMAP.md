@@ -48,9 +48,22 @@ Tilattu käyttäjän toimeksiannolla PR:ien 5 ja 6 yhdistämisen jälkeen. Toteu
 - Migraatio 0004 säilyttää vanhat tiedot luonnoksina; mitään ei julkaista automaattisesti. Kaksi nykyistä synteettistä editoria toimivat ristikkäin toisen organisaation tarkastajana/julkaisijana.
 - Codespacesin Private-portti 8000, automaattinen selainavaus ja vanhojen tietojen säilyminen jatkuvat.
 
+## Vaihe 2D — offline SHACL Core ja synteettinen esimerkkisisältö
+
+Jatko käyttäjän hyväksymän PR #7:n (2C) jälkeen, pohjana main `61ca4ed`.
+
+- Profiilin ja lukittujen riippuvuuksien SHACL Core -rakennetarkistus pySHACL-moottorilla sekä esimerkkisisällön oikea SHACL-validointi.
+- Turtle/RDFXML/paikalliskontekstinen JSON-LD, yksi synteettinen esimerkkigraafi, eksplisiittinen synteettisyysvahvistus.
+- Tietotyypit, kardinaliteetit, sisäkkäiset muodot ja koodistorajoitteet; tyhjä/kohdistamaton/deaktivoitu kohde ei anna väärää onnistumista.
+- Palvelimen tuottama raportti: säännöt, JSON Pointer, RDF-polut, kohteet, profiili-/esimerkkitarkisteet ja moottori-/käytäntöversio. Raportti ja esimerkki sidotaan hyväksyntään ja muuttumattomaan julkaisuun.
+- Uusi julkaisu tarvitsee läpäisseen ja ajantasaisen raportin. Vanhoja julkaisuja ei kirjoiteta uudelleen tai poisteta. Virheellisen esimerkin voi tallentaa korjattavaksi luonnokseksi.
+- Verkoton ja resurssirajattu prosessi. SPARQL/JS/AF/mukautetut komponentit ja tuntemattomat SHACL-predikaatit hylätään; ei hiljaista ohittamista.
+- Selainlomake tiedoston/tekstin syöttöön ja raportin näyttö. Tietokannan nykyinen JSONB-sisältö riittää, ei uutta migraatiota.
+- Codespacesin Private-portti 8000, automaattinen selainavaus ja nykyiset demotunnukset säilyvät.
+
 ## Vaiheen 2 myöhemmät osat — erillinen toimeksianto
 
-SHACL-instanssivalidointipalvelu ja kattava profiilivalidointi, DCAT-AP-vientien vaatimustenmukaisuus, retired/withdrawn/deprecated/archived-elinkaaret, useat rinnakkaiset VC-jakelut ja niiden valinta, jäsenyyksien hallintakäyttöliittymä, tuotannon IdP, kielituen laajennukset ja kuormitusvaatimukset. Vaiheen 2C ihmistarkastus ja rakenne-/riippuvuustarkistukset eivät korvaa näitä.
+JSON Schema-/OpenAPI-johdannaisten validointi ja kattavuuskartoitukset, laajemmat SHACL-profiilit, DCAT-AP-vientien vaatimustenmukaisuus, retired/withdrawn/deprecated/archived-elinkaaret, useat rinnakkaiset VC-jakelut ja niiden valinta, jäsenyyksien hallintakäyttöliittymä, tuotannon IdP, kielituen laajennukset ja kuormitusvaatimukset. Vaiheen 2D offline Core -tarkistus ja erillinen ihmistarkastus eivät korvaa näitä tai VC-kuoren/suojauksen tarkistusta.
 
 ## Vaihe 3 — ulkoiset integraatiot
 

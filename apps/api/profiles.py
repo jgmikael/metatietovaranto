@@ -10,9 +10,9 @@ from datetime import datetime, timezone
 import httpx
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import Response
-from pydantic import Field, HttpUrl, AfterValidator
+from pydantic import Field, HttpUrl, AfterValidator, StringConstraints
 from typing import Annotated
-from rdflib import Graph, URIRef, RDF, OWL, SH, BNode
+from rdflib import Graph, Dataset, URIRef, RDF, OWL, SH, BNode
 from rdflib.compare import to_isomorphic
 from sqlalchemy import select, text
 from sqlalchemy.orm import Session
@@ -42,7 +42,7 @@ Iri=Annotated[str,Field(min_length=1,max_length=2048),AfterValidator(absolute_ir
 
 class ArtifactInput(Contract):
     serialization: str = Field(pattern='^(turtle|rdfxml|jsonld|jsonSchema|openapi)$')
-    content: str = Field(max_length=MAX_BYTES)
+    content: Annotated[str, StringConstraints(strip_whitespace=False)] = Field(max_length=MAX_BYTES)
     sourceUrl: HttpUrl | None = None
 
 
@@ -114,7 +114,15 @@ def parse_artifact(artifact):
         raise ValueError('XML DTD/ENTITY ei ole sallittu')
     if artifact.serialization=='jsonld':reject_remote_contexts(json.loads(content))
     graph=LimitedGraph()
-    graph.parse(data=content,format=FORMATS[artifact.serialization],publicID='urn:metatietovaranto:unresolved-base:')
+    if artifact.serialization=='jsonld':
+        dataset=Dataset()
+        dataset.parse(data=content,format='json-ld',publicID='urn:metatietovaranto:unresolved-base:')
+        for s,p,o,context in dataset.quads():
+            if context!=dataset.default_graph.identifier:
+                raise ValueError('Nimettyjä JSON-LD-graafeja ei tueta; toimita yksi täydellinen oletusgraafi')
+            graph.add((s,p,o))
+    else:
+        graph.parse(data=content,format=FORMATS[artifact.serialization],publicID='urn:metatietovaranto:unresolved-base:')
     result['mediaType']={'turtle':'text/turtle','rdfxml':'application/rdf+xml','jsonld':'application/ld+json'}[artifact.serialization]
     return graph,result
 
@@ -193,6 +201,13 @@ def snapshot_manifest(data):
     if not data.sourceDeclaration.strip():errors.append('Lähdeilmoitus puuttuu')
     if not data.vocabularyReferences:errors.append('OWL-sanastoviitteet puuttuvat')
     if any(item['status']=='unresolved' for item in dependencies):errors.append('Profiilin riippuvuuksia puuttuu')
+    core_check=None
+    if graph is not None:
+        from apps.api.semantic_validation import profile_check, ENGINE, POLICY
+        try:core_check=profile_check(combined)|{'engine':ENGINE,'policy':POLICY}
+        except Exception:
+            core_check={'conforms':False,'engine':ENGINE,'policy':POLICY,'results':[]}
+        if not core_check['conforms']:errors.append('SHACL Core -rakennetarkistus ei läpäissyt; tarkista rajoitteet tai tukemattomat laajennukset')
     manifest={'sourcePlatform':'TietomallitSuomiFi','profileUri':profile_uri,
         'sourcePageUrl':str(data.sourcePageUrl) if data.sourcePageUrl else None,
         'sourceVersion':data.sourceVersion,'sourceStatus':data.sourceStatus,
@@ -202,7 +217,7 @@ def snapshot_manifest(data):
         'vocabularyReferences':[ref.model_dump(mode='json') for ref in data.vocabularyReferences],
         'dependencies':dependencies,'derivedArtifacts':derived,'elements':elements,
         'verificationStatus':'needsAttention' if errors else 'pending','issues':errors,
-        'sourceVerification':'declared; not independently verified',
+        'sourceVerification':'declared; not independently verified','profileValidation':core_check,
         'graphHash':str(to_isomorphic(combined).internal_hash()) if graph is not None else None}
     if not elements:
         manifest['issues'].append('Profiilista ei löytynyt näytettäviä tietoelementtejä');manifest['verificationStatus']='needsAttention'

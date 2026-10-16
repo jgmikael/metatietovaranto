@@ -13,6 +13,7 @@ from apps.api.contracts import Contract, ProductWrite, Issuance
 from apps.api.models import (Product, Organization, OrganizationMembership, Draft, ProfileSnapshot,
                             ProductVersion, Review, AuditEvent, IdempotentOperation, OutboxEvent)
 from apps.api.profiles import checksum, can_read_snapshot, snapshot_summary
+from apps.api.semantic_validation import validate_snapshot, current_report
 
 
 def now():return datetime.now(timezone.utc)
@@ -70,6 +71,14 @@ def validation(session,draft):
     else:
         errors += [{'path':'profileSnapshotId','message':issue} for issue in snapshot.manifest['issues']]
         if not snapshot.manifest['shapesArtifactId']:errors.append({'path':'profileSnapshotId','message':'SHACL-graafi puuttuu'})
+    if snapshot:
+        report=draft.content.get('semanticValidation')
+        if not current_report(report,snapshot,draft.content.get('syntheticExample')):
+            errors.append({'path':'syntheticExample','message':'Esimerkki tai ajantasainen SHACL-raportti puuttuu. Tallenna luonnos tarkistaaksesi sisällön.'})
+        elif report.get('status')!='conforms':
+            errors += [{'path':item.get('path','/syntheticExample'),'message':item.get('message','SHACL-tarkistus epäonnistui'),
+                        'ruleId':item.get('ruleId')} for item in report.get('results',[])]
+            if not report.get('results'):errors.append({'path':'syntheticExample','message':'SHACL-tarkistus ei läpäissyt'})
     delivery=Issuance.model_validate(draft.content.get('issuance',{}))
     if delivery.legalCategory=='QEAA':
         errors.append({'path':'issuance.legalCategory','message':'Demo ei vahvista QEAA-asemaa; käytä unassessed-luokkaa'})
@@ -119,6 +128,7 @@ def write_content(session,request,product,draft,data,identity):
         if organization_id and session.get(Organization,organization_id) is None:raise HTTPException(422,f'{key}: organisaatiota ei löydy')
     body|={'provider':provider.legal_name,'modifiedAt':now().isoformat(),
            'dataElements':snapshot.manifest['elements'] if snapshot else draft.content.get('dataElements',[])}
+    body['semanticValidation']=validate_snapshot(snapshot,body.get('syntheticExample')) if snapshot else None
     draft.content=body;draft.profile_snapshot_id=data.profileSnapshotId;draft.revision+=1
     draft.checksum=checksum(body);draft.status='draft';draft.approved_review_id=None
     draft.contributors=list(dict.fromkeys(draft.contributors+[identity.subject]));draft.modified_at=now()
@@ -284,7 +294,11 @@ def build_publication_router(engine,base_url,jsonld):
             found=session.get(Draft,draft_id)
             if found is None:raise HTTPException(404)
             product,identity=get_owned(session,request,found.product_id,write=True);draft=get_draft(session,product)
-            if command=='validate':return {'errors':validation(session,draft),'contentHash':draft.checksum}
+            if command=='validate':
+                snapshot=session.get(ProfileSnapshot,draft.profile_snapshot_id) if draft.profile_snapshot_id else None
+                return {'errors':validation(session,draft),'contentHash':draft.checksum,
+                    'semanticValidation':validate_snapshot(snapshot,draft.content.get('syntheticExample')) if snapshot else None,
+                    'storedReport':draft.content.get('semanticValidation')}
             check_etag(request,draft)
             if command=='submit':
                 require_editor(session,identity,product.owner_organization_id)
