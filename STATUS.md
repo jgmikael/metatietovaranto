@@ -39,7 +39,9 @@ Kehityksessä korjattiin kaksi uuden testiaineiston ongelmaa (SHACL-koodistorajo
 
 ## Toimitus
 
-Työhaara `feat/phase-2f-json-rdf`; valmis PR-kuvaus docs/pull-request.md. PR-avaamisen tulos kirjataan toimituksen lopuksi. Main-haaraan ei yhdistetä automaattisesti.
+Haara `feat/phase-2f-json-rdf` on pushattu GitHubiin (toteutuscommit `812d402`). Pull requestia **ei luotu**: `gh pr create --base main --head feat/phase-2f-json-rdf --title ... --body-file docs/pull-request.md` palautti `Post https://api.github.com/graphql: Forbidden`. Myös REST-varayritys `gh api --method POST repos/jgmikael/metatietovaranto/pulls --input /tmp/phase2f-pr.json` palautti Forbidden-vastauksen. Git-push onnistui; GitHub API -avaus estyi. Valmis kuvaus: docs/pull-request.md. Avaa PR selaimessa: https://github.com/jgmikael/metatietovaranto/compare/main...feat/phase-2f-json-rdf . Main-haaraan ei yhdistetty muutoksia.
+
+Kokeilu ennen yhdistämistä: https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2f-json-rdf → portti 8000 Private → `vero` / `demo-vero` → Omat luonnokset → Yrityssisältö — JSON API, W3C VC ja SD-JWT VC (synteettinen demo) → JSON → RDF -muunnoskokeilu.
 
 ---
 
