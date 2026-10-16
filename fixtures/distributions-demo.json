@@ -1,0 +1,159 @@
+[
+  {
+    "availability": "planned",
+    "environment": "sandbox",
+    "providerOrganizationId": "57c5e449-303c-5387-a2a4-050308cefaff",
+    "operatorOrganizationId": "57c5e449-303c-5387-a2a4-050308cefaff",
+    "sourceProviderOrganizationId": "57c5e449-303c-5387-a2a4-050308cefaff",
+    "profileSnapshotId": null,
+    "id": "20000000-0000-4000-8000-000000000001",
+    "type": "jsonApi",
+    "mapping": {
+      "version": "1.0.0",
+      "entries": [
+        {
+          "shapeUri": "https://example.org/metatietovaranto/demo/ProductShape",
+          "semanticPath": [
+            "https://example.org/metatietovaranto/demo/companyName"
+          ],
+          "valueKind": "literal",
+          "datatype": "http://www.w3.org/2001/XMLSchema#string",
+          "classUri": null,
+          "minCount": 1,
+          "maxCount": 1,
+          "fieldPath": "/companyName"
+        }
+      ]
+    },
+    "security": {
+      "mechanism": "tls",
+      "profileUri": "urn:synthetic:security:jsonApi:1",
+      "algorithms": []
+    },
+    "api": {
+      "authentication": "oauth2",
+      "requiredRights": [
+        "synthetic.company.read"
+      ],
+      "freshness": "Synteettinen sisältö, ei yhteyttä oikeaan lähdejärjestelmään."
+    }
+  },
+  {
+    "availability": "planned",
+    "environment": "sandbox",
+    "providerOrganizationId": "57c5e449-303c-5387-a2a4-050308cefaff",
+    "operatorOrganizationId": "57c5e449-303c-5387-a2a4-050308cefaff",
+    "sourceProviderOrganizationId": "57c5e449-303c-5387-a2a4-050308cefaff",
+    "profileSnapshotId": null,
+    "id": "20000000-0000-4000-8000-000000000002",
+    "type": "w3cVc",
+    "mapping": {
+      "version": "1.0.0",
+      "entries": [
+        {
+          "shapeUri": "https://example.org/metatietovaranto/demo/ProductShape",
+          "semanticPath": [
+            "https://example.org/metatietovaranto/demo/companyName"
+          ],
+          "valueKind": "literal",
+          "datatype": "http://www.w3.org/2001/XMLSchema#string",
+          "classUri": null,
+          "minCount": 1,
+          "maxCount": 1,
+          "fieldPath": "/credentialSubject/companyName"
+        }
+      ]
+    },
+    "security": {
+      "mechanism": "dataIntegrity",
+      "profileUri": "urn:synthetic:security:w3cVc:1",
+      "algorithms": []
+    },
+    "credential": {
+      "issuerOrganizationId": "57c5e449-303c-5387-a2a4-050308cefaff",
+      "protocol": "OpenID4VCI",
+      "protocolVersion": "1.0",
+      "configurationIds": [
+        "synthetic-company-w3cVc-v1"
+      ],
+      "validityProfile": "urn:synthetic:validity:1",
+      "statusProfile": "urn:synthetic:status:1",
+      "subjectTypes": [
+        "legalPerson"
+      ],
+      "representationRequirements": "Myöntäjä tarkistaa yrityksen edustamisoikeuden erikseen.",
+      "support": "Synteettinen ohjelmistodemo, ei myöntämispalvelua."
+    },
+    "w3c": {
+      "vcdmVersion": "2.0",
+      "vcTypes": [
+        "VerifiableCredential",
+        "urn:synthetic:CompanyCredential"
+      ],
+      "contexts": [
+        "https://www.w3.org/ns/credentials/v2"
+      ],
+      "contentPath": "/credentialSubject"
+    }
+  },
+  {
+    "availability": "planned",
+    "environment": "sandbox",
+    "providerOrganizationId": "57c5e449-303c-5387-a2a4-050308cefaff",
+    "operatorOrganizationId": "57c5e449-303c-5387-a2a4-050308cefaff",
+    "sourceProviderOrganizationId": "57c5e449-303c-5387-a2a4-050308cefaff",
+    "profileSnapshotId": null,
+    "id": "20000000-0000-4000-8000-000000000003",
+    "type": "sdJwtVc",
+    "mapping": {
+      "version": "1.0.0",
+      "entries": [
+        {
+          "shapeUri": "https://example.org/metatietovaranto/demo/ProductShape",
+          "semanticPath": [
+            "https://example.org/metatietovaranto/demo/companyName"
+          ],
+          "valueKind": "literal",
+          "datatype": "http://www.w3.org/2001/XMLSchema#string",
+          "classUri": null,
+          "minCount": 1,
+          "maxCount": 1,
+          "fieldPath": "/company_name",
+          "disclosure": "selective"
+        }
+      ]
+    },
+    "security": {
+      "mechanism": "sdJwt",
+      "profileUri": "urn:synthetic:security:sdJwtVc:1",
+      "algorithms": [
+        "ES256"
+      ]
+    },
+    "credential": {
+      "issuerOrganizationId": "57c5e449-303c-5387-a2a4-050308cefaff",
+      "protocol": "OpenID4VCI",
+      "protocolVersion": "1.0",
+      "configurationIds": [
+        "synthetic-company-sdJwtVc-v1"
+      ],
+      "validityProfile": "urn:synthetic:validity:1",
+      "statusProfile": "urn:synthetic:status:1",
+      "subjectTypes": [
+        "legalPerson"
+      ],
+      "representationRequirements": "Myöntäjä tarkistaa yrityksen edustamisoikeuden erikseen.",
+      "support": "Synteettinen ohjelmistodemo, ei myöntämispalvelua."
+    },
+    "sdJwt": {
+      "vct": "urn:synthetic:company:credential",
+      "profileVersion": "synthetic-demo-1",
+      "selectiveDisclosure": "perClaim",
+      "holderBinding": "required",
+      "nonDisclosableClaims": [
+        "/iss",
+        "/vct"
+      ]
+    }
+  }
+]

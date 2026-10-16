@@ -5,25 +5,13 @@ from typing import Literal, Annotated
 from urllib.parse import urlsplit, parse_qs
 import re
 from uuid import UUID
+from apps.api.metadata_urls import initiation_url
+from apps.api.distribution_contracts import Distribution, WalletCompatibility
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator, model_validator, StringConstraints
 
 
 class Contract(BaseModel):
     model_config = ConfigDict(extra='forbid', str_strip_whitespace=True)
-
-
-class WalletCompatibility(Contract):
-    profile: str = Field(min_length=1, max_length=200)
-    version: str = Field(min_length=1, max_length=100)
-    status: Literal['planned','declared','tested','incompatible'] = 'planned'
-    evidence: HttpUrl | None = None
-    testedAt: datetime | None = None
-
-    @model_validator(mode='after')
-    def evidence_required(self):
-        if self.status == 'tested' and (not self.evidence or not self.testedAt):
-            raise ValueError('Testattu lompakkotuki vaatii näytön ja testipäivän')
-        return self
 
 
 class CredentialProfile(Contract):
@@ -40,27 +28,6 @@ class CredentialProfile(Contract):
         if any(value != 'VerifiableCredential' and not re.match(r'^[A-Za-z][A-Za-z0-9+.-]*:[^\s]+$', value) for value in values):
             raise ValueError('VC-tyypin on oltava VerifiableCredential tai alkuperäinen absoluuttinen IRI')
         return values
-
-
-def initiation_url(value):
-    url = urlsplit(value)
-    host = (url.hostname or '').lower()
-    if url.scheme != 'https' or not host or url.username or url.password or url.fragment or url.port not in (None,443):
-        raise ValueError('Asiointilinkin on oltava pysyvä HTTPS-osoite ilman tunnuksia tai fragmenttia')
-    if (host == 'localhost' or host.endswith(('.localhost','.invalid','.test','.example'))
-            or any(host == domain or host.endswith('.'+domain) for domain in ('example.com','example.org','example.net'))):
-        raise ValueError('Esimerkkiverkkotunnus ei ole käytettävä myöntämispalvelu')
-    try:
-        if not ipaddress.ip_address(host).is_global:
-            raise ValueError('Sisäverkon osoite ei ole julkinen asiointilinkki')
-    except ValueError as error:
-        if 'Sisäverkon' in str(error):raise
-    query = parse_qs(url.query, keep_blank_values=True)
-    if set(query) - {'product','profile','configuration'} or len(value)>2048:
-        raise ValueError('Asiointilinkkiin sallitaan vain julkiset product/profile/configuration-tunnisteet, ei tarjouksia tai tokeneita')
-    if any(len(v)>256 for values in query.values() for v in values):
-        raise ValueError('Liian pitkä julkinen tunniste')
-    return value
 
 
 class Issuance(Contract):
@@ -105,6 +72,18 @@ class SyntheticExample(Contract):
         return value
 
 
+class DerivedExample(Contract):
+    artifactId: UUID
+    content: Annotated[str, StringConstraints(strip_whitespace=False)] = Field(min_length=1,max_length=100_000)
+    synthetic: Literal[True]
+
+    @field_validator('content')
+    @classmethod
+    def bounded_json_utf8(cls,value):
+        if len(value.encode())>100_000:raise ValueError('JSON-esimerkin raja on 100 kB')
+        return value
+
+
 class ProductWrite(Contract):
     title: str = Field(min_length=1,max_length=200)
     description: str = Field(min_length=1,max_length=5000)
@@ -119,3 +98,15 @@ class ProductWrite(Contract):
     profileSnapshotId: UUID | None = None
     issuance: Issuance = Field(default_factory=Issuance)
     syntheticExample: SyntheticExample | None = None
+    distributions: list[Distribution] | None = Field(default=None,min_length=1,max_length=10)
+    primaryDistributionId: UUID | None = None
+    derivedExamples: list[DerivedExample] = Field(default_factory=list,max_length=10)
+
+    @field_validator('derivedExamples')
+    @classmethod
+    def bounded_derived_examples(cls, examples):
+        if sum(len(example.content.encode()) for example in examples)>200_000:
+            raise ValueError('JSON-esimerkkien yhteisraja on 200 kB')
+        if len({example.artifactId for example in examples})!=len(examples):
+            raise ValueError('Yksi JSON-esimerkki kutakin johdannaisartefaktia kohti')
+        return examples

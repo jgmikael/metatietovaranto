@@ -13,8 +13,10 @@ def test_seed_health_and_private_legacy_data(client):
     assert client.get('/health/ready').json()=={'status':'ready','database':'postgresql'}
     assert client.get('/api/v1/products').json()['total']==0
     items=client.get('/api/v1/my/products').json()['items']
-    assert len(items)==3 and all(item['status']=='draft' and item['profileSnapshotId'] is None for item in items)
-    assert all(item['validationErrors'] for item in items)
+    assert len(items)==4 and all(item['status']=='draft' for item in items)
+    legacy=[item for item in items if item['id']!='00000000-0000-4000-8000-000000000004']
+    assert len(legacy)==3 and all(item['profileSnapshotId'] is None for item in legacy)
+    assert all(item['validationErrors'] for item in legacy)
 
 
 def test_private_crud_etag_and_persistence(client):

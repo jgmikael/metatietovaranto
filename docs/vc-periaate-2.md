@@ -2,6 +2,14 @@
 
 Päiväys 14.10.2026. Käyttäjän toinen perusoletus täydentää `docs/semanttinen-periaate-1.md`:tä. Tämä on suunnittelupäätös, ei vielä toimeksianto tuotannollisen myöntämispalvelun tai lompakkointegraation toteutukselle.
 
+## Käyttäjän täsmennys vaiheeseen 2E
+
+Yksi tietotuote tukee rinnakkain tarjoajan REST JSON APIa, W3C VCDM 2.0 JSON-LD VC:tä ja IETF SD-JWT VC:tä. W3C VC on oletuksena ensisijainen; jokaisella on oma saatavuus. Kaikki toimitustavat sitoutuvat saman tuoteversion samaan jäädytettyyn Tietomallit SHACL -profiiliin ja versioituihin, myös sisäkkäisiä rakenteita käsitteleviin mappingeihin. SD-JWT VC ei ole W3C VC:n sama tietorakenne eikä tarvitse sisäistä JSON-LD-kontekstia. Sisältöformaatti, protokolla ja suojaus erotetaan.
+
+Katalogi kuvaa ja ohjaa. Tarjoajan API palauttaa lähdesisällön; myöntäjä hoitaa tunnistamisen, asiointivaltuudet, lähteen käytön, myöntämispäätöksen, suojauksen ja lompakkotoimituksen. Yksi OpenID4VCI-palvelu voi tarjota molemmat todistusmuodot erillisillä configuration-tunnisteilla ja käyttää yhtä yhteistä JSON APIa tai muuta sovitinta. Katalogin metatietovienti ei ole tämä API. Pysyvät aloituslinkit eivät ole käyttäjäkohtaisia tarjouksia tai tokeneita. Suunniteltua palvelua ei esitetä käytettävänä.
+
+Tämä täsmennys laajentaa alla olevan alkuperäisen yksittäisen issuance-kuvauksen tyypitetyksi distributions-kokoelmaksi. Se ei peru aiempaa eroa formaatin, oikeudellisen luokan ja todennetun lompakkoyhteensopivuuden välillä. Vaiheen 2E mallin yksityiskohdat, yhteensopivuus ja myöhemmän integraation hyväksymiskriteerit ovat [phase-2e.md](phase-2e.md):ssä.
+
 ## Lähtökohta
 
 Tietotuotteen ensisijainen toimitusmuoto on W3C Verifiable Credential. Tavoiteltu sisältömalli on W3C VCDM 2.0 ja semanttinen JSON-LD-esitys. Myöntäjä suojaa VC:n nimetyn ja lompakon kanssa yhteensopivan mekanismin avulla. Pelkkä suojaamaton JSON-/JSON-LD-tiedosto ei ole valmis myönnetty todistus.

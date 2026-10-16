@@ -64,7 +64,7 @@ def test_legacy_upgrade_preserves_every_field_and_does_not_merge_names(migration
                      theme='Muokattu teema', metadata=json.dumps(metadata), modified=timestamp))
     before = legacy_rows(engine)
     upgrade_database(engine)
-    assert legacy_rows(engine) == before
+    assert [row for row in legacy_rows(engine) if row['id'] in {old['id'] for old in before}]==before
     with engine.connect() as connection:
         organizations = connection.execute(text('SELECT * FROM organizations')).mappings().all()
         assert len(organizations) == 2
@@ -85,7 +85,7 @@ def test_legacy_upgrade_preserves_every_field_and_does_not_merge_names(migration
         assert product['purpose']==metadata['purpose']
         assert all(product[key]==value for key,value in metadata.items())
         assert product['modifiedAt']==timestamp.isoformat()
-    assert legacy_rows(engine)==before
+    assert [row for row in legacy_rows(engine) if row['id'] in {old['id'] for old in before}]==before
 
 
 def test_empty_upgrade_and_repeat_start_seed_only_once(migration_database):
@@ -96,7 +96,7 @@ def test_empty_upgrade_and_repeat_start_seed_only_once(migration_database):
     with TestClient(app) as client:
         with engine.connect() as connection:
             products=[dict(row['content'])|{'id':str(row['product_id'])} for row in connection.execute(text('SELECT * FROM drafts')).mappings()]
-        assert len(products)==3
+        assert len(products)==4
         original_ids = {p['id'] for p in products}
         original_orgs = {p['providerOrganizationId'] for p in products}
     for _ in range(2):
@@ -165,7 +165,7 @@ def test_phase2a_or_2b_upgrade_preserves_organizations_and_products(migration_da
         assert client.get('/api/v1/products').json()['total']==0
         with engine.connect() as connection:
             assert connection.execute(text('SELECT content FROM drafts WHERE product_id=:id'),{'id':product_id}).scalar_one()['providerOrganizationId']==str(organization_id)
-    assert legacy_rows(engine)==before
+    assert [row for row in legacy_rows(engine) if row['id'] in {old['id'] for old in before}]==before
     with engine.connect() as connection:
         assert dict(connection.execute(text('SELECT * FROM organizations')).mappings().one())==organization_before
         # Custom organizations never receive demo rights solely because their names or fields look familiar.

@@ -40,10 +40,18 @@ def absolute_iri(value):
 
 Iri=Annotated[str,Field(min_length=1,max_length=2048),AfterValidator(absolute_iri)]
 
+class SemanticMapping(Contract):
+    shapeUri: Iri
+    semanticUri: Iri
+    propertyName: Annotated[str, StringConstraints(strip_whitespace=False)] = Field(min_length=1,max_length=200)
+
+
 class ArtifactInput(Contract):
     serialization: str = Field(pattern='^(turtle|rdfxml|jsonld|jsonSchema|openapi)$')
     content: Annotated[str, StringConstraints(strip_whitespace=False)] = Field(max_length=MAX_BYTES)
     sourceUrl: HttpUrl | None = None
+    schemaPointer: str = Field(default='',max_length=1000)
+    semanticMappings: list[SemanticMapping] = Field(default_factory=list,max_length=100)
 
 
 class VocabularyReference(Contract):
@@ -107,6 +115,8 @@ def parse_artifact(artifact):
     if artifact.serialization in ('jsonSchema','openapi'):
         doc=json.loads(content)
         if not isinstance(doc,dict):raise ValueError('Johdannaisen on oltava JSON-olio')
+        result['schemaPointer']=artifact.schemaPointer
+        result['semanticMappings']=[item.model_dump(mode='json') for item in artifact.semanticMappings]
         result['dialect']=doc.get('$schema') if artifact.serialization=='jsonSchema' else doc.get('openapi')
         result['mediaType']='application/schema+json' if artifact.serialization=='jsonSchema' else 'application/json'
         return None,result

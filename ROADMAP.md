@@ -61,12 +61,24 @@ Jatko käyttäjän hyväksymän PR #7:n (2C) jälkeen, pohjana main `61ca4ed`.
 - Selainlomake tiedoston/tekstin syöttöön ja raportin näyttö. Tietokannan nykyinen JSONB-sisältö riittää, ei uutta migraatiota.
 - Codespacesin Private-portti 8000, automaattinen selainavaus ja nykyiset demotunnukset säilyvät.
 
+## Vaihe 2E — rinnakkaiset toimitustavat ja mappingit
+
+Käyttäjän täsmentämä rajaus, pohjana main `5611be2` (2D / PR #8).
+
+- Tyypitetty distributions-kokoelma: tarjoajan JSON API, W3C VCDM 2.0 JSON-LD VC ja IETF SD-JWT VC; W3C VC oletuksena ensisijainen. Formaatti, protokolla ja suojaus erotetaan.
+- Jokaisella oma saatavuus, ympäristö, vastuut ja tekninen kuvaus. Kaikki lukitaan saman tuoteversion samaan SHACL-snapshotiin.
+- Versioidut semanttiset kenttämappingit, myös sisäkkäiset oliot, tietotyypit ja moniarvoisuus. SD-JWT VC käyttää erillistä mappingia ilman pakotettua JSON-LD-kontekstia. Metadata-/mapping-raportti sidotaan hyväksyntään.
+- Rakenteiset muokkausnäkymät ja muotokohtaiset tuotesivutoiminnot; planned/suspended ei saa aktiivista palvelutoimintoa. Sama OpenID4VCI-palvelu voi kuvata kaksi erillistä konfiguraatiota.
+- Neljäs synteettinen planned-esimerkki kertaluonteisesti tunnettuun demo-organisaatioon. Vanhat julkaisut/snapshotit/issuance-luku säilyvät; uusi kokoelma julkaistaan tavallisella hyväksyntäprosessilla.
+- Aiemmin aloitettu JSON Schema/OpenAPI -johdannaisten ja synteettisten JSON-esimerkkien tarkistus säilyy erillisenä rajattuna lisätarkistuksena. Suoran kenttävertailun rajaus ei rajoita toimitustapamappingien sisäkkäistä metadataa.
+- Ei lähdesisällön palvelua, todistusten muodostusta/allekirjoitusta, JWT:n tarkistusta tai lompakkointegraatiota. Ratkaisu ja integraation hyväksymiskriteerit: docs/phase-2e.md.
+
 ## Vaiheen 2 myöhemmät osat — erillinen toimeksianto
 
-JSON Schema-/OpenAPI-johdannaisten validointi ja kattavuuskartoitukset, laajemmat SHACL-profiilit, DCAT-AP-vientien vaatimustenmukaisuus, retired/withdrawn/deprecated/archived-elinkaaret, useat rinnakkaiset VC-jakelut ja niiden valinta, jäsenyyksien hallintakäyttöliittymä, tuotannon IdP, kielituen laajennukset ja kuormitusvaatimukset. Vaiheen 2D offline Core -tarkistus ja erillinen ihmistarkastus eivät korvaa näitä tai VC-kuoren/suojauksen tarkistusta.
+Laajemmat JSON Schema/OpenAPI-kattavuuskartoitukset ja hallittu JSON → RDF -sisältömuunnos, laajemmat SHACL-profiilit, DCAT-AP-vientien vaatimustenmukaisuus, retired/withdrawn/deprecated/archived-elinkaaret, jäsenyyksien hallintakäyttöliittymä, tuotannon IdP, kielituen laajennukset ja kuormitusvaatimukset. Vaiheen 2D offline Core -tarkistus ja erillinen ihmistarkastus eivät korvaa näitä tai VC-kuoren/suojauksen tarkistusta.
 
 ## Vaihe 3 — ulkoiset integraatiot
 
-Erillinen myöntäjäsimulaattori, oikeat OpenID4VCI/lompakko-, QEAA- ja data-avaruuspalvelut, linkkien saavutettavuuden ja luottamuksen todennus sekä nimetyt EUDIW-/EBW-yhteentoimivuuskokeet. Katalogi ei toteuta Credential Endpointia tai tallenna henkilökohtaisia myöntämisistuntoja.
+Saman synteettisen sisällön JSON-haku sekä W3C VC- ja SD-JWT VC -myöntäminen yhteiseen profiiliin perustuen; yksi lähde-API/sovitin riittää. Erillinen myöntäjäsimulaattori, oikeat OpenID4VCI/lompakko-, QEAA- ja data-avaruuspalvelut, linkkien saavutettavuuden ja luottamuksen todennus sekä nimetyt EUDIW-/EBW-yhteentoimivuuskokeet. Katalogi ei toteuta Credential Endpointia tai tallenna henkilökohtaisia myöntämisistuntoja.
 
 Seuraavaan vaiheeseen siirrytään vain erillisellä toimeksiannolla. Työhaaroja ei yhdistetä automaattisesti main-haaraan.
