@@ -4,6 +4,8 @@ Versio 1.2 · 14.10.2026 · Toteutusehdotus Suomen julkishallinnon käyttöön
 
 Version 1.2 täsmennykset: semanttinen perusta on Tietomallit-soveltamisprofiili (luku 1.3). Ensisijainen toimitusmuoto on W3C VC ja tuotesivu ohjaa erilliseen myöntäjäpalveluun pysyvällä asiointilinkillä (luku 1.4). Tarkat päätökset ovat `docs/semanttinen-periaate-1.md` ja `docs/vc-periaate-2.md`.
 
+> Vaiheen 2E käyttäjätäsmennys: sama tuoteversio tarjoaa rinnakkaiset JSON API-, W3C VCDM 2.0 JSON-LD VC- ja IETF SD-JWT VC -kuvaukset yhteiseen lukittuun SHACL-profiiliin ja versioituihin mappingeihin sidottuina. W3C VC on oletuksena ensisijainen. SD-JWT VC ei edellytä JSON-LD-kontekstia eikä kolmea erillistä lähdeintegraatiota. Täsmällinen toteutusraja, vanhojen versioiden yhteensopivuus ja integraatiovaiheen hyväksymiskriteerit: [docs/phase-2e.md](docs/phase-2e.md). Tämä täsmennys ohjaa alla olevien yleisempien esimerkkien soveltamista.
+
 ## 1 Tarkoitus ja käyttöohje
 
 Toteuta tämän dokumentin perusteella ajettava Metatietovaranto: viranomaisten ylläpitämä, tietotuotteiden kuvauksia kokoava ja julkaiseva palvelu. Tietotuote tarkoittaa nimettyä ja hallittua tietokokonaisuutta, jolla on määritelty merkitys, rakenne, vastuut, käyttöehdot ja yksi tai useampi jakelutapa. Ensisijainen käyttötapa on viranomaislähteisiin perustuvien attribuuttitodistusten löytäminen ja käyttöönotto eIDAS-kehyksen digilompakoissa. Samaa sisältöä voidaan tarjota myös REST API -rajapinnasta JSON-muodossa.

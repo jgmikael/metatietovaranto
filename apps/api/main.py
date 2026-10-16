@@ -18,6 +18,7 @@ from apps.api.models import Base, Product, Organization, DemoInitialization
 from apps.api.migrate import upgrade_database
 from apps.api.publication import build_publication_router, initialize_drafts
 from apps.api.profiles import build_profile_router
+from apps.api.demo_distributions import seed_distribution_demo
 from apps.api.auth import build_router, seed_memberships, require_session, require_editor, seed_review_memberships
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -88,11 +89,14 @@ def jsonld(product):
             "dcat:keyword": p["theme"], "dct:source": p["source"],
             "dct:modified": {"@value": p["modifiedAt"], "@type": "xsd:dateTime"},
             "dct:accessRights": p["accessConditions"], "demo:synthetic": True,
-            "demo:primaryDelivery": p.get("issuance", {}).get("primaryDelivery", "w3cVc"),
+            "demo:primaryDelivery": next((item["type"] for item in p.get("distributions") or [] if item["id"]==p.get("primaryDistributionId")),p.get("issuance", {}).get("primaryDelivery", "w3cVc")),
             "demo:serviceAvailability": p.get("issuance", {}).get("serviceAvailability", "planned"),
             "demo:vcMetadata": json.dumps(p.get("issuance",{}), ensure_ascii=False),
             **({"demo:semanticValidation": json.dumps(p["semanticValidation"], ensure_ascii=False)} if "semanticValidation" in p else {}),
             **({"demo:syntheticExample": json.dumps(p["syntheticExample"], ensure_ascii=False)} if "syntheticExample" in p else {}),
+            **({"demo:derivedValidation": json.dumps(p["derivedValidation"], ensure_ascii=False)} if p.get("derivedValidation") is not None else {}),
+            **({"demo:derivedExamples": json.dumps(p["derivedExamples"], ensure_ascii=False)} if p.get("derivedExamples") else {}),
+            **({"demo:distributions": json.dumps(p["distributions"], ensure_ascii=False),"demo:primaryDistributionId":p.get("primaryDistributionId"),"demo:distributionBindings":json.dumps(p.get("distributionBindings",[]),ensure_ascii=False),"demo:distributionValidation":json.dumps(p.get("distributionValidation"),ensure_ascii=False)} if p.get("distributions") is not None else {}),
             "demo:purpose": p["purpose"], "demo:limitations": p["limitations"],
             "demo:availability": p["availability"],
             "demo:dataElement": [{"demo:name": e["name"], "dct:description": e["description"],
@@ -128,6 +132,7 @@ async def lifespan(app):
         seed_memberships(session)
         seed_review_memberships(session)
         initialize_drafts(session)
+        seed_distribution_demo(session,ROOT)
         session.commit()
     yield
 

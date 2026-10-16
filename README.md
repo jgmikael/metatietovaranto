@@ -1,12 +1,12 @@
-# Metatietovaranto — synteettinen demo, vaihe 2D
+# Metatietovaranto — synteettinen demo, vaihe 2E
 
-Suomenkielinen React/TypeScript-käyttöliittymä, FastAPI, PostgreSQL ja Keycloak. Toteutettu: organisaatiokohtainen ylläpito, yksityiset luonnokset, erillinen hyväksyntä, muuttumattomat julkaisuversiot, haku, JSON-/JSON-LD-vienti ja sisältöprofiilin snapshotit sekä offline SHACL Core -validointi synteettisille esimerkeille. [ROADMAP](ROADMAP.md) rajaa toteutuksen, [STATUS](STATUS.md) kertoo todella ajetut tarkistukset.
+Suomenkielinen React/TypeScript-käyttöliittymä, FastAPI, PostgreSQL ja Keycloak. Toteutettu: organisaatiokohtainen ylläpito, yksityiset luonnokset, erillinen hyväksyntä, muuttumattomat julkaisuversiot, haku, JSON-/JSON-LD-vienti ja sisältöprofiilin snapshotit sekä offline SHACL Core -validointi synteettisille esimerkeille sekä rinnakkaiset JSON API-, W3C VC- ja SD-JWT VC -toimitustapakuvaukset. [ROADMAP](ROADMAP.md) rajaa toteutuksen, [STATUS](STATUS.md) kertoo todella ajetut tarkistukset.
 
-Vain synteettiseen demokäyttöön. Katalogi ei myönnä todistuksia eikä toteuta lompakkoprotokollaa, QEAA-palvelua tai tuotannon tunnistamista. Tavoitearkkitehtuuri on `metatietovaranto_suunnittelu.md`. PR:ien 5 ja 6 sitovat [semanttinen periaate](docs/semanttinen-periaate-1.md) ja [VC-periaate](docs/vc-periaate-2.md) on huomioitu [vaiheen 2C perustassa](docs/phase-2c.md) ja alla kuvatussa 2D-validoinnissa.
+Vain synteettiseen demokäyttöön. Katalogi ei myönnä todistuksia eikä toteuta lompakkoprotokollaa, QEAA-palvelua tai tuotannon tunnistamista. Tavoitearkkitehtuuri on `metatietovaranto_suunnittelu.md`. PR:ien 5 ja 6 sitovat [semanttinen periaate](docs/semanttinen-periaate-1.md) ja [VC-periaate](docs/vc-periaate-2.md) on huomioitu [vaiheen 2C perustassa](docs/phase-2c.md) ja [vaiheen 2E ratkaisussa](docs/phase-2e.md).
 
 ## Kokeile selaimessa ennen yhdistämistä
 
-Avaa [vaiheen 2D uusi Codespace](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2d-shacl), valitse haara **feat/phase-2d-shacl** ja **Create codespace**. Uusi Codespace pitää main-haaran kokeiludatan erillään. Sovellus, PostgreSQL ja Keycloak käynnistyvät automaattisesti. Selain avautuu automaattisesti tai valitse **PORTS → 8000 → Open in Browser**. Säilytä portin näkyvyys **Private**. Keycloak toimii saman osoitteen `/identity`-polussa; muita portteja ei tarvitse avata.
+Avaa [vaiheen 2E uusi Codespace](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2e-derived-validation), valitse haara **feat/phase-2e-derived-validation** ja **Create codespace**. Uusi Codespace pitää main-haaran kokeiludatan erillään. Sovellus, PostgreSQL ja Keycloak käynnistyvät automaattisesti. Selain avautuu automaattisesti tai valitse **PORTS → 8000 → Open in Browser**. Säilytä portin näkyvyys **Private**. Keycloak toimii saman osoitteen `/identity`-polussa; muita portteja ei tarvitse avata.
 
 Osoite on `https://<codespacen-nimi>-8000.app.github.dev`; täsmällinen oman ympäristön osoite näkyy PORTS-näkymässä. Älä vaihda portin sisäistä protokollaa HTTPS:ksi. [Verkkodemon ohje](docs/verkkodemo.md) kertoo pysäyttämisestä ja kiintiöistä.
 
@@ -20,7 +20,20 @@ Osoite on `https://<codespacen-nimi>-8000.app.github.dev`; täsmällinen oman ym
 
 Julkisia synteettisiä demotunnuksia, eivät tuotantosalaisuuksia. Samassa organisaatiossa kirjoittaja ei saa hyväksyä omaa muutostaan. Tarkastaja voi myös julkaista hyväksymänsä version. Julkaisijarooli ei anna muokkausoikeutta. Lisäjäsenyydet annetaan kerran vain tunnettuihin synteettisiin organisaatio-UUID:ihin; olemassa olevia jäsenyyksiä ei korvata. Kolmannen pätevyysorganisaation tuote säilyy kannassa, mutta sille ei ole valmista muokkaajatunnusta. Jäsenyyksien hallinta: [authentication.md](docs/authentication.md).
 
-### Kokeilupolku
+### Kokeile kolmea rinnakkaista toimitustapaa
+
+1. Kirjaudu `vero` / `demo-vero`. Avaa **Omat luonnokset → Yrityssisältö — JSON API, W3C VC ja SD-JWT VC (synteettinen demo)**. Uusi neljäs esimerkki sisältää saman profiilin ja kolme planned-toimitustapaa. W3C VC on oletuksena ensisijainen.
+2. Tarkastele erikseen formaattia, protokollaa, suojausprofiilia, mapping-versiota ja kenttäpolkuja. Suunnitelluilla palveluilla ei ole aktiivista API-/myöntämistoimintoa. SD-JWT VC:llä on oma vct ja väitemapping; siinä ei vaadita JSON-LD-kontekstia.
+3. Valitse **Muokkaa**. Toimitustavoilla on omat saatavuus-, vastuu-, palvelu-, tunnistautumis- ja profiilikenttänsä. **Versioitu kenttämapping** kuvaa IRI-polut, oliot/literaalit, tietotyypit ja min/maxCountin. `/*` tarkoittaa taulukon alkiota. Tallenna synteettinen muutos; usean erillisen validointiprosessin ajo voi kestää muutamia sekunteja. Tarkasta kolme erillistä raporttia: RDF-esimerkin SHACL, JSON-johdannaiset sekä toimitustapojen metadata/mapping.
+4. Säilytä esimerkin palvelut planned-tilassa; toimivaa lähde- tai myöntäjäpalvelua ei ole. Lähetä tarkastukseen. Kirjaudu ulos ja vahvista Keycloakin **Log out**. Kirjaudu `yritys` / `demo-yritys`, tarkasta kuvaukset, kirjaa perustelu ja hyväksy lähdeilmoituksen tarkastus. Hyväksy ja julkaise `1.0.0`.
+5. Tuote tulee julkiseen hakuun. Myös julkaistun esimerkin kolme palvelua ovat suunnitteilla ja ilman aktiivisia palvelutoimintoja. JSON-/JSON-LD-vienti kuvaa metatiedot; se ei palauta yrityksen varsinaista tietosisältöä eikä myönnettyä todistusta.
+6. `vero` voi luoda uuden työkopion. Aiempi julkaisu säilyy muuttumattomana. Mappingin sisältömuutos tarvitsee suuremman mapping-version sekä uuden hyväksynnän ja tuoteversion.
+
+Esimerkki lisätään päivityksessä kerran vain tunnettuun synteettiseen demo-organisaatioon. Alkuperäiset kolme tuotetta säilyvät. Poistettua tai muutettua esimerkkiä ei palauteta restartissa. Julkinen haku on uuden kannan alussa tyhjä, kunnes julkaiset ensimmäisen version.
+
+### Oman tuotteen sisältöprofiili ja esimerkit
+
+
 
 1. Uuden demon julkinen haku on aluksi tyhjä. Kolme synteettistä esimerkkiä (verovelka, yrityksen perustiedot, ammattipätevyys) säilyvät keskeneräisinä yksityisinä luonnoksina. Niille ei keksitä virallista profiilia tai hyväksyntää.
 2. Kirjaudu `vero`-käyttäjänä ja avaa **Omat luonnokset → Verovelkatieto → Muokkaa**. Voit myös lisätä oman synteettisen tuotteen. Tarjoajavalikossa ovat vain omat muokkaajaorganisaatiot.
@@ -36,7 +49,7 @@ Tarvitset Docker Desktopin käynnissä Linux-konteilla, Compose v2:n ja Gitin. K
 
 ```powershell
 git fetch origin
-git switch feat/phase-2d-shacl
+git switch feat/phase-2e-derived-validation
 docker compose up --build
 ```
 
@@ -62,7 +75,7 @@ docker compose stop app
 docker compose exec -T db sh -c 'pg_dump -U demo -d catalog > /tmp/before-update.sql'
 docker compose cp db:/tmp/before-update.sql ./before-update.sql
 git fetch origin
-git switch feat/phase-2d-shacl
+git switch feat/phase-2e-derived-validation
 docker compose up --build -d --wait
 docker compose exec -T app .venv/bin/alembic current
 ```
@@ -74,7 +87,7 @@ Tiedoston kopiointi säilyttää merkistön myös PowerShellissä. Odotettu head
 - `0003_auth` lisää organisaatiojäsenyydet ja OIDC-istunnot.
 - `0004_publication` säilyttää alkuperäiset tuoterivit, kopioi kuvaukset luonnoksiksi ja lisää muuttumattomat profiili-/julkaisusnapshotit, tarkastukset, auditoinnin ja outboxin. Omistajaorganisaatio lukitaan alkuperäiseen tarjoajaan. Vanhoja tuotteita ei julkaista automaattisesti; anonyymi näkyvyys muuttuu tarkoituksella. Vanhat käsin annetut tietoelementit säilyvät demotietona, kunnes profiili liitetään.
 
-Vain aidosti uusi kanta saa kolme fixtureä. Vanha tyhjä kanta tai poistettu fixture ei palaudu. Migraatio ei tarjoa tuhoavaa downgradea tai offline-SQL-ajoa; palautuminen vaatii testatun varmuuskopion palautuksen erilliseen kantaan. Älä poista vanhaa Codespacea tietoja säilyttävässä päivityksessä. **Rebuild Container** rakentaa haaran imagen uudelleen; pelkkä tiedostojen haaranvaihto ei päivitä ajossa olevaa imagea. Keycloak-realmiä ei tarvitse nollata.
+Aidosti uusi kanta saa kolme alkuperäistä fixtureä ja 2E:n neljännen kolmen toimitustavan esimerkin. 2E-päivitys lisää vain tämän uuden esimerkin kerran tunnettuun alkuperäiseen demo-organisaatioon; muita vanhoja kantoja ei siemennetä. Vanha tyhjä kanta tai poistettu fixture ei palaudu. Migraatio ei tarjoa tuhoavaa downgradea tai offline-SQL-ajoa; palautuminen vaatii testatun varmuuskopion palautuksen erilliseen kantaan. Älä poista vanhaa Codespacea tietoja säilyttävässä päivityksessä. **Rebuild Container** rakentaa haaran imagen uudelleen; pelkkä tiedostojen haaranvaihto ei päivitä ajossa olevaa imagea. Keycloak-realmiä ei tarvitse nollata.
 
 ## Rajapinta ja profiilit
 
@@ -112,7 +125,7 @@ POST/PUT ei hyväksy asiakkaan `provider`-, `dataElements`-, tila- tai hyväksyn
 
 API tukee riippuvuuksia, ulkoisia OWL-viitteitä ja JSON Schema/OpenAPI -johdannaisia. Käyttöliittymän yksinkertainen tuonti käsittelee yhden pääartefaktin ja yhden sanastoviitteen; moniosainen tuonti tehdään API:lla. Alkuperäiset IRI:t ja koko graafi säilyvät, tietoelementtinäkymä on johdettu osajoukko. Etäkonteksteja tai riippuvuuksia ei noudeta jäsennyksen aikana. Puuttuva lähde/SHACL/riippuvuus estää julkaisun. Pelkkä johdannainen ei riitä. RDF-esitysten ekvivalenssi tarkistetaan graafina; tavutarkisteet ovat erikseen. JSON-LD-katalogivienti on eri asia kuin sisältöprofiili tai myönnetty VC. DCAT-AP-vaatimustenmukaisuutta ei väitetä.
 
-VC-metatietojen editori on tässä vaiheessa JSON-kenttä. `planned`/`suspended` ei näytä toimivaa linkkiä. Käytettävä jakelu tarvitsee myöntäjä-/operaattori-/lähdeorganisaatiot, VC-profiilin ja kartoituksen, pysyvän HTTPS-linkin sekä saatavuus- ja käyttöehdot. Henkilökohtaisia tarjouksia, koodeja tai tokeneita ei tallenneta. Esimerkkiverkkotunnuksia ei hyväksytä toimivaksi myöntämispalveluksi. EUDIW-/EBW-`tested` vaatii nimetyn profiilin, version, näytön ja testipäivän. Demo ei vahvista QEAA-luokkaa.
+Uusia rinnakkaisia toimitustapoja muokataan rakenteisilla lomakkeilla. Vanha issuance-JSON-kenttä säilyy vanhoille kuvauksille, kunnes lisäät uuden toimitustapakokoelman. `planned`/`suspended` ei näytä toimivaa linkkiä. Käytettävä jakelu tarvitsee myöntäjä-/operaattori-/lähdeorganisaatiot, VC-profiilin ja kartoituksen, pysyvän HTTPS-linkin sekä saatavuus- ja käyttöehdot. Henkilökohtaisia tarjouksia, koodeja tai tokeneita ei tallenneta. Esimerkkiverkkotunnuksia ei hyväksytä toimivaksi myöntämispalveluksi. EUDIW-/EBW-`tested` vaatii nimetyn profiilin, version, näytön ja testipäivän. Demo ei vahvista QEAA-luokkaa.
 
 ## Vaihe 2D: esimerkit ja SHACL Core
 
@@ -134,6 +147,24 @@ Aiempi julkaisu pysyy luettavana alkuperäisine tarkisteineen, vaikka sillä ei 
 
 Tämä ei vielä kata JSON Schema-/OpenAPI-johdannaisten validointia tai kattavuuskartoitusta, DCAT-AP-vaatimustenmukaisuutta, VC-kuorta ja allekirjoitusta tai ulkoisia palveluita. Ne jäävät jatkovaiheisiin.
 
+## Vaihe 2E: toimitustavat ja koneluettavat sopimukset
+
+`distributions` on enintään kymmenen tyypitetyn kuvauksen kokoelma (`jsonApi`, `w3cVc`, `sdJwtVc`). `primaryDistributionId` valitsee ensisijaisen; W3C VC on oletus, kun se on mukana. Formaatti, protokolla ja suojausprofiili ovat erillisiä. Omat availability/environment- ja organisaatiokentät, yhteinen profileSnapshotId sekä mapping.version/entries kuvataan jokaiselle. Katalogi ei vaadi kolmea erillistä lähdeintegraatiota: sama lähde-API voi palvella molempia myöntämiskonfiguraatioita.
+
+API-sopimus kenttineen on `/docs`:ssä. `fixtures/distributions-demo.json` näyttää kaikkien kolmen syöttörakenteen. Käytä oman profiilisnapshotin ja organisaatioiden UUID:ita. Palvelin sitoo saman snapshotin kaikkiin toimitustapoihin; poikkeava viite hylätään. Raportit, julkaisuversio ja profileSnapshotSha256 ovat palvelimen kenttiä, eivät syöttöparametreja. `distributionBindings` lukitsee julkaisuun saman profiilitarkisteen ja tuoteversion sekä mapping-versiot.
+
+JSON API:n käyttökuvaus sisältää palveluosoitteen, OpenAPI- ja JSON Schema -artefaktien UUID:t, none/oauth2/apiKey/mtls-tunnistautumistavan, tarvittavat oikeudet ja ajantasaisuuden. W3C VC sisältää VCDM 2.0 -tyypit/kontekstit; SD-JWT VC sisältää vct:n, profiiliversion, paljastamis- ja haltijasidontakäytännöt. Todistusjakeluilla on erilliset konfiguraatiot, suojaus-, voimassaolo- ja tilatietoprofiilit. Samalle OpenID4VCI-palvelulle voi kuvata molemmat muodot. Tokenit, tunnistautumissalaisuudet ja käyttäjäkohtaiset tarjoukset eivät kuulu kenttiin.
+
+Sisäkkäisen mappingin semanticPath on alkuperäisten IRI:en ketju. Vanhemman valueKind on object, lapsella literal/object ja oikea datatype/classUri. Suojaus, oikeudellinen luokka ja lompakkonäyttö ovat erillisiä. Metadata-/mapping-tarkistus ei jäsennä JWT:tä, tarkista allekirjoitusta tai osoita palvelun saavutettavuutta. Rekursiiviset/monimutkaiset mapping-polut jäävät tässä profiilissa arvioimatta ja estävät uuden julkaisun. [Ratkaisukuvaus ja integraation hyväksymiskriteerit](docs/phase-2e.md) erittelevät rajat.
+
+Vanha issuance-luku ja vanhojen luonnosten kirjoitus säilyvät. Uudessa kuvauksessa distributions on määräävä. Kokoelman hiljainen pudottaminen vanhaan issuance-malliin estetään. Jo julkaistuja 2C/2D-versioita ei kirjoiteta uudelleen. Sama varmuuskopio/rebuild toimii; relaatiomigraatiota ei tarvita, head pysyy 0004_publication.
+
+### JSON Schema- ja OpenAPI-johdannaiset
+
+Tuontilomakkeen **Valinnainen JSON-johdannainen** voi liittää yhden JSON-muotoisen teknisen kuvauksen ja erillisen semanticMappings-tiedoston samaan SHACL-snapshotiin. API tukee useita. Esimerkit: `derived-schema-demo.json` (draft-07), `derived-openapi-demo.json` (OpenAPI 3.0.3), `derived-mappings-demo.json` ja `derived-example-demo.json` fixtures-hakemistossa. OpenAPI-valinta on `/components/schemas/DemoCompany`; JSON Scheman tyhjä schemaPointer tarkoittaa juurta. Codespacesissa lataa tiedostot Explorerin **Download**-toiminnolla ennen selaimen tiedostovalintaa.
+
+`derivedExamples` antaa liitetylle artefaktille artifactId:n, JSON-sisällön ja synthetic:true-vahvistuksen. Palvelin tarkistaa alkuperäisen dialektin, JSON-esimerkin sekä erillisen rajatun suoran kenttävertailun. Tämä ei korvaa distributions.mappingin sisäkkäistä metadataa. Valmiissa neljännessä esimerkissä molemmat johdannaiset ja esimerkit ovat mukana. Aiemmin aloitettu johdannaistarkistus ei ole JWT:n eikä kryptografian tarkistus; JSON → RDF -sisältömuunnos jää integraatiovaiheeseen.
+
 ## Kehitys ja testit
 
 ```bash
@@ -150,7 +181,7 @@ Testit käyttävät oikeaa PostgreSQL:ää ja tuhoavaa erillistä `catalog_test`
 
 ```bash
 docker compose exec -T db createdb -U demo catalog_test
-.venv/bin/pytest tests/test_api.py tests/test_publication.py tests/test_profiles.py tests/test_semantic_validation.py tests/test_auth.py tests/test_migrations.py tests/test_public_url.py -q
+.venv/bin/pytest tests/test_api.py tests/test_publication.py tests/test_profiles.py tests/test_semantic_validation.py tests/test_derived_validation.py tests/test_distributions.py tests/test_auth.py tests/test_migrations.py tests/test_public_url.py -q
 ```
 
 Älä aja tätä testikantaa käyttäviä pytest-ajoja rinnakkain. `TEST_DATABASE_URL` voi muuttaa yhteysosoitetta mutta kannan pitää olla `catalog_test`. Selaintestit käyttävät erikseen käynnistettyä demoa ja oikeaa Keycloak-kirjautumista:
@@ -160,6 +191,6 @@ docker compose exec -T db createdb -U demo catalog_test
 BROWSER_BASE_URL=http://localhost:8000 .venv/bin/pytest tests/test_browser.py -q
 ```
 
-Valmista paikallista Chromiumia käytetään automaattisesti; `CHROMIUM_EXECUTABLE` voi nimetä sen. Selaintestit luovat yksilöidyn testituotteen; julkaisutesti jättää muuttumattoman synteettisen julkaisun historiaan. Alkuperäisiä kolmea demotuotetta ei muuteta. Ilman `BROWSER_BASE_URL`-asetusta seitsemän selaintestiä ohitetaan. Täysi ajo: `BROWSER_BASE_URL=http://localhost:8000 .venv/bin/pytest -q`. GitHub Actionsin etätulos varmistetaan erikseen.
+Valmista paikallista Chromiumia käytetään automaattisesti; `CHROMIUM_EXECUTABLE` voi nimetä sen. Selaintestit luovat yksilöidyn testituotteen; julkaisutesti jättää muuttumattoman synteettisen julkaisun historiaan. Alkuperäisiä kolmea demotuotetta ei muuteta. Ilman `BROWSER_BASE_URL`-asetusta yhdeksän selaintestiä ohitetaan. Täysi ajo: `BROWSER_BASE_URL=http://localhost:8000 .venv/bin/pytest -q`. GitHub Actionsin etätulos varmistetaan erikseen.
 
 Tässä pilviympäristössä Docker-build käyttää alustan proxy-/CA-reittiä: `./scripts/cloud-build.sh`, sitten `docker compose up -d --no-build --wait`. Tavallisen Docker Desktopin komento on yllä oleva `docker compose up --build`. Kirjoitussuojatun kotihakemiston yhteydessä aseta `UV_CACHE_DIR=/workspace/.cache/uv`, `npm_config_cache=/workspace/.cache/npm`, `DOCKER_CONFIG=/workspace/.cache/docker`. Nämä eivät kuulu Windowsin normaaliin käynnistykseen.

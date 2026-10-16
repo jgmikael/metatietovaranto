@@ -1,0 +1,25 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Synthetic demo content; no running API",
+    "version": "1.0.0"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "DemoCompany": {
+        "title": "Synthetic company content; not a real Tietomallit export",
+        "type": "object",
+        "properties": {
+          "companyName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "companyName"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

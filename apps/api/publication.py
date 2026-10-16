@@ -14,6 +14,8 @@ from apps.api.models import (Product, Organization, OrganizationMembership, Draf
                             ProductVersion, Review, AuditEvent, IdempotentOperation, OutboxEvent)
 from apps.api.profiles import checksum, can_read_snapshot, snapshot_summary
 from apps.api.semantic_validation import validate_snapshot, current_report
+from apps.api.derived_validation import validate_derived, derived_errors
+from apps.api.distributions import normalize_distributions, validate_distributions, distribution_errors
 
 
 def now():return datetime.now(timezone.utc)
@@ -79,6 +81,10 @@ def validation(session,draft):
             errors += [{'path':item.get('path','/syntheticExample'),'message':item.get('message','SHACL-tarkistus epäonnistui'),
                         'ruleId':item.get('ruleId')} for item in report.get('results',[])]
             if not report.get('results'):errors.append({'path':'syntheticExample','message':'SHACL-tarkistus ei läpäissyt'})
+    if snapshot:errors+=derived_errors(snapshot,draft.content)
+    if draft.content.get('distributions') is not None:
+        if snapshot:errors+=distribution_errors(snapshot,draft.content)
+        return errors
     delivery=Issuance.model_validate(draft.content.get('issuance',{}))
     if delivery.legalCategory=='QEAA':
         errors.append({'path':'issuance.legalCategory','message':'Demo ei vahvista QEAA-asemaa; käytä unassessed-luokkaa'})
@@ -123,12 +129,22 @@ def write_content(session,request,product,draft,data,identity):
     snapshot=session.get(ProfileSnapshot,data.profileSnapshotId) if data.profileSnapshotId else None
     if data.profileSnapshotId and (snapshot is None or not can_read_snapshot(session,request,snapshot)):
         raise HTTPException(404,'Profiilisnapshotia ei löydy')
+    if draft.content.get('distributions') is not None and data.distributions is None:
+        raise HTTPException(422,'Säilytä tuotteen distributions-kuvaus; vanhaan issuance-malliin ei palata hiljaisesti')
+    try:normalize_distributions(body,snapshot)
+    except ValueError as error:raise HTTPException(422,str(error)) from None
+    for item in body.get('distributions') or []:
+        refs=[item[key] for key in ('providerOrganizationId','operatorOrganizationId','sourceProviderOrganizationId')]
+        if item['type']!='jsonApi' and item['credential']['issuerOrganizationId']:refs.append(item['credential']['issuerOrganizationId'])
+        if any(session.get(Organization,UUID(ref)) is None for ref in refs):raise HTTPException(422,'Toimitustavan organisaatioviite puuttuu')
     for key in ('issuerOrganizationId','operatorOrganizationId','sourceProviderOrganizationId'):
         organization_id=getattr(data.issuance,key)
         if organization_id and session.get(Organization,organization_id) is None:raise HTTPException(422,f'{key}: organisaatiota ei löydy')
     body|={'provider':provider.legal_name,'modifiedAt':now().isoformat(),
            'dataElements':snapshot.manifest['elements'] if snapshot else draft.content.get('dataElements',[])}
     body['semanticValidation']=validate_snapshot(snapshot,body.get('syntheticExample')) if snapshot else None
+    body['derivedValidation']=validate_derived(snapshot,body.get('derivedExamples',[])) if snapshot else None
+    body['distributionValidation']=validate_distributions(snapshot,body.get('distributions')) if snapshot else None
     draft.content=body;draft.profile_snapshot_id=data.profileSnapshotId;draft.revision+=1
     draft.checksum=checksum(body);draft.status='draft';draft.approved_review_id=None
     draft.contributors=list(dict.fromkeys(draft.contributors+[identity.subject]));draft.modified_at=now()
@@ -298,7 +314,8 @@ def build_publication_router(engine,base_url,jsonld):
                 snapshot=session.get(ProfileSnapshot,draft.profile_snapshot_id) if draft.profile_snapshot_id else None
                 return {'errors':validation(session,draft),'contentHash':draft.checksum,
                     'semanticValidation':validate_snapshot(snapshot,draft.content.get('syntheticExample')) if snapshot else None,
-                    'storedReport':draft.content.get('semanticValidation')}
+                    'storedReport':draft.content.get('semanticValidation'),
+                    'derivedValidation':validate_derived(snapshot,draft.content.get('derivedExamples',[])) if snapshot else None}
             check_etag(request,draft)
             if command=='submit':
                 require_editor(session,identity,product.owner_organization_id)
@@ -337,6 +354,14 @@ def build_publication_router(engine,base_url,jsonld):
             previous=session.scalar(select(ProductVersion).where(ProductVersion.product_id==product.id).order_by(ProductVersion.sequence.desc()).limit(1))
             if previous and tuple(map(int,data.version.split('.')))<=tuple(map(int,previous.version.split('.'))):
                 raise HTTPException(409,'Uuden semanttisen version on oltava aiempaa suurempi')
+            if previous and draft.content.get('distributions') is not None:
+                earlier={item['id']:item for item in previous.content.get('distributions') or []}
+                for item in draft.content['distributions']:
+                    old=earlier.get(item['id'])
+                    if old:
+                        before=tuple(map(int,old['mapping']['version'].split('.')));after=tuple(map(int,item['mapping']['version'].split('.')))
+                        if after<before or (item['mapping']['entries']!=old['mapping']['entries'] and after<=before):
+                            raise HTTPException(409,'Mappingin muutos tarvitsee aiempaa suuremman mapping-version; versionumeroa ei alenneta')
             snapshot=session.get(ProfileSnapshot,draft.profile_snapshot_id)
             body=dict(draft.content)|{'ownerOrganizationId':str(product.owner_organization_id),'id':str(product.id),'uri':base_url+'/id/products/'+str(product.id),'demo':True,
                 'versionUri':base_url+'/id/products/'+str(product.id)+'/versions/'+data.version,
@@ -345,6 +370,10 @@ def build_publication_router(engine,base_url,jsonld):
                 'semanticProfileAssessment':{'verificationStatus':'verified','method':'manualReview',
                     'sourceVerification':'declarationReviewed; not automatic platform attestation','reviewer':review.reviewer,
                     'reason':review.reason,'snapshotHash':snapshot.checksum},'publishedAt':now().isoformat()}
+            if body.get('distributions') is not None:
+                body['distributionBindings']=[{'distributionId':item['id'],'productVersion':data.version,
+                    'profileSnapshotId':str(snapshot.id),'profileSnapshotSha256':snapshot.checksum,
+                    'mappingVersion':item['mapping']['version']} for item in body['distributions']]
             version=ProductVersion(product_id=product.id,version=data.version,sequence=previous.sequence+1 if previous else 1,
                 content=body,checksum=checksum(body),profile_snapshot_id=snapshot.id,review_id=review.id,
                 publisher=identity.subject,created_at=now())

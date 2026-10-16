@@ -2,7 +2,7 @@
 
 ## Rajaus
 
-Lue `ROADMAP.md`, `STATUS.md` ja `metatietovaranto_suunnittelu.md`. Suunnitelma kuvaa tavoitearkkitehtuurin. Nykyinen toimitus kattaa ROADMAPin vaiheet 1, 2A, 2B, 2C ja 2D (luonnokset, riippumaton hyväksyntä, lukitut profiili-/julkaisusnapshotit, VC-metatiedot ja auditointi). Lue myös docs/phase-2c.md. Vaihe 2D tarkistaa synteettisen esimerkkisisällön offline SHACL Corella. Älä lisää SPARQL/JS/AF-laajennuksia, laajempaa elinkaarta tai ulkoisia integraatioita ilman erillistä toimeksiantoa. Älä yhdistä main-haaraan automaattisesti.
+Lue `ROADMAP.md`, `STATUS.md` ja `metatietovaranto_suunnittelu.md`. Suunnitelma kuvaa tavoitearkkitehtuurin. Nykyinen toimitus kattaa ROADMAPin vaiheet 1, 2A, 2B, 2C, 2D ja 2E (luonnokset, riippumaton hyväksyntä, lukitut profiili-/julkaisusnapshotit, VC-metatiedot ja auditointi). Lue myös docs/phase-2c.md ja docs/phase-2e.md. Vaihe 2D tarkistaa synteettisen esimerkkisisällön offline SHACL Corella. Älä lisää SPARQL/JS/AF-laajennuksia, laajempaa elinkaarta tai ulkoisia integraatioita ilman erillistä toimeksiantoa. Älä yhdistä main-haaraan automaattisesti.
 
 ## Sitova semanttinen suunnitteluperiaate
 
@@ -35,3 +35,7 @@ Lue docs/authentication.md. Keycloakin tunnukset ovat synteettisiä demotunnuksi
 ## SHACL ja synteettiset esimerkit
 
 Lue README:n vaiheen 2D rajaus. Älä muuta 2C:n muuttumattomia julkaisuja tai snapshotteja taustapäivityksellä. Raportti on palvelimen tuottama ja sidottu profiiliin, esimerkkiin, moottoriin ja käytäntöön; älä hyväksy raporttia asiakkaalta. Esimerkin muokkaus mitätöi hyväksynnän. Säilytä prosessin CPU-/muisti-/aikarajat ja verkkoyhteyksien esto, älä suorita profiilin koodia tai nouda riippuvuuksia validoinnissa. Lisää tests/test_semantic_validation.py API-/migraatiotestien ajoon. Vain synteettistä esimerkkisisältöä, ei henkilötietoja tai allekirjoitettuja VC-todistuksia.
+
+## Rinnakkaiset toimitustavat
+
+Distributions on uusien kuvausten auktoritatiivinen toimitusmalli, issuance säilyy vanhojen tietojen yhteensopivuutena. JSON API, W3C VC ja SD-JWT VC jakavat saman profiilisnapshotin; älä pakota SD-JWT:hen JSON-LD-kontekstia tai väitä sen olevan W3C VC -kuori. Säilytä versioidut sisäkkäiset mappingit ja erota metadata, SHACL-esimerkki ja kryptografinen tarkistus. Tuotteen metatietovienti ei ole lähdetietopalvelu. Älä lisää tokeneita tai Credential Offer -tietoja. Uusi fixture lisätään vain kerran tunnettuun demo-organisaatioon, ei vanhojen tietojen nollauksena. Aja myös tests/test_derived_validation.py ja tests/test_distributions.py.

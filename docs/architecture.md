@@ -1,4 +1,4 @@
-# Demon arkkitehtuuri (vaiheet 1–2D)
+# Demon arkkitehtuuri (vaiheet 1–2E)
 
 React/TypeScript rakennetaan Vitellä ja FastAPI palvelee saman alkuperän käyttöliittymän sekä REST API:n. Hash-reititys erottaa julkisen version, yksityisen työkopion, organisaatiot ja profiilit. Keycloak OIDC + PKCE, palvelinistunto ja CSRF ovat ennallaan; katso [authentication.md](authentication.md). Codespaces käyttää Private-porttia 8000 ja automaattista selainavausta.
 
@@ -11,3 +11,5 @@ Tietotuotteen sisältömalli tulee Tietomallit SHACL-profiilista linkillä tai t
 JSON-LD-katalogivienti käyttää DCAT/Dublin Core -termejä ja paikallisia demotermejä inline-kontekstilla. Se ei ole sisältöprofiili tai myönnetty VC. W3C VC on tuotteen ensisijainen toimitusmuoto, oletuksena suunnitteilla. Katalogi kuvaa myöntäjän metatiedot ja mahdollisen pysyvän asiointilinkin; tunnistaminen, edustamisoikeus ja myöntäminen jäävät erilliselle palvelulle. DCAT-AP-, QEAA- tai lompakkoyhteensopivuutta ei päätellä muodosta.
 
 Toteutuksen yksityiskohdat ja rajat: [phase-2c.md](phase-2c.md). Käynnistys, varmuuskopio ja testaus: [README](../README.md).
+
+Vaiheessa 2E uusi distributions-kokoelma kuvaa tarjoajan JSON API-, W3C VC- ja SD-JWT VC -muodot samassa tuoteversiossa. Yhteinen snapshot ja muotokohtaiset versioidut mappingit kuuluvat sisältötarkisteeseen. Muotokohtaiset kentät ovat validoituja tyyppejä. Metadata-/mapping-tarkistus, alkuperäisen RDF-esimerkin SHACL ja rajattu JSON-johdannaistarkistus ovat erillisiä raportteja. Katalogi ei palauta lähdesisältöä tai myönnä/allekirjoita todistuksia. Uuden ja vanhan issuance-mallin yhteensopivuus sekä integraation hyväksymiskriteerit: [phase-2e.md](phase-2e.md).

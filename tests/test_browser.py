@@ -7,6 +7,9 @@ import pytest
 import httpx
 from playwright.sync_api import sync_playwright, expect
 
+# Bounded validation spawns several offline workers; this is a correctness suite, not a latency benchmark.
+expect.set_options(timeout=20000)
+
 pytestmark=pytest.mark.skipif(not os.getenv('BROWSER_BASE_URL'), reason='Set BROWSER_BASE_URL to run live browser tests')
 
 @pytest.fixture
@@ -180,3 +183,106 @@ def test_profile_import_separate_approval_publication_and_public_search(page):
     expect(page.get_by_role('heading',name=title,exact=True)).to_be_visible()
     assert httpx.get(base+'/api/v1/products/'+product_id+'/versions/1.0.0').json()==first
     # Published fixtures intentionally remain as immutable history in this demo DB.
+
+
+def test_derived_schema_import_example_correction_and_publication(page):
+    from pathlib import Path
+    base=os.environ['BROWSER_BASE_URL'];title='JSON-johdannaistesti '+uuid.uuid4().hex
+    login(page);page.get_by_role('button',name='Lisää tietotuote',exact=True).click()
+    page.get_by_label('Tarjoaja',exact=True).select_option(index=1)
+    for label,value in [('Nimi',title),('Kuvaus','Synteettinen JSON-johdannaisen koe'),('Teema','Testit'),('Synteettinen lähde','Ei oikea Tietomallit-export'),('Käyttötarkoitus','Johdannaisten validointikoe'),('Rajaukset — mitä tuote ei todista','Ei VC-todistuksia tai tuotantopalvelua')]:
+        page.get_by_label(label,exact=True).fill(value)
+    page.get_by_text('Tuo Tietomallit-soveltamisprofiili',exact=True).click()
+    page.get_by_label('Profiilin alkuperäinen IRI',exact=True).fill('https://example.org/metatietovaranto/demo/profile')
+    page.get_by_label('OWL-sanaston nimiavaruus',exact=True).fill('https://example.org/metatietovaranto/demo/')
+    page.get_by_label('Lähdeilmoitus',exact=True).fill('Synteettinen ohjelmistotesti, ei oikea alustavienti tai rekisteriote.')
+    page.get_by_label('SHACL-tiedosto tai johdannainen',exact=True).set_input_files(str(Path('fixtures/semantic-profile-demo.ttl').resolve()))
+    page.get_by_label('Liitä JSON Schema- tai OpenAPI-johdannainen',exact=True).check()
+    page.get_by_label('Johdannaisen JSON-tiedosto',exact=True).set_input_files(str(Path('fixtures/derived-schema-demo.json').resolve()))
+    page.get_by_label('Semanttisen kartoituksen JSON-tiedosto',exact=True).set_input_files(str(Path('fixtures/derived-mappings-demo.json').resolve()))
+    expect(page.get_by_label('Semanttiset kenttäkartoitukset (JSON)',exact=True)).to_have_value(re.compile('ProductShape'))
+    page.get_by_role('button',name='Tuo profiili',exact=True).click()
+    expect(page.get_by_role('status')).to_contain_text('Profiilisnapshot tallennettu')
+    page.get_by_label('Esimerkkitiedosto',exact=True).set_input_files(str(Path('fixtures/semantic-example-demo.ttl').resolve()))
+    expect(page.get_by_label('Esimerkin RDF-sisältö',exact=True)).to_have_value(re.compile('Synteettinen Esimerkki Oy'))
+    page.get_by_label('Vahvistan, että esimerkki on synteettinen eikä sisällä henkilötietoja tai salaisuuksia',exact=True).check()
+    page.get_by_label('Johdannainen 1: JSON-esimerkkisisältö',exact=True).fill('{"companyName":123}')
+    page.get_by_label('Johdannainen 1: vahvistan JSON-esimerkin synteettisyyden',exact=True).check()
+    page.get_by_role('button',name='Tallenna',exact=True).click()
+    expect(page.get_by_text('Johdannaisten tarkistus ei läpäissyt',exact=True)).to_be_visible()
+    page.get_by_role('button',name='Lähetä tarkastukseen',exact=True).click()
+    expect(page.get_by_role('alert')).to_contain_text('JSON-esimerkki')
+    product_id=page.url.split('#draft/')[1]
+    page.get_by_role('button',name='Muokkaa',exact=True).click()
+    page.get_by_label('Johdannainen 1: JSON-esimerkkitiedosto',exact=True).set_input_files(str(Path('fixtures/derived-example-demo.json').resolve()))
+    expect(page.get_by_label('Johdannainen 1: JSON-esimerkkisisältö',exact=True)).to_have_value(re.compile('Synteettinen Esimerkki Oy'))
+    page.get_by_label('Johdannainen 1: vahvistan JSON-esimerkin synteettisyyden',exact=True).check()
+    page.get_by_role('button',name='Tallenna',exact=True).click()
+    expect(page.get_by_text('Johdannaisten rajattu tarkistus läpäisty',exact=True)).to_be_visible()
+    page.get_by_role('button',name='Lähetä tarkastukseen',exact=True).click()
+    expect(page.get_by_text('Tarkastuksessa',exact=True)).to_be_visible()
+    logout(page);login(page,'yritys','demo-yritys');page.goto(base+'/#draft/'+product_id)
+    expect(page.get_by_role('heading',name=title,exact=True)).to_be_visible()
+    page.get_by_label('Tarkastuksen perustelu',exact=True).fill('Synteettiset SHACL/JSON-skeema/esimerkit ja suorat semanttiset kartoitukset tarkastettu.')
+    page.get_by_label('Olen tarkastanut lähdeilmoituksen, SHACL-profiilin ja sen riippuvuudet',exact=True).check()
+    page.get_by_role('button',name='Hyväksy',exact=True).click()
+    page.get_by_role('button',name='Julkaise',exact=True).click()
+    expect(page.get_by_text('Julkaistu versio 1.0.0',exact=True)).to_be_visible()
+    expect(page.get_by_text('Johdannaisten rajattu tarkistus läpäisty',exact=True)).to_be_visible()
+    link=page.get_by_role('link',name='Johdannainen 1: lataa alkuperäinen skeema',exact=True)
+    assert page.request.get(base+link.get_attribute('href')).status==200
+    logout(page);page.goto(base+'/#'+product_id)
+    expect(page.get_by_text('Johdannaisten rajattu tarkistus läpäisty',exact=True)).to_be_visible()
+    snapshot=httpx.get(base+'/api/v1/products/'+product_id).json()
+    assert snapshot['derivedValidation']['status']=='conforms' and snapshot['derivedExamples'][0]['synthetic'] is True
+
+
+def test_parallel_distributions_edit_publish_and_format_specific_links(page):
+    base=os.environ['BROWSER_BASE_URL'];title='Kolme toimitustapaa '+uuid.uuid4().hex
+    login(page)
+    sample=page.request.get(base+'/api/v1/products/00000000-0000-4000-8000-000000000004/draft').json()
+    fields=('title','description','providerOrganizationId','theme','source','purpose','limitations','accessConditions','availability','synthetic','profileSnapshotId','issuance','syntheticExample','derivedExamples','distributions','primaryDistributionId')
+    data={key:sample[key] for key in fields};data['title']=title
+    identity=page.request.get(base+'/auth/me').json()
+    response=page.request.post(base+'/api/v1/products',data=data,headers={'X-CSRF-Token':identity['csrfToken'],'Idempotency-Key':str(uuid.uuid4())})
+    assert response.status==201,response.text()
+    created=response.json();page.goto(base+'/#draft/'+created['id'])
+    expect(page.get_by_role('heading',name=title,exact=True)).to_be_visible()
+    expect(page.get_by_role('link',name='Käytä JSON-rajapintaa',exact=True)).to_have_count(0)
+    expect(page.get_by_role('link',name='Pyydä SD-JWT VC lompakkoon',exact=True)).to_have_count(0)
+    page.get_by_role('button',name='Muokkaa',exact=True).click()
+    for prefix in ('JSON API 1','W3C VC 2','SD-JWT VC 3'):
+        page.get_by_label(prefix+': saatavuus',exact=True).select_option('planned')
+    page.get_by_label('JSON API 1: palveluosoite',exact=True).fill('https://provider.fi/company')
+    page.get_by_label('JSON API 1: rajapintakuvauksen osoite',exact=True).fill('https://provider.fi/docs')
+    for prefix,configuration in [('W3C VC 2','w3c'),('SD-JWT VC 3','sd-jwt')]:
+        page.get_by_label(prefix+': myöntäjäpalvelun HTTPS-tunniste',exact=True).fill('https://issuer.fi/')
+        page.get_by_label(prefix+': pysyvä myöntämisen aloituslinkki',exact=True).fill('https://issuer.fi/start?configuration='+configuration)
+    page.get_by_role('button',name='Tallenna',exact=True).click()
+    expect(page.get_by_text('Toimitustapojen metadata ja mappingit tarkistettu',exact=True)).to_be_visible(timeout=20000)
+    # Private drafts never expose active service actions.
+    expect(page.get_by_role('link',name='Käytä JSON-rajapintaa',exact=True)).to_have_count(0)
+    page.get_by_role('button',name='Lähetä tarkastukseen',exact=True).click()
+    expect(page.get_by_text('Tarkastuksessa',exact=True)).to_be_visible()
+    logout(page);login(page,'yritys','demo-yritys');page.goto(base+'/#draft/'+created['id'])
+    page.get_by_label('Tarkastuksen perustelu',exact=True).fill('Synteettiset kolme toimitustapaa, yhteinen profiili ja mappingit tarkastettu; ei palveluyhteyttä.')
+    page.get_by_label('Olen tarkastanut lähdeilmoituksen, SHACL-profiilin ja sen riippuvuudet',exact=True).check()
+    page.get_by_role('button',name='Hyväksy',exact=True).click();page.get_by_role('button',name='Julkaise',exact=True).click()
+    expect(page.get_by_text('Julkaistu versio 1.0.0',exact=True)).to_be_visible()
+    expect(page.get_by_role('link',name='Käytä JSON-rajapintaa',exact=True)).to_have_count(0)
+    expect(page.get_by_role('link',name='Pyydä W3C VC lompakkoon',exact=True)).to_have_count(0)
+    expect(page.get_by_role('link',name='Pyydä SD-JWT VC lompakkoon',exact=True)).to_have_count(0)
+    logout(page);page.goto(base+'/#'+created['id'])
+    expect(page.get_by_role('heading',name='W3C VC · Ensisijainen',exact=True)).to_be_visible()
+    snapshot=httpx.get(base+'/api/v1/products/'+created['id']).json()
+    assert len({binding['profileSnapshotSha256'] for binding in snapshot['distributionBindings']})==1
+    assert all(item['availability']=='planned' for item in snapshot['distributions'])
+    # Render-only fixture: no fake active services are persisted in the user's catalogue.
+    import copy
+    active=copy.deepcopy(snapshot)
+    for item in active['distributions']:item['availability']='sandbox'
+    page.route(base+'/api/v1/products/'+created['id'],lambda route:route.fulfill(json=active))
+    page.reload()
+    for label,href in [('Käytä JSON-rajapintaa','https://provider.fi/company'),('Tutustu rajapintakuvaukseen','https://provider.fi/docs'),('Pyydä W3C VC lompakkoon','https://issuer.fi/start?configuration=w3c'),('Pyydä SD-JWT VC lompakkoon','https://issuer.fi/start?configuration=sd-jwt')]:
+        expect(page.get_by_role('link',name=label,exact=True)).to_have_attribute('href',href)
+    # No external link is followed. Real active metadata gating is covered against catalog_test.

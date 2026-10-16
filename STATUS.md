@@ -1,3 +1,56 @@
+# Vaihe 2E — rinnakkaiset toimitustavat ja versioidut mappingit
+
+Pohjana yhdistetty main `5611be2` (PR #8 / 2D). Työhaara `feat/phase-2e-derived-validation`. Käyttäjän täsmennetty 2E-suunnitelma esitettiin ensin ja toteutettiin sen jälkeen. Main-haaraan ei yhdistetä automaattisesti. Alla olevat 2D/2C-toimitusten tulokset ovat historiaa.
+
+## Muutos aiempaan suunnitelmaan ja toteutus
+
+- Aiempi 2E-suunnitelma keskittyi JSON Schema/OpenAPI -johdannaisten tarkistuksiin. Käyttäjän täsmennyksen jälkeen pääkohteeksi tuli yksi tietotuote ja kolme tyypitettyä rinnakkaista toimitustapaa: JSON API, W3C VCDM 2.0 JSON-LD VC ja IETF SD-JWT VC. Johdannaistarkistus säilyi erillisenä, rajattuna lisätarkistuksena.
+- Distributions erottaa formaatin, protokollan, suojausprofiilin, saatavuuden, ympäristön, vastuuorganisaatiot ja yhteisen profiiliviitteen. W3C VC on oletuksena ensisijainen, kun se on mukana; eksplisiittinen primaryDistributionId tuetaan API:ssa ja käyttöliittymässä.
+- JSON API sisältää palvelun ja kuvauksen osoitteet, OpenAPI-/JSON Schema -artefaktiviitteet, tyypitetyn tunnistautumistavan, oikeudet ja ajantasaisuuden. Todistusjakeluilla ovat issuer/aloituslinkki, OpenID4VCI 1.0, erilliset configuration-tunnisteet, suojaus/voimassaolo/status-profiilit, kohdeluokat/edustaminen, maksu, tuki, oikeudellinen luokka ja lompakkonäyttö.
+- W3C VC:llä ovat VCDM 2.0, tyypit, kontekstit ja sisältöpolku. SD-JWT VC:llä ovat vct, profiiliversio, erillinen väitemapping sekä paljastamis- ja haltijasidontakäytännöt. SD-JWT:hen ei vaadita JSON-LD-kontekstia eikä sitä esitetä W3C VC:n samana kuorena.
+- Sama myöntäjäpalvelu voi tarjota molempia todistusmuotoja erillisillä konfiguraatioilla ja käyttää samaa lähde-APIa/sovitinta. Katalogi kuvaa ja ohjaa; sen metatietovienti ei ole lähdesisällön jakelurajapinta. Uusia lähdeintegraatioita, allekirjoituksia tai lompakkoprotokollaa ei toteutettu.
+- Kaikki toimitustavat sidotaan julkaistun tuoteversion samaan SHACL-snapshotiin. DistributionBindings sisältää tuotteen version, yhteisen snapshotin UUID/SHA-256:n ja mappingin version. Muuttunutta mappingia ei julkaista saman toimitustapa-ID:n vanhalla mapping-versiolla eikä versionumeroa alenneta.
+- Metadata-/mapping-tarkistus vertaa alkuperäisiä IRI-polkuja, sisäkkäisiä olioita, literaalien tietotyyppejä, luokkia ja min/maxCountia. Moniarvoisuus kuvataan /*-poluilla ja lapset oliovanhemman alle. Puuttuvat/ristiriitaiset/epäselvät mappingit, väärät skeemaviitteet tai JSON API:n skeemasta puuttuvat polut estävät uuden julkaisun.
+- 2D:n erillinen SHACL-esimerkki ja hyväksyntä säilyvät. DistributionValidation ja rajattu DerivedValidation kuuluvat sisältötarkisteeseen, erilliseen hyväksyntään ja muuttumattomaan versioon. Metadata, semanttinen esimerkki ja kryptografinen tarkistus erotetaan näkyvästi.
+- JSON Schema tukee alkuperäisiä draft 4/6/7/2019-09/2020-12-dialekteja, OpenAPI 3.0.x/3.1.x-versioita. Rajattu suora kenttävertailu ei väitä mallien ekvivalenssia eikä korvaa toimitustapojen sisäkkäistä metadataa. JSON-esimerkit ovat synteettisiä. Viitteitä ei noudeta ulkoisista lähteistä, prosessit ovat resurssirajattuja ja verkottomia.
+- Rakenteiset muokkauslomakkeet ja erilliset tuotesivutoiminnot. Planned/suspended ei saa aktiivista palvelutoimintoa. Muotokohtaiset toimintotekstit ovat Käytä JSON-rajapintaa / Tutustu rajapintakuvaukseen / Pyydä W3C VC lompakkoon / Pyydä SD-JWT VC lompakkoon.
+- Neljäs synteettinen esimerkki, jossa kaikki kolme ovat planned, lisätään kerran tunnettuun synteettiseen tuote–organisaatio-pariin. UUID-kollisiota, käyttäjän muokkauksia tai poistettua esimerkkiä ei palauteta alkuperäisiksi. Muita organisaatioita ei yhdistetä tai oikeuteta nimen perusteella.
+- Vanha issuance-luku ja vanhojen luonnosten kirjoitus säilyvät. Uuden kokoelman hiljainen pudottaminen vanhaan malliin estetään. Jo julkaistuja versioita ja snapshotteja ei kirjoiteta uudelleen. Ei uutta relaatiomigraatiota; head on edelleen 0004_publication.
+- ROADMAP, AGENTS, README, verkkodemon/arkkitehtuurin ohjeet, tavoitearkkitehtuuri ja VC-periaate päivitetty. Täsmällinen ratkaisu ja integraatiovaiheen hyväksymiskriteerit: docs/phase-2e.md. Codespacesin määrityksiin ei tehty muutoksia; portti 8000 / openBrowser / Private-ohje säilyvät.
+
+## Tässä tehtävässä todella ajettu
+
+- Lukittu uv-asennus: jsonschema 4.26.0, openapi-spec-validator 0.7.2 ja openapi-schema-validator 0.6.3 sekä niiden riippuvuudet. `UV_CACHE_DIR=/workspace/.cache/uv uv sync --locked` onnistui.
+- `npm run build --prefix apps/web`: TypeScript ja Vite-tuotantobuild onnistuivat. `./scripts/cloud-build.sh` rakensi Docker-imagen pilven proxy-/CA-reitillä TLS-tarkistuksia säilyttäen. `DOCKER_CONFIG=/workspace/.cache/docker docker compose up -d --no-build --wait`: app/db/keycloak healthy samoilla voluumeilla.
+- `.venv/bin/pytest tests/test_api.py tests/test_publication.py tests/test_profiles.py tests/test_semantic_validation.py tests/test_derived_validation.py tests/test_distributions.py tests/test_auth.py tests/test_migrations.py tests/test_public_url.py -q`: **90 läpäissyttä, 0 epäonnistunutta, 0 ohitettua**, lopullinen ajo 211,99 s. Yksi tyhjentävää catalog_test-kantaa käyttävä pytest-ajo kerrallaan.
+- Aiemmat 55 API-/auth-/SHACL-/migraatio-/osoitetestiä säilyivät. Lisäksi 18 johdannais- ja 17 toimitustapatestiä: alkuperäiset skeemadialektit, local-ref/OpenAPI/nullable, puuttuvat ja ristiriitaiset kentät, koodistot/taulukot, token-/salaisuusparametrien kielto, kolme muotoa, sama profiili, erilliset konfiguraatiot, sisäkkäiset mappingit, uusi mapping-versio, vanhat muuttumattomat versiot sekä fixtureiden muokkauksen/poiston säilyminen.
+- `BROWSER_BASE_URL=http://localhost:8000 .venv/bin/pytest tests/test_browser.py -q`: **9 läpäissyttä, 0 epäonnistunutta, 0 ohitettua**, lopullinen ajo 55,50 s. Oikea Chromium ja Keycloak: aiemmat seitsemän polkua, JSON-johdannaisen tiedostotuonti/virhe/korjaus/hyväksyntä/julkaisu sekä kolmen toimitustavan muokkaus, eri käyttäjän hyväksyntä, planned-julkaisu ja anonyymi näyttö.
+- Aktiivisten muotokohtaisten linkkien renderöinti tarkistettiin selaimessa korvatulla API-vastauksella. Tätä vastausta ei tallennettu katalogiin eikä palvelulinkkejä avattu. Aktiivisen metadatan oikeat backend-ehdot tarkistettiin erillisessä catalog_test-kannassa. Katalogiin jäävät selaintestijulkaisut ovat synteettisiä ja palvelukuvaukset planned-tilassa.
+- Yhteensä **99 eri testiä** läpäisi. Starlette/httpx- ja RDFLib-deprekaatiovaroitukset eivät ole ohituksia. Kyse on oikeellisuustesteistä, ei latenssi-/kuormitustavoitteen todennuksesta. Selainodotus sallii usean erillisen rajatun validointiprosessin vaatiman ajan.
+- Olemassa olevasta demokannasta tarkistettiin neljä aitoa ennen 2E:tä julkaistua versiota. Niiden koko sisältö vastaa alkuperäistä SHA-256:ta ja versio-API palauttaa saman sisällön/UUID:n/version/tarkisteen. Vanhoja julkaisuja ei muutettu.
+- Vanhojen vaiheiden 1/2A/2B kantojen migraatio-, alkuperäisten rivien säilymis- ja toistuvien käynnistysten testit läpäisivät. Käyttäjän nyt erikseen tilaama neljäs fixture on lisäys, ei alkuperäisten tuotteiden nollaus.
+- Alembic current: `0004_publication (head)`. Alembic check: `No new upgrade operations detected.` Migrations- ja .devcontainer-diff on tyhjä.
+- Codespacesin yhdistetty Compose validoitiin synteettisellä CODESPACE_NAME-arvolla: Keycloak samalla HTTPS-portin 8000 osoitteella, workspace service:app-verkossa ja openBrowser ennallaan.
+- `git diff --check` läpäisi. Tavallinen app-restart ja Compose-readiness läpäisivät. Ennen/jälkeen kaikkien tarkistettujen katalogirivien sisältö/tarkiste säilyi: 18 tuotetta/luonnosta, 3 organisaatiota, 5 jäsenyyttä, 12 profiilisnapshotia, 11 julkaisua/tarkastusta/outboxia ja 80 audit-tapahtumaa. Testien omat synteettiset julkaisut ja keskeneräiset kehitysluonnokset jäivät historiaan; alkuperäisiä tuotteita tai volumeita ei poistettu.
+
+Kehitysajoissa korjattiin vanhimmasta demokannasta puuttuvien maa-/organisaatiotunnisteiden vaikutus uuden fixturen lisäämiseen. Luotettava tunnistus käyttää tunnettua UUID-paria ja synteettisyyttä. Tässä kehitysympäristössä poistettiin kerran vain uuden, epäonnistuneen alustuskokeen oma phase-2e-distribution-demo-merkintä, kun ensin varmistettiin ettei neljättä tuotetta ollut luotu. Tuotteita, julkaisuja tai volumeita ei poistettu. Lisäksi selainkokeen viiden sekunnin odotus oli liian lyhyt usealle peräkkäiselle rajatulle validoinnille; odotus korjattiin ja käyttöliittymä näyttää käsittelyn olevan kesken. Lopulliset yllä raportoidut ajot läpäisivät.
+
+## Ajamattomat ja jatkovaiheen rajat
+
+- Windows/Docker Desktop, tavallinen `docker compose up --build` ilman pilven build-wrapperia, oikea GitHub Codespace/Private-portin pääsynvalvonta/automaattinen selainvälilehti ja GitHub Actions -etäajo jäivät ajamatta. Staattinen määritystarkistus ei todista näitä.
+- Ei elävän Tietomallit-palvelun hakua, lähde-APIa, oikeaa issuer-palvelua, todistusten muodostusta/allekirjoitusta, JWT:n tai haltijasidonnan kryptografista tarkistusta, OpenID4VCI/lompakkotoimitusta tai EUDIW-/EBW-yhteentoimivuuskoetta.
+- Tässä ei muunneta JSON-/purettuja VC-sisältöjä RDF:ksi eikä anneta JWT-merkkijonoa SHACL-moottorille. Hallittu muunnos ja saman sisällön vertailu kaikissa kolmessa muodossa ovat integraatiovaiheen hyväksymiskriteeri, eivät ajettu ominaisuus.
+- Mapping-profiili tukee yksiselitteisiä sisäkkäisiä sh:node/sh:class-polkuja, ei rekursiivisia tai mielivaltaisia SHACL-polkulausekkeita. Johdannaisten suora JSON-kenttävertailu on tätä suppeampi ja näkyvästi erillinen. Rajauksen ulkopuolinen kohta estää hyväksynnän; sitä ei hyväksytä hiljaisesti.
+- Ei QEAA-, DCAT-AP-, tuotantoturvallisuus-, kuormitus- tai saavutettavuusvaatimustenmukaisuuden väitettä. Synteettisyys on käyttäjän vahvistus, ei automaattinen henkilötietotunnistin. Palvelun saatavuus on kuvattu metadata, ei saavutettavuus-/luottamusmittaus.
+
+## Toimitus
+
+Haara `feat/phase-2e-derived-validation` on pushattu GitHubiin. Pull requestia **ei luotu**: `gh pr create --base main --head feat/phase-2e-derived-validation --title ... --body-file docs/pull-request.md` palautti `Post https://api.github.com/graphql: Forbidden`. Myös REST-varayritys `gh api --method POST repos/jgmikael/metatietovaranto/pulls --input /tmp/phase2e-pr.json` palautti Forbidden-vastauksen. Git-push onnistui; GitHub API -avaus estyi. Valmis kuvaus on docs/pull-request.md. PR:n voi avata selaimessa: https://github.com/jgmikael/metatietovaranto/compare/main...feat/phase-2e-derived-validation . Main-haaraan ei yhdistetty muutoksia.
+
+---
+
+# Aikaisemmat toimitukset (historia, eivät tämän ajon tuloksia)
+
 # Vaihe 2D — offline SHACL Core ja synteettinen esimerkkisisältö
 
 Tarkistettu 15.10.2026. Pohjana main `61ca4ed` (PR #7, vaihe 2C, yhdistetty käyttäjän hyväksynnällä). Työhaara `feat/phase-2d-shacl`. PR:ien 5 ja 6 semanttinen ja VC-toimituksen periaate säilyvät sitovina. Mainiin ei yhdistetä automaattisesti.

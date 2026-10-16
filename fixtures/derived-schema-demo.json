@@ -1,0 +1,8 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Synthetic company content; not a real Tietomallit export",
+  "type": "object",
+  "properties": {"companyName": {"type": "string"}},
+  "required": ["companyName"],
+  "additionalProperties": false
+}
