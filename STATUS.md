@@ -26,7 +26,9 @@ Aidosta muuttamattomasta Tietomallit-exportista ei voitu tehdä hyväksymiskoett
 
 **En suosittele yhdistämistä vielä:** käyttäjän vaatima aidon julkisen muuttamattoman Tietomallit-exportin testi puuttuu noutoeston vuoksi. `fixtures/tietomallit/provenance.json` kertoo virallisen työkalurepositorion testiaineiston alkuperän/tarkisteen ja sen testimuokkaukset. Koko aineiston rajoitteet raportoidaan; erillinen projektio ei muuta alkuperäistä eikä osoita koko profiilin tukea. Tarkastettava PR-kuvaus on [docs/pull-request.md](docs/pull-request.md). Automaattista yhdistämistä ei tehdä.
 
-PR:n toimitustulos kirjataan alle ennen viimeistelyä.
+Toteutuscommit `21a04c9` on työnnetty GitHubiin haaraan `feat/phase-2h-technical-packages`. PR:n avaaminen yritettiin sekä `gh pr create --draft --body-file docs/pull-request.md` (GraphQL) että REST `POST /repos/jgmikael/metatietovaranto/pulls` -pyynnöllä. Molemmat estyivät ympäristön **Forbidden**-vastaukseen. **PR:ää ei ole luotu.** Native git push onnistui; uutta tokenia tai oikeuksien kiertotapaa ei käytetty.
+
+[Avaa tarkastettava PR käsin](https://github.com/jgmikael/metatietovaranto/compare/main...feat/phase-2h-technical-packages?expand=1), base `main`, compare `feat/phase-2h-technical-packages`; valmis kuvaus on `docs/pull-request.md`. Avaa luonnoksena avoimen aidon exportin hyväksymiskokeen vuoksi. [Kokeile haaran Codespacessa](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2h-technical-packages); täsmällinen kokeilupolku README:n alussa. Main säilyi commitissa `ac002ad`; automaattista yhdistämistä ei tehty.
 
 ---
 
