@@ -1,3 +1,56 @@
+# Vaihe 2G — julkaisuversioiden elinkaari
+
+Tarkistettu 17.10.2026. Pohjana main `79dc9d1`, käyttäjän PR #10:llä yhdistämä 2F. Työhaara `feat/phase-2g-lifecycle`. Toteutus vastaa käyttäjän hyväksymää 2G-ehdotusta: deprecated/withdrawn, muuttumaton tapahtumahistoria, käyttöoikeudet, auditointi, haku, tuotesivut ja vientien tilatieto. Täsmällinen sopimus: [docs/phase-2g.md](docs/phase-2g.md). Ei vaihetta 3 eikä automaattista yhdistämistä mainiin.
+
+## Toteutettu
+
+- Versiokohtainen published → deprecated/withdrawn ja deprecated → withdrawn. Withdrawn on lopullinen tälle versiolle; sisältö palautetaan uutena normaalisti hyväksyttynä julkaisuna. Tapahtumaton julkaisu on published ilman vanhojen rivien täydentämistä.
+- Omistajaorganisaation publisher, oikea istunto, CSRF, erillinen elinkaari-ETag/If-Match ja 24 h idempotenssi. Editor/reviewer/reader tai pelkkä tarjoajaorganisaation publisher ei saa oikeutta. Julkinen perustelu vaaditaan; käyttäjän subject ei sisälly julkiseen elinkaarihistoriaan, vaan suojattuun auditointiin.
+- Korvaava versio on saman tuotteen myöhempi julkaisu, joka ei ole withdrawn kirjaushetkellä. Itseviitteet, takautuvat ketjut, toisen tuotteen/luonnoksen viitteet ja käytöstä poistetut kohteet estetään. Mahdollinen myöhempi kohteen tilamuutos ei kirjoita aiempaa tapahtumaa uudelleen.
+- Uusi Alembic `0005_lifecycle`: lifecycle_events ja lifecycle_outbox_events, vierasavaimet/rajoitteet ja append-only-triggerit. Aiemmat revisiot säilyvät. Tuoterivilukitus sarjoittaa elinkaarikomennot ja julkaisemisen. Tapahtuma, audit, oma outbox ja idempotenssivastaus samassa transaktiossa. Vanha julkaisuoutbox säilyy.
+- GET `/api/v1/products/{id}/versions/{version}/lifecycle` ja POST `/api/v1/products/{id}/lifecycle-events`. Luonnosta, hyväksyntää, ProductVersion-sisältöä, profiilisnapshotia tai niiden tarkisteita ei muuteta.
+- Oletushaku näyttää uusimmat published/deprecated-versiot. Withdrawn-uusimman tilalle ei nosteta vanhempaa versiota. lifecycleStatus=current/published/deprecated/withdrawn/all vaikuttaa ennen sivutusta/lukumääriä. Katalogiviennin includeWithdrawn=true mahdollistaa poistuneiden havaitsemisen.
+- Nykyversion lukuesitys/vienti saa erillisen lifecycle-tiedon tapahtuman jälkeen. contentHash koskee edelleen alkuperäistä sisältöä. Versio-API, version URI ja export?version=... säilyttävät alkuperäisen snapshotin/ETagin; ajantasainen tila ilmoitetaan X-Product-Lifecycle-Status- ja Link: describedby -otsakkeilla sekä erillisenä resurssina. JSON-LD:n elinkaaritieto on erillinen paikallinen demo-resurssi.
+- Selain: varoitus, historia, julkaisijan lomake, korvaavan version valinta ja hakurajaus. Withdrawn-version palvelutoiminnot estetään myös historiallisessa versiossa ja vanhassa issuance-näkymässä. Tilatiedon hakuvika estää palvelutoiminnot. Metatietojen ja profiilien lataus säilyy. Ulkoisten palvelujen oikeuksia tai myönnettyjä todistuksia ei peruta katalogimerkinnällä.
+- Varhainen 2C-snapshot voi olla ilman versionUri-kenttää. Lukuesitys johtaa silloin version URI:n alkuperäisestä tuote-URI:sta ja version tunnuksesta; puuttuvan tuote-URI:n tapauksessa nykyisestä perusosoitteesta ja UUID:stä. Vanhan snapshotin tavallinen JSON/JSON-LD-sisältö ja tarkiste säilyvät. Tästä lisättiin regressiotesti.
+- README, ROADMAP, AGENTS, tavoitearkkitehtuurin rajaus, arkkitehtuuri/verkkodemo, PR-kuvaus ja CI:n testilista päivitetty. .devcontainer, Private-portin ohje, openBrowser, fixtures, OIDC ja sisältöhyväksynnän säännöt säilyvät.
+
+## Tässä tehtävässä todella ajettu
+
+- Nykyinen pilviympäristö tarkistettiin cloud-environment-onboarding:setup-taidon avulla; PostgreSQL ja Keycloak käynnistettiin olemassa olevilla volyymeilla. Uusia ympäristöasetuksia, tunnuksia tai riippuvuuksia ei tarvittu eikä ympäristömäärityksiä tallennettu uudelleen. `UV_CACHE_DIR=/workspace/.cache/uv uv sync --locked` onnistui.
+- `npm run build --prefix apps/web`: TypeScript/Vite-tuotantobuild läpäisi. `./scripts/cloud-build.sh`: lopullinen Docker-build läpäisi nykyisellä proxy-/CA-reitillä ja TLS-tarkistuksilla. `DOCKER_CONFIG=/workspace/.cache/docker docker compose up -d --no-build --wait`: app/db/keycloak healthy.
+- **Suoraa Compose-buildia yritettiin:** `DOCKER_CONFIG=/workspace/.cache/docker docker compose up --build -d --wait` epäonnistui pipin uv-asennuksessa build-kontin DNS-virheeseen (`Temporary failure in name resolution`). Tämä ei ole läpäissyt tarkistus. Käynnistys ja lopulliset selaintestit tehtiin toimivalla cloud-build.sh-imagella ja --no-build-komennolla. Windowsin toimintaa ei päätellä pilven DNS-virheestä tai wrapper-buildin onnistumisesta.
+- `.venv/bin/pytest tests/test_api.py tests/test_publication.py tests/test_profiles.py tests/test_semantic_validation.py tests/test_derived_validation.py tests/test_distributions.py tests/test_conversion.py tests/test_lifecycle.py tests/test_auth.py tests/test_migrations.py tests/test_public_url.py -q`: lopullinen ajo **147 läpäissyttä**, 0 epäonnistunutta/ohitettua, 284,71 s. Vain yksi tyhjentävää catalog_test-kantaa käyttävä ajo kerrallaan.
+- Aiemmat 130 API-testiä säilyivät. Lisäksi 16 elinkaaritestiä ja yksi täytetyn 0004-kannan migraatiotesti. Todennettu käyttöoikeudet ja omistaja vs tarjoaja, CSRF, erillinen ETag, idempotenssi ja rinnakkaiset pyynnöt, siirtymät/korvaava versio, rollback, DB-triggerit, audit/outbox, haku/sivutus/URI:t/viennit, restart ja vanha versionUri-kentätön snapshot.
+- Tyhjän kannan, vaiheiden 1/2A/2B kantojen ja toistuvien migraatioiden säilymistestit läpäisivät. Uusi testi täyttää toimitetun 0004-skeeman julkaisuineen, tarkastuksineen, profiileineen, luonnoksineen, audit-/outbox-riveineen, oikeuksineen ja tuntemattomine JSON-kenttineen; vanhat rivit pysyvät samoina 0005:n, toiston ja oikean app-startupin jälkeen.
+- `BROWSER_BASE_URL=http://localhost:8000 .venv/bin/pytest tests/test_browser.py -q`: lopullista imagea vasten **12 läpäissyttä**, 0 epäonnistunutta/ohitettua, 81,39 s. Oikea Chromium ja Keycloak, aiemmat kymmenen polkua sekä uusi deprecated → withdrawn → hakurajaus/pysyvä versiosivu ja vanhan issuance-palvelulinkin esto tilan puuttuessa/withdrawn-tilassa.
+- Kolmen muodon aktiivisten linkkien renderöinti ja tilatiedon hakuvika tarkistettiin selaimen muistissa korvatuilla API-vastauksilla. Olemattomia aktiivisia palveluita ei tallennettu demokatalogiin eikä ulkoisia linkkejä avattu. Varsinaiset tilamuutokset tehtiin oikean API:n ja publisher-istunnon kautta. Katalogiin jäävät palvelukuvaukset ovat planned.
+- Yhteensä **159 erilaista testiä** läpäisi. Starlette/httpx- ja RDFLib-deprekaatiovaroitukset eivät ole ohituksia. Ei kuormitus-/latenssitavoitteen mittausta.
+- Alembic current: `0005_lifecycle (head)`. Alembic check: `No new upgrade operations detected.` Aiemmat 0001–0004-migraatiot ja .devcontainer säilyivät diffittä.
+- Imagen ensimmäinen 0004 → 0005 -käynnistys säilytti kaikkien tarkistettujen vanhojen katalogirivien määrät ja koko sisällön SHA-256:t; elinkaaritaulut alkoivat tyhjinä. Myös korjatun imagen päivitys ja lopullinen tavallinen app-restart säilyttivät kaikki tarkistetut rivit.
+- Lopullisessa restartissa ennallaan: 32 tuotetta/luonnosta, 3 organisaatiota, 5 jäsenyyttä, 1 semanttinen profiili / 20 snapshotia, 25 julkaisua/tarkastusta/julkaisuoutboxia, 164 audit-tapahtumaa, 4 alustusmerkintää ja 4 elinkaaritapahtumaa/elinkaarioutboxia. Selainajojen omat synteettiset julkaisut ja elinkaarihistoriat jäävät muuttumattomaan historiaan. Volyymeja, alkuperäisiä tuotteita tai käyttäjän muutoksia ei nollattu.
+- Kaikkien nykyisten 25 julkaisuversion sisältö vastaa alkuperäistä SHA-256:ta ja versio-API palauttaa täsmälleen tallennetun snapshotin. Näihin kuuluu aito aiemman 2C-toimituksen versio ilman versionUri-kenttää. Julkinen haku toimii sen kanssa.
+- Codespacesin yhdistetty Compose tarkistettu synteettisellä CODESPACE_NAME-arvolla: HTTPS /identity samalla portilla 8000, workspace service:app-verkossa, openBrowser ennallaan. `git diff --check` läpäisi.
+
+Ensimmäinen laaja ajo läpäisi 146 API-testiä, mutta ensimmäisessä selainajossa kolme testiä epäonnistui julkisen haun 500-virheeseen: elinkaariluku oletti versionUri-kentän myös kaikkein varhaisimmassa 2C-snapshotissa. Varsinaista vanhaa dataa ei korjattu, poistettu tai siemennetty uudelleen. Lukuyhteensopivuus korjattiin, lisättiin regressiotesti ja ajettiin yllä olevat lopulliset 147 + 12 testiä onnistuneesti. Epäonnistunut suora Compose-build on erillinen yllä raportoitu pilven DNS-rajoite.
+
+## Ajamattomat ja rajat
+
+- Windows/Docker Desktop, oikea GitHub Codespace/Private-portin pääsynvalvonta/automaattinen selainvälilehti ja GitHub Actions -etäajo jäivät ajamatta. Staattinen määritystarkistus ei todenna niitä. Tavallinen Compose-build tässä pilvessä epäonnistui kuten yllä, joten sitä ei esitetä onnistuneena.
+- Ei archived/retired-tilaa, lopetusajastusta, tuotannon roolihallintaa tai elinkaaren erillistä kahden henkilön hyväksyntäprosessia. Publisherin perusteltu operatiivinen komento ei muuta sisältöhyväksyntää.
+- Ei ulkoista outbox-kuluttajaa, lähde-/issuer-/wallet-integraatiota, ulkoisen käyttöoikeuden perumista tai todistuksen revokaatiota. Jo avoin vanha välilehti ei ole tarjoajan pääsynvalvonta; sivun lataus hakee tuoreen tilan.
+- Ei DCAT-AP-, QEAA-, EUDIW-/EBW-, tuotantoturvallisuus-, kuormitus- tai saavutettavuusvaatimustenmukaisuusväitettä. Alkuperäinen muuttumaton metatieto voi sisältää palveluosoitteita myös withdrawn-tilassa; ajantasainen erillinen elinkaari on tarkistettava ennen niiden käyttöä.
+
+## Toimitus
+
+Työhaara `feat/phase-2g-lifecycle`, valmis kuvaus docs/pull-request.md. PR-avaamisen tulos kirjataan toimituksen lopuksi. Main-haaraan ei yhdistetä automaattisesti.
+
+Kokeilu ennen yhdistämistä: https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2g-lifecycle . Portti 8000 Private. `vero` / `demo-vero` muokkaa/lähettää tarkastukseen, `yritys` / `demo-yritys` hyväksyy ja julkaisee. Julkaisun tuotesivun Version elinkaari -lomakkeella yritys voi merkitä version deprecated/withdrawn. Tarkka polku ja API-sopimus READMEssä.
+
+---
+
+# Aikaisemmat toimitukset (historia, eivät tämän ajon tuloksia)
+
 # Vaihe 2F — hallittu synteettisen JSON-sisällön RDF-esikatselu
 
 Tarkistettu 16.10.2026. Käyttäjä yhdisti 2E:n PR #9:llä; pohjana main `feca7b8`. Työhaara `feat/phase-2f-json-rdf`. ROADMAP ei nimennyt seuraavaa osatehtävää, joten ennen toteutusta rajattiin hallittu JSON → RDF -muunnos paikalliseksi valmisteluksi. Suunnitelma ja täsmällinen muunnossopimus: [docs/phase-2f.md](docs/phase-2f.md). Vaiheeseen 3 ei siirrytty. Main-haaraan ei yhdistetä automaattisesti.

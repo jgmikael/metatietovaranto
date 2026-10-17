@@ -91,7 +91,7 @@ def test_legacy_upgrade_preserves_every_field_and_does_not_merge_names(migration
 def test_empty_upgrade_and_repeat_start_seed_only_once(migration_database):
     upgrade_database(engine)
     with engine.connect() as connection:
-        assert connection.scalar(text('SELECT version_num FROM alembic_version'))=='0004_publication'
+        assert connection.scalar(text('SELECT version_num FROM alembic_version'))=='0005_lifecycle'
         assert connection.scalar(text('SELECT count(*) FROM products'))==0
     with TestClient(app) as client:
         with engine.connect() as connection:
@@ -138,7 +138,7 @@ def test_initial_revision_matches_phase1_and_can_be_upgraded(migration_database)
     upgrade_database(engine, '0001_phase1')
     upgrade_database(engine)
     with engine.connect() as connection:
-        assert connection.scalar(text('SELECT version_num FROM alembic_version'))=='0004_publication'
+        assert connection.scalar(text('SELECT version_num FROM alembic_version'))=='0005_lifecycle'
 
 
 @pytest.mark.parametrize("starting_revision", ["0002_organizations", "0003_auth"])
@@ -172,3 +172,45 @@ def test_phase2a_or_2b_upgrade_preserves_organizations_and_products(migration_da
         assert connection.scalar(text('SELECT count(*) FROM organization_memberships'))==(1 if starting_revision=='0003_auth' else 0)
         if starting_revision=='0003_auth':
             assert connection.execute(text("SELECT role FROM organization_memberships WHERE subject='existing-subject'")).scalar_one()=='reader'
+
+
+def test_phase2f_publication_history_survives_lifecycle_migration(migration_database):
+    """Populate the shipped 0004 tables independently; compare every old row after upgrade."""
+    from apps.api.profiles import checksum
+    upgrade_database(engine,'0004_publication')
+    org,product,profile,snapshot,draft,review,version,audit,outbox=[uuid4() for _ in range(9)]
+    timestamp=datetime(2026,2,3,4,5,6,123456,tzinfo=timezone.utc)
+    content={'id':str(product),'version':'1.0.0','versionUri':f'https://catalog.example/id/products/{product}/versions/1.0.0',
+             'preservedUnknown':{'nested':['äöå',1,False]},'issuance':{'serviceAvailability':'planned'}}
+    manifest={'original':'synthetic SHACL snapshot bytes and unknown metadata remain unchanged'}
+    with engine.begin() as connection:
+        metadata=MetaData();metadata.reflect(connection)
+        rows={
+            'organizations':dict(id=org,legal_name='Synteettinen aiempi organisaatio',country='FI',identifiers=[{'scheme':'test','value':'retained'}],synthetic=True),
+            'products':dict(id=product,owner_organization_id=org,provider_organization_id=org,title='Muokattu 2F-tuote',description='Käyttäjän muutokset säilyvät',provider='Säilyvä nimi',theme='Testi',metadata={'synthetic':True,'unknown':[False,42]},modified_at=timestamp),
+            'semantic_profiles':dict(id=profile,profile_uri='urn:synthetic:old-profile'),
+            'profile_snapshots':dict(id=snapshot,profile_id=profile,owner_organization_id=org,manifest=manifest,checksum=checksum(manifest),graph_hash='original-graph-hash',created_at=timestamp),
+            'drafts':dict(id=draft,product_id=product,content=content,profile_snapshot_id=snapshot,revision=17,status='published',checksum=checksum(content),contributors=['retained-writer'],approved_review_id=review,modified_at=timestamp),
+            'reviews':dict(id=review,draft_id=draft,revision=16,checksum=checksum(content),reviewer='retained-reviewer',decision='approved',reason='Synteettisen aiemman julkaisun hyväksyntä',source_reviewed=True,created_at=timestamp),
+            'product_versions':dict(id=version,product_id=product,version='1.0.0',sequence=1,content=content,checksum=checksum(content),profile_snapshot_id=snapshot,review_id=review,publisher='retained-publisher',created_at=timestamp),
+            'audit_events':dict(id=audit,organization_id=org,product_id=product,actor='retained-publisher',action='product.published',before_hash=None,after_hash=checksum(content),reason='Säilyvä audit-perustelu',details={'important':'retained'},created_at=timestamp),
+            'outbox_events':dict(id=outbox,version_id=version,payload={'type':'product.published','retained':True},created_at=timestamp),
+            'organization_memberships':dict(subject='retained-editor',organization_id=org,role='editor'),
+            'demo_initialization':dict(name='phase-1-fixtures'),
+        }
+        for name,values in rows.items():connection.execute(metadata.tables[name].insert().values(**values))
+    def existing_rows():
+        with engine.connect() as connection:
+            return {name:sorted(json.dumps(row,sort_keys=True,ensure_ascii=False) for row in connection.execute(text(f'SELECT to_jsonb(t) FROM "{name}" t')).scalars()) for name in rows}
+    before=existing_rows()
+    upgrade_database(engine);upgrade_database(engine)
+    assert existing_rows()==before
+    with engine.connect() as connection:
+        assert connection.scalar(text('SELECT count(*) FROM lifecycle_events'))==0
+        assert connection.scalar(text('SELECT count(*) FROM lifecycle_outbox_events'))==0
+        assert connection.scalar(text('SELECT version_num FROM alembic_version'))=='0005_lifecycle'
+    with TestClient(app) as client:assert client.get('/health/ready').status_code==200
+    after=existing_rows()
+    for name in rows:
+        if name=='demo_initialization':assert set(before[name])<=set(after[name])
+        else:assert after[name]==before[name],name
