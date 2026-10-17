@@ -43,7 +43,7 @@ Ensimmäinen laaja ajo läpäisi 146 API-testiä, mutta ensimmäisessä selainaj
 
 ## Toimitus
 
-Työhaara `feat/phase-2g-lifecycle`, valmis kuvaus docs/pull-request.md. PR-avaamisen tulos kirjataan toimituksen lopuksi. Main-haaraan ei yhdistetä automaattisesti.
+Haara `feat/phase-2g-lifecycle` on pushattu GitHubiin (toteutuscommit `1146932`). Pull requestia **ei luotu**: `gh pr create --base main --head feat/phase-2g-lifecycle --title ... --body-file docs/pull-request.md` palautti `Post https://api.github.com/graphql: Forbidden`. Myös REST-varayritys `gh api --method POST repos/jgmikael/metatietovaranto/pulls --input /tmp/phase2g-pr.json` palautti Forbidden-vastauksen. Git-push onnistui, mutta GitHub API -avaus estyi. Valmis kuvaus: docs/pull-request.md. Avaa PR selaimessa: https://github.com/jgmikael/metatietovaranto/compare/main...feat/phase-2g-lifecycle . Main-haaraan ei yhdistetty muutoksia.
 
 Kokeilu ennen yhdistämistä: https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2g-lifecycle . Portti 8000 Private. `vero` / `demo-vero` muokkaa/lähettää tarkastukseen, `yritys` / `demo-yritys` hyväksyy ja julkaisee. Julkaisun tuotesivun Version elinkaari -lomakkeella yritys voi merkitä version deprecated/withdrawn. Tarkka polku ja API-sopimus READMEssä.
 
