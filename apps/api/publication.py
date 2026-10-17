@@ -16,6 +16,7 @@ from apps.api.profiles import checksum, can_read_snapshot, snapshot_summary
 from apps.api.semantic_validation import validate_snapshot, current_report
 from apps.api.derived_validation import validate_derived, derived_errors
 from apps.api.distributions import normalize_distributions, validate_distributions, distribution_errors
+from apps.api.conversion import ConversionRequest, conversion_preview
 
 
 def now():return datetime.now(timezone.utc)
@@ -292,6 +293,20 @@ def build_publication_router(engine,base_url,jsonld):
             draft=session.get(Draft,draft_id)
             if draft is None:raise HTTPException(404)
             return save(draft.product_id,data,request,response)
+    @router.post('/api/v1/drafts/{draft_id}/conversion-preview')
+    def preview_conversion(draft_id:UUID,data:ConversionRequest,request:Request,response:Response):
+        with Session(engine) as session:
+            found=session.get(Draft,draft_id)
+            if found is None:raise HTTPException(404)
+            product,identity=get_owned(session,request,found.product_id,write=True)
+            require_editor(session,identity,product.owner_organization_id)
+            draft=get_draft(session,product);check_etag(request,draft)
+            snapshot=session.get(ProfileSnapshot,draft.profile_snapshot_id) if draft.profile_snapshot_id else None
+            if snapshot is None or not draft.content.get('distributions'):
+                raise HTTPException(422,'Tallenna ensin yhteinen profiili ja toimitustapojen mappingit')
+            result=conversion_preview(snapshot,draft.content['distributions'],data.model_dump(mode='json')['examples'])
+            response.headers['ETag']=etag(draft)
+            return result|{'draftRevision':draft.revision,'draftContentHash':draft.checksum}
     @router.post('/api/v1/products/{product_id}/drafts')
     def next_draft(product_id:UUID,request:Request,response:Response):
         with Session(engine) as session:

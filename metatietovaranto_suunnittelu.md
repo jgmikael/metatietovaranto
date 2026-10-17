@@ -1,3 +1,5 @@
+> Vaiheen 2F rajattu paikallinen JSON → RDF -esikatselu on kuvattu [docs/phase-2f.md](docs/phase-2f.md). Se ei toteuta todistusten myöntämistä, JWT:n purkamista, JSON-LD-kontekstin laajennusta tai kryptografista tarkistusta.
+
 # Metatietovarannon toteutussuunnitelma ja tekoälykoodauksen kehote
 
 Versio 1.2 · 14.10.2026 · Toteutusehdotus Suomen julkishallinnon käyttöön

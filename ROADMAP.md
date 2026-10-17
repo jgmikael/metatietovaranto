@@ -73,9 +73,20 @@ Käyttäjän täsmentämä rajaus, pohjana main `5611be2` (2D / PR #8).
 - Aiemmin aloitettu JSON Schema/OpenAPI -johdannaisten ja synteettisten JSON-esimerkkien tarkistus säilyy erillisenä rajattuna lisätarkistuksena. Suoran kenttävertailun rajaus ei rajoita toimitustapamappingien sisäkkäistä metadataa.
 - Ei lähdesisällön palvelua, todistusten muodostusta/allekirjoitusta, JWT:n tarkistusta tai lompakkointegraatiota. Ratkaisu ja integraation hyväksymiskriteerit: docs/phase-2e.md.
 
+## Vaihe 2F — hallittu synteettisen JSON-sisällön RDF-esikatselu
+
+Jatko käyttäjän yhdistämän PR #9:n jälkeen, pohjana main `feca7b8`. Rajaus: docs/phase-2f.md.
+
+- Editorin yksityinen, tallentamaton esikatselu luonnoksen nykyisillä toimitustapamappingeilla ja yhteisellä lukitulla profiililla. Istunto, organisaatioraja, CSRF ja If-Match.
+- JSON API:n synteettinen sisältö, W3C:n sisältöpolun olio ja SD-JWT:n erillinen synteettinen väiteolio. Ei kuorta, JWT:n purkamista tai lompakkointegraatiota.
+- Yksiselitteinen juuriluokka, sisäkkäiset oliot ja moniarvoiset kentät, eksplisiittiset XSD-literaalit. Kartoittamattomat, häviävät ja tukemattomat kohdat hylätään.
+- Lukitun JSON API -skeeman tarkistus, hallittu muunnos, 2D:n offline SHACL ja RDF-graafien isomorfinen vertailu erillisinä. Sidonta luonnoksen, profiilin, mappingien ja syötteiden tarkisteisiin.
+- Selainkokeilu valmiilla synteettisellä sisällöllä. Ei fixtureiden tai aiempien julkaisujen muutosta, uutta relaatiomigraatiota tai uusia julkaisuehtoja.
+- Varsinaiset lähde-/todistuspalvelut, kuoriskeemat, kontekstin laajennus, SD-JWT-profiilin purku ja kryptografia jäävät vaiheeseen 3.
+
 ## Vaiheen 2 myöhemmät osat — erillinen toimeksianto
 
-Laajemmat JSON Schema/OpenAPI-kattavuuskartoitukset ja hallittu JSON → RDF -sisältömuunnos, laajemmat SHACL-profiilit, DCAT-AP-vientien vaatimustenmukaisuus, retired/withdrawn/deprecated/archived-elinkaaret, jäsenyyksien hallintakäyttöliittymä, tuotannon IdP, kielituen laajennukset ja kuormitusvaatimukset. Vaiheen 2D offline Core -tarkistus ja erillinen ihmistarkastus eivät korvaa näitä tai VC-kuoren/suojauksen tarkistusta.
+Laajemmat JSON Schema/OpenAPI-kattavuuskartoitukset ja muunnoksen laajentaminen IRI-identiteetteihin, RDF-listoihin ja monijuurisiin profiileihin, laajemmat SHACL-profiilit, DCAT-AP-vientien vaatimustenmukaisuus, retired/withdrawn/deprecated/archived-elinkaaret, jäsenyyksien hallintakäyttöliittymä, tuotannon IdP, kielituen laajennukset ja kuormitusvaatimukset. Vaiheen 2D offline Core -tarkistus ja erillinen ihmistarkastus eivät korvaa näitä tai VC-kuoren/suojauksen tarkistusta.
 
 ## Vaihe 3 — ulkoiset integraatiot
 

@@ -1,3 +1,52 @@
+# Vaihe 2F — hallittu synteettisen JSON-sisällön RDF-esikatselu
+
+Tarkistettu 16.10.2026. Käyttäjä yhdisti 2E:n PR #9:llä; pohjana main `feca7b8`. Työhaara `feat/phase-2f-json-rdf`. ROADMAP ei nimennyt seuraavaa osatehtävää, joten ennen toteutusta rajattiin hallittu JSON → RDF -muunnos paikalliseksi valmisteluksi. Suunnitelma ja täsmällinen muunnossopimus: [docs/phase-2f.md](docs/phase-2f.md). Vaiheeseen 3 ei siirrytty. Main-haaraan ei yhdistetä automaattisesti.
+
+## Toteutettu
+
+- Editorin yksityinen muunnoslaboratorio luonnossivulla ja POST `/api/v1/drafts/{draftId}/conversion-preview`. Oikea istunto, omistajaorganisaation editor-jäsenyys, CSRF ja If-Match. Kokeilu ei muuta luonnosta, hyväksyntää, auditointisisältöä tai julkaisuja eikä tallenna syötteitä/raporttia.
+- Tallennetun luonnoksen toimitustapamappingit ja yhteinen lukittu SHACL-snapshot. JSON API -sisältöolio, W3C:n sisältöpolun mukainen olio ja SD-JWT:n erillinen synteettinen väiteolio. Ei JWT:n purkamista tai kokonaisen todistuksen käsittelyä.
+- Yksi juuriluokka, eksplisiittiset IRI-ominaisuuspolut, sisäkkäiset oliot ja vanhempaansa kohdistuvat taulukkoalkiot. Eksplisiittiset XSD-literaalit; decimal tarkkana merkkijonona. Anonyymit RDF-solmut eivät keksi liiketoimintatunnisteita. Null, ylimääräinen kenttä, ristiriitainen mapping, häviävä toistuva literaali tai tukematon rakenne estää onnistumisen.
+- JSON API:n liitettyjen alkuperäisen dialektin JSON Schema/OpenAPI -skeemojen rakenne-/sisältötarkistus, hallittu muunnos ja 2D:n SHACL Core erillisinä tuloksina. Vähintään kahden onnistuneen esimerkin RDF-graafien isomorfinen vertailu. Samuus koskee järjestyksettömiä RDF-ominaisuuksia, ei OWL-ekvivalenssia tai yleistä literaalien arvonormalisointia.
+- Raportin sidonta luonnoksen revisioon/tarkisteeseen, profiilin UUID/SHA-256:een ja mappingien versioihin/tarkisteisiin sekä syötteiden tarkisteisiin. Raporttia ei hyväksytä asiakkaan asettamaksi julkaisutodisteeksi. Nykyiset 2D/2E-julkaisuehdot säilyvät.
+- Verkoton aliprosessi: CPU 5 s, muisti 512 MiB, seinäkello 15 s. 1–3 esimerkkiä, UTF-8 100 kB per sisältö / 200 kB yhteensä, JSON syvyys 20 / solmut 5 000, RDF 2 000 kolmikkoa. Myös raskaan SHACL-regexin oikea prosessirajan testi.
+- Selainlomake, synteettisyysvahvistus, valmiin neljännen demon täyttö, eri/virheellisten sisältöjen näyttö, RDF-teksti ja tarkisteet. Muutos tyhjentää vanhan tuloksen ja vahvistuksen. Sivun lataus tyhjentää kokeilun.
+- README, ROADMAP, AGENTS, arkkitehtuuri, verkkodemo, 2E-jatkorajaus ja tavoitearkkitehtuurin täsmennys päivitetty. CI:n API-testilistaan lisätty muunnostestit.
+- Ei relaatiomigraatiota tai fixtures-muutosta. .devcontainer ja aiemmat migraatiot säilyvät ennallaan. Private-portin ohje ja automaattinen openBrowser säilyvät.
+
+## Tässä tehtävässä todella ajettu
+
+- `UV_CACHE_DIR=/workspace/.cache/uv uv sync --locked`: lukittu asennus onnistui; uusia riippuvuuksia ei lisätty.
+- `npm run build --prefix apps/web`: lopullinen TypeScript/Vite-build läpäisi. `./scripts/cloud-build.sh`: lopullinen Docker-build läpäisi pilven proxy-/CA-reitillä. `DOCKER_CONFIG=/workspace/.cache/docker docker compose up -d --no-build --wait`: app/db/keycloak healthy nykyisillä volyymeilla.
+- `.venv/bin/pytest tests/test_api.py tests/test_publication.py tests/test_profiles.py tests/test_semantic_validation.py tests/test_derived_validation.py tests/test_distributions.py tests/test_conversion.py tests/test_auth.py tests/test_migrations.py tests/test_public_url.py -q`: **127 läpäissyttä**, 0 epäonnistunutta/ohitettua, 266,48 s. Tässä kokoelmassa muunnostestejä oli 37. Aiemmat 90 API-/auth-/julkaisu-/semantiikka-/migraatiotestiä säilyivät.
+- Viimeisen aikaleimarajauksen ja kolmen uuden reunatapauksen jälkeen `.venv/bin/pytest tests/test_conversion.py -q`: **40 läpäissyttä**, 0 epäonnistunutta/ohitettua, 52,72 s. Tämä on lopullisen muunnostoteutuksen koko testitiedosto. Laajaa kokoelmaa ja kohdistettua uusinta-ajoa ei ajettu samanaikaisesti samaan catalog_test-kantaan.
+- API-puolella yhteensä **130 erilaista testiä** (90 aiempaa + 40 uutta), ei 167. Testattu saman/eri sisällön vertailu, sisäkkäisten taulukko-olioiden korrelaatio, järjestys, eksplisiittiset tyypit ja tarkka decimal, aikaleimarajat, null/puuttuvat/ylimääräiset kentät, häviävät toistot, väärät juuret/mappingit, JSON Schema vs SHACL-koodisto, disclosure-/todistusmateriaalin kielto, resurssiraja, oikeudet/CSRF/If-Match, vanha julkaisu ja esikatselun tallentamattomuus.
+- `BROWSER_BASE_URL=http://localhost:8000 .venv/bin/pytest tests/test_browser.py -q`: lopullista Docker-imagea vasten **10 läpäissyttä**, 0 epäonnistunutta/ohitettua, 71,38 s. Oikea Chromium/Keycloak; aiemmat yhdeksän polkua ja uusi kolme samaa sisältöä → eri sisältö → null-hylkäys → luonnos ennallaan → uudelleenlataus tyhjentää kokeilun.
+- Yhteensä **140 erilaista testiä** läpäisi. Starlette/httpx- ja RDFLib-deprekaatiovaroitukset eivät ole ohituksia. Ei suorituskyky-/kuormitusmittaus.
+- Alembic current: `0004_publication (head)`. Alembic check: `No new upgrade operations detected.` Tyhjän ja vanhan muokatun kannan sekä toistuvien migraatioiden säilymistestit läpäisivät osana laajaa ajoa.
+- Katalogirivien määrät ja koko sisältö tarkistettiin ennen/jälkeen imagen päivityksen ja tavallisen restartin SHA-256:lla. Viimeisessä tarkistuksessa ennallaan: 24 tuotetta/luonnosta, 3 organisaatiota, 5 jäsenyyttä, 16 profiilisnapshotia, 17 julkaisua/tarkastusta/outboxia ja 116 audit-tapahtumaa. Selainajojen omat synteettiset julkaisut jäävät muuttumattomaan historiaan. Tuotteita, oikeuksia tai volyymeja ei nollattu.
+- Kaikkien nykyisten 17 julkaisuversion sisältö vastaa tallennettua SHA-256:ta ja version API palauttaa täsmälleen saman JSON-sisällön. Vanhoja julkaisuja ei kirjoitettu uudelleen.
+- Codespacesin yhdistetty Compose tarkistettu synteettisellä CODESPACE_NAME-arvolla: Keycloak saman HTTPS-portin 8000 /identity-polussa, workspace service:app-verkossa ja openBrowser. Migrations- ja .devcontainer-diff tyhjä. `git diff --check` läpäisi.
+
+Kehityksessä korjattiin kaksi uuden testiaineiston ongelmaa (SHACL-koodistorajoitteen sijoitus ja julkaisun jälkeen vanhentunut ETag). Kohdistettu korjausajo läpäisi. Viimeisen buildin ensimmäinen yritys epäonnistui ENOSPC-levytilaan. Poistettiin vain käyttämätöntä Dockerin build-välimuistia ja irrallisia imageja, jolloin vapautui noin 6,6 Gt; tietokantavolyymeihin ei koskettu. Tämän jälkeen lopullinen web-/Docker-build, käynnistys, säilyvyystarkistus ja selaintestit läpäisivät.
+
+## Ajamattomat ja rajat
+
+- Windows/Docker Desktop, tavallinen `docker compose up --build` ilman pilven build-wrapperia, oikea GitHub Codespace/Private-portin pääsynvalvonta/automaattinen välilehti ja GitHub Actions -etäajo jäivät ajamatta. Staattinen määritystarkistus ei todista näitä.
+- Ei elävän Tietomallit-palvelun hakua, oikeaa lähde-APIa tai issuer-/wallet-integraatiota. Ei VC-kuoren rakennetarkistusta, JSON-LD-kontekstin laajennusta, SD-JWT-profiilin purkua/disclosurejen todennusta, kryptografiaa tai luottamus-/haltijasidontatarkistusta.
+- Ei monijuurisia/rekursiivisia profiileja, RDF-listojen järjestystä, IRI-viitearvoja, kielitunnisteita tai liiketoimintaidentiteettien yhdistämistä. Ne saavat hylkäyksen/arvioimatta-tuloksen. Tuetut tyypit ja tarkkuusrajat on dokumentoitu phase-2f.md:ssä.
+- Ei QEAA-, DCAT-AP-, EUDIW-/EBW-, tuotantoturvallisuus-, kuormitus- tai saavutettavuusvaatimustenmukaisuuden väitettä. Synteettisyys perustuu käyttäjän vahvistukseen. Kokeilun läpäisy ei ole julkaisuun tallennettu hyväksymisraportti.
+
+## Toimitus
+
+Haara `feat/phase-2f-json-rdf` on pushattu GitHubiin (toteutuscommit `812d402`). Pull requestia **ei luotu**: `gh pr create --base main --head feat/phase-2f-json-rdf --title ... --body-file docs/pull-request.md` palautti `Post https://api.github.com/graphql: Forbidden`. Myös REST-varayritys `gh api --method POST repos/jgmikael/metatietovaranto/pulls --input /tmp/phase2f-pr.json` palautti Forbidden-vastauksen. Git-push onnistui; GitHub API -avaus estyi. Valmis kuvaus: docs/pull-request.md. Avaa PR selaimessa: https://github.com/jgmikael/metatietovaranto/compare/main...feat/phase-2f-json-rdf . Main-haaraan ei yhdistetty muutoksia.
+
+Kokeilu ennen yhdistämistä: https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2f-json-rdf → portti 8000 Private → `vero` / `demo-vero` → Omat luonnokset → Yrityssisältö — JSON API, W3C VC ja SD-JWT VC (synteettinen demo) → JSON → RDF -muunnoskokeilu.
+
+---
+
+# Aikaisemmat toimitukset (historia, eivät tämän ajon tuloksia)
+
 # Vaihe 2E — rinnakkaiset toimitustavat ja versioidut mappingit
 
 Pohjana yhdistetty main `5611be2` (PR #8 / 2D). Työhaara `feat/phase-2e-derived-validation`. Käyttäjän täsmennetty 2E-suunnitelma esitettiin ensin ja toteutettiin sen jälkeen. Main-haaraan ei yhdistetä automaattisesti. Alla olevat 2D/2C-toimitusten tulokset ovat historiaa.

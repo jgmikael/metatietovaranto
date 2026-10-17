@@ -1,11 +1,11 @@
 # Kokeile Metatietovarantoa selaimessa
 
-Tämä käynnistää nykyisen demon (vaiheet 1–2E) GitHub Codespacesissa. Paikallisia asennuksia tai uutta hosting-tiliä ei tarvita. GitHub käynnistää sovelluksen, PostgreSQL:n ja Keycloakin omassa kehitysympäristössäsi. Tämä ei ole jatkuvasti käynnissä oleva tuotantopalvelu.
+Tämä käynnistää nykyisen demon (vaiheet 1–2F) GitHub Codespacesissa. Paikallisia asennuksia tai uutta hosting-tiliä ei tarvita. GitHub käynnistää sovelluksen, PostgreSQL:n ja Keycloakin omassa kehitysympäristössäsi. Tämä ei ole jatkuvasti käynnissä oleva tuotantopalvelu.
 
 ## Ensimmäinen käynnistys
 
 1. Avaa https://codespaces.new/jgmikael/metatietovaranto?ref=main . Kirjaudu GitHubiin samalla tilillä, jolla pääset yksityiseen repositorioon.
-2. Tarkista Branch `main` (tai ennen yhdistämistä `feat/phase-2e-derived-validation`), valitse 2-core-kone ja **Create codespace**. Tarkista GitHubin näyttämä käyttö- ja laskutustieto ennen luontia.
+2. Tarkista Branch `main` (tai ennen yhdistämistä `feat/phase-2f-json-rdf`), valitse 2-core-kone ja **Create codespace**. Tarkista GitHubin näyttämä käyttö- ja laskutustieto ennen luontia.
 3. Odota konttien ensimmäistä rakennusta. Tähän voi kulua useita minuutteja. Sovellus ja tietokanta käynnistyvät automaattisesti; terminaalikomentoja ei tarvita tavallisessa käynnistyksessä.
 4. Demo pyritään avaamaan automaattisesti uuteen selainvälilehteen. Jos selain estää avaamisen, avaa editorin alaosan **PORTS**-välilehti. Etsi portti **8000**, jonka nimi on **Avaa Metatietovarannon demo**, ja valitse maapallokuvake **Open in Browser**.
 5. Säilytä portin näkyvyys arvossa **Private**. GitHub-kirjautuminen suojaa pääsyn; vaiheessa 2B sovelluksen tuoteylläpito vaatii lisäksi OIDC-kirjautumisen.
@@ -32,4 +32,6 @@ Tämän toimituksen paikallinen tarkistus ei yksin todista, että oman tilisi Co
 
 ## Muutoksen kokeilu ennen yhdistämistä
 
-Luo uusi Codespace [haarasta feat/phase-2e-derived-validation](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2e-derived-validation). Säilytä portti 8000 Private-tilassa. Käytä yllä olevaa kahden käyttäjän kokeilupolkua. Pysäytä Codespace kokeilun jälkeen. Vanhan Codespacen päivityksessä ota ensin READMEn varmuuskopio ja valitse Rebuild Container; älä poista sen volumea.
+Luo uusi Codespace [haarasta feat/phase-2f-json-rdf](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2f-json-rdf). Säilytä portti 8000 Private-tilassa. Käytä yllä olevaa kahden käyttäjän kokeilupolkua. Pysäytä Codespace kokeilun jälkeen. Vanhan Codespacen päivityksessä ota ensin READMEn varmuuskopio ja valitse Rebuild Container; älä poista sen volumea.
+
+Vaiheen 2F [muunnoskokeilu](phase-2f.md) toimii editorin luonnossivulla: synteettinen JSON-sisältö → mappingin RDF → offline SHACL ja graafien vertailu. Kokeilu ei tallenna syötettä tai raporttia eikä käsittele myönnettyjä todistuksia.

@@ -1,18 +1,19 @@
-Vaihe 2E lisää saman tietotuotteen rinnakkaiset JSON API-, W3C VCDM 2.0 JSON-LD VC- ja SD-JWT VC -toimitustapakuvaukset. Jokaisella on oma saatavuus, ympäristö, vastuut, formaatti, protokolla ja suojausprofiili. W3C VC valitaan oletuksena ensisijaiseksi. Julkaisu sitoo kaikki samaan tuoteversioon ja samaan jäädytettyyn SHACL-snapshotiin.
+## Muutos
 
-- Tyypitetty distributions-kokoelma ja versioidut mappingit: alkuperäiset semanttiset IRI-polut, toimitusmuodon kenttäpolut, sisäkkäiset oliot, tietotyypit ja moniarvoisuus. SD-JWT VC:ltä ei vaadita JSON-LD-kontekstia; se ei ole W3C VC:n sama kuori.
-- JSON API:n palvelu-, skeema-, tunnistautumis-, oikeus- ja ajantasaisuuskentät; todistusten issuer-, OpenID4VCI-, konfiguraatio-, suojaus-, voimassaolo- ja statustietokentät; W3C:n tyypit/kontekstit ja SD-JWT:n vct/paljastamis-/haltijasidontakäytännöt.
-- Sama myöntäjäpalvelu voi käyttää eri configuration-tunnisteita kahdelle formaatille ja samaa lähde-APIa/sovitinta. Katalogi ei ole lähdesisällön palvelu tai myöntäjä. Credential Offerit, QR-koodit, tokenit ja henkilötiedot eivät kuulu metatietoihin.
-- Rakenteiset muokkauslomakkeet, muotokohtaiset tuotesivutoiminnot ja saatavuudet. Planned/suspended ei saa aktiivista palvelutoimintoa. Neljäs synteettinen kolmen planned-toimitustavan esimerkki lisätään kerran tunnettuun demo-organisaatioon.
-- 2D:n SHACL ja erillinen hyväksyntä säilyvät. Toimitustapojen metadata-/mapping-raportti sekä alkuperäisillä dialekteilla tehty erillinen rajattu JSON Schema/OpenAPI -johdannaistarkistus sidotaan sisältötarkisteeseen. Mappingin muuttaminen vaatii suuremman mapping-version.
-- Vanhojen issuance-versioiden luku säilyy. Uutta relaatiomigraatiota ei tarvita, head pysyy 0004_publication. Vanhoja julkaisuja, snapshotteja, UUID:ita, metatietoja tai oikeuksia ei kirjoiteta uudelleen. Codespacesin Private-portti 8000 ja automaattinen selainavaus säilyvät.
+Editor voi kokeilla luonnoksen JSON API-, W3C VC- ja SD-JWT VC -toimitustapamappingeja synteettisillä sisältöolioilla. Uusi yksityinen esikatselu muuntaa sisällöt lukitun SHACL-profiilin mukaiseksi RDF:ksi, tarkistaa ne offline SHACL Corella ja näyttää, ovatko graafit samoja. JSON API:n lukitut JSON Schema/OpenAPI -tarkistukset näkyvät erikseen.
 
-Käyttäjän täsmennykset on kirjattu ROADMAPiin, AGENTSiin, suunnitteludokumenttiin, VC-periaatteeseen ja docs/phase-2e.md:hen. README sisältää valmiin esimerkin kokeilupolun ja päivitysohjeet.
+Sisäkkäiset oliot ja moniarvoisuus käsitellään vanhemman jokaisessa esiintymässä. Väärät tyypit, kartoittamattomat kentät, RDF-joukossa häviävät arvot ja tukemattomat rakenteet estävät onnistumisen. Istunto, omistajaorganisaation editor, CSRF ja If-Match vaaditaan. Verkoton aliprosessi on resurssirajattu.
 
-Todennus: 90 API-/PostgreSQL-/migraatiotestiä ja 9 oikean Chromiumin/Keycloakin selaintestiä läpäisivät, yhteensä 99 eri testiä. TypeScript/Vite-build, pilven Docker-build, Compose-readiness ja Alembic check läpäisivät. Neljän aidon aiemman julkaisuversion sisältö, UUID, versio ja tarkiste säilyivät. Tarkat ajetut komennot ja rajat STATUS.md:ssä. Mukana tallennus/palautus, kolme formaattia ja yhteinen sidonta, nested-/array-mappingit, skeemaviitteet, eri issuer-konfiguraatiot, virheelliset tekniset valinnat ja token-linkit, muuttumattomat vanhat julkaisut, mapping-version korotus ja fixtureiden säilyminen.
+Kokeilu ei tallenna syötteitä tai raportteja, muuta hyväksyntää tai kirjoita vanhoja julkaisuja/fixtureitä uudelleen. Ei relaatiomigraatiota. Ei lähdepalvelua, kokonaisten VC-kuorien tarkistusta, JWT:n purkamista, JSON-LD-kontekstin laajennusta, allekirjoitusta tai lompakkointegraatiota. Codespacesin Private-portti/openBrowser säilyvät.
 
-Oikean Keycloakin/Chromiumin selainpolku julkaisee kolme planned-kuvausta ja varmistaa, ettei palvelulinkkejä näytetä toimivina. Aktiivisten painikkeiden renderöinti käyttää erikseen selaimessa korvattua vastausta; palveluita ei kutsuta eikä vääriä aktiivisia palveluita tallenneta katalogiin. Backendin aktiivisen metadatan ehdot testataan erillisessä catalog_test-kannassa.
+## Kokeilu ennen yhdistämistä
 
-Rajaus: ei varsinaista lähdetietopalvelua, JSON → RDF -sisältömuunnosta, JWT:n jäsentämistä, todistuksen muodostusta/allekirjoitusta tai lompakkointegraatiota. JSON Schema/OpenAPI -suora kenttävertailu on suppea lisätarkistus; rekursiiviset ja monimutkaiset mappingit jäävät arvioimatta ja estävät julkaisun. Ei väitettä QEAA-, DCAT-AP- tai EUDIW/EBW-vaatimustenmukaisuudesta. Ulkoisten palveluiden sekä Windowsin/oikean Codespacen/etä-CI:n ajamattomat tarkistukset raportoidaan STATUSissa.
+https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2f-json-rdf
 
-Kokeile ennen yhdistämistä: https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2e-derived-validation . Portti 8000 Private. Kirjaudu vero/demo-vero, avaa uusi kolmen toimitustavan esimerkki; yritys/demo-yritys hyväksyy ja julkaisee. Älä yhdistä mainiin automaattisesti.
+Kirjaudu vero / demo-vero → Omat luonnokset → Yrityssisältö — JSON API, W3C VC ja SD-JWT VC (synteettinen demo) → JSON → RDF -muunnoskokeilu. Täytä esimerkki, vahvista synteettisyys ja vertaa. Vaihda SD-JWT-esimerkin nimeä nähdäksesi eron tai anna null nähdäksesi hylkäyksen. Portti 8000 Private.
+
+## Rajaus ja todennus
+
+130 erilaista API-/PostgreSQL-/migraatiotestiä ja 10 oikean OIDC-ketjun selaintestiä läpäisi. Lopullinen web-/Docker-build, Compose-readiness, Alembic check ja restartin tietojen säilyvyys tarkistettiin. Windows, oikea Codespace ja etä-CI jäivät ajamatta.
+
+Tarkka muunnossopimus: docs/phase-2f.md. Ajetut tarkistukset, tulokset ja ajamattomat ympäristöt: STATUS.md. Main-haaraan ei yhdistetä automaattisesti.
