@@ -1,3 +1,5 @@
+> Vaiheen 2H täsmennys: [tekninen kuvauspaketti](phase-2h.md) muodostetaan lukitusta SHACL-profiilista ja hyväksytyistä esitysvalinnoista. JSON-LD-konteksti, JSON Schema ja SD-JWT Type Metadata ovat johdannaisia; ne eivät muodosta uutta OWL-/SHACL-mallinnustyökalua. Alkuperäiset profiilisnapshotit säilyvät muuttumattomina.
+
 # Suunnitteluperiaate 1 Tietomallit soveltamisprofiili sisällön perustana
 
 Päiväys 14.10.2026. Käyttäjän täsmennys Metatietovarannon suunnitteluun. Tämä päätös koskee ensimmäistä suunnitteluolettamaa. Toinen, VC-toimitusta ja myöntäjäpalvelua koskeva päätös on `docs/vc-periaate-2.md`:ssä. Dokumentit täsmentävät tavoitearkkitehtuuria eivätkä väitä ominaisuuksien olevan toteutettu vaiheessa 2B.

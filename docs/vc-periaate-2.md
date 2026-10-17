@@ -1,3 +1,5 @@
+> Vaihe 2H lisää [SHACL-pohjaisen teknisen kuvauspaketin](phase-2h.md) ja selvästi allekirjoittamattoman synteettisen VC-rakenne-esimerkin. Tämä ei siirrä tunnistamista, valtuuksia, myöntämistä, allekirjoitusta tai lompakkotoimitusta katalogin vastuulle.
+
 # Suunnitteluperiaate 2 W3C VC ensisijaisena toimitusmuotona
 
 Päiväys 14.10.2026. Käyttäjän toinen perusoletus täydentää `docs/semanttinen-periaate-1.md`:tä. Tämä on suunnittelupäätös, ei vielä toimeksianto tuotannollisen myöntämispalvelun tai lompakkointegraation toteutukselle.

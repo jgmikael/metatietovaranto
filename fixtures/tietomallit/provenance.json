@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/VRK-YTI/yti-datamodel-api",
+  "commit": "f0608ee62ca98c4fd0cd9a5c186c75e5701d5285",
+  "path": "src/test/resources/migration/fi-dcatap.ttl",
+  "profileUri": "http://uri.suomi.fi/datamodel/ns/fi-dcatap",
+  "sourceVersion": "DRAFT; upstream migration fixture, not independently verified live export",
+  "sha256": "613819ad63d57bcf1c4f1d654b8dd7260d64fbc2960a40310a91effa45a847dc",
+  "retrievedAt": "2026-10-17",
+  "limitation": "Official tool repository migration fixture contains test edits (e.g. Invalid@fr). Live Tietomallit export retrieval blocked by environment HTTP 403; do not claim unmodified genuine export acceptance fulfilled."
+}

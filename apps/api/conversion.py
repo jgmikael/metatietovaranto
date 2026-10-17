@@ -236,9 +236,10 @@ def _worker(manifest, profile_hash, items, examples, writer):
     finally:writer.close()
 
 
-def conversion_preview(snapshot, items, examples):
+def conversion_preview(snapshot, items, examples, root_shape=None):
     context = multiprocessing.get_context('spawn');reader, writer = context.Pipe(duplex=False)
-    process = context.Process(target=_worker, args=(snapshot.manifest, snapshot.checksum, items, examples, writer))
+    manifest={**snapshot.manifest,'entryShapeUris':[root_shape]} if root_shape else snapshot.manifest
+    process = context.Process(target=_worker, args=(manifest, snapshot.checksum, items, examples, writer))
     process.start();writer.close()
     try:
         if not reader.poll(15):raise ValueError('Timeout')
@@ -250,5 +251,5 @@ def conversion_preview(snapshot, items, examples):
     finally:
         reader.close();process.join(.2)
         if process.is_alive():process.terminate();process.join(1)
-    return report | {'policy':POLICY, 'engine':ENGINE, 'profileSnapshotId':str(snapshot.id),
+    return report | ({'selectedRootShapeUri':root_shape} if root_shape else {}) | {'policy':POLICY, 'engine':ENGINE, 'profileSnapshotId':str(snapshot.id),
         'profileSnapshotSha256':snapshot.checksum, 'checkedAt':datetime.now(timezone.utc).isoformat()}

@@ -1,4 +1,20 @@
-# Metatietovaranto — synteettinen demo, vaihe 2G
+# Metatietovaranto — synteettinen demo, vaihe 2H
+
+## Vaihe 2H: tekninen kuvauspaketti
+
+SHACL-soveltamisprofiilista voi muodostaa yhteisen JSON-sisältöskeeman, W3C VC:n JSON-LD-kontekstin ja SD-JWT VC:n teknisen kuvauspaketin. [Täsmällinen rajaus, artefaktit ja standardiversiot](docs/phase-2h.md). DCAT-AP-vienti ei kuulu tähän vaiheeseen.
+
+Kokeile ennen yhdistämistä: avaa Codespace haarasta **feat/phase-2h-technical-packages** (New with options → Branch), tai valitse haara nykyisessä Codespacessa ja rakenna uudelleen `docker compose up --build -d --wait`. Säilytä portti 8000 Private-tilassa ja avaa sen Forwarded Address selaimessa. Käynnistyksen automaattinen selainavaus säilyy.
+
+1. Kirjaudu `vero / demo-vero`. Avaa **Omat luonnokset** ja kolmen toimitustavan synteettinen yritystuote. Jos se on jo julkaistu, luo ensin uusi työkopio.
+2. Avaa **Muodosta SHACL-pohjainen kuvauspaketti**. Juurimuoto on `https://example.org/metatietovaranto/demo/ProductShape`. Muodosta mapping-ehdotus ja tarkasta nimi `companyName`, alkuperäinen IRI, xsd:string ja määrä 1…1.
+3. Käytä mapping-versiota `1.1.0` tai aiempaa suurempaa versiota. Anna synteettiseksi sisällöksi `{"companyName":"Synteettinen Esimerkki Oy"}`. Tarkasta toimitustapojen asetukset ja vahvista neljä valintaa. Muodosta paketti ja avaa luonnos uudelleen.
+4. Tarkasta artefaktit ja validointiraportti. Lähetä normaaliin tarkastukseen; eri käyttäjä `yritys / demo-yritys` tarkastaa ja julkaisee uuden tuoteversion. Artefaktien koneluettavat linkit näkyvät julkisella tuotesivulla vasta julkaisun jälkeen.
+
+Windowsin paikallinen demo käynnistyy edelleen `docker compose up --build`, selainosoite **http://localhost:8000**. Pysäytys `docker compose down` säilyttää tiedot; testidatan palautusohje on alempana. Kuvauspaketti ei lisää demotunnuksia tai muuta oikeuksia. Artefaktit käyttävät Codespacesissa sen HTTPS-osoitetta, paikallisesti demon HTTP-osoitetta. Private-Codespaces vaatii GitHub-pääsyn myös kontekstinoutoon, joten se ei ole ulkoisen myöntäjän julkinen kontekstipalvelu. Tuotantokäyttö tarvitsee pysyvän HTTPS-alkuperän.
+
+Aidon muuttamattoman Tietomallit-exportin hyväksymiskoe on vielä avoin ympäristön verkkonoutoeston vuoksi; lähde- ja testitilanne eritellään STATUSissa. Allekirjoitusta tai lompakkotoimitusta ei toteuteta.
+
 
 Suomenkielinen React/TypeScript-käyttöliittymä, FastAPI, PostgreSQL ja Keycloak. Toteutettu: organisaatiokohtainen ylläpito, yksityiset luonnokset, erillinen hyväksyntä, muuttumattomat julkaisuversiot, haku, JSON-/JSON-LD-vienti ja sisältöprofiilin snapshotit sekä offline SHACL Core -validointi synteettisille esimerkeille sekä rinnakkaiset JSON API-, W3C VC- ja SD-JWT VC -toimitustapakuvaukset ja rajattu synteettisen JSON-sisällön RDF-muunnoskokeilu sekä julkaisuversioiden deprecated-/withdrawn-elinkaari. [ROADMAP](ROADMAP.md) rajaa toteutuksen, [STATUS](STATUS.md) kertoo todella ajetut tarkistukset.
 
@@ -6,7 +22,7 @@ Vain synteettiseen demokäyttöön. Katalogi ei myönnä todistuksia eikä toteu
 
 ## Kokeile selaimessa ennen yhdistämistä
 
-Avaa [vaiheen 2G uusi Codespace](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2g-lifecycle), valitse haara **feat/phase-2g-lifecycle** ja **Create codespace**. Uusi Codespace pitää main-haaran kokeiludatan erillään. Sovellus, PostgreSQL ja Keycloak käynnistyvät automaattisesti. Selain avautuu automaattisesti tai valitse **PORTS → 8000 → Open in Browser**. Säilytä portin näkyvyys **Private**. Keycloak toimii saman osoitteen `/identity`-polussa; muita portteja ei tarvitse avata.
+Avaa [vaiheen 2H uusi Codespace](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2h-technical-packages), valitse haara **feat/phase-2h-technical-packages** ja **Create codespace**. Uusi Codespace pitää main-haaran kokeiludatan erillään. Sovellus, PostgreSQL ja Keycloak käynnistyvät automaattisesti. Selain avautuu automaattisesti tai valitse **PORTS → 8000 → Open in Browser**. Säilytä portin näkyvyys **Private**. Keycloak toimii saman osoitteen `/identity`-polussa; muita portteja ei tarvitse avata.
 
 Osoite on `https://<codespacen-nimi>-8000.app.github.dev`; täsmällinen oman ympäristön osoite näkyy PORTS-näkymässä. Älä vaihda portin sisäistä protokollaa HTTPS:ksi. [Verkkodemon ohje](docs/verkkodemo.md) kertoo pysäyttämisestä ja kiintiöistä.
 
@@ -49,7 +65,7 @@ Tarvitset Docker Desktopin käynnissä Linux-konteilla, Compose v2:n ja Gitin. K
 
 ```powershell
 git fetch origin
-git switch feat/phase-2g-lifecycle
+git switch feat/phase-2h-technical-packages
 docker compose up --build
 ```
 
@@ -75,7 +91,7 @@ docker compose stop app
 docker compose exec -T db sh -c 'pg_dump -U demo -d catalog > /tmp/before-update.sql'
 docker compose cp db:/tmp/before-update.sql ./before-update.sql
 git fetch origin
-git switch feat/phase-2g-lifecycle
+git switch feat/phase-2h-technical-packages
 docker compose up --build -d --wait
 docker compose exec -T app .venv/bin/alembic current
 ```
@@ -208,7 +224,7 @@ Testit käyttävät oikeaa PostgreSQL:ää ja tuhoavaa erillistä `catalog_test`
 
 ```bash
 docker compose exec -T db createdb -U demo catalog_test
-.venv/bin/pytest tests/test_api.py tests/test_publication.py tests/test_profiles.py tests/test_semantic_validation.py tests/test_derived_validation.py tests/test_distributions.py tests/test_conversion.py tests/test_lifecycle.py tests/test_auth.py tests/test_migrations.py tests/test_public_url.py -q
+.venv/bin/pytest tests/test_api.py tests/test_publication.py tests/test_profiles.py tests/test_semantic_validation.py tests/test_derived_validation.py tests/test_distributions.py tests/test_conversion.py tests/test_technical_packages.py tests/test_lifecycle.py tests/test_auth.py tests/test_migrations.py tests/test_public_url.py -q
 ```
 
 Älä aja tätä testikantaa käyttäviä pytest-ajoja rinnakkain. `TEST_DATABASE_URL` voi muuttaa yhteysosoitetta mutta kannan pitää olla `catalog_test`. Selaintestit käyttävät erikseen käynnistettyä demoa ja oikeaa Keycloak-kirjautumista:

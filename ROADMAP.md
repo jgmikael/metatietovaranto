@@ -96,6 +96,17 @@ Tilattu käyttäjän hyväksymän ehdotuksen mukaisesti; pohjana main `79dc9d1` 
 - Migraatio-, oikeus-, rinnakkaisuus-, rollback-, triggeri-, vienti- ja selaintestit. Codespacesin Private-portti/openBrowser ja vanhat tiedot säilyvät.
 - Ei archived/retired-tilaa, ajastettua lopetusta, ulkoisten oikeuksien peruuttamista tai todistusten revokaatiota. Nämä eivät seuraa katalogin withdrawn-merkinnästä.
 
+## Vaihe 2H — SHACL-pohjaiset tekniset kuvauspaketit
+
+Käyttäjän toimeksianto, pohjana main `ac002ad` (PR #11). Tämä korvaa aiemman DCAT-AP-vientiehdotuksen vaiheelle 2H. Sopimus ja täsmällinen tuettu profiili: [docs/phase-2h.md](docs/phase-2h.md).
+
+- Eksplisiittinen juurimuoto, deterministiset tekniset nimet, tarkastettavat yhteiset esitysvalinnat ja kaikkien kolmen toimitustavan mappingit; SHACL-tyyppejä/kardinaliteetteja ei muuteta rinnakkaismalliksi.
+- JSON-LD 1.1 scoped -konteksti erillään VCDM 2.0 -peruskontekstista, yhteinen JSON Schema, SD-JWT VC draft-19 Type Metadata, erilliset mappingit ja synteettiset allekirjoittamattomat esimerkit.
+- Oikea PyLD-prosessointi, lukittu paikallinen lataaja, RDF-graafivertailu ja offline SHACL. Ei JWT:tä, disclosureja, allekirjoitusta tai myöntämistä.
+- Versioitu, tarkistesidottu deterministinen paketti luonnoksessa/julkaisussa, normaali riippumaton hyväksyntä, pysyvät koneluettavat artefaktipolut; vanhojen julkaisujen ja withdrawn-artefaktien säilyminen. Ei uutta relaatiomigraatiota.
+- Useat sanastoviitteet sijainteineen ja riippuvuusaineistot käyttöliittymään. Ei mielivaltaisia verkkonoutoja.
+- Aidon muuttamattoman Tietomallit-live-exportin hyväksymiskoe on avoin ympäristön 403-eston vuoksi; virallinen migraatiotestiaineisto ei täytä tätä vaatimusta. DCAT-AP-viennit ja tämän generointiprofiilin laajentaminen jäävät myöhemmiksi.
+
 ## Vaiheen 2 myöhemmät osat — erillinen toimeksianto
 
 Laajemmat JSON Schema/OpenAPI-kattavuuskartoitukset ja muunnoksen laajentaminen IRI-identiteetteihin, RDF-listoihin ja monijuurisiin profiileihin, laajemmat SHACL-profiilit, DCAT-AP-vientien vaatimustenmukaisuus, retired/archived-elinkaaret ja ajastettu lopetus, jäsenyyksien hallintakäyttöliittymä, tuotannon IdP, kielituen laajennukset ja kuormitusvaatimukset. Vaiheen 2D offline Core -tarkistus ja erillinen ihmistarkastus eivät korvaa näitä tai VC-kuoren/suojauksen tarkistusta.

@@ -158,21 +158,22 @@ def assess(manifest,items):
         'scope':'metadata and mapping declarations only; no JSON-to-RDF conversion, JWT parsing, cryptography or wallet interoperability'}
 
 
-def _worker(manifest,items,writer):
+def _worker(manifest,items,writer,root_shape=None):
     try:
         import resource,socket
         resource.setrlimit(resource.RLIMIT_CPU,(5,5));resource.setrlimit(resource.RLIMIT_AS,(512*1024*1024,512*1024*1024))
         def offline(*args,**kwargs):raise ValueError('Offline')
         socket.socket.connect=offline;socket.socket.connect_ex=offline;socket.getaddrinfo=offline
+        if root_shape:manifest={**manifest,'entryShapeUris':[root_shape]}
         writer.send(assess(manifest,items))
     except Exception:writer.send({'status':'error','results':[{'path':'/distributions','ruleId':'DISTRIBUTION_ERROR','message':'Toimitustapojen metadataa ei voitu tarkistaa'}]})
     finally:writer.close()
 
 
-def validate_distributions(snapshot,items):
+def validate_distributions(snapshot,items,root_shape=None):
     if items is None:return None
     context=multiprocessing.get_context('spawn');reader,writer=context.Pipe(duplex=False)
-    process=context.Process(target=_worker,args=(snapshot.manifest,items,writer));process.start();writer.close()
+    process=context.Process(target=_worker,args=(snapshot.manifest,items,writer,root_shape));process.start();writer.close()
     try:
         if not reader.poll(15):raise ValueError('Timeout')
         try:report=reader.recv()
@@ -181,13 +182,14 @@ def validate_distributions(snapshot,items):
     finally:
         reader.close();process.join(.2)
         if process.is_alive():process.terminate();process.join(1)
-    return report|{'policy':POLICY,'profileSnapshotSha256':snapshot.checksum,'distributionsHash':checksum(items),'checkedAt':datetime.now(timezone.utc).isoformat()}
+    return report|({'selectedRootShapeUri':root_shape} if root_shape else {})|{'policy':POLICY,'profileSnapshotSha256':snapshot.checksum,'distributionsHash':checksum(items),'checkedAt':datetime.now(timezone.utc).isoformat()}
 
 
 def distribution_errors(snapshot,body):
     items=body.get('distributions')
     if items is None:return []
     report=body.get('distributionValidation')
-    if not report or report.get('policy')!=POLICY or report.get('profileSnapshotSha256')!=snapshot.checksum or report.get('distributionsHash')!=checksum(items):
+    root=(body.get('technicalPackage') or {}).get('rootShapeUri')
+    if not report or report.get('selectedRootShapeUri')!=root or report.get('policy')!=POLICY or report.get('profileSnapshotSha256')!=snapshot.checksum or report.get('distributionsHash')!=checksum(items):
         return [{'path':'/distributions','ruleId':'DISTRIBUTION_REPORT_REQUIRED','message':'Ajantasainen toimitustapojen metadata- ja mapping-raportti puuttuu. Tallenna luonnos.'}]
     return [] if report['status']=='conforms' else report['results']

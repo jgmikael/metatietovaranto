@@ -157,9 +157,10 @@ def bounded_validation(manifest, profile_hash, example):
             process.join(1)
 
 
-def validate_snapshot(snapshot, example):
+def validate_snapshot(snapshot, example, root_shape=None):
     try:
-        report = bounded_validation(snapshot.manifest, snapshot.checksum, example)
+        manifest={**snapshot.manifest,'entryShapeUris':[root_shape]} if root_shape else snapshot.manifest
+        report = bounded_validation(manifest, snapshot.checksum, example)
     except ValueError:
         report = {'status': 'error', 'results': [{'stage': 'validation', 'ruleId': 'VALIDATION_RESOURCE_LIMIT',
             'path': '/syntheticExample', 'severity': str(SH.Violation),
@@ -167,11 +168,12 @@ def validate_snapshot(snapshot, example):
     report.update({'policy': POLICY, 'engine': ENGINE, 'profileSnapshotSha256': snapshot.checksum,
         'exampleSha256': hashlib.sha256(example['content'].encode()).hexdigest() if example else None,
         'exampleSerialization': example['serialization'] if example else None})
+    if root_shape:report['selectedRootShapeUri']=root_shape
     return report
 
 
-def current_report(report, snapshot, example):
-    return bool(report and example and example.get('synthetic') is True
+def current_report(report, snapshot, example, root_shape=None):
+    return bool(report and example and report.get('selectedRootShapeUri')==root_shape and example.get('synthetic') is True
         and report.get('exampleSerialization') == example.get('serialization') and report.get('policy') == POLICY and report.get('engine') == ENGINE
         and report.get('profileSnapshotSha256') == snapshot.checksum
         and report.get('exampleSha256') == hashlib.sha256(example['content'].encode()).hexdigest())

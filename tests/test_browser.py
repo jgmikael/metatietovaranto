@@ -403,3 +403,56 @@ def test_missing_or_withdrawn_lifecycle_blocks_legacy_service_link(page):
     page.reload()
     expect(page.get_by_text('Versio on poistettu käytöstä.',exact=True)).to_be_visible()
     expect(page.get_by_role('link',name='Pyydä todistus lompakkoon',exact=True)).to_have_count(0)
+
+
+def test_technical_package_real_editor_review_publication_and_artifact_urls(page):
+    """Real OIDC identities; generation controls, persisted bytes and public routes."""
+    base=os.environ['BROWSER_BASE_URL'];login(page)
+    identity=page.request.get(base+'/auth/me').json();headers={'X-CSRF-Token':identity['csrfToken']}
+    source=page.request.get(base+'/api/v1/products/00000000-0000-4000-8000-000000000004/draft').json()
+    keys=('title','description','providerOrganizationId','theme','source','purpose','limitations','accessConditions','availability','synthetic','profileSnapshotId','issuance','syntheticExample','distributions','primaryDistributionId','derivedExamples')
+    payload={key:source[key] for key in keys};payload['title']='2H selainpaketti '+uuid.uuid4().hex
+    created=page.request.post(base+'/api/v1/products',data=payload,headers=headers|{'Idempotency-Key':str(uuid.uuid4())})
+    assert created.status==201,created.text()
+    draft=created.json();product_id=draft['id'];review_context=None
+    try:
+        page.goto(base+'/#draft/'+product_id)
+        page.get_by_text('Muodosta SHACL-pohjainen kuvauspaketti',exact=True).click()
+        page.get_by_label('Generoinnin juurimuodon IRI',exact=True).fill('https://example.org/metatietovaranto/demo/ProductShape')
+        page.get_by_role('button',name='Muodosta mapping-ehdotus',exact=True).click()
+        expect(page.get_by_label('Kenttänimi https://example.org/metatietovaranto/demo/companyName',exact=True)).to_have_value('companyName')
+        page.set_viewport_size({'width':390,'height':844})
+        assert page.evaluate('document.documentElement.scrollWidth <= window.innerWidth')
+        page.set_viewport_size({'width':1280,'height':720})
+        page.get_by_label('Synteettinen yhteisen sisällön JSON-esimerkki',exact=True).fill('{"companyName":"Synteettinen Esimerkki Oy"}')
+        for label in ('Vahvistan paketin esimerkin synteettiseksi','Hyväksyn yhteiset esitysvalinnat ja kenttänimet','Korvaa nykyiset toimitustapamappingit tällä ehdotuksella','Olen tarkastanut toimitustapojen paljastamis-, haltijasidonta- ja suojauspäätökset'):
+            page.get_by_label(label,exact=True).check()
+        page.get_by_role('button',name='Muodosta ja tallenna kuvauspaketti',exact=True).click()
+        expect(page.get_by_text('Paketti valmis tarkastettavaksi',exact=True)).to_be_visible()
+        page.reload();expect(page.get_by_text('Paketti valmis tarkastettavaksi',exact=True)).to_be_visible()
+        saved=page.request.get(base+'/api/v1/products/'+product_id+'/draft').json()
+        package=saved['technicalPackage'];assert package['validation']['shacl']=='conforms'
+        assert page.request.get(package['artifacts']['context.jsonld']['url']).status==404
+        page.get_by_role('button',name='Lähetä tarkastukseen',exact=True).click()
+        expect(page.locator('p.tag')).to_have_text('Tarkastuksessa')
+        review_context=page.context.browser.new_context();review_page=review_context.new_page()
+        login(review_page,'yritys','demo-yritys');review_page.goto(base+'/#draft/'+product_id)
+        # A non-editor reviewer sees private contents rather than an unpublished public download link.
+        panel=review_page.get_by_role('region',name='Tekninen kuvauspaketti')
+        panel.get_by_text('context.jsonld · application/ld+json',exact=True).click()
+        expect(panel.locator('details').filter(has=review_page.get_by_text('context.jsonld · application/ld+json',exact=True)).locator('pre')).to_contain_text('@context')
+        review_page.get_by_label('Tarkastuksen perustelu',exact=True).fill('2H synteettinen paketti, esitysvalinnat ja lukittu lähde tarkastettu')
+        review_page.get_by_label('Olen tarkastanut lähdeilmoituksen, SHACL-profiilin ja sen riippuvuudet',exact=True).check()
+        review_page.get_by_role('button',name='Hyväksy',exact=True).click()
+        expect(review_page.get_by_role('button',name='Julkaise',exact=True)).to_be_visible()
+        review_page.get_by_role('button',name='Julkaise',exact=True).click()
+        expect(review_page.locator('p.tag')).to_have_text('Julkaistu versio 1.0.0')
+        review_page.reload();expect(review_page.get_by_role('link',name='context.jsonld',exact=True)).to_be_visible()
+        response=review_page.request.get(package['artifacts']['context.jsonld']['url'])
+        assert response.status==200 and response.headers['content-type'].startswith('application/ld+json')
+        assert response.text()==package['artifacts']['context.jsonld']['content']
+        assert review_page.request.get(base+'/api/v1/products/'+product_id+'/versions/1.0.0').json()['technicalPackage']==package
+    finally:
+        if review_context:review_context.close()
+        # Published audit history deliberately remains in the synthetic live demo.
+        delete_test_product(page,product_id)
