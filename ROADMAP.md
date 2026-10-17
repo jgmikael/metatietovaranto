@@ -84,9 +84,21 @@ Jatko käyttäjän yhdistämän PR #9:n jälkeen, pohjana main `feca7b8`. Rajaus
 - Selainkokeilu valmiilla synteettisellä sisällöllä. Ei fixtureiden tai aiempien julkaisujen muutosta, uutta relaatiomigraatiota tai uusia julkaisuehtoja.
 - Varsinaiset lähde-/todistuspalvelut, kuoriskeemat, kontekstin laajennus, SD-JWT-profiilin purku ja kryptografia jäävät vaiheeseen 3.
 
+## Vaihe 2G — julkaisuversioiden deprecated-/withdrawn-elinkaari
+
+Tilattu käyttäjän hyväksymän ehdotuksen mukaisesti; pohjana main `79dc9d1` (PR #10 / 2F). Sopimus: docs/phase-2g.md.
+
+- Julkaisijan perustellut tilamuutokset: published → deprecated/withdrawn ja deprecated → withdrawn. Erillinen version elinkaari-ETag, CSRF, omistajaorganisaation oikeus ja idempotenssi.
+- Korvaava versio valitaan saman tuotteen myöhemmistä julkaisuista; ristiriitaiset tai käytöstä poistetut kohteet hylätään.
+- Uusi migraatio 0005: muuttumattomat elinkaaritapahtumat ja erillinen outbox; auditointi samassa transaktiossa. Julkaistuja sisältöjä, profiileja, hyväksyntöjä ja luonnoksia ei kirjoiteta uudelleen.
+- Deprecated näkyy oletushaussa varoituksella; withdrawn jätetään oletushaun/katalogiviennin ulkopuolelle, mutta pysyvä sivu ja historia säilyvät. Ei automaattista paluuta vanhempaan versioon.
+- Ajantasainen elinkaari lukuesityksissä ja erillisenä resurssina. Alkuperäiset versio-API:t/tarkisteet säilyvät. Tuotesivu estää withdrawn-version palvelutoiminnot myös historiallisessa versiossa; puuttuva tilatieto estää toiminnot.
+- Migraatio-, oikeus-, rinnakkaisuus-, rollback-, triggeri-, vienti- ja selaintestit. Codespacesin Private-portti/openBrowser ja vanhat tiedot säilyvät.
+- Ei archived/retired-tilaa, ajastettua lopetusta, ulkoisten oikeuksien peruuttamista tai todistusten revokaatiota. Nämä eivät seuraa katalogin withdrawn-merkinnästä.
+
 ## Vaiheen 2 myöhemmät osat — erillinen toimeksianto
 
-Laajemmat JSON Schema/OpenAPI-kattavuuskartoitukset ja muunnoksen laajentaminen IRI-identiteetteihin, RDF-listoihin ja monijuurisiin profiileihin, laajemmat SHACL-profiilit, DCAT-AP-vientien vaatimustenmukaisuus, retired/withdrawn/deprecated/archived-elinkaaret, jäsenyyksien hallintakäyttöliittymä, tuotannon IdP, kielituen laajennukset ja kuormitusvaatimukset. Vaiheen 2D offline Core -tarkistus ja erillinen ihmistarkastus eivät korvaa näitä tai VC-kuoren/suojauksen tarkistusta.
+Laajemmat JSON Schema/OpenAPI-kattavuuskartoitukset ja muunnoksen laajentaminen IRI-identiteetteihin, RDF-listoihin ja monijuurisiin profiileihin, laajemmat SHACL-profiilit, DCAT-AP-vientien vaatimustenmukaisuus, retired/archived-elinkaaret ja ajastettu lopetus, jäsenyyksien hallintakäyttöliittymä, tuotannon IdP, kielituen laajennukset ja kuormitusvaatimukset. Vaiheen 2D offline Core -tarkistus ja erillinen ihmistarkastus eivät korvaa näitä tai VC-kuoren/suojauksen tarkistusta.
 
 ## Vaihe 3 — ulkoiset integraatiot
 

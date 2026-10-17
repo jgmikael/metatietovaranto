@@ -2,7 +2,7 @@
 from datetime import datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, String, UniqueConstraint
+from sqlalchemy import CheckConstraint, Boolean, DateTime, ForeignKey, String, UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSONB, UUID as PGUUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -157,5 +157,32 @@ class OutboxEvent(Base):
     __tablename__ = "outbox_events"
     id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
     version_id: Mapped[UUID] = mapped_column(ForeignKey("product_versions.id"), unique=True)
+    payload: Mapped[dict] = mapped_column(JSONB)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class LifecycleEvent(Base):
+    __tablename__ = 'lifecycle_events'
+    __table_args__ = (
+        UniqueConstraint('version_id', 'sequence'),
+        CheckConstraint('sequence > 0', name='ck_lifecycle_sequence'),
+        CheckConstraint("(previous_status = 'published' AND status IN ('deprecated','withdrawn')) OR (previous_status = 'deprecated' AND status = 'withdrawn')", name='ck_lifecycle_transition'),
+        CheckConstraint("replacement_version_id IS NULL OR (status = 'deprecated' AND replacement_version_id <> version_id)", name='ck_lifecycle_replacement'),)
+    id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
+    version_id: Mapped[UUID] = mapped_column(ForeignKey('product_versions.id'))
+    sequence: Mapped[int]
+    previous_status: Mapped[str] = mapped_column(String(20))
+    status: Mapped[str] = mapped_column(String(20))
+    reason: Mapped[str] = mapped_column(String(2000))
+    replacement_version_id: Mapped[UUID | None] = mapped_column(ForeignKey('product_versions.id'))
+    actor: Mapped[str] = mapped_column(String(255))
+    organization_id: Mapped[UUID] = mapped_column(ForeignKey('organizations.id'))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class LifecycleOutboxEvent(Base):
+    __tablename__ = 'lifecycle_outbox_events'
+    id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
+    event_id: Mapped[UUID] = mapped_column(ForeignKey('lifecycle_events.id'), unique=True)
     payload: Mapped[dict] = mapped_column(JSONB)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))

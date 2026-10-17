@@ -1,3 +1,5 @@
+> Vaiheen 2G toteutusrajaus: [docs/phase-2g.md](docs/phase-2g.md). Deprecated ja withdrawn ovat version erillisiä elinkaaritapahtumia; alkuperäinen sisältö säilyy. Archived/retired, ajastukset ja ulkoisten palveluiden oikeuksien peruminen jäävät myöhemmiksi.
+
 > Vaiheen 2F rajattu paikallinen JSON → RDF -esikatselu on kuvattu [docs/phase-2f.md](docs/phase-2f.md). Se ei toteuta todistusten myöntämistä, JWT:n purkamista, JSON-LD-kontekstin laajennusta tai kryptografista tarkistusta.
 
 # Metatietovarannon toteutussuunnitelma ja tekoälykoodauksen kehote

@@ -1,12 +1,12 @@
-# Metatietovaranto — synteettinen demo, vaihe 2F
+# Metatietovaranto — synteettinen demo, vaihe 2G
 
-Suomenkielinen React/TypeScript-käyttöliittymä, FastAPI, PostgreSQL ja Keycloak. Toteutettu: organisaatiokohtainen ylläpito, yksityiset luonnokset, erillinen hyväksyntä, muuttumattomat julkaisuversiot, haku, JSON-/JSON-LD-vienti ja sisältöprofiilin snapshotit sekä offline SHACL Core -validointi synteettisille esimerkeille sekä rinnakkaiset JSON API-, W3C VC- ja SD-JWT VC -toimitustapakuvaukset ja rajattu synteettisen JSON-sisällön RDF-muunnoskokeilu. [ROADMAP](ROADMAP.md) rajaa toteutuksen, [STATUS](STATUS.md) kertoo todella ajetut tarkistukset.
+Suomenkielinen React/TypeScript-käyttöliittymä, FastAPI, PostgreSQL ja Keycloak. Toteutettu: organisaatiokohtainen ylläpito, yksityiset luonnokset, erillinen hyväksyntä, muuttumattomat julkaisuversiot, haku, JSON-/JSON-LD-vienti ja sisältöprofiilin snapshotit sekä offline SHACL Core -validointi synteettisille esimerkeille sekä rinnakkaiset JSON API-, W3C VC- ja SD-JWT VC -toimitustapakuvaukset ja rajattu synteettisen JSON-sisällön RDF-muunnoskokeilu sekä julkaisuversioiden deprecated-/withdrawn-elinkaari. [ROADMAP](ROADMAP.md) rajaa toteutuksen, [STATUS](STATUS.md) kertoo todella ajetut tarkistukset.
 
 Vain synteettiseen demokäyttöön. Katalogi ei myönnä todistuksia eikä toteuta lompakkoprotokollaa, QEAA-palvelua tai tuotannon tunnistamista. Tavoitearkkitehtuuri on `metatietovaranto_suunnittelu.md`. PR:ien 5 ja 6 sitovat [semanttinen periaate](docs/semanttinen-periaate-1.md) ja [VC-periaate](docs/vc-periaate-2.md) on huomioitu [vaiheen 2C perustassa](docs/phase-2c.md) ja [vaiheen 2E ratkaisussa](docs/phase-2e.md).
 
 ## Kokeile selaimessa ennen yhdistämistä
 
-Avaa [vaiheen 2F uusi Codespace](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2f-json-rdf), valitse haara **feat/phase-2f-json-rdf** ja **Create codespace**. Uusi Codespace pitää main-haaran kokeiludatan erillään. Sovellus, PostgreSQL ja Keycloak käynnistyvät automaattisesti. Selain avautuu automaattisesti tai valitse **PORTS → 8000 → Open in Browser**. Säilytä portin näkyvyys **Private**. Keycloak toimii saman osoitteen `/identity`-polussa; muita portteja ei tarvitse avata.
+Avaa [vaiheen 2G uusi Codespace](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2g-lifecycle), valitse haara **feat/phase-2g-lifecycle** ja **Create codespace**. Uusi Codespace pitää main-haaran kokeiludatan erillään. Sovellus, PostgreSQL ja Keycloak käynnistyvät automaattisesti. Selain avautuu automaattisesti tai valitse **PORTS → 8000 → Open in Browser**. Säilytä portin näkyvyys **Private**. Keycloak toimii saman osoitteen `/identity`-polussa; muita portteja ei tarvitse avata.
 
 Osoite on `https://<codespacen-nimi>-8000.app.github.dev`; täsmällinen oman ympäristön osoite näkyy PORTS-näkymässä. Älä vaihda portin sisäistä protokollaa HTTPS:ksi. [Verkkodemon ohje](docs/verkkodemo.md) kertoo pysäyttämisestä ja kiintiöistä.
 
@@ -49,7 +49,7 @@ Tarvitset Docker Desktopin käynnissä Linux-konteilla, Compose v2:n ja Gitin. K
 
 ```powershell
 git fetch origin
-git switch feat/phase-2f-json-rdf
+git switch feat/phase-2g-lifecycle
 docker compose up --build
 ```
 
@@ -75,7 +75,7 @@ docker compose stop app
 docker compose exec -T db sh -c 'pg_dump -U demo -d catalog > /tmp/before-update.sql'
 docker compose cp db:/tmp/before-update.sql ./before-update.sql
 git fetch origin
-git switch feat/phase-2f-json-rdf
+git switch feat/phase-2g-lifecycle
 docker compose up --build -d --wait
 docker compose exec -T app .venv/bin/alembic current
 ```
@@ -147,6 +147,23 @@ Aiempi julkaisu pysyy luettavana alkuperäisine tarkisteineen, vaikka sillä ei 
 
 Tämä ei vielä kata JSON Schema-/OpenAPI-johdannaisten validointia tai kattavuuskartoitusta, DCAT-AP-vaatimustenmukaisuutta, VC-kuorta ja allekirjoitusta tai ulkoisia palveluita. Ne jäävät jatkovaiheisiin.
 
+## Vaihe 2G: julkaisuversioiden elinkaari
+
+Kokeile uudessa Codespacessa tai nykyisillä Docker Desktop -käynnistysohjeilla. Julkaise ensin synteettinen tuote yllä olevan kahden käyttäjän polun mukaan: `vero` muokkaa/lähettää tarkastukseen, `yritys` hyväksyy ja julkaisee. Valmiin neljännen tuotteen palvelut pidetään planned-tilassa. Julkaisemisen jälkeen `yritys` näkee julkisella tuotesivulla **Version elinkaari → Julkaisijan elinkaarimuutos**.
+
+1. Valitse **Poistumassa käytöstä**, kirjoita julkinen perustelu ja tallenna. Varoitus näkyy kaikille, mutta tuote säilyy oletushaussa. Voit viitata saman tuotteen myöhempään jo julkaistuun versioon korvaajana. Jos sellaista ei ole, kerro tilanne perustelussa.
+2. Valitse **Poistettu käytöstä**, kirjoita uusi julkinen perustelu ja vahvista tallennuksen yhteydessä avautuva kysymys. Tämä on version lopullinen tila; sisältö palautetaan tarvittaessa uutena hyväksyttynä julkaisuna.
+3. Tuote jää pois oletushausta, jos tämä on sen uusin julkaisu. Hae rajauksella **Version elinkaaritila → Poistettu käytöstä** tai avaa version pysyvä linkki: varoitus ja tapahtumahistoria säilyvät. Palvelutoiminnot on estetty. Planned-palveluilla ei ollut aktiivisia toimintoja alun perinkään.
+4. Alkuperäinen JSON/JSON-LD-julkaisu ja sisältötarkiste säilyvät. **Ajantasainen elinkaaritieto JSONina** kertoo erikseen nykytilan ja julkisen historian. Perusteluun ei kirjoiteta henkilötietoja tai salaisuuksia. Sivun uudelleenlataus hakee tuoreen tilan; jo avoin välilehti ei peru ulkoisen palvelun pääsyoikeuksia.
+
+Vain pysyvän omistajaorganisaation publisher voi muuttaa elinkaaritilaa. Editor/reviewer/reader eivät saa oikeutta tästä roolistaan; tarjoajan vaihtaminen ei siirrä oikeutta. Tilamuutos ei muokkaa luonnosta tai sisältöhyväksyntää. Withdrawn-version tilalle ei automaattisesti nosteta vanhempaa versiota. Uusi julkaisu käy tavallisen luonnos-/hyväksymisprosessin.
+
+API: `GET /api/v1/products/{id}/versions/{version}/lifecycle` ja `POST /api/v1/products/{id}/lifecycle-events`, body `{"version":"1.0.0","status":"deprecated","reason":"Julkinen perustelu...","replacementVersion":null}`. Kirjoitus tarvitsee istunnon, CSRF:n, elinkaaren oman If-Match-ETagin sekä Idempotency-Keyn. Haku: `lifecycleStatus=current|published|deprecated|withdrawn|all`; oletus current näyttää published/deprecated. Katalogiviennin `includeWithdrawn=true` sisällyttää poistuneet tilatietoineen.
+
+Nykyversion JSON/JSON-LD-lukuesitys sisältää erillisen lifecycle-tiedon tapahtuman jälkeen; contentHash koskee alkuperäistä snapshotia. Versio-API, version URI ja `export?version=...` säilyttävät alkuperäisen sisältönsä/ETaginsa. Vastauksen `X-Product-Lifecycle-Status` ja `Link: describedby` ohjaavat ajantasaiseen tilaan. Käyttöliittymä hakee sen aina erikseen ennen palvelutoimintojen näyttämistä. [Täsmällinen sopimus](docs/phase-2g.md).
+
+Migraatio `0005_lifecycle` lisää kaksi append-only-taulua. Se ajetaan samassa nykyisessä Compose/Codespaces-startupissa ennen readiness-tilaa. Se ei muuta vanhoja tuotteita, julkaisuja, profiilisnapshotteja tai fixtureitä. Varmuuskopiointi- ja pysäytysohjeet yllä säilyvät.
+
 ## Vaihe 2F: synteettinen JSON → RDF -muunnoskokeilu
 
 Kirjaudu `vero` / `demo-vero`, avaa **Omat luonnokset** ja **Yrityssisältö — JSON API, W3C VC ja SD-JWT VC (synteettinen demo)**. Tuotesivun **JSON → RDF -muunnoskokeilu** käyttää tallennettuja mappingeja. Valitse **Täytä synteettinen kolmen muodon esimerkki**, vahvista synteettisyys ja valitse **Muunna ja vertaa RDF-sisältöä**. Kaikki kolme tuottavat saman RDF-sisällön. Muuta SD-JWT-esimerkin nimeä: graafit eroavat. Anna nimen arvoksi null: muunnos hylätään. Mapping-muutokset on tallennettava ensin; vanha If-Match estää vanhentuneen kokeilun.
@@ -191,7 +208,7 @@ Testit käyttävät oikeaa PostgreSQL:ää ja tuhoavaa erillistä `catalog_test`
 
 ```bash
 docker compose exec -T db createdb -U demo catalog_test
-.venv/bin/pytest tests/test_api.py tests/test_publication.py tests/test_profiles.py tests/test_semantic_validation.py tests/test_derived_validation.py tests/test_distributions.py tests/test_conversion.py tests/test_auth.py tests/test_migrations.py tests/test_public_url.py -q
+.venv/bin/pytest tests/test_api.py tests/test_publication.py tests/test_profiles.py tests/test_semantic_validation.py tests/test_derived_validation.py tests/test_distributions.py tests/test_conversion.py tests/test_lifecycle.py tests/test_auth.py tests/test_migrations.py tests/test_public_url.py -q
 ```
 
 Älä aja tätä testikantaa käyttäviä pytest-ajoja rinnakkain. `TEST_DATABASE_URL` voi muuttaa yhteysosoitetta mutta kannan pitää olla `catalog_test`. Selaintestit käyttävät erikseen käynnistettyä demoa ja oikeaa Keycloak-kirjautumista:
@@ -201,6 +218,6 @@ docker compose exec -T db createdb -U demo catalog_test
 BROWSER_BASE_URL=http://localhost:8000 .venv/bin/pytest tests/test_browser.py -q
 ```
 
-Valmista paikallista Chromiumia käytetään automaattisesti; `CHROMIUM_EXECUTABLE` voi nimetä sen. Selaintestit luovat yksilöidyn testituotteen; julkaisutesti jättää muuttumattoman synteettisen julkaisun historiaan. Alkuperäisiä kolmea demotuotetta ei muuteta. Ilman `BROWSER_BASE_URL`-asetusta kymmenen selaintestiä ohitetaan. Täysi ajo: `BROWSER_BASE_URL=http://localhost:8000 .venv/bin/pytest -q`. GitHub Actionsin etätulos varmistetaan erikseen.
+Valmista paikallista Chromiumia käytetään automaattisesti; `CHROMIUM_EXECUTABLE` voi nimetä sen. Selaintestit luovat yksilöidyn testituotteen; julkaisutesti jättää muuttumattoman synteettisen julkaisun historiaan. Alkuperäisiä kolmea demotuotetta ei muuteta. Ilman `BROWSER_BASE_URL`-asetusta kaksitoista selaintestiä ohitetaan. Täysi ajo: `BROWSER_BASE_URL=http://localhost:8000 .venv/bin/pytest -q`. GitHub Actionsin etätulos varmistetaan erikseen.
 
 Tässä pilviympäristössä Docker-build käyttää alustan proxy-/CA-reittiä: `./scripts/cloud-build.sh`, sitten `docker compose up -d --no-build --wait`. Tavallisen Docker Desktopin komento on yllä oleva `docker compose up --build`. Kirjoitussuojatun kotihakemiston yhteydessä aseta `UV_CACHE_DIR=/workspace/.cache/uv`, `npm_config_cache=/workspace/.cache/npm`, `DOCKER_CONFIG=/workspace/.cache/docker`. Nämä eivät kuulu Windowsin normaaliin käynnistykseen.

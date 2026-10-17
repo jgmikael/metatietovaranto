@@ -315,3 +315,91 @@ def test_synthetic_json_rdf_preview_same_different_and_invalid_without_saving(pa
     logout(page)
     assert page.request.post(base+'/api/v1/drafts/'+before['draftId']+'/conversion-preview',
         data={'examples':[]}).status in (401,422)
+
+
+def test_version_lifecycle_deprecate_withdraw_and_block_service_actions(page):
+    import copy
+    base=os.environ['BROWSER_BASE_URL'];title='Elinkaaritesti '+uuid.uuid4().hex
+    login(page)
+    sample=page.request.get(base+'/api/v1/products/00000000-0000-4000-8000-000000000004/draft').json()
+    fields=('title','description','providerOrganizationId','theme','source','purpose','limitations','accessConditions','availability','synthetic','profileSnapshotId','issuance','syntheticExample','derivedExamples','distributions','primaryDistributionId')
+    data={key:sample[key] for key in fields};data['title']=title
+    identity=page.request.get(base+'/auth/me').json()
+    response=page.request.post(base+'/api/v1/products',data=data,headers={'X-CSRF-Token':identity['csrfToken'],'Idempotency-Key':str(uuid.uuid4())})
+    assert response.status==201,response.text()
+    created=response.json();page.goto(base+'/#draft/'+created['id'])
+    page.get_by_role('button',name='Lähetä tarkastukseen',exact=True).click()
+    expect(page.get_by_text('Tarkastuksessa',exact=True)).to_be_visible()
+    logout(page);login(page,'yritys','demo-yritys');page.goto(base+'/#draft/'+created['id'])
+    page.get_by_label('Tarkastuksen perustelu',exact=True).fill('Synteettinen elinkaaritesti; profiili ja toimitustapojen mappingit tarkastettu.')
+    page.get_by_label('Olen tarkastanut lähdeilmoituksen, SHACL-profiilin ja sen riippuvuudet',exact=True).check()
+    page.get_by_role('button',name='Hyväksy',exact=True).click();page.get_by_role('button',name='Julkaise',exact=True).click()
+    expect(page.get_by_text('Julkaistu versio 1.0.0',exact=True)).to_be_visible()
+    product_id=created['id'];snapshot=page.request.get(base+f'/api/v1/products/{product_id}/versions/1.0.0').json()
+    # Exercise active rendering without storing or calling nonexistent source/issuer services.
+    active=copy.deepcopy(snapshot)
+    for item in active['distributions']:
+        item['availability']='sandbox'
+        if item['type']=='jsonApi':item['api']['serviceUrl']='https://provider.fi/company';item['api']['descriptionUrl']='https://provider.fi/docs'
+        else:item['credential']['initiationUrl']='https://issuer.fi/start?configuration='+item['type']
+    def render(route):route.fulfill(json=active)
+    page.route(base+'/api/v1/products/'+product_id,render)
+    page.route(base+f'/api/v1/products/{product_id}/versions/1.0.0',render)
+    page.reload()
+    for label in ('Käytä JSON-rajapintaa','Pyydä W3C VC lompakkoon','Pyydä SD-JWT VC lompakkoon'):
+        expect(page.get_by_role('link',name=label,exact=True)).to_be_visible()
+    lifecycle_path=base+f'/api/v1/products/{product_id}/versions/1.0.0/lifecycle'
+    def unavailable_parallel(route):route.fulfill(status=503,json={'detail':'Synthetic unavailable lifecycle'})
+    page.route(lifecycle_path,unavailable_parallel);page.reload()
+    expect(page.get_by_text('Ajantasainen elinkaaritieto puuttuu. Palvelutoiminnot ovat estettyinä; lataa sivu uudelleen.',exact=True)).to_be_visible()
+    for label in ('Käytä JSON-rajapintaa','Pyydä W3C VC lompakkoon','Pyydä SD-JWT VC lompakkoon'):
+        expect(page.get_by_role('link',name=label,exact=True)).to_have_count(0)
+    page.unroute(lifecycle_path,unavailable_parallel);page.reload()
+    expect(page.get_by_role('link',name='Käytä JSON-rajapintaa',exact=True)).to_be_visible()
+    panel=page.get_by_role('region',name='Version elinkaari',exact=True)
+    panel.get_by_label('Julkinen elinkaariperustelu — ei henkilötietoja tai salaisuuksia',exact=True).fill('Synteettinen versio on poistumassa käytöstä; korvaavaa versiota ei vielä ole.')
+    panel.get_by_role('button',name='Tallenna elinkaarimuutos',exact=True).click()
+    expect(panel.get_by_text('Versio on poistumassa käytöstä.',exact=True)).to_be_visible()
+    expect(page.get_by_role('link',name='Käytä JSON-rajapintaa',exact=True)).to_be_visible()
+    panel.get_by_label('Uusi elinkaaritila',exact=True).select_option('withdrawn')
+    panel.get_by_label('Julkinen elinkaariperustelu — ei henkilötietoja tai salaisuuksia',exact=True).fill('Synteettinen versio vedetään pois käytöstä testin päätösvaiheessa.')
+    page.once('dialog',lambda dialog:dialog.accept())
+    panel.get_by_role('button',name='Tallenna elinkaarimuutos',exact=True).click()
+    expect(panel.get_by_text('Versio on poistettu käytöstä.',exact=True)).to_be_visible()
+    for label in ('Käytä JSON-rajapintaa','Tutustu rajapintakuvaukseen','Pyydä W3C VC lompakkoon','Pyydä SD-JWT VC lompakkoon'):
+        expect(page.get_by_role('link',name=label,exact=True)).to_have_count(0)
+    page.goto(base+'/#'+product_id+'@1.0.0');expect(panel.get_by_text('Versio on poistettu käytöstä.',exact=True)).to_be_visible()
+    expect(page.get_by_role('link',name='Käytä JSON-rajapintaa',exact=True)).to_have_count(0)
+    page.unroute(base+'/api/v1/products/'+product_id,render);page.unroute(base+f'/api/v1/products/{product_id}/versions/1.0.0',render)
+    logout(page);page.goto(base+'/#');page.get_by_label('Hakusana',exact=True).fill(title);page.get_by_role('button',name='Hae',exact=True).click()
+    expect(page.get_by_role('link',name=title,exact=True)).to_have_count(0)
+    page.get_by_label('Version elinkaaritila',exact=True).select_option('withdrawn');page.get_by_role('button',name='Hae',exact=True).click()
+    page.get_by_role('link',name=title,exact=True).click()
+    expect(panel.get_by_text('Versio on poistettu käytöstä.',exact=True)).to_be_visible()
+    expect(panel.get_by_role('button',name='Tallenna elinkaarimuutos',exact=True)).to_have_count(0)
+    original=page.request.get(base+f'/api/v1/products/{product_id}/versions/1.0.0')
+    assert original.json()==snapshot and original.headers['x-product-lifecycle-status']=='withdrawn'
+    assert page.request.get(base+f'/api/v1/products/{product_id}/export?version=1.0.0').json()==snapshot
+
+
+def test_missing_or_withdrawn_lifecycle_blocks_legacy_service_link(page):
+    import copy
+    base=os.environ['BROWSER_BASE_URL'];page.goto(base)
+    items=page.request.get(base+'/api/v1/products?lifecycleStatus=all').json()['items']
+    assert items,'Earlier publication browser tests should supply a synthetic snapshot'
+    source=copy.deepcopy(items[0]);source.pop('lifecycle',None)
+    source['distributions']=None;source['issuance']={'serviceAvailability':'sandbox','issuanceInitiationUrl':'https://issuer.fi/start','primaryDelivery':'w3cVc'}
+    product=source['id'];version=source['version']
+    page.route(base+'/api/v1/products/'+product,lambda route:route.fulfill(json=source))
+    def unavailable(route):route.fulfill(status=503,json={'detail':'Synthetic unavailable lifecycle'})
+    page.route(base+f'/api/v1/products/{product}/versions/{version}/lifecycle',unavailable)
+    page.goto(base+'/#'+product)
+    expect(page.get_by_text('Ajantasainen elinkaaritieto puuttuu. Palvelutoiminnot ovat estettyinä; lataa sivu uudelleen.',exact=True)).to_be_visible()
+    expect(page.get_by_role('link',name='Pyydä todistus lompakkoon',exact=True)).to_have_count(0)
+    page.unroute(base+f'/api/v1/products/{product}/versions/{version}/lifecycle',unavailable)
+    # A real withdrawn state must block the legacy action too; no state is persisted by route fixtures.
+    life=page.request.get(base+f'/api/v1/products/{product}/versions/{version}/lifecycle').json()
+    page.route(base+f'/api/v1/products/{product}/versions/{version}/lifecycle',lambda route:route.fulfill(json=life|{'status':'withdrawn','reason':'Synteettinen renderöintitesti','events':[]}))
+    page.reload()
+    expect(page.get_by_text('Versio on poistettu käytöstä.',exact=True)).to_be_visible()
+    expect(page.get_by_role('link',name='Pyydä todistus lompakkoon',exact=True)).to_have_count(0)

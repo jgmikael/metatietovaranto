@@ -1,6 +1,7 @@
 """Organization-scoped draft workflow and atomic, immutable publication."""
 from datetime import datetime, timezone, timedelta
 import re
+from typing import Literal
 from uuid import UUID
 from fastapi import APIRouter, HTTPException, Query, Request, Response
 from fastapi.responses import JSONResponse, RedirectResponse
@@ -17,6 +18,7 @@ from apps.api.semantic_validation import validate_snapshot, current_report
 from apps.api.derived_validation import validate_derived, derived_errors
 from apps.api.distributions import normalize_distributions, validate_distributions, distribution_errors
 from apps.api.conversion import ConversionRequest, conversion_preview
+from apps.api.lifecycle import build_lifecycle_router, lifecycle_state, live_body, snapshot_headers
 
 
 def now():return datetime.now(timezone.utc)
@@ -194,47 +196,53 @@ def build_publication_router(engine,base_url,jsonld):
             return {'items':[draft_response(session,get_draft(session,product)) for product in products]}
     @router.get('/api/v1/products')
     def search(q:str=Query('',max_length=200),theme:str=Query('',max_length=100),provider:str=Query('',max_length=200),
-               limit:int=Query(20,ge=1,le=100),offset:int=Query(0,ge=0)):
+               limit:int=Query(20,ge=1,le=100),offset:int=Query(0,ge=0),
+               lifecycleStatus:Literal['current','published','deprecated','withdrawn','all']='current'):
         with Session(engine) as session:
-            bodies=[version_body(row) for row in latest_rows(session)]
+            bodies=[live_body(session,row,base_url) for row in latest_rows(session)]
+            bodies=[body for body in bodies if (lifecycleStatus=='all' or (body.get('lifecycle',{}).get('status','published')!='withdrawn' if lifecycleStatus=='current' else body.get('lifecycle',{}).get('status','published')==lifecycleStatus))]
             bodies=[body for body in bodies if (not q.strip() or q.strip().casefold() in ' '.join(str(body[key]) for key in ('title','description','provider')).casefold())
                     and (not theme or body['theme']==theme) and (not provider or body['provider']==provider)]
             bodies.sort(key=lambda body:(body['title'],body['id']))
             return {'items':bodies[offset:offset+limit],'total':len(bodies),'offset':offset,'limit':limit}
     @router.get('/api/v1/products/{product_id}')
     def detail(product_id:UUID):
-        with Session(engine) as session:return version_body(latest(session,product_id))
+        with Session(engine) as session:return live_body(session,latest(session,product_id),base_url)
     @router.get('/api/v1/products/{product_id}/versions')
     def versions(product_id:UUID):
         with Session(engine) as session:
-            return {'items':[{'version':row.version,'sha256':row.checksum,'publishedAt':row.created_at.isoformat()}
+            return {'items':[{'version':row.version,'sha256':row.checksum,'publishedAt':row.created_at.isoformat(),'sequence':row.sequence,'lifecycle':lifecycle_state(session,row,base_url)}
                 for row in session.scalars(select(ProductVersion).where(ProductVersion.product_id==product_id).order_by(ProductVersion.sequence.desc())).all()]}
     @router.get('/api/v1/products/{product_id}/versions/{version}')
     def version(product_id:UUID,version:str):
         with Session(engine) as session:
             row=session.scalar(select(ProductVersion).where(ProductVersion.product_id==product_id,ProductVersion.version==version))
             if row is None:raise HTTPException(404)
-            return JSONResponse(version_body(row),headers={'ETag':'"'+row.checksum+'"'})
+            return JSONResponse(version_body(row),headers=snapshot_headers(session,row,base_url))
     @router.get('/api/v1/products/{product_id}/export')
     def export(product_id:UUID,format:str=Query('json',pattern='^(json|jsonld)$'),version:str|None=None):
         with Session(engine) as session:
             row=(session.scalar(select(ProductVersion).where(ProductVersion.product_id==product_id,ProductVersion.version==version))
                  if version else latest(session,product_id))
             if row is None:raise HTTPException(404)
-            body=version_body(row)
-            return JSONResponse(jsonld(body) if format=='jsonld' else body,
+            body=version_body(row) if version else live_body(session,row,base_url)
+            headers=snapshot_headers(session,row,base_url)
+            if not version:headers.pop('ETag')
+            return JSONResponse(jsonld(body) if format=='jsonld' else body,headers=headers,
                 media_type='application/ld+json' if format=='jsonld' else 'application/json')
     @router.get('/api/v1/catalog/export')
-    def catalog(format:str=Query('json',pattern='^(json|jsonld)$')):
+    def catalog(format:str=Query('json',pattern='^(json|jsonld)$'),includeWithdrawn:bool=False):
         with Session(engine) as session:
-            bodies=[version_body(row) for row in latest_rows(session)]
+            bodies=[live_body(session,row,base_url) for row in latest_rows(session)]
+            if not includeWithdrawn:bodies=[body for body in bodies if body.get('lifecycle',{}).get('status')!='withdrawn']
             if format=='json':return {'demo':True,'items':bodies}
             return JSONResponse({'@context':{'dcat':'http://www.w3.org/ns/dcat#'},'@id':base_url+'/id/catalog',
                 '@type':'dcat:Catalog','dcat:dataset':[jsonld(body) for body in bodies]},media_type='application/ld+json')
     @router.get('/id/products/{product_id}')
     def uri(product_id:UUID,request:Request):
         with Session(engine) as session:
-            body=version_body(latest(session,product_id));accept=request.headers.get('accept','text/html');headers={'Vary':'Accept'}
+            row=latest(session,product_id);body=live_body(session,row,base_url);accept=request.headers.get('accept','text/html')
+            headers=snapshot_headers(session,row,base_url)|{'Vary':'Accept'};headers.pop('ETag')
             if 'application/ld+json' in accept:return JSONResponse(jsonld(body),media_type='application/ld+json',headers=headers)
             if 'application/json' in accept:return JSONResponse(body,headers=headers)
             return RedirectResponse(f'/#{product_id}',status_code=303,headers=headers)
@@ -243,7 +251,7 @@ def build_publication_router(engine,base_url,jsonld):
         with Session(engine) as session:
             row=session.scalar(select(ProductVersion).where(ProductVersion.product_id==product_id,ProductVersion.version==version))
             if row is None:raise HTTPException(404)
-            body=version_body(row);headers={'Vary':'Accept','ETag':'"'+row.checksum+'"'}
+            body=version_body(row);headers=snapshot_headers(session,row,base_url)|{'Vary':'Accept'}
             accept=request.headers.get('accept','text/html')
             if 'application/ld+json' in accept:return JSONResponse(jsonld(body),media_type='application/ld+json',headers=headers)
             if 'application/json' in accept:return JSONResponse(body,headers=headers)
@@ -418,4 +426,5 @@ def build_publication_router(engine,base_url,jsonld):
             return {'items':[{'id':str(row.id),'actorId':row.actor,'action':row.action,'beforeHash':row.before_hash,
                 'afterHash':row.after_hash,'reason':row.reason,'details':row.details,'createdAt':row.created_at.isoformat()}
                 for row in session.scalars(select(AuditEvent).where(AuditEvent.product_id==product.id).order_by(AuditEvent.created_at)).all()]}
+    router.include_router(build_lifecycle_router(engine,base_url))
     return router
