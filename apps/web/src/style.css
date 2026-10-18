@@ -3,3 +3,5 @@
 .auth{background:#e5edf0;border-radius:6px;padding:1rem;margin-bottom:1rem;overflow-wrap:anywhere}.auth button{margin-left:1rem}.auth details{margin-top:.5rem}select{max-width:100%}
 nav a{color:white}.check{display:flex;gap:.6rem;align-items:center}.check input{width:auto}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#e5edf0;padding:1rem}code{word-break:break-word}.issue-link{display:inline-block;background:#075d82;color:white;padding:.7rem 1rem;border-radius:5px}select{margin-bottom:1rem}summary{cursor:pointer;font-weight:600;margin:1rem 0}.errors{color:#852536}
 .card{min-width:0;overflow-wrap:anywhere}input,textarea{min-width:0}article,section{overflow-wrap:anywhere}
+
+.technical-mappings{max-width:100%;overflow-x:auto}.technical-mappings table{width:100%;border-collapse:collapse}.technical-mappings th,.technical-mappings td{text-align:left;vertical-align:top;padding:.5rem;border-bottom:1px solid #ccdce2}.technical-mappings input{min-width:12rem}

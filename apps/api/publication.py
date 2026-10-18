@@ -19,6 +19,7 @@ from apps.api.derived_validation import validate_derived, derived_errors
 from apps.api.distributions import normalize_distributions, validate_distributions, distribution_errors
 from apps.api.conversion import ConversionRequest, conversion_preview
 from apps.api.lifecycle import build_lifecycle_router, lifecycle_state, live_body, snapshot_headers
+from apps.api.technical_packages import ProposalRequest, PackageRequest, bounded as generate_package, package_errors, bindings
 
 
 def now():return datetime.now(timezone.utc)
@@ -76,15 +77,17 @@ def validation(session,draft):
     else:
         errors += [{'path':'profileSnapshotId','message':issue} for issue in snapshot.manifest['issues']]
         if not snapshot.manifest['shapesArtifactId']:errors.append({'path':'profileSnapshotId','message':'SHACL-graafi puuttuu'})
+    root_shape=(draft.content.get('technicalPackage') or {}).get('rootShapeUri')
     if snapshot:
         report=draft.content.get('semanticValidation')
-        if not current_report(report,snapshot,draft.content.get('syntheticExample')):
+        if not current_report(report,snapshot,draft.content.get('syntheticExample'),root_shape):
             errors.append({'path':'syntheticExample','message':'Esimerkki tai ajantasainen SHACL-raportti puuttuu. Tallenna luonnos tarkistaaksesi sisällön.'})
         elif report.get('status')!='conforms':
             errors += [{'path':item.get('path','/syntheticExample'),'message':item.get('message','SHACL-tarkistus epäonnistui'),
                         'ruleId':item.get('ruleId')} for item in report.get('results',[])]
             if not report.get('results'):errors.append({'path':'syntheticExample','message':'SHACL-tarkistus ei läpäissyt'})
     if snapshot:errors+=derived_errors(snapshot,draft.content)
+    errors += package_errors(draft.content,snapshot)
     if draft.content.get('distributions') is not None:
         if snapshot:errors+=distribution_errors(snapshot,draft.content)
         return errors
@@ -145,9 +148,11 @@ def write_content(session,request,product,draft,data,identity):
         if organization_id and session.get(Organization,organization_id) is None:raise HTTPException(422,f'{key}: organisaatiota ei löydy')
     body|={'provider':provider.legal_name,'modifiedAt':now().isoformat(),
            'dataElements':snapshot.manifest['elements'] if snapshot else draft.content.get('dataElements',[])}
-    body['semanticValidation']=validate_snapshot(snapshot,body.get('syntheticExample')) if snapshot else None
+    body['semanticValidation']=validate_snapshot(snapshot,body.get('syntheticExample'),(body.get('technicalPackage') or {}).get('rootShapeUri')) if snapshot else None
     body['derivedValidation']=validate_derived(snapshot,body.get('derivedExamples',[])) if snapshot else None
-    body['distributionValidation']=validate_distributions(snapshot,body.get('distributions')) if snapshot else None
+    body['distributionValidation']=validate_distributions(snapshot,body.get('distributions'),(body.get('technicalPackage') or {}).get('rootShapeUri')) if snapshot else None
+    if body.get('technicalPackage') and (not snapshot or body['technicalPackage'].get('bindingHash')!=bindings(body,snapshot.checksum)):
+        body['technicalPackage']={**body['technicalPackage'],'status':'needsRegeneration'}
     draft.content=body;draft.profile_snapshot_id=data.profileSnapshotId;draft.revision+=1
     draft.checksum=checksum(body);draft.status='draft';draft.approved_review_id=None
     draft.contributors=list(dict.fromkeys(draft.contributors+[identity.subject]));draft.modified_at=now()
@@ -312,9 +317,62 @@ def build_publication_router(engine,base_url,jsonld):
             snapshot=session.get(ProfileSnapshot,draft.profile_snapshot_id) if draft.profile_snapshot_id else None
             if snapshot is None or not draft.content.get('distributions'):
                 raise HTTPException(422,'Tallenna ensin yhteinen profiili ja toimitustapojen mappingit')
-            result=conversion_preview(snapshot,draft.content['distributions'],data.model_dump(mode='json')['examples'])
+            result=conversion_preview(snapshot,draft.content['distributions'],data.model_dump(mode='json')['examples'],(draft.content.get('technicalPackage') or {}).get('rootShapeUri'))
             response.headers['ETag']=etag(draft)
             return result|{'draftRevision':draft.revision,'draftContentHash':draft.checksum}
+    @router.post('/api/v1/drafts/{draft_id}/technical-package/proposal')
+    def propose_package(draft_id:UUID,data:ProposalRequest,request:Request,response:Response):
+        with Session(engine) as session:
+            found=session.get(Draft,draft_id)
+            if found is None:raise HTTPException(404)
+            product,identity=get_owned(session,request,found.product_id,write=True)
+            require_editor(session,identity,product.owner_organization_id)
+            draft=get_draft(session,product);check_etag(request,draft)
+            snapshot=session.get(ProfileSnapshot,draft.profile_snapshot_id) if draft.profile_snapshot_id else None
+            if snapshot is None:raise HTTPException(422,'Valitse ja tallenna ensin SHACL-profiili')
+            if not can_read_snapshot(session,request,snapshot):raise HTTPException(404,'Profiilisnapshotia ei löydy')
+            result=generate_package('proposal',snapshot,draft.content,data.model_dump(mode='json'),base_url)
+            response.headers['ETag']=etag(draft)
+            return result|{'sourceSnapshotSha256':snapshot.checksum,'draftRevision':draft.revision}
+    @router.post('/api/v1/drafts/{draft_id}/technical-package')
+    def make_package(draft_id:UUID,data:PackageRequest,request:Request,response:Response):
+        with Session(engine) as session:
+            found=session.get(Draft,draft_id)
+            if found is None:raise HTTPException(404)
+            product,identity=get_owned(session,request,found.product_id,write=True)
+            require_editor(session,identity,product.owner_organization_id)
+            draft=get_draft(session,product);check_etag(request,draft)
+            require_editor(session,identity,UUID(draft.content.get('providerOrganizationId') or str(product.provider_organization_id)))
+            if draft.status=='published':raise HTTPException(409,'Luo ensin uusi työkopio')
+            snapshot=session.get(ProfileSnapshot,draft.profile_snapshot_id) if draft.profile_snapshot_id else None
+            if snapshot is None:raise HTTPException(422,'Valitse ja tallenna ensin SHACL-profiili')
+            if not can_read_snapshot(session,request,snapshot):raise HTTPException(404,'Profiilisnapshotia ei löydy')
+            generated=generate_package('generate',snapshot,draft.content,data.model_dump(mode='json'),base_url)
+            if isinstance(generated,dict):
+                # Diagnostics do not replace an earlier approved package or alter a draft.
+                return {'generation':generated,'draft':draft_response(session,draft)}
+            package,items=generated
+            before=draft.checksum
+            body=draft.content|{'technicalPackage':package,'distributions':items,'modifiedAt':now().isoformat()}
+            body['distributionValidation']=validate_distributions(snapshot,items,package['rootShapeUri'])
+            body['semanticValidation']=validate_snapshot(snapshot,body.get('syntheticExample'),package['rootShapeUri'])
+            draft.content=body;draft.revision+=1;draft.checksum=checksum(body);draft.status='draft';draft.approved_review_id=None
+            draft.contributors=list(dict.fromkeys(draft.contributors+[identity.subject]));draft.modified_at=now()
+            record(session,product,identity,'technicalPackage.generated',before,draft.checksum,
+                   'Esitysvalinnat ja muotokohtaiset käytännöt tarkastettu',{'packageId':package['packageId']})
+            session.commit();response.headers['ETag']=etag(draft)
+            return {'generation':{'status':'ready'},'draft':draft_response(session,draft)}
+    @router.get('/id/technical-packages/{package_id}/{artifact_name}')
+    def public_package_artifact(package_id:str,artifact_name:str):
+        if not re.fullmatch(r'[a-f0-9]{64}',package_id):raise HTTPException(404)
+        with Session(engine) as session:
+            row=session.scalar(select(ProductVersion).where(ProductVersion.content['technicalPackage']['packageId'].astext==package_id).limit(1))
+            if row is None:raise HTTPException(404)
+            package=row.content['technicalPackage'];artifact=package['artifacts'].get(artifact_name)
+            if artifact is None:raise HTTPException(404)
+            return Response(artifact['content'],media_type=artifact['mediaType'],headers={
+                'ETag':'"'+artifact['sha256']+'"','Cache-Control':'public, max-age=31536000, immutable',
+                'X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'none'",'Access-Control-Allow-Origin':'*'})
     @router.post('/api/v1/products/{product_id}/drafts')
     def next_draft(product_id:UUID,request:Request,response:Response):
         with Session(engine) as session:
@@ -336,7 +394,7 @@ def build_publication_router(engine,base_url,jsonld):
             if command=='validate':
                 snapshot=session.get(ProfileSnapshot,draft.profile_snapshot_id) if draft.profile_snapshot_id else None
                 return {'errors':validation(session,draft),'contentHash':draft.checksum,
-                    'semanticValidation':validate_snapshot(snapshot,draft.content.get('syntheticExample')) if snapshot else None,
+                    'semanticValidation':validate_snapshot(snapshot,draft.content.get('syntheticExample'),(draft.content.get('technicalPackage') or {}).get('rootShapeUri')) if snapshot else None,
                     'storedReport':draft.content.get('semanticValidation'),
                     'derivedValidation':validate_derived(snapshot,draft.content.get('derivedExamples',[])) if snapshot else None}
             check_etag(request,draft)

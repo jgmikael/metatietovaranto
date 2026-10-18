@@ -2,7 +2,7 @@
 
 ## Rajaus
 
-Lue `ROADMAP.md`, `STATUS.md` ja `metatietovaranto_suunnittelu.md`. Suunnitelma kuvaa tavoitearkkitehtuurin. Nykyinen toimitus kattaa ROADMAPin vaiheet 1, 2A, 2B, 2C, 2D, 2E, 2F ja 2G (luonnokset, riippumaton hyväksyntä, lukitut profiili-/julkaisusnapshotit, VC-metatiedot ja auditointi). Lue myös docs/phase-2c.md, docs/phase-2e.md, docs/phase-2f.md ja docs/phase-2g.md. Vaihe 2D tarkistaa synteettisen esimerkkisisällön offline SHACL Corella. Älä lisää SPARQL/JS/AF-laajennuksia, laajempaa elinkaarta tai ulkoisia integraatioita ilman erillistä toimeksiantoa. Älä yhdistä main-haaraan automaattisesti.
+Lue `ROADMAP.md`, `STATUS.md` ja `metatietovaranto_suunnittelu.md`. Suunnitelma kuvaa tavoitearkkitehtuurin. Nykyinen toimitus kattaa ROADMAPin vaiheet 1, 2A, 2B, 2C, 2D, 2E, 2F, 2G ja 2H (luonnokset, riippumaton hyväksyntä, lukitut profiili-/julkaisusnapshotit, VC-metatiedot ja auditointi). Lue myös docs/phase-2c.md, docs/phase-2e.md, docs/phase-2f.md ja docs/phase-2g.md. Vaihe 2D tarkistaa synteettisen esimerkkisisällön offline SHACL Corella. Älä lisää SPARQL/JS/AF-laajennuksia, laajempaa elinkaarta tai ulkoisia integraatioita ilman erillistä toimeksiantoa. Älä yhdistä main-haaraan automaattisesti.
 
 ## Sitova semanttinen suunnitteluperiaate
 
@@ -14,7 +14,7 @@ Lue `docs/vc-periaate-2.md`. Ensisijainen toimitusmuoto on W3C VC. Tuotesivu tar
 
 ## Työskentelyn käytännöt
 
-Käytä nykyistä checkoutia: pilvitehtävät ovat jo eristettyjä. Älä luo worktreea ilman käyttäjän pyyntöä. Säilytä käyttäjän muutokset. Kaikki fixturet ovat synteettisiä. Älä lisää salaisuuksia, aitoja rekisteritietoja tai väitteitä QEAA-/DCAT-AP-vaatimustenmukaisuudesta.
+Käytä nykyistä checkoutia: pilvitehtävät ovat jo eristettyjä. Älä luo worktreea ilman käyttäjän pyyntöä. Säilytä käyttäjän muutokset. Testattavat henkilö-/yrityssisällöt ovat synteettisiä. fixtures/tietomallit-hakemisto sisältää myös alkuperäisiä julkisia mallikuvauksia, joiden alkuperä ja tarkiste on lukittu. Älä lisää salaisuuksia, aitoja rekisteritietoja tai väitteitä QEAA-/DCAT-AP-vaatimustenmukaisuudesta.
 
 ## Käynnistys ja todennus
 
@@ -47,3 +47,9 @@ Vaiheen 2F muunnoslaboratorio on tallentamaton ja vain omistajaorganisaation edi
 ## Julkaisuversioiden elinkaari
 
 2G sallii published → deprecated/withdrawn ja deprecated → withdrawn, vain omistajan publisherille. Säilytä erillinen lifecycle-ETag, idempotenssi, append-only-tapahtuma ja audit/outbox samassa transaktiossa. Älä muokkaa alkuperäistä ProductVersion-sisältöä tai julkaisuoutboxia. Versio-API ja version vienti säilyttävät snapshotin; ajantasainen tila löytyy erillisestä julkisesta resurssista ja vastausotsakkeista. Withdrawn-uusimman tilalle ei nosteta aiempaa versiota. Estä palvelutoiminnot myös historiallisessa versiossa ja tilatiedon puuttuessa. Aja tests/test_lifecycle.py sekä täytetyn 0004-kannan migraatiotesti ja selainpolut.
+
+## SHACL-pohjaiset tekniset paketit
+
+Lue docs/phase-2h.md. Paketilla ei muokata lähdeprofiilia tai OWLia. Säilytä generaattorin yksilöidyt estot, yhteiset hyväksytyt esitysvalinnat, erillinen IETF Type Metadata ja paikallinen lukittu JSON-LD-lataaja. Älä väitä upstream-testifixtureä aidoksi muuttamattomaksi Tietomallit-exportiksi. Aja tests/test_technical_packages.py sekä oikean JSON-LD-prosessorin RDF/SHACL-tarkistukset. Paketin generointi on editorin kirjoitus ja mitätöi hyväksynnän. Julkisia artefakteja palvellaan vain muuttumattomista julkaisuista, myös withdrawn-tilassa; luonnoksista ei synny julkista kontekstia. Paikallisen HTTP-demon ja Codespacesin Private-HTTPS-portin rajat ilmoitetaan erikseen.
+
+WE BUILD -aineistokoe: lue docs/webcor-acceptance.md. Säilytä fixtures/tietomallit/webcor-0.0.2/original.ttl tavuntarkasti. Erillisen testiprojektion lisättyä xsd:string-rajoitetta ei saa väittää alkuperäiseksi eikä alkuperäisen profiilin generointia valmiiksi. Täysi testi on edelleen tests/test_technical_packages.py; kohdennettu ajo -k webcor sisältää 8 tapausta.

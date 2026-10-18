@@ -1,3 +1,63 @@
+# 2H:n aineistokokeen täydennys — WE BUILD 0.0.2 (18.10.2026)
+
+Käyttäjä toimitti alkuperäisen Turtle-exportin, profiilin <https://iri.suomi.fi/model/webcor/> ja version 0.0.2. Tiedosto on lukittu muuttamattomana `fixtures/tietomallit/webcor-0.0.2/original.ttl`: **29 811 tavua**, **429 kolmikkoa**, SHA-256 **2ad4331272558bb541b7804f194a74e261d8313985554015ccc4e23785286133**. Tiedoston profiili-/versiotiedot täsmäävät ilmoitukseen. Alkuperä on käyttäjän ilmoittama alustalta ladattu tiedosto; riippumatonta verkkovertausta ei väitetä tehdyksi (403). Provenienssi, raportti ja erillisen testiprojektion muutosluettelo/tarkiste tallennettu.
+
+Koko profiili **ei ole generaattorin tukema valmis paketti**: 24 literaaliominaisuudelta puuttuu sh:datatype ja SKOS owl:imports on unresolved. Viisi juurta tuottavat hallitun eston; API säilyttää alkuperäiset tavut/luonnoksen ja estää tarkastukseen lähettämisen. Tietotyyppejä, kardinaliteetteja tai OWL-riippuvuuksia ei päätellä tai haeta verkosta.
+
+Erillinen paikallinen synteettinen Person/familyName-projektio lisää xsd:stringin eksplisiittisenä testioletuksena, ei alkuperäisen profiilin määrityksenä. Sillä on eri profiili-identiteetti/testiversio; minCountia/maxCountia ei keksitä. Oikea PyLD + lukittu lataaja tuottaa käsin kirjoitetun odotteen kanssa isomorfisen RDF-graafin. Se tarkistetaan projektion sekä alkuperäisen SHACLin kanssa offline yhdellä Person-fokussolmulla; puuttuvia ulkoisia riippuvuuksia tai puuttuvia tyyppirajoitteita ei väitetä tarkistetuiksi. [Täsmällinen koeraportti](docs/webcor-acceptance.md).
+
+## Todella ajettu tässä täydennyksessä
+
+- Kohdennettu realistisen aineiston koe: **8 passed, 34 deselected, 1 warning in 5.45s**. Rajatut vanhat testit kuuluvat täyteen ajoon.
+- Perus-2H:n koko README/CI:n 12 tiedoston API-/PostgreSQL-/migraatiosarja: **189 passed, 4 warnings in 318.14s (0:05:18)**. Ei epäonnistuneita tai ohitettuja. Sisältää kaikki aiemmat 181 testiä ja 8 uutta aineistotapausta; oikeudet, hyväksyntä, muuttumattomat julkaisut ja vanhan/tyhjän kannan migraatiot säilyivät. Kohdennettu ajo ei ole lisätestimäärä tämän päälle.
+- Ensimmäisessä kohdennetussa ajossa testin oletus claims-listan järjestyksestä korjattiin: molempien standardipolkujen sisältyminen tarkistetaan järjestyksestä riippumatta. Lopullinen rajattu koe läpäisee.
+- Sovelluskoodia, skeemaa, UI:ta tai käynnistysasetuksia ei muutettu. Web-buildia, Docker-imagea, selaintestejä tai demokannan restartia ei ajettu uudelleen tässä testi-/dokumentaatiotäydennyksessä. Aiemmat tulokset ovat alla historiassa; niitä ei lasketa uusiksi ajoiksi. catalog-kantaa ei tyhjennetty, API-testit käyttävät catalog_test-kantaa.
+- Windowsin, uuden Codespacen ja GitHub Actionsin etätulosta ei varmistettu tässä ympäristössä. Ei allekirjoittamista tai lompakkotestausta.
+
+## PR-tilanne
+
+GitHubin git-viitteistä tarkistettiin käyttäjän avaamat **PR #12** (perus-2H) ja **PR #13** (attribuuttisemantiikka). Tämä koe täydentää PR #12:n aiemmin avoimen aineistovaatimuksen toimeksiannon sallimalla tavalla: koko aineiston raja raportoidaan ja erillinen rajattu tapaus testataan. Se ei väitä koko WE BUILD 0.0.2:n generointia tuetuksi. PR #12:n vaadittujen GitHub-tarkistusten ja katselmoinnin on edelleen läpäistävä. PR #13:n ETSI-/EU-alkutekstitarkistus jää avoimeksi.
+
+Toteutuscommit **9420d05** on työnnetty haaraan `feat/phase-2h-technical-packages`; olemassa oleva [PR #12](https://github.com/jgmikael/metatietovaranto/pull/12) saa nämä muutokset automaattisesti. PR:n kuvausta yritettiin päivittää sekä `gh pr edit 12 --body-file docs/pull-request.md` -komennolla (GraphQL) että REST PATCH /pulls/12 -pyynnöllä: molemmat estyivät **Forbidden**-vastaukseen. **Kuvaustekstiä ei ole päivitetty GitHubissa**: kopioi ajantasainen docs/pull-request.md olemassa olevan PR:n ensimmäisen kuvauksen Edit-kenttään. Main-haaraa ei muutettu. Pohjamuutos tuodaan myös jatkohaaraan/PR #13; se ei sulje jatkon normatiivisten alkutekstien tarkistuspuutetta.
+
+---
+
+Seuraavat ovat alkuperäisen 2H-toimituksen historiatietoja ennen yllä olevaa aineistotäydennystä. Niiden aiempi puuttuvan exportin tila on korvattu yllä olevalla tuloksella.
+
+# Vaihe 2H — SHACL-pohjaiset tekniset kuvauspaketit (17.10.2026)
+
+Pohja main `ac002ad` (PR #11), työhaara `feat/phase-2h-technical-packages`. Toteutus ja täsmällinen rajaus: [docs/phase-2h.md](docs/phase-2h.md). Tämä tehtävä korvaa aiemman DCAT-AP-ehdotuksen vaiheelle 2H.
+
+Toteutettu lukitusta SHACL-snapshotista yhteiset tarkastettavat esitysvalinnat/mappingit, JSON-LD 1.1 -konteksti, yhteinen JSON Schema, SD-JWT VC draft-19 Type Metadata, erilliset mappingit sekä synteettiset allekirjoittamattomat esimerkit. Paketti ja tarkisteet kulkevat luonnoksen, riippumattoman hyväksynnän ja muuttumattoman julkaisun mukana. Muutos mitätöi hyväksynnän; keskeneräinen/vanhentunut paketti ei kelpaa julkaistavaksi. Julkiset artefaktit ovat sisältöosoitteisia ja saatavilla myös withdrawn-julkaisuille. Vanhoihin julkaisuihin/profiileihin/fixtureihin ei luotu paketteja taustalla. Useat sanastoviitteet ja riippuvuusaineistot lisättiin tuontikäyttöliittymään. Ei uutta relaatiomigraatiota tai ulkoisia myöntäjäintegraatioita.
+
+## Lopullisesta toteutuksesta todella ajettu
+
+- Koko API-/PostgreSQL-/migraatiosarja (README/CI:n 12 tiedostoa): **181 passed, 4 warnings in 298.49s (0:04:58)**. Ei epäonnistuneita tai ohitettuja. Mukana tyhjä/legacy-kanta, toistuvat migraatiot/startup, oikeudet, CSRF, ETag/idempotenssi, SHACL/johdannaiset, hyväksyntä, immutable-julkaisut ja elinkaari.
+- Uuden pakettimoduulin erillinen korjauksen jälkeinen ajo: **34 passed**; nämä sisältyvät yllä olevan täyden ajon 181 testiin. Mukana determinismi, kymmenen literaalityyppiä, sisäkkäisyys/moniarvoisuus, varatut/törmäävät nimet, alkuperäiset IRI:t, useat sanastot/lukitut riippuvuudet, Type Metadata, luku-/kirjoitusoikeudet, nykyinen tarjoaja, hyväksynnän mitätöinti ja julkiset artefaktit.
+- Oikea Chromium + Keycloak, lopullista Docker-toteutusta vasten: **13 passed, 1 warning in 99.15s (0:01:39)**. Mukana aiemmat 12 selainpolkua ja uusi 2H:n editori → mapping-ehdotus → generointi → tallennus/reload → eri käyttäjän hyväksyntä → julkaisu → artefakti sekä mapping-taulukon mobiilileveys.
+- **194 eri pytest-testiä** yhteensä; erillistä 34 testin ajoa ei lasketa uudelleen. Starlette/httpx- ja RDFLib-varoitukset eivät ole ohituksia.
+- `uv sync --locked`, `npm ci --prefix apps/web` ja `npm run build --prefix apps/web`: läpäisivät. PyLD 2.0.4 ja transitiiviset riippuvuudet lukittu uv.lockiin.
+- `bash scripts/cloud-build.sh` ja `docker compose up -d --no-build --wait`: läpäisivät; TLS-tarkistuksia ei poistettu. Käynnissä olevan imagen **34 lähde-/migraatio-/web-build-/standardiaineisto-/lock-tiedoston** SHA:t vastasivat checkoutia.
+- Myös `docker compose up --build -d --wait` todella yritettiin tässä tehtävässä: **epäonnistui build-kontin DNS-virheeseen** (`Temporary failure in name resolution`, pip/uv). Tätä ei ilmoiteta läpäisseeksi. Pilviskripti käyttää ympäristön olemassa olevaa proxy-/CA-reittiä; sama lähde rakentui sillä ja käynnistyi.
+- Käytössä olevan `catalog`-kannan 13 metatietotaulun kokonaissisältötarkisteet säilyivät lopullisen imagen restartin yli (ennen viimeistä selainajoa): 66 tuotetta/luonnosta, 59 muuttumatonta julkaisua, 34 profiilisnapshotia, 3 organisaatiota ja 5 jäsenyyttä. Kaikkien **59 julkaisun** sisältötarkiste ja version API vastasivat alkuperäistä; myös yksi varhainen 2C-versio ilman versionUriä. **45 julkista artefaktia** tarkistettiin. Varsinaista demokantaa ei tyhjennetty, auth-istuntoja ei kopioitu.
+- Alembic head edelleen `0005_lifecycle`; `alembic check`: **No new upgrade operations detected**. Ei uutta skeemamigraatiota. Startup/tyhjä/vanha kanta testattu; fixturet eivät palaudu tavallisessa restartissa.
+- Erillinen julkaistun paketin toimintakoe: yhdeksän artefaktia haettiin oikeista julkisista reiteistä, tavut/tarkisteet tarkistettiin. HTTP:llä haettu konteksti käsiteltiin PyLD:llä **lukitulla paikallisella lataajalla**, RDF vastasi käsin kirjoitettua odotettua graafia ja läpäisi julkaisun alkuperäisen SHACL-snapshotin. Lähteen manifestin SHA vastasi julkaistun paketin viitettä. Tämäkin käytti synteettistä aineistoa.
+- Aiemman koko ajon löytämä nykyisen tarjoajan oikeustarkistuksen virhe korjattiin; yllä olevat lopulliset API-tulokset sisältävät regressiotestin. Ensimmäisen uuden selainajon valitsinvirhe korjattiin; lopullinen 13 testin ajo läpäisi.
+
+## Ajamattomat / varmistamatta jääneet
+
+Aidosta muuttamattomasta Tietomallit-exportista ei voitu tehdä hyväksymiskoetta (HTTP 403); virallisen työkalun migraatiotestifixture ja erillinen suppea projektio testattiin, eikä niitä nimetä aidoksi exportiksi. Windows Docker Desktopia, oikean uuden Codespacen luontia/automaattista selainavausta/Private-portin ajonaikaista tilaa, ulkoisen pysyvän HTTPS-palvelun noutoa tai GitHub Actions -ajoa ei voitu varmistaa tässä ympäristössä. `.devcontainer`, Compose-portit ja toimitetut Alembic-revisiot säilyvät muuttumattomina. Kuorma-/tietoturva-auditointia tai ulkoisen myöntäjän/allekirjoituksen/lompakon integraatiotestejä ei ajettu; ne eivät ole tämän paikallisen generointivaiheen toteutusväitteitä.
+
+## Avoin hyväksymiskriteeri
+
+**En suosittele yhdistämistä vielä:** käyttäjän vaatima aidon julkisen muuttamattoman Tietomallit-exportin testi puuttuu noutoeston vuoksi. `fixtures/tietomallit/provenance.json` kertoo virallisen työkalurepositorion testiaineiston alkuperän/tarkisteen ja sen testimuokkaukset. Koko aineiston rajoitteet raportoidaan; erillinen projektio ei muuta alkuperäistä eikä osoita koko profiilin tukea. Tarkastettava PR-kuvaus on [docs/pull-request.md](docs/pull-request.md). Automaattista yhdistämistä ei tehdä.
+
+Toteutuscommit `21a04c9` on työnnetty GitHubiin haaraan `feat/phase-2h-technical-packages`. PR:n avaaminen yritettiin sekä `gh pr create --draft --body-file docs/pull-request.md` (GraphQL) että REST `POST /repos/jgmikael/metatietovaranto/pulls` -pyynnöllä. Molemmat estyivät ympäristön **Forbidden**-vastaukseen. **PR:ää ei ole luotu.** Native git push onnistui; uutta tokenia tai oikeuksien kiertotapaa ei käytetty.
+
+[Avaa tarkastettava PR käsin](https://github.com/jgmikael/metatietovaranto/compare/main...feat/phase-2h-technical-packages?expand=1), base `main`, compare `feat/phase-2h-technical-packages`; valmis kuvaus on `docs/pull-request.md`. Avaa luonnoksena avoimen aidon exportin hyväksymiskokeen vuoksi. [Kokeile haaran Codespacessa](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2h-technical-packages); täsmällinen kokeilupolku README:n alussa. Main säilyi commitissa `ac002ad`; automaattista yhdistämistä ei tehty.
+
+---
+
 # 2G:n PR-esitarkistus käyttäjän pyynnöstä — 17.10.2026
 
 Käyttäjä pyysi PR:n avaamista ja ennen yhdistämissuositusta automaattiset tarkistukset sekä lyhyen toimintakokeilun ilman omaa demotestaustaan. Tarkistettu haara `feat/phase-2g-lifecycle`, lähtö-HEAD `d0a5232`, sovellustoteutus `1146932`. Main `79dc9d1` on ennallaan ja sisältyy haaraan. Tässä esitarkistuksessa ei muutettu sovelluskoodia, migraatiota tai testejä; päivitettiin tulokset ja valmis PR-kuvaus.

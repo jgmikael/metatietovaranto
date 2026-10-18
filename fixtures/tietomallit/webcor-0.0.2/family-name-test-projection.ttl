@@ -1,0 +1,15 @@
+# SYNTHETIC LOCAL TEST PROJECTION -- NOT A TIETOMALLIT EXPORT.
+# Source: https://iri.suomi.fi/model/webcor/ version 0.0.2
+# Source SHA-256: 2ad4331272558bb541b7804f194a74e261d8313985554015ccc4e23785286133
+# Retain only Person's familyName occurrence and its original identifiers/types.
+# ADD sh:datatype xsd:string as an EXPLICIT LOCAL TEST ASSUMPTION, absent in source.
+# Do not add min/max cardinalities. Exclude other fields and ontology imports here,
+# not from original.ttl. Never publish this as the unmodified webcor 0.0.2 profile.
+@prefix webcor: <https://iri.suomi.fi/model/webcor/> .
+@prefix eu-core: <https://iri.suomi.fi/model/eu-core/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+<urn:metatietovaranto:test:webcor-family-name> a owl:Ontology .
+webcor:Person a sh:NodeShape ; sh:targetClass eu-core:Person ; sh:property webcor:familyName .
+webcor:familyName a sh:PropertyShape, owl:DatatypeProperty ; sh:path eu-core:familyName ; sh:datatype xsd:string .
