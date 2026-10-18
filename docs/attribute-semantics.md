@@ -1,6 +1,6 @@
 # Vaiheen 2H jatko — attribuuttien semanttiset viittaukset
 
-18.10.2026. Erillinen haara `feat/phase-2h-attribute-semantics`, alkuperäinen pohja 2H:n `ace80e3`, täydennetty aineistokokeen commitilla `8bc37dc`. Mainissa on vielä 2G (`ac002ad`), joten tämän jatko-PR:n base on `feat/phase-2h-technical-packages`. Yhdistä pohja ensin ja kohdista jatko-PR mainiin sen jälkeen; kumpaakaan ei yhdistetä automaattisesti. 2H:n aito aineistokoe on täydennetty käyttäjän toimittamalla WE BUILD 0.0.2 -exportilla: [tulos ja tarkat rajat](webcor-acceptance.md). Koko profiilia ei väitetä generaattorin tukemaksi.
+18.10.2026. Työhaara `feat/phase-2h-attribute-semantics`. Perus-2H:n PR #12 on yhdistetty mainiin (`9258fff`), ja main on tuotu tähän työhaaraan commitissa `339824e`. PR #13:n GitHub-base pitää tarkistaa/vaihtaa mainiksi; API-vaihto estyi Forbidden-vastaukseen. [Normatiivisen tarkistuksen nykytila, main-pohjan testit ja tarvittavat lähdetiedostot](pr13-normative-review.md). WE BUILD 0.0.2 -aineistokoe on tehty: [tulos ja tarkat rajoitteet](webcor-acceptance.md). Koko profiilia ei väitetä generaattorin tukemaksi. Automaattista yhdistämistä ei tehdä.
 
 ## Sopimus: Metatietovarannon semanttinen laajennus 1.0.0
 

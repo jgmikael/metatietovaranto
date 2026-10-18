@@ -4,7 +4,7 @@
 
 JSON Scheman `x-term`/`x-mtv-shacl`, SD-JWT Type Metadatan `x-mtv-semantic` ja yhteinen mapping yksilöivät saman SHACL-käyttöyhteyden, alkuperäiset IRI:t ja lähdesnapshotin. Laajennusprofiili 1.0.0, skeema ja mapping löytyvät Type Metadatan omista x-mtv-viitteistä tarkisteineen. Esimerkkikuluttaja lukee yhden väitepolun semantiikan ilman väitearvoja; [sopimus, ajettava esimerkki ja ETSI/EU-vastaavuustaulukko](docs/attribute-semantics.md).
 
-Tämä on erillinen jatkohaara vielä yhdistämättömän 2H-haaran päällä; PR:n pohja on `feat/phase-2h-technical-packages`. Vanhat julkaisut säilyvät muuttumattomina. Katalogiviitteitä voi lisätä **Muokkaa → Ulkoiset attribuutti- ja todistusjärjestelykatalogit** -osiossa. Viitteet tarvitsevat dokumentoidun alkuperän ja normaalin hyväksynnän. ETSI-alkutekstien ja EU-asetuksen ajantasaisuuden tarkistus jäi verkkoeston vuoksi avoimeksi; paikallinen laajennus ei väitä standardienmukaisuutta tai lompakkotukea.
+Perus-2H:n PR #12 on nyt mainissa. PR #13:n työhaaraan on tuotu main `9258fff`; PR:n base-kentäksi tulee valita `main` GitHubissa. ETSI-/EU-alkutekstien noudot estyvät edelleen 403-vastaukseen: [tarkistuksen tila ja tarvittavat tiedostot](docs/pr13-normative-review.md). Vanhat julkaisut säilyvät muuttumattomina. Katalogiviitteitä voi lisätä **Muokkaa → Ulkoiset attribuutti- ja todistusjärjestelykatalogit** -osiossa. Viitteet tarvitsevat dokumentoidun alkuperän ja normaalin hyväksynnän. ETSI-alkutekstien ja EU-asetuksen ajantasaisuuden tarkistus jäi verkkoeston vuoksi avoimeksi; paikallinen laajennus ei väitä standardienmukaisuutta tai lompakkotukea.
 
 ## Vaihe 2H: tekninen kuvauspaketti
 

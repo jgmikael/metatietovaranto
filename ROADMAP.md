@@ -113,6 +113,8 @@ Erillinen tarkastettava jatkohaara 2H:n päällä: [sopimus ja lähdeversiot](do
 
 Versioitu oma laajennusprofiili, schema-/mapping-löydettävyys ja standardin base64-SRI-ketju julkaistaan artefakteina. Esimerkkikuluttaja lukee semantiikkaa ilman väitearvoja tai allekirjoituksen tarkistusta. Valinnaiset attribuutti-/järjestelykatalogivastaavuudet edellyttävät lähdettä, versiota, todistusaineiston tarkistetta ja normaalia hyväksyntää. TS11 1.0.1 ja molemmat viralliset tietomallit on lukittu muuttamattomina; pyydettyjen ETSI-versioiden ja EU-asetuksen ajantasaisen tekstin tarkistus on avoin 403-eston vuoksi. Koneellinen puuteraportti ei ole vaatimustenmukaisuusväite.
 
+Main-pohja tuotu PR #13:n työhaaraan (main `9258fff`, merge `339824e`). [Uusi normatiivisen lähdetarkistuksen yritys](docs/pr13-normative-review.md): ETSI/EUR-Lex edelleen HTTP 403; TS11-lukot uudelleen varmennettu virallisesta Gitistä. Alkutekstivertailu ja EU-muutosten ajantasaisuus vaativat vielä lähdeaineistot.
+
 Jäljellä: normatiivisten lähteiden tarkistus ja mahdolliset täsmennykset sen perusteella sekä erikseen tilattavat katalogirekisteröinti- ja ulkoisen myöntäjän integraatiot. Osittainen esitys ei osoita piilotetun attribuutin puuttumista alkuperäisestä todistuksesta.
 
 ## Vaiheen 2 myöhemmät osat — erillinen toimeksianto

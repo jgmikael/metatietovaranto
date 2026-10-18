@@ -2,7 +2,7 @@
 
 SD-JWT VC:n claim-polku ei yksin kerro alkuperäistä semanttista ominaisuutta tai sen SHACL-käyttöyhteyttä. Tämä 2H:n jatko johtaa attribuuttiviittaukset samasta lukitusta lähteestä JSON Schemaan (x-term/x-mtv-shacl), Type Metadataan (x-mtv-semantic) ja yhteiseen mappingiin. Sisäkkäinen rooli, nimetön PropertyShape, ulkoinen nimiavaruus sekä lähdeversio ja snapshotin SHA säilyvät. Ei uutta käsin ylläpidettävää sisältömallia.
 
-**Pohja:** `feat/phase-2h-technical-packages`, alkuperäinen commit ace80e3, nyt aineistokokeen täydennys 8bc37dc mukana. Origin/main on vielä 2G ac002ad. Tarkasta tämän PR:n erot 2H-haaraa vasten; yhdistä pohja ensin ja muuta tämän base mainiksi sen jälkeen. Ei automaattista yhdistämistä.
+**Pohja:** main `9258fffb4633c90240eddba1c09b6b135c3fb057` (PR #12 yhdistetty). Main on integroitu tähän työhaaraan commitissa `339824e`. PR:n base-kenttä pitää tarkistaa/vaihtaa `main`-haaraan GitHubissa; REST-päivitys estyi Forbidden-vastaukseen. [Tarkistusyrityksen loki ja normatiiviset puutteet](docs/pr13-normative-review.md). Ei automaattista yhdistämistä.
 
 Oma semanttinen laajennusprofiili 1.0.0 määrittelee x-kentät ja eksplisiittisen skeeman/mappingin löydettävyyden; niitä ei esitetä IETF:n schema/schema_uri-standardikenttinä. SD-JWT VC pysyy draft-19:ssä. Type Metadata, skeema, mapping ja profiili julkaistaan muuttumattomina oikeista koneellisista reiteistä. Syklitön standardin base64-SRI-ketju ja myöntäjän vct#integrity-ohje eivät toteuta allekirjoittamista tai myöntäjän luottamuksen todentamista. Vanhoja julkaisuja ei päivitetä.
 
@@ -15,6 +15,19 @@ Synteettisen demo-SHACLin `ProductShape` → hyväksytty `/companyName`-mapping 
 `["companyName"]`-claimin x-mtv-semantic palauttaa ominaisuuden `https://example.org/metatietovaranto/demo/companyName`, erillisen PropertyShape-viitteen ja lähdesnapshotin version/tarkisteen. Type Metadatasta löytyvät profiloidut, tarkistesidotut mapping-/schema-osoitteet. `examples/semantic_consumer.py` lukee saman semantiikan suoraan julkaistuista kuvauksista ilman esimerkkien tai muiden väitteiden arvoja. Sisäkkäisen taulukon polku esitetään esimerkiksi `["groups",null,"members",null,"city"]`, ei sisäisellä /*-merkkijonolla. Sama `city` eri rooleissa säilyttää eri ominaisuus-IRI:n ja rajoitepolun.
 
 ## Todella suoritetut tarkistukset
+
+### Nykyinen main-pohja 18.10.2026
+
+- Koko README/CI:n 13 tiedoston API-/PostgreSQL-/migraatiosarja: **205 passed, 4 warnings in 344.76s (0:05:44)**. Ei epäonnistuneita tai ohitettuja. Mukana oikeudet/CSRF, hyväksynnän mitätöinti, muuttumattomat julkaisut, tyhjä/vanha kanta ja toistuvat migraatiot, todellinen JSON-LD/RDF/SHACL, uusi WE BUILD -aineistokoe, attribuuttiannotaatiot sekä tarkisteketju.
+- Oikea Chromium + Keycloak -selainajo käynnistettyä demoa vasten: **13 passed, 1 warning in 114.18s (0:01:54)**. Mukana tallennus/uudelleenavaaminen, riippumaton hyväksyntä/julkaisu, julkiset artefaktit ja semantiikan lukija. Vain erillinen API-sarja käyttää tyhjennettävää catalog_test-kantaa; live-katalogia ei nollattu.
+- Yhteensä **218 eri pytest-testiä**. Starlette/httpx- ja RDFLib-deprekaatiovaroitukset eivät ole ohituksia.
+- `npm run build --prefix apps/web`: läpäisi (Vite 1,13 s). Käynnissä olevan Docker-sovelluksen **20 API-/lukijalähdetiedoston** SHA-256:t vastaavat checkoutia, ja **3 web-build-tiedoston** SHA-256:t vastaavat tuoretta paikallista buildia. Selainajo testasi näin nykyisiä sovellustavuja, ei aiempaa erilaista versiota.
+- `git merge-base --is-ancestor origin/main HEAD`: läpäisi mainin 9258fff sisältävällä työhaaralla. `git diff --check` ja tarkistuslokin JSON-jäsennys läpäisivät.
+- Ei uutta tietokantamigraatiota tai sovelluskoodimuutosta. Docker-imagea/compose-käynnistystä ei rakennettu uudelleen tässä dokumentaatio-/pohjapäivityksessä; päällä olevien palveluiden vastaavuus varmistettiin yllä. Windows Docker Desktopia, uuden Codespacen luontia/Private-portin tilaa, tuotanto-HTTPS:ää tai GitHub Actionsin etätulosta ei ajettu tässä ympäristössä.
+- **Ajamattomat sisältötarkistukset:** pyydettyjen ETSI-alkutekstien kohta-/kenttävertailu, EU-asetuksen ajantasaisen konsolidoidun tekstin ja myöhempien muutosten/oikaisujen vertailu sekä niiden perusteella mahdollisesti tarvittavat koodikorjaukset. Näitä ei korvaa yllä oleva tekninen läpäisy.
+
+
+ETSI-/EU-alkutekstien noudot (kolme kohde-URL:ää ja kaksi virallista EU-vaihtoehtoa) estyivät 403-vastaukseen. TS11:n kolme tiedostoa verrattiin uudelleen virallisen Git-commitin tavuihin/SHA-arvoihin, ja upstream HEAD on ennallaan. Tämä vahvistaa vain TS11-lukot. Pyydettyjen ETSI-versioiden pykäläkohtainen vertailu ja EU-asetuksen konsolidoitu teksti/muutokset ovat edelleen tarkistamatta; sisältöön perustuvia koodikorjauksia ei arvata. [Tarvittavat PDF-/HTML-alkutekstit](docs/pr13-normative-review.md).
 
 ### Aineistokokeen tuonti perus-2H:sta
 

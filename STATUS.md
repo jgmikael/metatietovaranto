@@ -1,3 +1,32 @@
+# PR #13 — main-pohjan tarkistus ja estynyt normatiivinen vertailu (18.10.2026)
+
+PR #12 on yhdistetty mainiin `9258fffb4633c90240eddba1c09b6b135c3fb057`. Main on tuotu PR #13:n työhaaraan `feat/phase-2h-attribute-semantics` merge-commitissa `339824ece0127f13cc17494efc13ef7d0c030ba0`. Main-haaraa ei muutettu eikä PR #13:a yhdistetty. Main-pohjan päivitys ei muuttanut sovelluskoodia. Päivitettiin tarkistuksen loki, dokumentaatio ja vanhat pohjahaara-/export-tilaviittaukset.
+
+**Normatiivinen tarkistus ei ole valmis:** molempien ETSI-PDF:ien ja EU 2025/1569:n alkuperäistekstin noudot palauttivat edelleen HTTP 403:n. Myös viralliset EU:n CELEX- ja data.europa.eu-vaihtoehdot palauttivat 403:n. Alkutekstien tarkisteita, voimassa olevia muutoksia tai vaatimustenmukaisuutta ei väitetä tarkistetuiksi. TS11:n 1.0.1 kolme lähdetiedostoa verrattiin uudelleen virallisen Git-commitin täsmällisiin tavuihin/lukittuihin SHA-arvoihin; upstream HEAD `ee91a294c833af5188726fd8c302c641212192aa` on ennallaan. TS11:n V0.0.7-luonnosviite ei korvaa ETSI V1.1.1:tä.
+
+[Tarkistusyrityksen täsmällinen raportti ja tarvittavat lähdetiedostot](docs/pr13-normative-review.md); koneellinen loki fixtures/catalog-standards/review-attempt-2026-10-18.json. Alkuperäisiä sources.json-lukkoja tai generaattorin syötteitä ei muutettu, vanhoja paketteja ei generoitu uudelleen. Ilman alkutekstejä ei tehty arvauksiin perustuvia sovelluskoodin muutoksia.
+
+## Tässä main-päivityksessä todella ajettu
+
+- Koko README/CI:n 13 tiedoston API-/PostgreSQL-/migraatiosarja: **205 passed, 4 warnings in 344.76s (0:05:44)**. Ei epäonnistuneita tai ohitettuja. Mukana oikeudet/CSRF, hyväksynnän mitätöinti, muuttumattomat julkaisut, tyhjä/vanha kanta ja toistuvat migraatiot, todellinen JSON-LD/RDF/SHACL, uusi WE BUILD -aineistokoe, attribuuttiannotaatiot sekä tarkisteketju.
+- Oikea Chromium + Keycloak -selainajo käynnistettyä demoa vasten: **13 passed, 1 warning in 114.18s (0:01:54)**. Mukana tallennus/uudelleenavaaminen, riippumaton hyväksyntä/julkaisu, julkiset artefaktit ja semantiikan lukija. Vain erillinen API-sarja käyttää tyhjennettävää catalog_test-kantaa; live-katalogia ei nollattu.
+- Yhteensä **218 eri pytest-testiä**. Starlette/httpx- ja RDFLib-deprekaatiovaroitukset eivät ole ohituksia.
+- `npm run build --prefix apps/web`: läpäisi (Vite 1,13 s). Käynnissä olevan Docker-sovelluksen **20 API-/lukijalähdetiedoston** SHA-256:t vastaavat checkoutia, ja **3 web-build-tiedoston** SHA-256:t vastaavat tuoretta paikallista buildia. Selainajo testasi näin nykyisiä sovellustavuja, ei aiempaa erilaista versiota.
+- `git merge-base --is-ancestor origin/main HEAD`: läpäisi mainin 9258fff sisältävällä työhaaralla. `git diff --check` ja tarkistuslokin JSON-jäsennys läpäisivät.
+- Ei uutta tietokantamigraatiota tai sovelluskoodimuutosta. Docker-imagea/compose-käynnistystä ei rakennettu uudelleen tässä dokumentaatio-/pohjapäivityksessä; päällä olevien palveluiden vastaavuus varmistettiin yllä. Windows Docker Desktopia, uuden Codespacen luontia/Private-portin tilaa, tuotanto-HTTPS:ää tai GitHub Actionsin etätulosta ei ajettu tässä ympäristössä.
+- **Ajamattomat sisältötarkistukset:** pyydettyjen ETSI-alkutekstien kohta-/kenttävertailu, EU-asetuksen ajantasaisen konsolidoidun tekstin ja myöhempien muutosten/oikaisujen vertailu sekä niiden perusteella mahdollisesti tarvittavat koodikorjaukset. Näitä ei korvaa yllä oleva tekninen läpäisy.
+
+
+## Jäljellä ja toimitus
+
+- ETSI TS 119 472-1 V1.2.1 ja TS 119 478 V1.1.1 -PDF:t, EU 2025/1569:n ajantasainen konsolidoitu teksti tai alkuperäinen ja muutossäädökset sekä EUR-Lexin muutos-/oikaisutiedot tarvitaan sisältövertailun jatkamiseen. Ei vielä yhdistämissuositusta.
+- GitHubin refs/pull/13/merge-viitteen base-vanhempi oli 8bc37dc (vanha 2H-haara). Base-vaihto mainiksi yritettiin REST PATCH /pulls/13 -pyynnöllä; **Forbidden**. Käyttöliittymässä on varmistettava **PR #13 → Edit → base: main**. Paikallinen main-pohja ja PR:n kohdehaara eivät ole sama asetus.
+- Main-päivitys ja tämän tarkistuksen raportti toimitetaan nykyiseen PR #13 -haaraan. PR:n base- ja kuvauskentän API-päivityksen tulos kirjataan toimituksessa. Yhdistämistä mainiin ei tehdä.
+
+---
+
+Alla ovat aiempien vaiheiden ja tarkistusten historiatiedot. Niiden vanhat main-/PR-pohjat ja puuttuvan exportin tilat eivät korvaa yllä olevaa nykytilaa.
+
 # 2H:n aineistokokeen täydennys — WE BUILD 0.0.2 (18.10.2026)
 
 Käyttäjä toimitti alkuperäisen Turtle-exportin, profiilin <https://iri.suomi.fi/model/webcor/> ja version 0.0.2. Tiedosto on lukittu muuttamattomana `fixtures/tietomallit/webcor-0.0.2/original.ttl`: **29 811 tavua**, **429 kolmikkoa**, SHA-256 **2ad4331272558bb541b7804f194a74e261d8313985554015ccc4e23785286133**. Tiedoston profiili-/versiotiedot täsmäävät ilmoitukseen. Alkuperä on käyttäjän ilmoittama alustalta ladattu tiedosto; riippumatonta verkkovertausta ei väitetä tehdyksi (403). Provenienssi, raportti ja erillisen testiprojektion muutosluettelo/tarkiste tallennettu.
