@@ -18,7 +18,7 @@ Erillinen paikallinen synteettinen Person/familyName-projektio lisää xsd:strin
 
 GitHubin git-viitteistä tarkistettiin käyttäjän avaamat **PR #12** (perus-2H) ja **PR #13** (attribuuttisemantiikka). Tämä koe täydentää PR #12:n aiemmin avoimen aineistovaatimuksen toimeksiannon sallimalla tavalla: koko aineiston raja raportoidaan ja erillinen rajattu tapaus testataan. Se ei väitä koko WE BUILD 0.0.2:n generointia tuetuksi. PR #12:n vaadittujen GitHub-tarkistusten ja katselmoinnin on edelleen läpäistävä. PR #13:n ETSI-/EU-alkutekstitarkistus jää avoimeksi.
 
-Muutos toimitetaan nykyiseen haaraan `feat/phase-2h-technical-packages`, jolloin olemassa oleva PR #12 päivittyy. Sen jälkeen sama pohjamuutos yhdistetään jatkohaaraan `feat/phase-2h-attribute-semantics`, PR #13. Main-haaraa ei muuteta. PR-kuvauksen päivityksen tulos kirjataan toimituksen yhteydessä.
+Toteutuscommit **9420d05** on työnnetty haaraan `feat/phase-2h-technical-packages`; olemassa oleva [PR #12](https://github.com/jgmikael/metatietovaranto/pull/12) saa nämä muutokset automaattisesti. PR:n kuvausta yritettiin päivittää sekä `gh pr edit 12 --body-file docs/pull-request.md` -komennolla (GraphQL) että REST PATCH /pulls/12 -pyynnöllä: molemmat estyivät **Forbidden**-vastaukseen. **Kuvaustekstiä ei ole päivitetty GitHubissa**: kopioi ajantasainen docs/pull-request.md olemassa olevan PR:n ensimmäisen kuvauksen Edit-kenttään. Main-haaraa ei muutettu. Pohjamuutos tuodaan myös jatkohaaraan/PR #13; se ei sulje jatkon normatiivisten alkutekstien tarkistuspuutetta.
 
 ---
 
