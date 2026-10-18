@@ -49,11 +49,12 @@ def attach_references(tree, snapshot_id, snapshot_hash, manifest, base_url):
 
 
 def catalogue_report(refs, external):
+    pins=source_pins()
     valid={(r['rootShapeUri'],tuple(r['semanticPath'])) for r in refs}
     for reference in external:
         if reference['kind']=='attribute' and (reference['rootShapeUri'],tuple(reference['semanticPath'])) not in valid:
             raise ValueError('Catalogue correspondence refers to an unknown SHACL occurrence')
-    return {'status':'partial','conformanceClaim':False,'sources':source_pins(),
+    return {'status':'partial','conformanceClaim':False,'sources':pins,
         'references':external,'coverage':[
             {'target':'TS11.Attribute.identifier','local':'sourceProfile + term; optional attribute catalogue reference','status':'partial','missing':'authoritative catalogue-assigned identifier'},
             {'target':'TS11.Attribute.semanticDataSpecification','local':'SHACL sourceProfile snapshotUrl/URI/checksum','status':'described'},
@@ -65,8 +66,7 @@ def catalogue_report(refs, external):
             {'target':'TS11.SchemaMeta.trustedAuthorities/attestationLoS','local':None,'status':'missing'},
             {'target':'TS11.SchemaMeta.bindingType','local':'distribution holderBinding declaration','status':'partial','missing':'reviewed mapping to scheme bindingType; no automatic key/claim/biometric inference'},
             {'target':'TS11.SchemaMeta.supportedFormats/schemaURIs','local':'distribution type and package artifact URLs','status':'described'},
-        ],'missing':[
-            {'code':'NORMATIVE_SOURCES_UNVERIFIED','detail':'ETSI V1.2.1/V1.1.1 and current consolidated EU 2025/1569 amendments unavailable (403)'},
+        ]+pins.get('reviewFindings',[]),'missing':pins.get('remainingReviewGaps',[])+[
             {'code':'CATALOGUE_REGISTRATION_NOT_IMPLEMENTED','detail':'No authoritative Attribute/Scheme catalogue registration or approval implied'},
             {'code':'AUTHENTIC_SOURCE_VERIFICATION_NOT_IMPLEMENTED','detail':'Verification endpoints, legal authority and trust approval require the external issuer/catalogue process'},
         ]+([{'code':'SOURCE_VERSION_UNDECLARED','detail':'Source profile has no declared version; frozen snapshot checksum remains explicit'}] if any(r['sourceProfile']['version'] is None for r in refs) else [])+

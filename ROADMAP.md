@@ -115,7 +115,9 @@ Versioitu oma laajennusprofiili, schema-/mapping-löydettävyys ja standardin ba
 
 Main-pohja tuotu PR #13:n työhaaraan (main `9258fff`, merge `339824e`). [Uusi normatiivisen lähdetarkistuksen yritys](docs/pr13-normative-review.md): ETSI/EUR-Lex edelleen HTTP 403; TS11-lukot uudelleen varmennettu virallisesta Gitistä. Alkutekstivertailu ja EU-muutosten ajantasaisuus vaativat vielä lähdeaineistot.
 
-Jäljellä: normatiivisten lähteiden tarkistus ja mahdolliset täsmennykset sen perusteella sekä erikseen tilattavat katalogirekisteröinti- ja ulkoisen myöntäjän integraatiot. Osittainen esitys ei osoita piilotetun attribuutin puuttumista alkuperäisestä todistuksesta.
+ETSI V1.2.1/V1.1.1 ja EU-konsolidointi 11.8.2026 saatu käyttäjältä; [kohta-/artiklakohtainen vertailu](docs/pr13-source-comparison.md) ja tarkisteet lukittu. Generaattori 1.1.1 erottaa luetut lähteet vielä avoimesta EU-muutosten ajantasaisuudesta ja SD-JWT draft-13/draft-19 -profiilierosta.
+
+Jäljellä: myöhempien EU-muutosten/oikaisujen tarkistus asiakirjatietosivulta, mahdolliset täsmennykset sen perusteella sekä erikseen tilattavat katalogirekisteröinti- ja ulkoisen myöntäjän integraatiot. Osittainen esitys ei osoita piilotetun attribuutin puuttumista alkuperäisestä todistuksesta.
 
 ## Vaiheen 2 myöhemmät osat — erillinen toimeksianto
 

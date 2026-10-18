@@ -4,7 +4,7 @@
 
 ## Sopimus: Metatietovarannon semanttinen laajennus 1.0.0
 
-Uudet paketit käyttävät generaattoria `technical-package/1.1.0`. Vanhoja julkaisuja ja niiden artefakteja ei kirjoiteta uudelleen. Generointiprofiili on edelleen 2H:n rajattu SHACL-puu. Lähde on lukittu alkuperäinen profiilisnapshot, ei käsin ylläpidettävä attribuuttimalli.
+Uudet paketit käyttävät generaattoria `technical-package/1.1.1`. Vanhoja julkaisuja ja niiden artefakteja ei kirjoiteta uudelleen. Generointiprofiili on edelleen 2H:n rajattu SHACL-puu. Lähde on lukittu alkuperäinen profiilisnapshot, ei käsin ylläpidettävä attribuuttimalli.
 
 Jokaisella kuvatulla attribuutilla on sama palvelimen johtama viite:
 
@@ -79,14 +79,16 @@ Catalogue of Attributes kuvaa yksittäisten attribuuttien identiteetin, semantii
 
 **Todella tarkistettu lähde:** EU:n virallisen `eudi-doc-standards-and-technical-specifications`-repositorion TS11 **1.0.1 (2026-01-30)**, commit `ee91a294c833af5188726fd8c302c641212192aa`. Markdown ja molemmat julkaistut JSON-tietomallit säilytetään muuttamattomina `fixtures/catalog-standards/`-hakemistossa; tiedostokohtaiset SHA:t ovat `sources.json`-tiedostossa ja generointimanifestissa. CC BY 4.0 -lähde-/uudelleenkäyttötieto on TS11-tekstissä. ARF 3.0.0:n viite osoitti tähän erilliseen viralliseen repositorioon; ARF-tekstiä ei käytetä TS11:n korvikkeena.
 
-**Tarkistamatta:** pyydetyt ETSI TS 119 472-1 **V1.2.1** ja ETSI TS 119 478 **V1.1.1** -alkutekstit sekä asetuksen **EU 2025/1569 artiklojen 7 ja 8 ajantasainen konsolidoitu teksti ja myöhemmät muutokset**. ETSI:n ja EUR-Lexin HTTPS-noudot estyivät 403:lla. Niiden kohdeversiot ja URL:t on kirjattu, mutta niille ei keksitä tarkistetta, pykäläkohtaisen tarkistuksen tulosta tai ajantasaisuuden vahvistusta. TS11 1.0.1 viittaa itse 119 478:n luonnokseen **V0.0.7**; se ei todista V1.1.1:n vaatimuksia. Artiklojen sisältö alla on TS11:n välittämä kuvaus, ei tarkistettu ajantasainen säädöstulkinta. Myöhempien muutosten tilaksi merkitään unknown, eikä puuttumista oleteta.
+**Toimitetut alkutekstit tarkastettu:** ETSI TS 119 472-1 V1.2.1 (2026-02), ETSI TS 119 478 V1.1.1 (2026-01) ja EU 2025/1569:n konsolidointi 11.8.2026 / 001.001 on saatu käyttäjältä PDF-kopioina ja relevantit kohdat luettu. Alkuperäiset kopiot ja tarkisteet ovat fixtures/catalog-standards/originals/ ja sources.json. [Kohta-/artiklakohtainen uusi vertailu](pr13-source-comparison.md) korvaa alla olevan aiemman noutoestoon perustuvan arvion niiltä osin kuin lähde on nyt saatavilla. Riippumatonta verkkovertausta ei väitetä tehdyksi.
+
+**Avoin ajantasaisuus:** PDF luettelee muutoksen EU 2026/1735. Mahdolliset 11.8.2026 jälkeiset muutokset/oikaisut ja viimeisin versio tarvitsevat vielä EUR-Lexin asiakirjatietosivun. ETSI 472-1 viittaa SD-JWT VC draft-13:een, kun paikallinen profiili käyttää draft-19:ää; ero on näkyvä puute, ei täysi yhteensopivuusväite. TS11:n oma V0.0.7-viite säilyy lähdehistoriana eikä sitä vaihdeta V1.1.1:ksi.
 
 | Kohde ja lähteen tila | Paikallinen vastaavuus | Puuttuva tieto / raja |
 | --- | --- | --- |
-| ETSI 119 472-1 V1.2.1: konteksti (alkuteksti estetty) | Erilliset VCDM 2.0 -perus- ja tuotekontekstit; SHACL-IRI:t/scoped-kontekstit | Kohdekerroksen paikallinen toteutus; tarkka ETSI-kohta ja profiiliehtojen täyttyminen vahvistamatta |
-| ETSI 119 472-1 V1.2.1: schema (alkuteksti estetty) | Annotated content.schema.json + lähde-SHACL + tarkisteet | Ei väitettä ETSI:n täydellisestä schema-profiilista |
-| ETSI 119 472-1 V1.2.1: SD-JWT Type Metadata (alkuteksti estetty) | IETF draft-19 metadata + omat x-mtv-annotaatiot | Ei oletusta, että oma laajennus on ETSI:n pakollinen tai standardoitu kenttä |
-| ETSI 119 478 V1.1.1: semantiikan/skeemien löydettävyys (alkuteksti estetty) | Profiilin URI/snapshot; x-mtv-schema/mapping; valinnaiset ulkoiset attribuuttikatalogiviitteet | Ei I1-discovery- tai I2-todentamispalvelua eikä V0.0.7→V1.1.1-yhtäläisyysväitettä |
+| ETSI 119 472-1 V1.2.1: konteksti (toimitettu PDF tarkastettu) | Erilliset VCDM 2.0 -perus- ja tuotekontekstit; SHACL-IRI:t/scoped-kontekstit | Kohdekerroksen paikallinen toteutus; ks. 4.2.1.3 ja 7.2.1.2; täysi profiiliehtojen täyttyminen arvioimatta |
+| ETSI 119 472-1 V1.2.1: schema (toimitettu PDF tarkastettu) | Annotated content.schema.json + lähde-SHACL + tarkisteet | 4.2.1.4 ja 7.2.1.3: ei täydellisen schema-/myöntäjäprofiilin väitettä |
+| ETSI 119 472-1 V1.2.1: SD-JWT Type Metadata (toimitettu PDF tarkastettu) | IETF draft-19 metadata + omat x-mtv-annotaatiot | 5.2.1: draft-13/draft-19-ero; oma x-mtv-laajennus ei ole standardikenttä |
+| ETSI 119 478 V1.1.1: semantiikan/skeemien löydettävyys (toimitettu PDF tarkastettu) | Profiilin URI/snapshot; x-mtv-schema/mapping; valinnaiset ulkoiset attribuuttikatalogiviitteet | 5.2.3 ja 5.3: ei standardin DIP-/todentamispalvelun toteutusta |
 | TS11 1.0.1 §2.1 Attribute: identifier/nameSpace | Alkuperäinen term-IRI ja eksplisiittinen catalogueReferences.attribute | OWL-ominaisuus ei ole automaattisesti katalogin antama attribuuttitunniste; namespace/local/version-katalogi-identiteetti puuttuu ilman hyväksyttyä viitettä |
 | TS11 §2.1: name/description/semanticDataSpecification | SHACL-nimet/kuvaukset, lähdeprofiili ja versioitu snapshot | Englanninkielinen nimi/kuvaus ei ole taattu; näyttönimestä ei päätellä teknistä identiteettiä |
 | TS11 §2.1.1 DataService / authenticSources | Olemassa olevat vastuuorganisaatiot ja ulkoiset palvelukuvaukset | Jäsenvaltion/tietolähteen viralliset tunnisteet ja hyväksytty todentamisosoite eivät synny skeemasta |
@@ -94,9 +96,9 @@ Catalogue of Attributes kuvaa yksittäisten attribuuttien identiteetin, semantii
 | TS11 §4.3 SchemaMeta: id/version/rulebookURI | Paketilla oma CID ja generaattoriversio; valinnainen scheme-viite | Katalogipalvelimen schema-ID, järjestelyn versio/tila ja hyväksytty Rulebook eivät ole sama kuin tuotteen/snapshotin versio |
 | TS11 SchemaMeta: supportedFormats/schemaURIs | Toimitustyyppi + formaattikohtaiset artefaktiosoitteet | Ei suoraa enum-muunnosta application/dc+sd-jwt → kaikkiin TS11-formaatteihin; mdoc ei kuulu toteutukseen |
 | TS11 SchemaMeta: trustedAuthorities/attestationLoS/bindingType | Haltijasidonta/suojaus ovat erillisiä hyväksyttyjä toimitusasetuksia | Luottamusankkurit, järjestelyn LoS ja claim/key/biometric-bindingType vaativat erillisen arvion; holderBinding=required ei yksin ratkaise niitä |
-| EU 2025/1569 art.7 TS11:n mukaan: attribuutin namespace/tunniste/semantiikka/tyyppi | Alkuperäiset IRI:t, SHACL, lähdeversio/SHA, datatype, skeema ja mahdollinen attribuuttikatalogiviite | Alkuperäisen ajantasaisen artiklan tarkistus, rekisteröinti, yhteystiedot, oikeusperusta ja authenticSources puuttuvat |
-| EU 2025/1569 art.8 TS11:n mukaan: järjestelyn nimi/omistaja/tila/versio/säännöt/formaatit/attribuutit | Tuotemetatiedot, kolmen formaatin kuvaukset, valinnainen scheme-viite ja attribuuttimappingit | Järjestelyn hyväksytty omistajuus/yhteystiedot, säännöt, luottamus/governance/revokaatio, tarjoaja-/lähdevaatimukset ja oikeudellinen luokka eivät seuraa formaatista |
-| EU 2025/1569 myöhemmät muutokset | Lähdepinneissä ja raportissa `NORMATIVE_SOURCES_UNVERIFIED` | Ajantasaisuus vahvistamatta; ei väitettä, ettei muutoksia olisi tai että toteutus olisi niitä vastaan arvioitu |
+| EU 2025/1569 art.7(5), toimitettu konsolidointi: attribuutin namespace/tunniste/semantiikka/tyyppi | Alkuperäiset IRI:t, SHACL, lähdeversio/SHA, datatype, skeema ja mahdollinen attribuuttikatalogiviite | Myöhempien muutosten tarkistus, rekisteröinti, yhteystiedot, oikeusperusta ja authenticSources puuttuvat |
+| EU 2025/1569 art.8(3), toimitettu konsolidointi: järjestelyn nimi/omistaja/tila/versio/säännöt/formaatit/attribuutit | Tuotemetatiedot, kolmen formaatin kuvaukset, valinnainen scheme-viite ja attribuuttimappingit | Järjestelyn hyväksytty omistajuus/yhteystiedot, säännöt, luottamus/governance/revokaatio, tarjoaja-/lähdevaatimukset ja oikeudellinen luokka eivät seuraa formaatista |
+| EU 2025/1569 myöhemmät muutokset | Lähdepinneissä ja raportissa `EU_AMENDMENT_CURRENTNESS_UNVERIFIED` | Ajantasaisuus vahvistamatta; ei väitettä, ettei muutoksia olisi tai että toteutus olisi niitä vastaan arvioitu |
 
 `catalogue-coverage.json` sisältää tämän paikallisen kartoituksen keskeiset kentät, tarkistetut lähdepinnit, viitteet ja puuttuvat tiedot. Status on **partial**, conformanceClaim=false. Katalogiin rekisteröintiä, täyttä katalogipalvelua tai oikeudellista/ETSI-/EUDIW-vaatimustenmukaisuutta ei toteuteta.
 

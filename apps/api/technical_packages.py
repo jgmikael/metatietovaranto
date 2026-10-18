@@ -19,7 +19,7 @@ from apps.api.profiles import checksum, canonical, Iri
 from apps.api.semantic_validation import locked_graph, validation_report, ENGINE as SHACL_ENGINE
 from apps.api.conversion import bounded_json, convert, tokens
 
-GENERATOR = 'technical-package/1.1.0'
+GENERATOR = 'technical-package/1.1.1'
 POLICY = 'shacl-tree-json-v1'
 SD_STANDARD = 'draft-ietf-oauth-sd-jwt-vc-19'
 STANDARDS = {'sdJwtVc': SD_STANDARD, 'vcdm': '2.0', 'jsonLd': '1.1', 'jsonSchema': '2020-12', 'mtvSemanticExtension': EXTENSION_VERSION}

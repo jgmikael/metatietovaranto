@@ -12,20 +12,113 @@
   },
   "requestedUnverifiedSources": [
     {
+      "id": "EU 2025/1569 subsequent amendment/corrigendum status after 2026-08-11",
+      "version": "currentness as of 2026-10-18 unknown",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX:32025R1569"
+    }
+  ],
+  "unverifiedReason": "The three supplied PDF copies were read and checksummed. EUR-Lex document information is still needed to determine later amendments/corrigenda after 2026-08-11; no ETSI/EU conformance claim.",
+  "reviewedProvidedCopies": [
+    {
       "id": "ETSI TS 119 472-1",
-      "version": "V1.2.1",
-      "url": "https://www.etsi.org/deliver/etsi_ts/119400_119499/11947201/01.02.01_60/ts_11947201v010201p.pdf"
+      "version": "V1.2.1 (2026-02)",
+      "file": "originals/ts_11947201v010201p.pdf",
+      "sha256": "0f76ce7cad5f046802146b0c2a9cd8af9db3c1db77db5eeca86d2a4559fcfc3f",
+      "byteLength": 523959,
+      "sourceUrl": "https://www.etsi.org/deliver/etsi_ts/119400_119499/11947201/01.02.01_60/ts_11947201v010201p.pdf",
+      "provenance": "User-uploaded copy; header/version and relevant clauses read locally. Independent web comparison unavailable (HTTP 403).",
+      "reviewedClauses": [
+        "4.2.1.3",
+        "4.2.1.4",
+        "5.1",
+        "5.2.1.1-5.2.1.4",
+        "7.2.1.1-7.2.1.3"
+      ]
     },
     {
       "id": "ETSI TS 119 478",
-      "version": "V1.1.1",
-      "url": "https://www.etsi.org/deliver/etsi_ts/119400_119499/119478/01.01.01_60/ts_119478v010101p.pdf"
+      "version": "V1.1.1 (2026-01)",
+      "file": "originals/ts_119478v010101p.pdf",
+      "sha256": "80926b200713c2a9577d6d24095d7438dc970747b36228541b197f3edd6c6295",
+      "byteLength": 699450,
+      "sourceUrl": "https://www.etsi.org/deliver/etsi_ts/119400_119499/119478/01.01.01_60/ts_119478v010101p.pdf",
+      "provenance": "User-uploaded copy; header/version and relevant clauses read locally. Independent web comparison unavailable (HTTP 403).",
+      "reviewedClauses": [
+        "3.1",
+        "5.2.1-5.2.3",
+        "5.3",
+        "6.1.1"
+      ]
     },
     {
-      "id": "EU 2025/1569 Articles 7 and 8, subsequent amendments",
-      "version": "requested current consolidated text as of 2026-10-18; not verified",
-      "url": "https://eur-lex.europa.eu/eli/reg_impl/2025/1569/oj/eng"
+      "id": "EU 2025/1569",
+      "version": "consolidated 2026-08-11; 001.001",
+      "file": "originals/CELEX_02025R1569-20260811_EN_TXT.pdf",
+      "sha256": "7db65f30f1e0701aed6dc1d2402fea69a0a869a2c680ffd226e0aa5d31d888a8",
+      "byteLength": 247964,
+      "sourceUrl": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02025R1569-20260811",
+      "provenance": "User-uploaded copy; header/version and relevant clauses read locally. Independent web comparison unavailable (HTTP 403).",
+      "reviewedClauses": [
+        "Article 7",
+        "Article 8",
+        "Article 3(2)",
+        "Annex IV"
+      ]
     }
   ],
-  "unverifiedReason": "HTTPS egress proxy returned 403; no currentness or normative conformance claim"
+  "euConsolidation": {
+    "date": "2026-08-11",
+    "documentVersion": "001.001",
+    "listedAmendingAct": "EU 2026/1735 of 2026-07-15 (OJ 2026-07-22)",
+    "articles7And8Marker": "B (base text in supplied consolidation)",
+    "currentAsOfReviewDate": null,
+    "reviewDate": "2026-10-18",
+    "scope": "Supplied consolidation read; later amendments/corrigenda require EUR-Lex document information. Consolidated text is documentary; authentic acts are in the Official Journal."
+  },
+  "remainingReviewGaps": [
+    {
+      "code": "EU_AMENDMENT_CURRENTNESS_UNVERIFIED",
+      "detail": "Consolidated text through 2026-08-11 includes EU 2026/1735; later changes/corrigenda as of 2026-10-18 unknown pending EUR-Lex document information."
+    },
+    {
+      "code": "ETSI_SD_JWT_PROFILE_VERSION_DIFFERENCE",
+      "detail": "ETSI TS 119 472-1 V1.2.1 clause 2.1 reference [3] pins SD-JWT VC draft-13; this local generator deliberately uses draft-19. Metadata comparison does not establish full ETSI-profile conformance."
+    },
+    {
+      "code": "EXTERNAL_ISSUER_PROFILE_NOT_VERIFIED",
+      "detail": "ETSI EAA-5.2.1.2-02/-03 require vct pointing to Type Metadata and vct#integrity in an issued credential. Synthetic URN examples are not proof of HTTPS discovery, issuance, signatures or wallet support."
+    }
+  ],
+  "reviewFindings": [
+    {
+      "target": "ETSI119472-1V1.2.1 4.2.1.3/4.2.1.4/7.2.1.2/7.2.1.3",
+      "local": "separate VCDM/product context and JSON Schema; credentialSchema optional",
+      "status": "described",
+      "missing": "full issuer profile; no cryptographic conformance assessment"
+    },
+    {
+      "target": "ETSI119472-1V1.2.1 5.2.1.1-5.2.1.4",
+      "local": "Type Metadata and own x-mtv schema/mapping/semantic extension; issuer vct#integrity guidance",
+      "status": "partial",
+      "missing": "draft-13 versus draft-19; issued vct discovery/integrity must be verified externally"
+    },
+    {
+      "target": "ETSI119478V1.1.1 REQ-DIP-5.2.3-03/-08/-09/-10",
+      "local": "original semantic IRI plus optional catalogue identity; snapshot and schema URL/media type",
+      "status": "partial",
+      "missing": "attributeIdentifier with catalogue namespace/local/version and actual DIP search/retrieve service"
+    },
+    {
+      "target": "EU2025/1569 Article7(5)(a)-(h),7(6),7(8),7(10)",
+      "local": "provider metadata; source semantics/datatype; optional attribute catalogue correspondence",
+      "status": "partial",
+      "missing": "requester legal basis, new/existing request, namespace/catalogue ID/version, verification point, signed/sealed submission and Commission-sealed public unauthenticated catalogue"
+    },
+    {
+      "target": "EU2025/1569 Article8(3)(a)-(i),8(4),8(6),8(8)",
+      "local": "product/formats/mapping and optional scheme reference",
+      "status": "partial",
+      "missing": "scheme owner/contact/status/version, rules, trust/governance/revocation, provider/source requirements, declared attestation legal category, signed/sealed registration and Commission ID"
+    }
+  ]
 }

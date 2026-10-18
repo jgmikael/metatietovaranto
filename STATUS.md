@@ -1,3 +1,34 @@
+# PR #13 — toimitettujen alkutekstien vertailu (18.10.2026)
+
+Käyttäjältä saatu kolme pyydettyä PDF:ää: ETSI TS 119 472-1 V1.2.1 (2026-02), ETSI TS 119 478 V1.1.1 (2026-01) ja EU 2025/1569:n konsolidointi 11.8.2026 / 001.001. Etusivut, yksilöidyt kohdat/artiklat ja EU-tekstin muutosmerkit luettu paikallisesti. Alkuperäiset kopiot ja SHA-256:t lukittu fixtures/catalog-standards/originals/ ja sources.json. Ei väitettä riippumattomasta verkkovertauksesta tai koko ETSI-/EU-vaatimustenmukaisuudesta. [Uusi lähdevertailu ja kohdan 4 asiakirjatietosivun ohje](docs/pr13-source-comparison.md).
+
+Generaattori 1.1.1 korjaa puuteraportin: luettuja tekstejä ei enää merkitä kokonaan puuttuviksi. Raportti erottaa vielä avoimen EU-muutosten ajantasaisuuden, ETSI:n SD-JWT draft-13 -viitteen ja sovelluksen draft-19:n eron sekä ulkoisen myöntäjän vct-löydettävyyden/integrityn ja profiilin todentamisen. ETSI 478:n attributeIdentifier/semanticDataSpecification/schemaDistribution-vaatimukset sekä EU art.7/8:n tietovaatimukset ja ulkoiset vastuut on lisätty koneelliseen peitto-/puuteraporttiin. IETF-profiilia tai semanttista laajennusta ei vaihdeta automaattisesti; suojaus/myöntäminen jää ulkoiselle palvelulle. Vanhoja muuttumattomia julkaisuja tai snapshotteja ei kirjoiteta uudelleen.
+
+**Jäljellä:** konsolidoinnin etusivu luettelee EU 2026/1735:n, mutta mahdolliset 11.8.2026 jälkeiset muutokset/oikaisut ja uusin versio pitää vielä varmistaa EUR-Lexin Document information / Asiakirjan tiedot -sivulta. Artiklat 7/8 ovat annetussa tekstissä B-merkittyjä. Myöhemmässä integraatiossa on huomioitava M1:n liite IV:n mukautukset ETSI 119 478:aan. Ei vielä lopullista yhdistämissuositusta.
+
+## Todella ajettu korjatulle toteutukselle
+
+- Mainin 9258fff sisältävän korjatun toteutuksen koko 13 tiedoston API-/PostgreSQL-/migraatiosarja: **207 passed, 4 warnings in 357.80s (0:05:57)**. Ei epäonnistuneita tai ohitettuja. Mukana aiemmat 205 testiä sekä kaksi uutta lähdekopioiden pinnaus-/tarkiste- ja puuteraporttitestiä.
+- Kohdennettu paketti-/attribuuttisarja: **60 passed, 1 warning in 51.17s**; nämä sisältyvät täyteen 207 testin ajoon.
+- Oikea Chromium + Keycloak, korjattua Docker-sovellusta vasten: **13 passed, 1 warning in 116.18s (0:01:56)**. Tallennus/uudelleenavaaminen, eri käyttäjän hyväksyntä, julkaisu, julkiset artefaktit ja semantiikan lukija säilyivät.
+- **220 eri pytest-testiä** yhteensä. Starlette/httpx- ja RDFLib-deprekaatiovaroitukset eivät ole ohituksia.
+- Web-build läpäisi. Docker-image rakennettiin varmennukset säilyttävällä scripts/cloud-build.sh-reitillä; `docker compose up -d --no-build --wait` käynnisti app/db/Keycloakin healthy-tilaan. Tavallista `docker compose up --build` -reittiä tai Windows Docker Desktopia ei ajettu tässä täydennyksessä.
+- **13 oikean catalog-kannan metatietotaulua säilyi tarkalleen ennallaan uudelleenkäynnistyksen yli** ennen uusia synteettisiä selainjulkaisuja. Ei uutta relaatiomigraatiota; aiemmat migraatiot tarkistettiin erillisessä catalog_test-kannassa. Demokantaa ei tyhjennetty.
+- Julkinen HTTP-yhteensopivuuskoe: **83 julkaisuversiota luettavissa**, **8 vanhan generaattorin pakettia / 78 artefaktia** tavuntarkasti alkuperäisillä SHA-arvoilla. Uusi lähdetarkistus ei kirjoittanut vanhojen julkaisujen raportteja uudelleen.
+- `git diff --check` läpäisi. PR #13:n GitHub-mergeviite vahvisti basen mainiksi 9258fff; käyttäjä vahvisti saman. Main-haaraa ei muutettu eikä PR:ää yhdistetty.
+- Ajamattomat: asiakirjatietosivun jälkeiset mahdolliset lisäsäädösten tarkistukset, Windows, uuden Codespacen luonti/Private-portin ajonaikainen tila, tuotanto-HTTPS ja GitHub Actionsin etätulos. Ei allekirjoittamista, lompakkoa, EU-katalogirekisteröintiä tai koko ETSI-profiilin vaatimustenmukaisuusarviota.
+
+
+## PR ja toimitus
+
+Main 9258fff sisältyy työhaaraan. Käyttäjä vahvisti PR #13:n baseksi mainin; GitHubin refs/pull/13/merge-viitteen ensimmäinen vanhempi 9258fff varmisti tämän myös teknisesti. Basea ei tarvitse vaihtaa uudelleen. Sovelluksen UI tai relaatiomigraatiot eivät muutu; generaattorin lähdepinnit ja puuteraportti muuttuvat, joten Docker-image rakennettiin ja käynnistettiin uudelleen. Normaalin restartin tiedonsäilyminen tarkistettiin ennen uusia synteettisiä selaintestijulkaisuja.
+
+Lähdekopiot, tarkisteet, vertailu, raporttikorjaus ja testitulokset toimitetaan nykyiseen PR #13:n haaraan. Kuvauskentän API-päivityksen tulos kirjataan toimituksessa. PR jätetään avoimeksi asiakirjatietosivun tarkistusta varten.
+
+---
+
+Alla ovat aiempien tarkistusyritysten historiatiedot. Niiden kaikkien kolmen alkutekstin puuttumista ja vanhaa PR-basea koskevat tilat on korvattu yllä olevilla havainnoilla.
+
 # PR #13 — main-pohjan tarkistus ja estynyt normatiivinen vertailu (18.10.2026)
 
 PR #12 on yhdistetty mainiin `9258fffb4633c90240eddba1c09b6b135c3fb057`. Main on tuotu PR #13:n työhaaraan `feat/phase-2h-attribute-semantics` merge-commitissa `339824ece0127f13cc17494efc13ef7d0c030ba0`. Main-haaraa ei muutettu eikä PR #13:a yhdistetty. Main-pohjan päivitys ei muuttanut sovelluskoodia. Päivitettiin tarkistuksen loki, dokumentaatio ja vanhat pohjahaara-/export-tilaviittaukset.

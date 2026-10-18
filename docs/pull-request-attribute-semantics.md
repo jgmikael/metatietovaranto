@@ -1,58 +1,46 @@
-## Ongelma ja muutos
+## Ongelma ja tulos
 
-SD-JWT VC:n claim-polku ei yksin kerro alkuperäistä semanttista ominaisuutta tai sen SHACL-käyttöyhteyttä. Tämä 2H:n jatko johtaa attribuuttiviittaukset samasta lukitusta lähteestä JSON Schemaan (x-term/x-mtv-shacl), Type Metadataan (x-mtv-semantic) ja yhteiseen mappingiin. Sisäkkäinen rooli, nimetön PropertyShape, ulkoinen nimiavaruus sekä lähdeversio ja snapshotin SHA säilyvät. Ei uutta käsin ylläpidettävää sisältömallia.
+SD-JWT VC:n väitepolku ei yksin kerro alkuperäistä semanttista ominaisuutta tai sen SHACL-käyttöyhteyttä. Tämä jatko johtaa attribuuttiviittaukset samasta lukitusta SHACL-lähteestä JSON Schemaan (x-term/x-mtv-shacl), Type Metadataan (x-mtv-semantic) ja yhteiseen mappingiin. Sisäkkäinen rooli, nimetön PropertyShape, ulkoinen nimiavaruus sekä lähdeversio ja snapshotin SHA säilyvät. Ei uutta käsin ylläpidettävää sisältömallia.
 
-**Pohja:** main `9258fffb4633c90240eddba1c09b6b135c3fb057` (PR #12 yhdistetty). Main on integroitu tähän työhaaraan commitissa `339824e`. PR:n base-kenttä pitää tarkistaa/vaihtaa `main`-haaraan GitHubissa; REST-päivitys estyi Forbidden-vastaukseen. [Tarkistusyrityksen loki ja normatiiviset puutteet](docs/pr13-normative-review.md). Ei automaattista yhdistämistä.
+**Base: main**, `9258fff` (PR #12 yhdistetty). Main sisältyy työhaaraan. Ei automaattista yhdistämistä.
 
-Oma semanttinen laajennusprofiili 1.0.0 määrittelee x-kentät ja eksplisiittisen skeeman/mappingin löydettävyyden; niitä ei esitetä IETF:n schema/schema_uri-standardikenttinä. SD-JWT VC pysyy draft-19:ssä. Type Metadata, skeema, mapping ja profiili julkaistaan muuttumattomina oikeista koneellisista reiteistä. Syklitön standardin base64-SRI-ketju ja myöntäjän vct#integrity-ohje eivät toteuta allekirjoittamista tai myöntäjän luottamuksen todentamista. Vanhoja julkaisuja ei päivitetä.
+## Toteutus ja yhteensopivuus
 
-Valinnaiset attribuutti-/järjestelykatalogivastaavuudet ovat tyypitettyjä, alkuperätiedollisia ja normaalisti hyväksyttäviä väitteitä. Uusi muokkauskenttä säilyy uudelleenavaamisessa; vanhojen asiakkaiden kentän poisjättäminen säilyttää tiedot. Vastaavuuden muutos vanhentaa paketin/hyväksynnän. Koneellinen puuteraportti ja [ETSI/EU/TS11-vastaavuustaulukko](docs/attribute-semantics.md) erottavat attribuuttikatalogin, todistusjärjestelykatalogin ja yksittäisen skeeman. TS11 1.0.1 ja molemmat viralliset tietomallit ovat alkuperäisinä tarkisteineen mukana.
+- Oma semanttinen laajennusprofiili 1.0.0 määrittelee x-kentät sekä eksplisiittisen schema-/mapping-löydettävyyden. Ne eivät ole IETF:n schema/schema_uri-standardikenttiä. SD-JWT VC pysyy draft-19:ssä.
+- Type Metadata, skeema, mapping ja profiili julkaistaan muuttumattomista tuoteversioista oikeilla mediatyypeillä. Syklitön standardin base64-SRI-ketju ja myöntäjän vct#integrity-ohje eivät toteuta allekirjoittamista tai myöntäjän luottamuksen todentamista. Withdrawn ei poista julkaistuja artefakteja.
+- Nimetöntä PropertyShapea ei nimetä keksityllä alkuperäisellä URI:lla: snapshot + rootShapeUri + constraintPath yksilöivät sen. Claim Path käyttää sisäkkäisten taulukoiden kohdalla nullia, ei sisäistä /*-merkkijonoa.
+- Valinnaiset attribuutti-/järjestelykatalogivastaavuudet ovat tyypitettyjä, alkuperätiedollisia ja normaalisti hyväksyttäviä väitteitä. Muutos mitätöi hyväksynnän ja paketin. Vanhan asiakkaan pois jättämä uusi kenttä säilyttää aiemmat viitteet.
+- Esimerkkikuluttaja `examples/semantic_consumer.py` lukee yhden claimin kuvauksen ilman väitearvoja tai JSON Schemaa. Se ei ole SD-JWT-/allekirjoitusverifioija eikä tulkitse piilotettua väitettä alkuperäisestä todistuksesta puuttuvaksi.
+
+## Alkutekstien vertailu ja tarvittava loppuvarmistus
+
+Käyttäjän toimittamat **ETSI TS 119 472-1 V1.2.1 (2026-02)**, **ETSI TS 119 478 V1.1.1 (2026-01)** ja **EU 2025/1569:n konsolidointi 11.8.2026 / 001.001** on luettu relevanttien kohtien osalta ja lukittu alkuperäisinä PDF-kopioina tarkisteineen. Tämä ei väitä riippumatonta verkkovertausta tai koko standardiprofiilin vaatimustenmukaisuutta.
+
+Generaattori **1.1.1** korjaa katalogin puuteraportin: luettuja tekstejä ei enää merkitä kokonaan puuttuviksi. Jäljelle erotellaan EU-muutosten ajantasaisuus, ETSI:n draft-13-viitteen ja paikallisen draft-19:n ero sekä ulkoisen myöntäjän vct-löydettävyyden/integrityn ja suojausprofiilin todentaminen. Oma laajennus ei muutu standardikentäksi. Täyttä EU-katalogia, rekisteröintiä, allekirjoitusta tai lompakkopalvelua ei toteuteta.
+
+[Kohta-/artiklakohtainen vertailu ja asiakirjatietosivun ohje](https://github.com/jgmikael/metatietovaranto/blob/feat/phase-2h-attribute-semantics/docs/pr13-source-comparison.md): ETSI 472-1 4.2.1, 5.2.1 ja 7.2.1; ETSI 478 3.1 ja 5.2/5.3; EU art.7(5)–(10), art.8(3)–(8), M1:n 3(2) ja liite IV. Artiklat 7/8 ovat toimitetussa konsolidoinnissa B-merkittyjä; etusivu luettelee EU 2026/1735 -muutoksen. Liitteen IV mukautuksia ei saa korvata pelkällä ETSI-perustekstillä myöhemmässä integraatiossa.
+
+**Avoin yhdistämisen tarkistus:** on vielä saatava EUR-Lexin asiakirjatietosivulta tieto, onko 11.8.2026 jälkeen uusia muutoksia/oikaisuja ja mikä versio on tarkistuspäivänä uusin. Niiden puuttumista ei oleteta. Ei vielä lopullista yhdistämissuositusta.
 
 ## Konkreettinen ketju
 
-Synteettisen demo-SHACLin `ProductShape` → hyväksytty `/companyName`-mapping → annotoitu content.schema.json, JSON-LD-konteksti ja SD-JWT Type Metadata → JSON-LD/PyLD-graafi, odotetun RDF-graafin vertailu ja lähde-SHACL → eri käyttäjän hyväksymä muuttumaton julkaisu → julkiset 12 artefaktia.
+Synteettinen SHACL ProductShape → hyväksytty /companyName-mapping → JSON-LD-konteksti ja annotoitu JSON Schema/SD-JWT Type Metadata → PyLD:n todellinen RDF, käsin määritelty graafi ja lähde-SHACL → toisen käyttäjän hyväksymä muuttumaton julkaisu → 12 julkista artefaktia → esimerkkikuluttajan ominaisuus-IRI, PropertyShape ja lähdesnapshot.
 
-`["companyName"]`-claimin x-mtv-semantic palauttaa ominaisuuden `https://example.org/metatietovaranto/demo/companyName`, erillisen PropertyShape-viitteen ja lähdesnapshotin version/tarkisteen. Type Metadatasta löytyvät profiloidut, tarkistesidotut mapping-/schema-osoitteet. `examples/semantic_consumer.py` lukee saman semantiikan suoraan julkaistuista kuvauksista ilman esimerkkien tai muiden väitteiden arvoja. Sisäkkäisen taulukon polku esitetään esimerkiksi `["groups",null,"members",null,"city"]`, ei sisäisellä /*-merkkijonolla. Sama `city` eri rooleissa säilyttää eri ominaisuus-IRI:n ja rajoitepolun.
+Aito WE BUILD 0.0.2 -export säilyy tavuntarkasti: koko profiilin puuttuvat literaalityypit ja SKOS-importti estävät valmiin paketin. Erillinen nimetty paikallinen testiprojektio on testattu; sen lisättyä tyyppiä ei väitetä alkuperäiseksi. Vanhoja julkaisuja ei päivitetä.
 
 ## Todella suoritetut tarkistukset
 
-### Nykyinen main-pohja 18.10.2026
-
-- Koko README/CI:n 13 tiedoston API-/PostgreSQL-/migraatiosarja: **205 passed, 4 warnings in 344.76s (0:05:44)**. Ei epäonnistuneita tai ohitettuja. Mukana oikeudet/CSRF, hyväksynnän mitätöinti, muuttumattomat julkaisut, tyhjä/vanha kanta ja toistuvat migraatiot, todellinen JSON-LD/RDF/SHACL, uusi WE BUILD -aineistokoe, attribuuttiannotaatiot sekä tarkisteketju.
-- Oikea Chromium + Keycloak -selainajo käynnistettyä demoa vasten: **13 passed, 1 warning in 114.18s (0:01:54)**. Mukana tallennus/uudelleenavaaminen, riippumaton hyväksyntä/julkaisu, julkiset artefaktit ja semantiikan lukija. Vain erillinen API-sarja käyttää tyhjennettävää catalog_test-kantaa; live-katalogia ei nollattu.
-- Yhteensä **218 eri pytest-testiä**. Starlette/httpx- ja RDFLib-deprekaatiovaroitukset eivät ole ohituksia.
-- `npm run build --prefix apps/web`: läpäisi (Vite 1,13 s). Käynnissä olevan Docker-sovelluksen **20 API-/lukijalähdetiedoston** SHA-256:t vastaavat checkoutia, ja **3 web-build-tiedoston** SHA-256:t vastaavat tuoretta paikallista buildia. Selainajo testasi näin nykyisiä sovellustavuja, ei aiempaa erilaista versiota.
-- `git merge-base --is-ancestor origin/main HEAD`: läpäisi mainin 9258fff sisältävällä työhaaralla. `git diff --check` ja tarkistuslokin JSON-jäsennys läpäisivät.
-- Ei uutta tietokantamigraatiota tai sovelluskoodimuutosta. Docker-imagea/compose-käynnistystä ei rakennettu uudelleen tässä dokumentaatio-/pohjapäivityksessä; päällä olevien palveluiden vastaavuus varmistettiin yllä. Windows Docker Desktopia, uuden Codespacen luontia/Private-portin tilaa, tuotanto-HTTPS:ää tai GitHub Actionsin etätulosta ei ajettu tässä ympäristössä.
-- **Ajamattomat sisältötarkistukset:** pyydettyjen ETSI-alkutekstien kohta-/kenttävertailu, EU-asetuksen ajantasaisen konsolidoidun tekstin ja myöhempien muutosten/oikaisujen vertailu sekä niiden perusteella mahdollisesti tarvittavat koodikorjaukset. Näitä ei korvaa yllä oleva tekninen läpäisy.
-
-
-ETSI-/EU-alkutekstien noudot (kolme kohde-URL:ää ja kaksi virallista EU-vaihtoehtoa) estyivät 403-vastaukseen. TS11:n kolme tiedostoa verrattiin uudelleen virallisen Git-commitin tavuihin/SHA-arvoihin, ja upstream HEAD on ennallaan. Tämä vahvistaa vain TS11-lukot. Pyydettyjen ETSI-versioiden pykäläkohtainen vertailu ja EU-asetuksen konsolidoitu teksti/muutokset ovat edelleen tarkistamatta; sisältöön perustuvia koodikorjauksia ei arvata. [Tarvittavat PDF-/HTML-alkutekstit](docs/pr13-normative-review.md).
-
-### Aineistokokeen tuonti perus-2H:sta
-
-Jatkohaaran paketti-/attribuuttisemantiikan sarja: **58 passed, 1 warning in 50.08s**. Ei epäonnistuneita tai ohitettuja. Mukana kaikki 42 pakettitestiä (myös 8 uutta aidon aineiston tapausta) sekä 16 attribuuttisemantiikan testiä; uusi testi varmistaa paikallisen projektion lähde-identiteetin ja alkuperäisen ominaisuus-/PropertyShape-IRI:n eron. Tämä ei ole uusi täysi API-/migraatioajo tässä jatkohaarassa, eikä päällekkäisiä testejä lasketa uutena kokonaismääränä.
-
-Perus-2H:ssa koko API-/migraatiosarja läpäisi **189 testiä**. Tässä jatkohaaraan tuonnissa testataan lisäksi projektioiden annotaatioiden alkuperä: eu-core:familyName-ominaisuus ja webcor:familyName-PropertyShape erottuvat, ja lähdeviite pysyy synteettisen paikallisen projektion versiona eikä alkuperäisenä webcor 0.0.2:na. Alkuperäinen 29 811 tavun export säilyy tavuntarkkana. [Täysi koeraportti](webcor-acceptance.md). Sovelluskoodi, UI ja skeema eivät muutu; selaintestejä, web-buildia tai Docker-imagea ei ajettu uudelleen tätä testitäydennystä varten.
-
-### Alkuperäisen jatkotoimituksen ajot
-
-- Koko README/CI:n 13 tiedoston API-/PostgreSQL-/migraatiosarja: **196 passed, 4 warnings in 317.51s (0:05:17)**. Ei epäonnistuneita tai ohitettuja. Mukana vanhojen kantojen päivitykset, tyhjä kanta/toistuvat migraatiot, käyttöoikeudet, hyväksynnän mitätöinti, muuttumattomat julkaisut, oikea PyLD + lukittu lataaja + RDF-graafivertailu + lähde-SHACL, sisäkkäiset taulukot/roolit, nimetön PropertyShape, ulkoinen nimiavaruus, ristiriitaisten annotaatioiden hylkäys ja SRI-ketjun muutosten havaitseminen.
-- Kohdennettu paketti-/attribuuttisemantiikan ajo: **49 passed** (sisältyy edellä olevaan 196 testiin). Näistä 15 on uuden jatkon testejä.
-- Oikea Chromium ja Keycloak, lopullista Docker-imagea vasten: **13 passed, 1 warning in 106.27s (0:01:46)**. Aiempien polkujen lisäksi katalogiviitteen syöttö → tallennus → uudelleenavaaminen → paketin generointi → toisen käyttäjän hyväksyntä/julkaisu → julkisten kuvausten tarkisteketju ja yhden claimin semantiikka. Ensimmäinen selainajo löysi uuden JSON-kentän nimilappuongelman; eksplisiittinen label/id-yhteys korjattiin ja koko selainajo uusittiin onnistuneesti.
-- **209 eri pytest-testiä**, ei ohituksia. Deprekaatiovaroitukset ovat Starlette/httpx- ja RDFLib-varoituksia.
-- `npm run build --prefix apps/web` läpäisi (TypeScript/Vite). Docker-image rakennettiin varmennukset säilyttävällä `scripts/cloud-build.sh`-reitillä ja käynnistettiin `docker compose up -d --no-build --wait`: app/db/Keycloak healthy. Tavallista `docker compose up --build` -rakennusreittiä ei ajettu uudelleen tässä jatkossa; pilviympäristön aiemmin todettu build-DNS-rajaus edellytti proxy-/CA-asetukset säilyttävää apureittiä.
-- Olemassa olevan catalog-kannan uudelleenkäynnistys: **13 metatietotaulun kaikki rivit täsmälleen ennallaan**, mukana 71 tuotetta, 71 luonnosta, 36 profiilisnapshotia ja 64 julkaisua ennen selaintestien uusia synteettisiä julkaisuja. `alembic current`: **0005_lifecycle (head)**. Ei uutta skeemamigraatiota; toimitetut revisiot ennallaan. Tyhjentävät API-testit käyttivät vain erillistä catalog_test-kantaa.
-- Julkisten vanhojen tietojen erillinen HTTP-toimintakoe: **73 julkaisuversiota luettavissa**, mukaan lukien kaikki testien jättämät historiat. **6 vanhan 1.0.0-generaattorin pakettia / 54 artefaktia** haettiin ja alkuperäiset tavut/tarkisteet säilyivät.
-- Dockerissa ajettu `examples/semantic_consumer.py` luki oikean julkisen Type Metadatan ja palautti `["companyName"]`-polulle alkuperäisen ominaisuus-IRI:n, NameShape-kytkennän ja lähdesnapshotin/version/SHA:n. Kaikki **12 uuden paketin artefaktia** haettiin julkisista HTTP-reiteistä ja niiden tavut, mediatyypit ja SHA:t tarkistettiin. Tämä on kuvausten toimintakoe, ei SD-JWT:n kryptografinen verifiointi.
-- `git diff --check` läpäisi. `.devcontainer`/Private-portin määrityksiä, Composea tai Alembic-revisioita ei muutettu.
+- Mainin 9258fff sisältävän korjatun toteutuksen koko 13 tiedoston API-/PostgreSQL-/migraatiosarja: **207 passed, 4 warnings in 357.80s (0:05:57)**. Ei epäonnistuneita tai ohitettuja. Mukana aiemmat 205 testiä sekä kaksi uutta lähdekopioiden pinnaus-/tarkiste- ja puuteraporttitestiä.
+- Kohdennettu paketti-/attribuuttisarja: **60 passed, 1 warning in 51.17s**; nämä sisältyvät täyteen 207 testin ajoon.
+- Oikea Chromium + Keycloak, korjattua Docker-sovellusta vasten: **13 passed, 1 warning in 116.18s (0:01:56)**. Tallennus/uudelleenavaaminen, eri käyttäjän hyväksyntä, julkaisu, julkiset artefaktit ja semantiikan lukija säilyivät.
+- **220 eri pytest-testiä** yhteensä. Starlette/httpx- ja RDFLib-deprekaatiovaroitukset eivät ole ohituksia.
+- Web-build läpäisi. Docker-image rakennettiin varmennukset säilyttävällä scripts/cloud-build.sh-reitillä; `docker compose up -d --no-build --wait` käynnisti app/db/Keycloakin healthy-tilaan. Tavallista `docker compose up --build` -reittiä tai Windows Docker Desktopia ei ajettu tässä täydennyksessä.
+- **13 oikean catalog-kannan metatietotaulua säilyi tarkalleen ennallaan uudelleenkäynnistyksen yli** ennen uusia synteettisiä selainjulkaisuja. Ei uutta relaatiomigraatiota; aiemmat migraatiot tarkistettiin erillisessä catalog_test-kannassa. Demokantaa ei tyhjennetty.
+- Julkinen HTTP-yhteensopivuuskoe: **83 julkaisuversiota luettavissa**, **8 vanhan generaattorin pakettia / 78 artefaktia** tavuntarkasti alkuperäisillä SHA-arvoilla. Uusi lähdetarkistus ei kirjoittanut vanhojen julkaisujen raportteja uudelleen.
+- `git diff --check` läpäisi. PR #13:n GitHub-mergeviite vahvisti basen mainiksi 9258fff; käyttäjä vahvisti saman. Main-haaraa ei muutettu eikä PR:ää yhdistetty.
+- Ajamattomat: asiakirjatietosivun jälkeiset mahdolliset lisäsäädösten tarkistukset, Windows, uuden Codespacen luonti/Private-portin ajonaikainen tila, tuotanto-HTTPS ja GitHub Actionsin etätulos. Ei allekirjoittamista, lompakkoa, EU-katalogirekisteröintiä tai koko ETSI-profiilin vaatimustenmukaisuusarviota.
 
 
-## Ajamattomat ja yhdistämisen esteet
+## Ajamattomat / rajauksen ulkopuolella
 
-- ETSI TS 119 472-1 V1.2.1 / TS 119 478 V1.1.1 ja EU 2025/1569 artiklat 7/8 myöhempine muutoksineen: alkuperäislähteiden nouto **403**, joten tarkka normatiivinen vastaavuus ja ajantasaisuus vahvistamatta. TS11 itse viittaa 119 478 V0.0.7:ään, eikä sitä sekoiteta lopulliseen versioon. Tarvitaan alkutekstien tarkistus ennen yhdistämissuositusta.
-- Pohja-2H:n aito aineistokoe on nyt täydennetty käyttäjän toimittamalla WE BUILD Certificate of Residence 0.0.2 -exportilla. Koko profiilin puuttuvat literaalityypit ja SKOS-importti estävät valmiin paketin; erillinen nimetty paikallinen testiprojektio on testattu alkuperäistä muuttamatta. Tämä on toimeksiannossa sallittu rajattu tapaus, ei koko profiilin tukiväite.
-- Windows Docker Desktop, uuden Codespacen luonti/automaattinen selainavaus/Private-portin ajonaikainen tila, tuotanto-HTTPS ja GitHub Actionsin etätulos varmistamatta. Niiden asetuksia ei muutettu.
-- Ei katalogiin rekisteröintiä, täyttä katalogipalvelua, kryptografisia SD-JWT-tarkistuksia, oikeaa myöntämistä tai lompakkointegraatiota. Nämä eivät kuulu toimitukseen. Osittaisen esityksen piilotettuja attribuutteja ei tulkita alkuperäisestä todistuksesta puuttuviksi.
-
-Avaa **draft**-PR. Ei yhdistämissuositusta ennen yllä olevien lähde-/hyväksymispuutteiden sulkemista. README sisältää haaran Codespaces- ja Docker-kokeiluohjeet; [laajennussopimus ja kuluttajan komento](docs/attribute-semantics.md).
+EU:n myöhempien muutosten/oikaisujen nykytila odottaa asiakirjatietosivua. Windows Docker Desktopia, uuden Codespacen luontia/automaattista selainavausta/Private-portin ajonaikaista tilaa, tuotanto-HTTPS:ää ja GitHub Actionsin etätulosta ei voitu varmistaa tässä ympäristössä. Ei kuorma-/tietoturva-auditointia, EU-katalogirekisteröintiä tai kryptografista myöntäjä-/lompakkotestiä. Olemassa olevat oikeudet, hyväksyntä, muuttumattomuus ja Codespaces-asetukset säilyvät.

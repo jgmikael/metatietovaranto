@@ -152,7 +152,8 @@ def test_pinned_ts11_source_checksums_and_unverified_normative_versions_explicit
     import hashlib
     for name,digest in pins['ts11']['files'].items():assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest
     assert pins['ts11']['version'].startswith('1.0.1')
-    assert len(pins['requestedUnverifiedSources'])==3
+    assert len(pins['requestedUnverifiedSources'])==1
+    assert pins['euConsolidation']['currentAsOfReviewDate'] is None
 
 
 def test_webcor_projection_annotations_preserve_source_iris_without_claiming_original_profile_version():
@@ -169,3 +170,30 @@ def test_webcor_projection_annotations_preserve_source_iris_without_claiming_ori
     assert ref['sourceProfile']['version']=='0.0.2-local-test-1' and ref['sourceProfile']['snapshotSha256']==checksum(source)
     raw=metadata_raw(package)
     assert resolve_claim(raw,integrity(raw),['familyName',None],documents(package).__getitem__)['propertyIri']==EU_CORE+'familyName'
+
+
+def test_reviewed_normative_copies_are_pinned_without_claiming_later_amendments_absent():
+    import hashlib
+    pins=source_pins();root=Path('fixtures/catalog-standards')
+    assert len(pins['reviewedProvidedCopies'])==3
+    for item in pins['reviewedProvidedCopies']:
+        raw=(root/item['file']).read_bytes()
+        assert raw.startswith(b'%PDF-') and len(raw)==item['byteLength']
+        assert hashlib.sha256(raw).hexdigest()==item['sha256']
+        assert item['reviewedClauses'] and 'User-uploaded copy' in item['provenance']
+    assert pins['euConsolidation']['date']=='2026-08-11'
+    assert pins['euConsolidation']['listedAmendingAct'].startswith('EU 2026/1735')
+    assert pins['euConsolidation']['currentAsOfReviewDate'] is None
+
+
+def test_generated_coverage_distinguishes_reviewed_texts_currentness_and_issuer_profile():
+    package=generated(unit_source(),{'companyName':'S'})
+    report=artifact(package,'catalogue-coverage.json')
+    codes={row['code'] for row in report['missing']}
+    assert 'NORMATIVE_SOURCES_UNVERIFIED' not in codes
+    assert {'EU_AMENDMENT_CURRENTNESS_UNVERIFIED','ETSI_SD_JWT_PROFILE_VERSION_DIFFERENCE','EXTERNAL_ISSUER_PROFILE_NOT_VERIFIED'}<=codes
+    assert report['status']=='partial' and not report['conformanceClaim']
+    assert any(row['target'].startswith('EU2025/1569 Article7(5)') for row in report['coverage'])
+    assert any(row['target'].startswith('EU2025/1569 Article8(3)') for row in report['coverage'])
+    assert package['generator']=='technical-package/1.1.1'
+    assert package['standards']['sdJwtVc']=='draft-ietf-oauth-sd-jwt-vc-19'
