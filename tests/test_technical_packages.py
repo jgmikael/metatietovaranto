@@ -356,3 +356,111 @@ def test_generation_and_proposal_respect_current_private_profile_read_permission
     assert generate_api(client,created).status_code==404
     response=client.post('/api/v1/drafts/'+created['draftId']+'/technical-package/proposal',json={'rootShapeUri':P+'ProductShape'},headers={'If-Match':created['etag']})
     assert response.status_code==404
+
+
+# Real user-supplied export. The complete original and local synthetic projection
+# are deliberately separate; successful projection generation is NOT full support.
+WEBCOR = 'https://iri.suomi.fi/model/webcor/'
+EU_CORE = 'https://iri.suomi.fi/model/eu-core/'
+WEBCOR_FILES = Path('fixtures/tietomallit/webcor-0.0.2')
+
+
+def webcor_source(projected=False):
+    provenance=json.loads((WEBCOR_FILES/'provenance.json').read_text())
+    data=profile_input()
+    data.update({'profileUri':provenance['projection']['profileUri'] if projected else WEBCOR,
+        'sourcePageUrl':WEBCOR,'sourceVersion':'0.0.2-local-test-1' if projected else '0.0.2',
+        'sourceStatus':'synthetic local test' if projected else 'SUGGESTED',
+        'sourceDeclaration':('Synthetic local test projection; adds xsd:string not present in the original export.' if projected else provenance['sourceVerification']),
+        'entryShapeUris':[WEBCOR+'Person'],
+        'artifact':{'serialization':'turtle','content':(WEBCOR_FILES/('family-name-test-projection.ttl' if projected else 'original.ttl')).read_bytes().decode()},
+        'vocabularyReferences':[{'uri':EU_CORE,'location':'platform'},
+            {'uri':'https://iri.suomi.fi/model/ncbv/0.0.7/','version':'0.0.7','location':'platform'},
+            {'uri':'https://iri.suomi.fi/model/webuild/','location':'platform'},
+            {'uri':'http://www.w3.org/2004/02/skos/core#','location':'external'}]})
+    return data
+
+
+def test_webcor_real_export_octets_version_original_iris_and_missing_dependencies():
+    provenance=json.loads((WEBCOR_FILES/'provenance.json').read_text())
+    coverage=json.loads((WEBCOR_FILES/'coverage.json').read_text())
+    raw=(WEBCOR_FILES/'original.ttl').read_bytes()
+    assert len(raw)==29811 and hashlib.sha256(raw).hexdigest()==provenance['sha256']==coverage['sourceSha256']
+    graph=Graph().parse(data=raw.decode(),format='turtle')
+    assert len(graph)==429 and str(graph.value(URIRef(WEBCOR),OWL.versionInfo))=='0.0.2'
+    assert str(graph.value(URIRef(WEBCOR),OWL.versionIRI))==provenance['versionIri']
+    assert len(set(graph.subjects(RDF.type,SH.NodeShape)))==5
+    actual=[{'propertyShapeUri':str(prop),'propertyIri':str(graph.value(prop,SH.path))}
+            for prop in sorted(graph.subjects(RDF.type,OWL.DatatypeProperty),key=str) if not list(graph.objects(prop,SH.datatype))]
+    assert actual==coverage['literalPropertiesWithoutDatatype'] and len(actual)==24
+    manifest=snapshot_manifest(ProfileInput.model_validate(webcor_source()))
+    assert manifest['sourceArtifacts'][0]['content'].encode()==raw
+    assert manifest['sourceArtifacts'][0]['sha256']==provenance['sha256']
+    assert manifest['profileUri']==WEBCOR and manifest['sourceVersion']=='0.0.2'
+    assert {'uri':'http://www.w3.org/2004/02/skos/core#','status':'unresolved'} in manifest['dependencies']
+    assert manifest['verificationStatus']=='needsAttention' and manifest['issues']
+    assert str(graph.value(URIRef(WEBCOR+'familyName'),SH.path))==EU_CORE+'familyName'
+
+
+@pytest.mark.parametrize('root',['Address','Identifier','Jurisdiction','Location','Person'])
+def test_webcor_original_root_proposals_report_missing_type_without_fabricated_mappings(root):
+    manifest=snapshot_manifest(ProfileInput.model_validate(webcor_source()))
+    original=copy.deepcopy(manifest)
+    result=proposal(manifest,{'rootShapeUri':WEBCOR+root,'names':[]})
+    assert result['status']=='invalid' and result['fields']==[]
+    finding=result['results'][0]
+    expected=json.loads((WEBCOR_FILES/'coverage.json').read_text())['literalPropertiesWithoutDatatype']
+    assert finding['ruleId']=='OBJECT_AMBIGUOUS' and finding['path'] in {row['propertyIri'] for row in expected}
+    assert manifest==original
+
+
+def test_webcor_original_api_upload_preserves_bytes_and_blocks_ready_package(client):
+    response=client.post('/api/v1/profile-snapshots',json=webcor_source())
+    assert response.status_code==201,response.text
+    snapshot=response.json()
+    fetched=client.get('/api/v1/profile-snapshots/'+snapshot['id']).json()
+    assert fetched['manifest']['sourceArtifacts'][0]['content'].encode()==(WEBCOR_FILES/'original.ttl').read_bytes()
+    draft=create(client,body()|{'profileSnapshotId':snapshot['id'],'syntheticExample':None})
+    before=client.get('/api/v1/products/'+draft['id']+'/draft').json()
+    response=client.post('/api/v1/drafts/'+draft['draftId']+'/technical-package',
+        json=request()|{'rootShapeUri':WEBCOR+'Person'},headers={'If-Match':draft['etag']})
+    assert response.status_code==200,response.text
+    assert response.json()['generation']['status']=='invalid'
+    assert response.json()['generation']['results'][0]['ruleId']=='SOURCE_NOT_READY'
+    assert client.get('/api/v1/products/'+draft['id']+'/draft').json()==before
+    assert not before.get('technicalPackage')
+    assert client.post('/api/v1/drafts/'+draft['draftId']+'/submit',headers={'If-Match':draft['etag']}).status_code==422
+
+
+def test_webcor_explicit_local_projection_real_jsonld_expected_rdf_and_source_shacl(monkeypatch):
+    import socket
+    def offline(*args,**kwargs):raise AssertionError('No network access permitted')
+    monkeypatch.setattr(socket,'getaddrinfo',offline)
+    monkeypatch.setattr(socket.socket,'connect',offline)
+    provenance=json.loads((WEBCOR_FILES/'provenance.json').read_text())
+    projection=(WEBCOR_FILES/'family-name-test-projection.ttl').read_bytes()
+    assert hashlib.sha256(projection).hexdigest()==provenance['projection']['sha256']
+    original=snapshot_manifest(ProfileInput.model_validate(webcor_source()))
+    manifest=snapshot_manifest(ProfileInput.model_validate(webcor_source(projected=True)))
+    assert not manifest['issues'] and manifest['profileUri']!=original['profileUri']
+    assert manifest['sourceVersion']!='0.0.2'
+    graph=Graph().parse(data=original['sourceArtifacts'][0]['content'],format='turtle')
+    assert graph.value(URIRef(WEBCOR+'familyName'),SH.datatype) is None
+    example={'familyName':['Synteettinen Testiperhe']}
+    package=generated(manifest,example,rootShapeUri=WEBCOR+'Person')
+    assert package['validation']['shacl']=='conforms'
+    context=artifact(package,'context.jsonld');vc=artifact(package,'unsigned-vc-example.jsonld')
+    loader=local_loader({vc['@context'][1]:context,BASE_CONTEXT:json.loads((FIXTURES/'credentials-v2.jsonld').read_text())})
+    rdf=jsonld.to_rdf({'@context':vc['@context'][1],**vc['credentialSubject']},options={'documentLoader':loader,'format':'application/n-quads'})
+    actual=Graph().parse(data=rdf,format='nt')
+    expected=Graph().parse(data=f'[] a <{EU_CORE}Person>; <{EU_CORE}familyName> "Synteettinen Testiperhe" .',format='turtle')
+    assert isomorphic(normalize_rdf11(actual),normalize_rdf11(expected))
+    assert context['@context']['familyName']['@id']==EU_CORE+'familyName'
+    assert artifact(package,'content.schema.json')['properties']['familyName']['type']=='array'
+    paths=[claim['path'] for claim in artifact(package,'sd-jwt-type-metadata.json')['claims']]
+    assert ['familyName',None] in paths and ['familyName'] in paths
+    for source in (manifest,original):
+        # The original is checked offline as supplied, without resolving SKOS imports.
+        report=validation_report(source,checksum(source),{'serialization':'turtle','content':actual.serialize(format='turtle'),'synthetic':True})
+        assert report['status']=='conforms' and report['focusNodeCount']==1
+    assert (WEBCOR_FILES/'original.ttl').read_bytes()==original['sourceArtifacts'][0]['content'].encode()

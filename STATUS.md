@@ -1,3 +1,29 @@
+# 2H:n aineistokokeen täydennys — WE BUILD 0.0.2 (18.10.2026)
+
+Käyttäjä toimitti alkuperäisen Turtle-exportin, profiilin <https://iri.suomi.fi/model/webcor/> ja version 0.0.2. Tiedosto on lukittu muuttamattomana `fixtures/tietomallit/webcor-0.0.2/original.ttl`: **29 811 tavua**, **429 kolmikkoa**, SHA-256 **2ad4331272558bb541b7804f194a74e261d8313985554015ccc4e23785286133**. Tiedoston profiili-/versiotiedot täsmäävät ilmoitukseen. Alkuperä on käyttäjän ilmoittama alustalta ladattu tiedosto; riippumatonta verkkovertausta ei väitetä tehdyksi (403). Provenienssi, raportti ja erillisen testiprojektion muutosluettelo/tarkiste tallennettu.
+
+Koko profiili **ei ole generaattorin tukema valmis paketti**: 24 literaaliominaisuudelta puuttuu sh:datatype ja SKOS owl:imports on unresolved. Viisi juurta tuottavat hallitun eston; API säilyttää alkuperäiset tavut/luonnoksen ja estää tarkastukseen lähettämisen. Tietotyyppejä, kardinaliteetteja tai OWL-riippuvuuksia ei päätellä tai haeta verkosta.
+
+Erillinen paikallinen synteettinen Person/familyName-projektio lisää xsd:stringin eksplisiittisenä testioletuksena, ei alkuperäisen profiilin määrityksenä. Sillä on eri profiili-identiteetti/testiversio; minCountia/maxCountia ei keksitä. Oikea PyLD + lukittu lataaja tuottaa käsin kirjoitetun odotteen kanssa isomorfisen RDF-graafin. Se tarkistetaan projektion sekä alkuperäisen SHACLin kanssa offline yhdellä Person-fokussolmulla; puuttuvia ulkoisia riippuvuuksia tai puuttuvia tyyppirajoitteita ei väitetä tarkistetuiksi. [Täsmällinen koeraportti](docs/webcor-acceptance.md).
+
+## Todella ajettu tässä täydennyksessä
+
+- Kohdennettu realistisen aineiston koe: **8 passed, 34 deselected, 1 warning in 5.45s**. Rajatut vanhat testit kuuluvat täyteen ajoon.
+- Perus-2H:n koko README/CI:n 12 tiedoston API-/PostgreSQL-/migraatiosarja: **189 passed, 4 warnings in 318.14s (0:05:18)**. Ei epäonnistuneita tai ohitettuja. Sisältää kaikki aiemmat 181 testiä ja 8 uutta aineistotapausta; oikeudet, hyväksyntä, muuttumattomat julkaisut ja vanhan/tyhjän kannan migraatiot säilyivät. Kohdennettu ajo ei ole lisätestimäärä tämän päälle.
+- Ensimmäisessä kohdennetussa ajossa testin oletus claims-listan järjestyksestä korjattiin: molempien standardipolkujen sisältyminen tarkistetaan järjestyksestä riippumatta. Lopullinen rajattu koe läpäisee.
+- Sovelluskoodia, skeemaa, UI:ta tai käynnistysasetuksia ei muutettu. Web-buildia, Docker-imagea, selaintestejä tai demokannan restartia ei ajettu uudelleen tässä testi-/dokumentaatiotäydennyksessä. Aiemmat tulokset ovat alla historiassa; niitä ei lasketa uusiksi ajoiksi. catalog-kantaa ei tyhjennetty, API-testit käyttävät catalog_test-kantaa.
+- Windowsin, uuden Codespacen ja GitHub Actionsin etätulosta ei varmistettu tässä ympäristössä. Ei allekirjoittamista tai lompakkotestausta.
+
+## PR-tilanne
+
+GitHubin git-viitteistä tarkistettiin käyttäjän avaamat **PR #12** (perus-2H) ja **PR #13** (attribuuttisemantiikka). Tämä koe täydentää PR #12:n aiemmin avoimen aineistovaatimuksen toimeksiannon sallimalla tavalla: koko aineiston raja raportoidaan ja erillinen rajattu tapaus testataan. Se ei väitä koko WE BUILD 0.0.2:n generointia tuetuksi. PR #12:n vaadittujen GitHub-tarkistusten ja katselmoinnin on edelleen läpäistävä. PR #13:n ETSI-/EU-alkutekstitarkistus jää avoimeksi.
+
+Muutos toimitetaan nykyiseen haaraan `feat/phase-2h-technical-packages`, jolloin olemassa oleva PR #12 päivittyy. Sen jälkeen sama pohjamuutos yhdistetään jatkohaaraan `feat/phase-2h-attribute-semantics`, PR #13. Main-haaraa ei muuteta. PR-kuvauksen päivityksen tulos kirjataan toimituksen yhteydessä.
+
+---
+
+Seuraavat ovat alkuperäisen 2H-toimituksen historiatietoja ennen yllä olevaa aineistotäydennystä. Niiden aiempi puuttuvan exportin tila on korvattu yllä olevalla tuloksella.
+
 # Vaihe 2H — SHACL-pohjaiset tekniset kuvauspaketit (17.10.2026)
 
 Pohja main `ac002ad` (PR #11), työhaara `feat/phase-2h-technical-packages`. Toteutus ja täsmällinen rajaus: [docs/phase-2h.md](docs/phase-2h.md). Tämä tehtävä korvaa aiemman DCAT-AP-ehdotuksen vaiheelle 2H.

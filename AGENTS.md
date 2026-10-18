@@ -14,7 +14,7 @@ Lue `docs/vc-periaate-2.md`. Ensisijainen toimitusmuoto on W3C VC. Tuotesivu tar
 
 ## Työskentelyn käytännöt
 
-Käytä nykyistä checkoutia: pilvitehtävät ovat jo eristettyjä. Älä luo worktreea ilman käyttäjän pyyntöä. Säilytä käyttäjän muutokset. Kaikki fixturet ovat synteettisiä. Älä lisää salaisuuksia, aitoja rekisteritietoja tai väitteitä QEAA-/DCAT-AP-vaatimustenmukaisuudesta.
+Käytä nykyistä checkoutia: pilvitehtävät ovat jo eristettyjä. Älä luo worktreea ilman käyttäjän pyyntöä. Säilytä käyttäjän muutokset. Testattavat henkilö-/yrityssisällöt ovat synteettisiä. fixtures/tietomallit-hakemisto sisältää myös alkuperäisiä julkisia mallikuvauksia, joiden alkuperä ja tarkiste on lukittu. Älä lisää salaisuuksia, aitoja rekisteritietoja tai väitteitä QEAA-/DCAT-AP-vaatimustenmukaisuudesta.
 
 ## Käynnistys ja todennus
 
@@ -51,3 +51,5 @@ Vaiheen 2F muunnoslaboratorio on tallentamaton ja vain omistajaorganisaation edi
 ## SHACL-pohjaiset tekniset paketit
 
 Lue docs/phase-2h.md. Paketilla ei muokata lähdeprofiilia tai OWLia. Säilytä generaattorin yksilöidyt estot, yhteiset hyväksytyt esitysvalinnat, erillinen IETF Type Metadata ja paikallinen lukittu JSON-LD-lataaja. Älä väitä upstream-testifixtureä aidoksi muuttamattomaksi Tietomallit-exportiksi. Aja tests/test_technical_packages.py sekä oikean JSON-LD-prosessorin RDF/SHACL-tarkistukset. Paketin generointi on editorin kirjoitus ja mitätöi hyväksynnän. Julkisia artefakteja palvellaan vain muuttumattomista julkaisuista, myös withdrawn-tilassa; luonnoksista ei synny julkista kontekstia. Paikallisen HTTP-demon ja Codespacesin Private-HTTPS-portin rajat ilmoitetaan erikseen.
+
+WE BUILD -aineistokoe: lue docs/webcor-acceptance.md. Säilytä fixtures/tietomallit/webcor-0.0.2/original.ttl tavuntarkasti. Erillisen testiprojektion lisättyä xsd:string-rajoitetta ei saa väittää alkuperäiseksi eikä alkuperäisen profiilin generointia valmiiksi. Täysi testi on edelleen tests/test_technical_packages.py; kohdennettu ajo -k webcor sisältää 8 tapausta.
