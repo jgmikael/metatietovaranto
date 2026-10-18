@@ -60,7 +60,8 @@
     "observedMergeRefHeadCommit": "15cab8ec75e7020127f8531b18b6246ca5904f9e",
     "targetBase": "main",
     "patchAttempt": "REST PATCH /repos/jgmikael/metatietovaranto/pulls/13",
-    "result": "Forbidden; UI base must be checked/changed manually"
+    "result": "Forbidden; UI base must be checked/changed manually",
+    "descriptionAndBasePatchAttempt": "REST PATCH /pulls/13 with base=main and prepared description returned Forbidden after branch push"
   },
   "immutablePackagesChanged": false,
   "runtimeRule": "This audit records the review attempt; it is not imported as a generation source pin or used to rewrite existing packages."

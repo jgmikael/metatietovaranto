@@ -21,7 +21,7 @@ PR #12 on yhdistetty mainiin `9258fffb4633c90240eddba1c09b6b135c3fb057`. Main on
 
 - ETSI TS 119 472-1 V1.2.1 ja TS 119 478 V1.1.1 -PDF:t, EU 2025/1569:n ajantasainen konsolidoitu teksti tai alkuperäinen ja muutossäädökset sekä EUR-Lexin muutos-/oikaisutiedot tarvitaan sisältövertailun jatkamiseen. Ei vielä yhdistämissuositusta.
 - GitHubin refs/pull/13/merge-viitteen base-vanhempi oli 8bc37dc (vanha 2H-haara). Base-vaihto mainiksi yritettiin REST PATCH /pulls/13 -pyynnöllä; **Forbidden**. Käyttöliittymässä on varmistettava **PR #13 → Edit → base: main**. Paikallinen main-pohja ja PR:n kohdehaara eivät ole sama asetus.
-- Main-päivitys ja tämän tarkistuksen raportti toimitetaan nykyiseen PR #13 -haaraan. PR:n base- ja kuvauskentän API-päivityksen tulos kirjataan toimituksessa. Yhdistämistä mainiin ei tehdä.
+- Main-integrointi **339824e** ja tarkistusraportti **b9f2d68** on työnnetty nykyiseen PR #13:n haaraan. REST PATCH /pulls/13 -pyynnöllä yritettiin päivittää sekä `base: main` että valmis kuvausteksti: **Forbidden**. GitHubin base- tai kuvauskenttää ei siis ole päivitetty tämän työympäristön kautta; base pitää tarkistaa/vaihtaa ja ajantasainen docs/pull-request-attribute-semantics.md kopioida haluttaessa kuvauskenttään käsin. Koodi-/dokumentaatiomuutokset näkyvät olemassa olevassa PR:ssä. Main-haara säilyi commitissa 9258fff. Normatiivinen lähdevertailu odottaa yllä lueteltuja tiedostoja, eikä PR:ää yhdistetty.
 
 ---
 
