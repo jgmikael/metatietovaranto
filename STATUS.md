@@ -23,7 +23,7 @@ Generaattori 1.1.1 korjaa puuteraportin: luettuja tekstejä ei enää merkitä k
 
 Main 9258fff sisältyy työhaaraan. Käyttäjä vahvisti PR #13:n baseksi mainin; GitHubin refs/pull/13/merge-viitteen ensimmäinen vanhempi 9258fff varmisti tämän myös teknisesti. Basea ei tarvitse vaihtaa uudelleen. Sovelluksen UI tai relaatiomigraatiot eivät muutu; generaattorin lähdepinnit ja puuteraportti muuttuvat, joten Docker-image rakennettiin ja käynnistettiin uudelleen. Normaalin restartin tiedonsäilyminen tarkistettiin ennen uusia synteettisiä selaintestijulkaisuja.
 
-Lähdekopiot, tarkisteet, vertailu, raporttikorjaus ja testitulokset toimitetaan nykyiseen PR #13:n haaraan. Kuvauskentän API-päivityksen tulos kirjataan toimituksessa. PR jätetään avoimeksi asiakirjatietosivun tarkistusta varten.
+Toteutuscommit **e79b453** (generaattori 1.1.1) on työnnetty PR #13:n nykyiseen haaraan. `gh pr edit 13 --body-file docs/pull-request-attribute-semantics.md` yritti päivittää kuvauksen mutta estyi **Forbidden**-vastaukseen: GitHubin kuvauskenttä ei siis päivittynyt automaattisesti. Ajantasainen valmis kuvausteksti on repositoriossa, ja haara-/tiedostomuutokset näkyvät olemassa olevassa PR:ssä. PR #13:n base on main, joten sitä ei tarvitse vaihtaa uudelleen. Main 9258fff säilyi ennallaan, yhdistämistä ei tehty. PR jää avoimeksi asiakirjatietosivun loppuvarmistusta varten.
 
 ---
 
