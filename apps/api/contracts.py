@@ -6,6 +6,7 @@ from urllib.parse import urlsplit, parse_qs
 import re
 from uuid import UUID
 from apps.api.metadata_urls import initiation_url
+from apps.api.catalog_contracts import CatalogueReference
 from apps.api.distribution_contracts import Distribution, WalletCompatibility
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator, model_validator, StringConstraints
 
@@ -100,6 +101,7 @@ class ProductWrite(Contract):
     syntheticExample: SyntheticExample | None = None
     distributions: list[Distribution] | None = Field(default=None,min_length=1,max_length=10)
     primaryDistributionId: UUID | None = None
+    catalogueReferences: list[CatalogueReference] | None = Field(default=None,max_length=100)
     derivedExamples: list[DerivedExample] = Field(default_factory=list,max_length=10)
 
     @field_validator('derivedExamples')

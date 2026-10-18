@@ -1,0 +1,31 @@
+{
+  "ts11": {
+    "version": "1.0.1 (2026-01-30)",
+    "repository": "https://github.com/eu-digital-identity-wallet/eudi-doc-standards-and-technical-specifications",
+    "commit": "ee91a294c833af5188726fd8c302c641212192aa",
+    "files": {
+      "ts11-1.0.1.md": "22b73ecb74aa05ea8316767c46e53cb66aadcce34dc5e3b2e33d33e2fb944d06",
+      "ts11-cat-of-attributes-datamodel.json": "3007fc1c9131f87c6e870f234d47a0b36c83b83e8d983cd17466bf553b353251",
+      "ts11-json-cat-attestations-data-model.json": "136cd6a158bb99f25919922a6ae86b40e52a402d29b865d1226abb5930712525"
+    },
+    "note": "TS11 itself references ETSI 119 478 V0.0.7, not requested V1.1.1; models retained without edits"
+  },
+  "requestedUnverifiedSources": [
+    {
+      "id": "ETSI TS 119 472-1",
+      "version": "V1.2.1",
+      "url": "https://www.etsi.org/deliver/etsi_ts/119400_119499/11947201/01.02.01_60/ts_11947201v010201p.pdf"
+    },
+    {
+      "id": "ETSI TS 119 478",
+      "version": "V1.1.1",
+      "url": "https://www.etsi.org/deliver/etsi_ts/119400_119499/119478/01.01.01_60/ts_119478v010101p.pdf"
+    },
+    {
+      "id": "EU 2025/1569 Articles 7 and 8, subsequent amendments",
+      "version": "requested current consolidated text as of 2026-10-18; not verified",
+      "url": "https://eur-lex.europa.eu/eli/reg_impl/2025/1569/oj/eng"
+    }
+  ],
+  "unverifiedReason": "HTTPS egress proxy returned 403; no currentness or normative conformance claim"
+}

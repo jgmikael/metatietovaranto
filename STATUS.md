@@ -1,3 +1,40 @@
+# Vaiheen 2H jatko — attribuuttien semanttiset viittaukset (18.10.2026)
+
+Erillinen työhaara `feat/phase-2h-attribute-semantics`, pohja `feat/phase-2h-technical-packages` (`ace80e3`). Uudelleen tarkistettu origin/main on `ac002ad` (2G); 2H ei vielä sisälly päähaaraan. Tämä jatko on tarkastettava erillisenä PR:nä 2H-haaraa vasten ja siirrettävä main-pohjaiseksi vasta pohjan yhdistämisen jälkeen. Aiemman tehtävän historiatiedot ovat alempana.
+
+Toteutus: generaattori 1.1.0 johtaa lähde-SHACLista yhteiset attribuuttiviittaukset mappingiin, JSON Scheman x-term/x-mtv-shacl-kenttiin ja SD-JWT VC draft-19 Type Metadatan x-mtv-semantic-kenttiin. Viite erottaa alkuperäisen ominaisuus-IRI:n PropertyShapesta, säilyttää koko sisäkkäisen käyttöyhteyden sekä lähdeprofiilin version/snapshotin tarkisteen. Nimettömälle lähdesolmulle ei keksitä URI:a. IETF-väitepolut käyttävät taulukoille null-askelia. Oma versioitu laajennusprofiili määrittelee annotaatiot ja schema-/mapping-löydettävyyden.
+
+Paketissa on 12 julkista muuttumatonta artefaktia. SRI-tarkisteketju sitoo laajennusprofiilin, mappingin, skeeman ja Type Metadatan; issuer-metadata-binding.json ohjeistaa ulkoisen myöntäjän vct/vct#integrity-käytön. Esimerkkikuluttaja hakee yhden väitepolun semantiikan ilman väitearvoja tai JSON Schemaa. Se ei ole SD-JWT-/allekirjoitusverifioija. Valinnaiset attribuutti- ja järjestelykatalogiviitteet säilyttävät vastaavuusväitteen alkuperän ja kulkevat normaalissa hyväksynnässä. Vanhan asiakkaan puuttuva uusi kenttä ei poista jo tallennettuja viitteitä. Ei uutta relaatiomigraatiota, allekirjoittamista, katalogirekisteröintiä tai lompakkointegraatiota.
+
+Sopimus, vastaavuustaulukko, lähdeversiot ja kokeiluohje: [docs/attribute-semantics.md](docs/attribute-semantics.md).
+
+## Tässä jatkotehtävässä todella ajettu
+
+- Koko README/CI:n 13 tiedoston API-/PostgreSQL-/migraatiosarja: **196 passed, 4 warnings in 317.51s (0:05:17)**. Ei epäonnistuneita tai ohitettuja. Mukana vanhojen kantojen päivitykset, tyhjä kanta/toistuvat migraatiot, käyttöoikeudet, hyväksynnän mitätöinti, muuttumattomat julkaisut, oikea PyLD + lukittu lataaja + RDF-graafivertailu + lähde-SHACL, sisäkkäiset taulukot/roolit, nimetön PropertyShape, ulkoinen nimiavaruus, ristiriitaisten annotaatioiden hylkäys ja SRI-ketjun muutosten havaitseminen.
+- Kohdennettu paketti-/attribuuttisemantiikan ajo: **49 passed** (sisältyy edellä olevaan 196 testiin). Näistä 15 on uuden jatkon testejä.
+- Oikea Chromium ja Keycloak, lopullista Docker-imagea vasten: **13 passed, 1 warning in 106.27s (0:01:46)**. Aiempien polkujen lisäksi katalogiviitteen syöttö → tallennus → uudelleenavaaminen → paketin generointi → toisen käyttäjän hyväksyntä/julkaisu → julkisten kuvausten tarkisteketju ja yhden claimin semantiikka. Ensimmäinen selainajo löysi uuden JSON-kentän nimilappuongelman; eksplisiittinen label/id-yhteys korjattiin ja koko selainajo uusittiin onnistuneesti.
+- **209 eri pytest-testiä**, ei ohituksia. Deprekaatiovaroitukset ovat Starlette/httpx- ja RDFLib-varoituksia.
+- `npm run build --prefix apps/web` läpäisi (TypeScript/Vite). Docker-image rakennettiin varmennukset säilyttävällä `scripts/cloud-build.sh`-reitillä ja käynnistettiin `docker compose up -d --no-build --wait`: app/db/Keycloak healthy. Tavallista `docker compose up --build` -rakennusreittiä ei ajettu uudelleen tässä jatkossa; pilviympäristön aiemmin todettu build-DNS-rajaus edellytti proxy-/CA-asetukset säilyttävää apureittiä.
+- Olemassa olevan catalog-kannan uudelleenkäynnistys: **13 metatietotaulun kaikki rivit täsmälleen ennallaan**, mukana 71 tuotetta, 71 luonnosta, 36 profiilisnapshotia ja 64 julkaisua ennen selaintestien uusia synteettisiä julkaisuja. `alembic current`: **0005_lifecycle (head)**. Ei uutta skeemamigraatiota; toimitetut revisiot ennallaan. Tyhjentävät API-testit käyttivät vain erillistä catalog_test-kantaa.
+- Julkisten vanhojen tietojen erillinen HTTP-toimintakoe: **73 julkaisuversiota luettavissa**, mukaan lukien kaikki testien jättämät historiat. **6 vanhan 1.0.0-generaattorin pakettia / 54 artefaktia** haettiin ja alkuperäiset tavut/tarkisteet säilyivät.
+- Dockerissa ajettu `examples/semantic_consumer.py` luki oikean julkisen Type Metadatan ja palautti `["companyName"]`-polulle alkuperäisen ominaisuus-IRI:n, NameShape-kytkennän ja lähdesnapshotin/version/SHA:n. Kaikki **12 uuden paketin artefaktia** haettiin julkisista HTTP-reiteistä ja niiden tavut, mediatyypit ja SHA:t tarkistettiin. Tämä on kuvausten toimintakoe, ei SD-JWT:n kryptografinen verifiointi.
+- `git diff --check` läpäisi. `.devcontainer`/Private-portin määrityksiä, Composea tai Alembic-revisioita ei muutettu.
+
+
+## Avoimet / ajamattomat tarkistukset
+
+Virallinen TS11 1.0.1 (2026-01-30), commit `ee91a294c833af5188726fd8c302c641212192aa`, ja sen kaksi JSON-tietomallia on tallennettu muuttamattomina SHA-256-tarkisteineen. TS11 viittaa itse 119 478:n V0.0.7-luonnokseen: sitä ei esitetä pyydetyn V1.1.1:n vahvistuksena.
+
+Pyydettyjen ETSI TS 119 472-1 V1.2.1- ja TS 119 478 V1.1.1 -alkutekstien sekä EU 2025/1569:n artiklojen 7/8 ajantasaisen tekstin ja myöhempien muutosten varmistaminen estyi **HTTP 403** -verkkovastaukseen. Vastaavuustaulukko ja koneellinen catalogue-coverage.json erottavat vahvistamattomat kohdat. Ajantasaista oikeudellista tai ETSI-/EU-vaatimustenmukaisuusväitettä ei tehdä. Myös pohja-2H:n aito muuttamaton Tietomallit-exportin hyväksymiskoe säilyy avoimena. Näiden vuoksi toimitus on tarkastettava luonnos; en suosittele yhdistämistä ennen lähdetarkistusten täydentämistä.
+
+Windows Docker Desktopia, uuden Codespacen todellista luontia/selainavausta/Private-porttia, julkista tuotanto-HTTPS-palvelua ja GitHub Actionsin etäajoa ei ajettu. Compose, `.devcontainer` ja aiemmat Alembic-revisiot säilyvät ennallaan. Ei kuorma-/tietoturva-auditointia tai ulkoisen myöntäjän kryptografisia integraatiotestejä. Piilotettu väite osittaisessa esityksessä ei tarkoita puuttuvaa attribuuttia alkuperäisessä todistuksessa.
+
+## Toimitus
+
+Erillinen tarkastettava PR kohdistetaan haaraan `feat/phase-2h-technical-packages`. PR:n avaamisen tulos kirjataan toimituksessa. Ei automaattista yhdistämistä. Kokeile uutta haaraa README:n Codespaces-linkillä.
+
+---
+
 # Vaihe 2H — SHACL-pohjaiset tekniset kuvauspaketit (17.10.2026)
 
 Pohja main `ac002ad` (PR #11), työhaara `feat/phase-2h-technical-packages`. Toteutus ja täsmällinen rajaus: [docs/phase-2h.md](docs/phase-2h.md). Tämä tehtävä korvaa aiemman DCAT-AP-ehdotuksen vaiheelle 2H.

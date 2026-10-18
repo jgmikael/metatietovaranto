@@ -107,6 +107,14 @@ Käyttäjän toimeksianto, pohjana main `ac002ad` (PR #11). Tämä korvaa aiemma
 - Useat sanastoviitteet sijainteineen ja riippuvuusaineistot käyttöliittymään. Ei mielivaltaisia verkkonoutoja.
 - Aidon muuttamattoman Tietomallit-live-exportin hyväksymiskoe on avoin ympäristön 403-eston vuoksi; virallinen migraatiotestiaineisto ei täytä tätä vaatimusta. DCAT-AP-viennit ja tämän generointiprofiilin laajentaminen jäävät myöhemmiksi.
 
+## 2H:n jatko — attribuuttikohtainen semantiikka
+
+Erillinen tarkastettava jatkohaara 2H:n päällä: [sopimus ja lähdeversiot](docs/attribute-semantics.md). Generaattori 1.1.0 tuottaa alkuperäisen ominaisuus-IRI:n ja SHACL-rajoitteen käyttöyhteyden yhteiseen mappingiin, JSON Scheman x-term/x-mtv-shacl-annotaatioihin ja Type Metadatan x-mtv-semantic-annotaatioihin. Nimetön PropertyShape säilyy nimettömänä ja yksilöidään snapshotin, juurimuodon ja rajoitepolun avulla. Sisäkkäiset taulukot käyttävät IETF Claim Pathin null-askelia.
+
+Versioitu oma laajennusprofiili, schema-/mapping-löydettävyys ja standardin base64-SRI-ketju julkaistaan artefakteina. Esimerkkikuluttaja lukee semantiikkaa ilman väitearvoja tai allekirjoituksen tarkistusta. Valinnaiset attribuutti-/järjestelykatalogivastaavuudet edellyttävät lähdettä, versiota, todistusaineiston tarkistetta ja normaalia hyväksyntää. TS11 1.0.1 ja molemmat viralliset tietomallit on lukittu muuttamattomina; pyydettyjen ETSI-versioiden ja EU-asetuksen ajantasaisen tekstin tarkistus on avoin 403-eston vuoksi. Koneellinen puuteraportti ei ole vaatimustenmukaisuusväite.
+
+Jäljellä: normatiivisten lähteiden tarkistus ja mahdolliset täsmennykset sen perusteella, 2H:n aito muuttamaton Tietomallit-exporti sekä erikseen tilattavat katalogirekisteröinti- ja ulkoisen myöntäjän integraatiot. Osittainen esitys ei osoita piilotetun attribuutin puuttumista alkuperäisestä todistuksesta.
+
 ## Vaiheen 2 myöhemmät osat — erillinen toimeksianto
 
 Laajemmat JSON Schema/OpenAPI-kattavuuskartoitukset ja muunnoksen laajentaminen IRI-identiteetteihin, RDF-listoihin ja monijuurisiin profiileihin, laajemmat SHACL-profiilit, DCAT-AP-vientien vaatimustenmukaisuus, retired/archived-elinkaaret ja ajastettu lopetus, jäsenyyksien hallintakäyttöliittymä, tuotannon IdP, kielituen laajennukset ja kuormitusvaatimukset. Vaiheen 2D offline Core -tarkistus ja erillinen ihmistarkastus eivät korvaa näitä tai VC-kuoren/suojauksen tarkistusta.
