@@ -1,6 +1,6 @@
 # Vaiheen 2H jatko — attribuuttien semanttiset viittaukset
 
-18.10.2026. Erillinen haara `feat/phase-2h-attribute-semantics`, pohja 2H:n `ace80e3`. Mainissa on vielä 2G (`ac002ad`), joten tämän jatko-PR:n base on `feat/phase-2h-technical-packages`. Yhdistä pohja ensin ja kohdista jatko-PR mainiin sen jälkeen; kumpaakaan ei yhdistetä automaattisesti. 2H:n avoin aidon Tietomallit-exportin koe säilyy avoimena.
+18.10.2026. Erillinen haara `feat/phase-2h-attribute-semantics`, alkuperäinen pohja 2H:n `ace80e3`, täydennetty aineistokokeen commitilla `8bc37dc`. Mainissa on vielä 2G (`ac002ad`), joten tämän jatko-PR:n base on `feat/phase-2h-technical-packages`. Yhdistä pohja ensin ja kohdista jatko-PR mainiin sen jälkeen; kumpaakaan ei yhdistetä automaattisesti. 2H:n aito aineistokoe on täydennetty käyttäjän toimittamalla WE BUILD 0.0.2 -exportilla: [tulos ja tarkat rajat](webcor-acceptance.md). Koko profiilia ei väitetä generaattorin tukemaksi.
 
 ## Sopimus: Metatietovarannon semanttinen laajennus 1.0.0
 
@@ -120,3 +120,11 @@ Lukijan verkkosovitin noutaa vain käyttäjän eksplisiittisesti valitsemasta al
 18.10.2026: selaintesti julkaisi synteettisen tuotteen `6e6214d0-82be-44ad-9495-3dd0ab388cf2` version 1.0.0 normaalilla eri käyttäjän hyväksynnällä. Paketin tunniste oli `4db0ebac58d0d485160ecf772ab0c9833d9864bb8ec7376291470c413bc6823e`. Kontissa ajettu kuluttaja palautti companyName-polun IRI:n `https://example.org/metatietovaranto/demo/companyName`, PropertyShapen `https://example.org/metatietovaranto/demo/NameShape` ja lähdeversion `synthetic-demo-2e`. Lähdesnapshotin tarkiste oli `e52039c7417a8869bee8a315f8d1884ce007c25886ca8082966e9c8b69a62749`. Type Metadatan vct#integrity oli `sha256-uFw1xGSU7N56JGoW1J3P8MQg4mwYHof/D3yoJSzmkSQ=`. Kaikkien 12 julkisen artefaktin tavut, tarkisteet ja mediatyypit tarkistettiin.
 
 Nämä tunnisteet ovat tämän paikallisen testikannan havaintoja, eivät uudessa Codespacessa valmiiksi olemassa olevia fixtureitä tai pysyvän julkisen internet-palvelun julkaisu. Uudessa demossa julkaise oma synteettinen versio ja käytä sen artefaktiosoitteita/pin-arvoa yllä olevaan komentoon.
+
+## WE BUILD -aineistokokeen tuonti jatkohaaraan
+
+Perus-2H:n 8bc37dc yhdistettiin tähän työhaaraan; samalla testaamme generaattorin 1.1.0 todelliset attribuuttiannotaatiot erillisellä paikallisella projektiolla. `x-term` ja Type Metadatan `term` ovat eu-core:familyName; `propertyShapeUri` on eri webcor:familyName. SourceProfile pysyy paikallisena testiprofiilina (`urn:metatietovaranto:test:webcor-family-name`, `0.0.2-local-test-1`), koska lisätty xsd:string-rajoite ei ole alkuperäisen webcor 0.0.2:n vaatimus. Se ei saa vaihtua alkuperäisen mallin identiteetiksi pelkkien samojen IRI:en perusteella.
+
+Jatkohaaran paketti-/attribuuttisemantiikan sarja: **58 passed, 1 warning in 50.08s**. Ei epäonnistuneita tai ohitettuja. Mukana kaikki 42 pakettitestiä (myös 8 uutta aidon aineiston tapausta) sekä 16 attribuuttisemantiikan testiä; uusi testi varmistaa paikallisen projektion lähde-identiteetin ja alkuperäisen ominaisuus-/PropertyShape-IRI:n eron. Tämä ei ole uusi täysi API-/migraatioajo tässä jatkohaarassa, eikä päällekkäisiä testejä lasketa uutena kokonaismääränä.
+
+Tämä täydennys muuttaa vain testiaineistoa, testejä ja dokumentaatiota. Sovellus, UI, skeema ja käynnistyspolku eivät muutu; Docker-buildia, web-buildia tai selaintestejä ei ajettu uudelleen tätä täydennystä varten. Aiemmat ajot on erotettu STATUSissa. ETSI-/EU-alkutekstien varmistus on edelleen avoin.

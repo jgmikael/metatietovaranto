@@ -1,0 +1,434 @@
+PREFIX dcap:       <http://purl.org/ws-mmi-dc/terms/>
+PREFIX dcterms:    <http://purl.org/dc/terms/>
+PREFIX eu-core:    <https://iri.suomi.fi/model/eu-core/>
+PREFIX geo:        <http://www.opengis.net/ont/geosparql#>
+PREFIX http:       <http://www.w3.org/2011/http#>
+PREFIX ncbv:       <https://iri.suomi.fi/model/ncbv/0.0.7/>
+PREFIX owl:        <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:        <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:       <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX sh:         <http://www.w3.org/ns/shacl#>
+PREFIX skos:       <http://www.w3.org/2004/02/skos/core#>
+PREFIX suomi-meta: <https://iri.suomi.fi/model/suomi-meta/>
+PREFIX webcor:     <https://iri.suomi.fi/model/webcor/>
+PREFIX webuild:    <https://iri.suomi.fi/model/webuild/>
+PREFIX xsd:        <http://www.w3.org/2001/XMLSchema#>
+
+webcor:Location  rdf:type             sh:NodeShape;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Location"@en;
+        dcterms:created               "2026-02-12T11:47:32.527Z"^^xsd:dateTime;
+        dcterms:identifier            "Location"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T11:47:32.527Z"^^xsd:dateTime;
+        sh:property                   webcor:geographicIdentifier , webcor:geographicName;
+        sh:targetClass                eu-core:Location;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:geographicIdentifier
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Geographic identifier"@en;
+        dcterms:created               "2026-02-12T11:47:32.609Z"^^xsd:dateTime;
+        dcterms:identifier            "geographicIdentifier"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T11:47:32.609Z"^^xsd:dateTime;
+        sh:path                       eu-core:geographicIdentifier;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:geographicName
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Geographic name"@en;
+        dcterms:created               "2026-02-12T11:47:32.603Z"^^xsd:dateTime;
+        dcterms:identifier            "geographicName"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T11:47:32.603Z"^^xsd:dateTime;
+        sh:path                       eu-core:geographicName;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:name  rdf:type                 sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Name"@en;
+        dcterms:created               "2026-02-12T07:50:04.831Z"^^xsd:dateTime;
+        dcterms:identifier            "name"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:50:04.831Z"^^xsd:dateTime;
+        sh:path                       eu-core:name;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:Jurisdiction  rdf:type         sh:NodeShape;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Jurisdiction"@en;
+        dcterms:created               "2026-02-12T07:50:04.736Z"^^xsd:dateTime;
+        dcterms:identifier            "Jurisdiction"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:50:04.736Z"^^xsd:dateTime;
+        sh:property                   webcor:name , webcor:id;
+        sh:targetClass                eu-core:Jurisdiction;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:id  rdf:type                   sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Id"@en;
+        dcterms:created               "2026-02-12T07:50:04.825Z"^^xsd:dateTime;
+        dcterms:identifier            "id"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:50:04.825Z"^^xsd:dateTime;
+        sh:path                       eu-core:id;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:dateOfIssue  rdf:type          sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Date of issue"@en;
+        dcterms:created               "2026-02-12T07:49:02.326Z"^^xsd:dateTime;
+        dcterms:identifier            "dateOfIssue"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:49:02.326Z"^^xsd:dateTime;
+        sh:path                       eu-core:dateOfIssue;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:notation  rdf:type             sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Notation"@en;
+        dcterms:created               "2026-02-12T07:49:02.338Z"^^xsd:dateTime;
+        dcterms:identifier            "notation"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:49:02.338Z"^^xsd:dateTime;
+        sh:path                       eu-core:notation;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:issuingAuthorityName
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Issuing authority name"@en;
+        dcterms:created               "2026-02-12T07:49:02.332Z"^^xsd:dateTime;
+        dcterms:identifier            "issuingAuthorityName"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:49:02.332Z"^^xsd:dateTime;
+        sh:path                       eu-core:issuingAuthorityName;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:Identifier  rdf:type           sh:NodeShape;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Identifier"@en;
+        dcterms:created               "2026-02-12T07:49:02.221Z"^^xsd:dateTime;
+        dcterms:identifier            "Identifier"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:49:02.221Z"^^xsd:dateTime;
+        sh:property                   webcor:dateOfIssue , webcor:notation , webcor:issuingAuthorityName , webcor:schemeName , webcor:schemeURI , webcor:issuingAuthorityURI;
+        sh:targetClass                eu-core:Identifier;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:schemeName  rdf:type           sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Scheme name"@en;
+        dcterms:created               "2026-02-12T07:49:02.351Z"^^xsd:dateTime;
+        dcterms:identifier            "schemeName"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:49:02.351Z"^^xsd:dateTime;
+        sh:path                       eu-core:schemeName;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:schemeURI  rdf:type            sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Scheme URI"@en;
+        dcterms:created               "2026-02-12T07:49:02.321Z"^^xsd:dateTime;
+        dcterms:identifier            "schemeURI"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:49:02.321Z"^^xsd:dateTime;
+        sh:path                       eu-core:schemeURI;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:issuingAuthorityURI
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Issuing authority URI"@en;
+        dcterms:created               "2026-02-12T07:49:02.345Z"^^xsd:dateTime;
+        dcterms:identifier            "issuingAuthorityURI"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:49:02.345Z"^^xsd:dateTime;
+        sh:path                       eu-core:issuingAuthorityURI;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:adminUnitLevel1
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Admin unit level 1"@en;
+        dcterms:created               "2026-02-12T07:36:02.745Z"^^xsd:dateTime;
+        dcterms:identifier            "adminUnitLevel1"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:36:02.745Z"^^xsd:dateTime;
+        sh:path                       eu-core:adminUnitLevel1;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:poBox  rdf:type                sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "PO box"@en;
+        dcterms:created               "2026-02-12T07:36:02.79Z"^^xsd:dateTime;
+        dcterms:identifier            "poBox"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:36:02.79Z"^^xsd:dateTime;
+        sh:path                       eu-core:poBox;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:thoroughfare  rdf:type         sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Thoroughfare"@en;
+        dcterms:created               "2026-02-12T07:36:02.806Z"^^xsd:dateTime;
+        dcterms:identifier            "thoroughfare"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:36:02.806Z"^^xsd:dateTime;
+        sh:path                       eu-core:thoroughfare;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:addressArea  rdf:type          sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Address area"@en;
+        dcterms:created               "2026-02-12T07:36:02.798Z"^^xsd:dateTime;
+        dcterms:identifier            "addressArea"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:36:02.798Z"^^xsd:dateTime;
+        sh:path                       eu-core:addressArea;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:adminUnitLevel2
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Admin unit level 2"@en;
+        dcterms:created               "2026-02-12T07:36:02.752Z"^^xsd:dateTime;
+        dcterms:identifier            "adminUnitLevel2"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:36:02.752Z"^^xsd:dateTime;
+        sh:path                       eu-core:adminUnitLevel2;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:postCode  rdf:type             sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Post code"@en;
+        dcterms:created               "2026-02-12T07:36:02.74Z"^^xsd:dateTime;
+        dcterms:identifier            "postCode"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:36:02.74Z"^^xsd:dateTime;
+        sh:path                       eu-core:postCode;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:locatorName  rdf:type          sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Locator name"@en;
+        dcterms:created               "2026-02-12T07:36:02.76Z"^^xsd:dateTime;
+        dcterms:identifier            "locatorName"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:36:02.76Z"^^xsd:dateTime;
+        sh:path                       eu-core:locatorName;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:postName  rdf:type             sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Post name"@en;
+        dcterms:created               "2026-02-12T07:36:02.769Z"^^xsd:dateTime;
+        dcterms:identifier            "postName"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:36:02.769Z"^^xsd:dateTime;
+        sh:path                       eu-core:postName;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:locatorDesignator
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Locator designator"@en;
+        dcterms:created               "2026-02-12T07:36:02.778Z"^^xsd:dateTime;
+        dcterms:identifier            "locatorDesignator"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:36:02.778Z"^^xsd:dateTime;
+        sh:path                       eu-core:locatorDesignator;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:fullAddress  rdf:type          sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Full address"@en;
+        dcterms:created               "2026-02-12T07:36:02.734Z"^^xsd:dateTime;
+        dcterms:identifier            "fullAddress"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:36:02.734Z"^^xsd:dateTime;
+        sh:path                       eu-core:fullAddress;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:addressId  rdf:type            sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Address id"@en;
+        dcterms:created               "2026-02-12T07:36:02.728Z"^^xsd:dateTime;
+        dcterms:identifier            "addressId"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:36:02.728Z"^^xsd:dateTime;
+        sh:path                       eu-core:addressId;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:Address  rdf:type              sh:NodeShape;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Address"@en;
+        dcterms:created               "2026-02-12T07:36:02.641Z"^^xsd:dateTime;
+        dcterms:identifier            "Address"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:36:02.641Z"^^xsd:dateTime;
+        sh:property                   webcor:adminUnitLevel1 , webcor:addressId , webcor:fullAddress , webcor:locatorDesignator , webcor:postName , webcor:locatorName , webcor:postCode , webcor:adminUnitLevel2 , webcor:addressArea , webcor:thoroughfare , webcor:poBox;
+        sh:targetClass                eu-core:Address;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:registeredAddress
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "registered address"@en;
+        dcterms:created               "2026-02-12T07:36:55.274Z"^^xsd:dateTime;
+        dcterms:identifier            "registeredAddress"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:37:15.561Z"^^xsd:dateTime;
+        sh:class                      eu-core:Address;
+        sh:path                       eu-core:registeredAddress;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:dateOfBirth  rdf:type          sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Date of birth"@en;
+        dcterms:created               "2026-02-12T07:35:44.545Z"^^xsd:dateTime;
+        dcterms:identifier            "dateOfBirth"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:35:44.545Z"^^xsd:dateTime;
+        sh:path                       eu-core:dateOfBirth;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:identifierAs  rdf:type         sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "identifier"@en;
+        dcterms:created               "2026-02-12T07:35:44.528Z"^^xsd:dateTime;
+        dcterms:identifier            "identifierAs"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:49:32.097Z"^^xsd:dateTime;
+        sh:class                      eu-core:Identifier;
+        sh:path                       eu-core:identifierAs;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:residency  rdf:type            sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "residency"@en;
+        dcterms:created               "2026-02-12T07:35:44.539Z"^^xsd:dateTime;
+        dcterms:identifier            "residency"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T09:50:21.803Z"^^xsd:dateTime;
+        sh:class                      eu-core:Jurisdiction;
+        sh:path                       eu-core:residency;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:placeOfBirth  rdf:type         sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "place of birth"@en;
+        dcterms:created               "2026-02-12T07:35:44.534Z"^^xsd:dateTime;
+        dcterms:identifier            "placeOfBirth"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T11:47:59.807Z"^^xsd:dateTime;
+        sh:class                      eu-core:Location;
+        sh:path                       eu-core:placeOfBirth;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:givenName  rdf:type            sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Given name"@en;
+        dcterms:created               "2026-02-12T07:35:44.559Z"^^xsd:dateTime;
+        dcterms:identifier            "givenName"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:35:44.559Z"^^xsd:dateTime;
+        sh:path                       eu-core:givenName;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:Person  rdf:type               sh:NodeShape;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Person"@en;
+        dcterms:created               "2026-02-12T07:35:44.349Z"^^xsd:dateTime;
+        dcterms:identifier            "Person"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:35:44.349Z"^^xsd:dateTime;
+        sh:property                   webcor:citizenship , webcor:familyName , webcor:givenName , webcor:placeOfBirth , webcor:residency , webcor:identifierAs , webcor:dateOfBirth , webcor:registeredAddress;
+        sh:targetClass                eu-core:Person;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:familyName  rdf:type           sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "Family name"@en;
+        dcterms:created               "2026-02-12T07:35:44.553Z"^^xsd:dateTime;
+        dcterms:identifier            "familyName"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T07:35:44.553Z"^^xsd:dateTime;
+        sh:path                       eu-core:familyName;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:citizenship  rdf:type          sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              webcor:;
+        rdfs:label                    "citizenship"@en;
+        dcterms:created               "2026-02-12T07:35:44.522Z"^^xsd:dateTime;
+        dcterms:identifier            "citizenship"^^xsd:NCName;
+        dcterms:modified              "2026-02-12T09:50:44.604Z"^^xsd:dateTime;
+        sh:class                      eu-core:Jurisdiction;
+        sh:path                       eu-core:citizenship;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+webcor:  rdf:type                     owl:Ontology , suomi-meta:ApplicationProfile;
+        rdfs:comment                  "Example data model for a \"Ceritificate of Residence\" attestation in the WE BUILD LSP context."@en;
+        rdfs:label                    "WE BUILD Certificate of Residence"@en;
+        dcterms:contributor           <urn:uuid:0e7e4f57-be57-4f99-bb1f-bfdcf0b6948a>;
+        dcterms:created               "2026-02-12T07:33:02.598Z"^^xsd:dateTime;
+        dcterms:identifier            "90829466-acea-47f4-9f67-e3aad06e7d54";
+        dcterms:isPartOf              <http://urn.fi/URN:NBN:fi:au:ptvl:v1095>;
+        dcterms:language              "en";
+        dcterms:modified              "2026-02-12T07:33:51.661Z"^^xsd:dateTime;
+        dcterms:requires              ncbv: , eu-core: , webuild:;
+        dcap:preferredXMLNamespace    "https://iri.suomi.fi/model/webcor/";
+        dcap:preferredXMLNamespacePrefix
+                "webcor";
+        owl:imports                   skos:;
+        owl:priorVersion              <https://iri.suomi.fi/model/webcor/0.0.1/>;
+        owl:versionIRI                <https://iri.suomi.fi/model/webcor/0.0.2/>;
+        owl:versionInfo               "0.0.2";
+        suomi-meta:contact            "yhteentoimivuus@dvv.fi";
+        suomi-meta:contentModified    "2026-02-12T07:33:02.598Z"^^xsd:dateTime;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+skos:   rdfs:label  "SKOS"@en;
+        dcap:preferredXMLNamespacePrefix
+                "skos" .

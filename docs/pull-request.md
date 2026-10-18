@@ -1,6 +1,6 @@
 # Vaihe 2H: SHACL-pohjaiset tekniset kuvauspaketit
 
-**Avoin yhdistämisen este:** käyttäjän vaatima aidon muuttamattoman Tietomallit-exportin koe puuttuu verkkonoutoeston vuoksi. Alla erotellaan toteutuksen testitulokset tästä avoimesta hyväksymiskriteeristä.
+**Aineistokoe täydennetty 18.10.2026:** käyttäjän toimittama WE BUILD Certificate of Residence 0.0.2 on tallennettu muuttamattomana ja testattu. Koko profiili estyy puuttuvien literaalityyppien ja SKOS-riippuvuuden vuoksi; erillinen, eksplisiittisesti synteettinen testiprojektio läpäisee JSON-LD/RDF/SHACL-ketjun. [Alkuperä, havainnot ja rajoitteet](webcor-acceptance.md). Tämä toteuttaa toimeksiannon sallitun rajatun aineistokokeen, ei koko webcor-profiilin generointitukea.
 
 ## Muutos ja rajaus
 
@@ -35,6 +35,14 @@ Paikallisen tarkistuksen konkreettinen julkaisu oli `32a69862-a5e5-4a8b-ba5a-d6f
 
 ## Ajetut tarkistukset
 
+### Aineistokokeen täydennys 18.10.2026
+
+- `pytest tests/test_technical_packages.py -k webcor -q`: **8 passed, 34 deselected**. Alkuperäiset tavut/tarkiste, viisi juurta, API-tallennus/eston säilyminen sekä erillinen PyLD + odotettu RDF + projektion/alkuperäisen lähteen SHACL offline.
+- Perus-2H:n koko README/CI:n 12 tiedoston API-/PostgreSQL-/migraatiosarja: **189 passed, 4 warnings in 318.14s (0:05:18)**. Ei epäonnistuneita tai ohitettuja. Sisältää kaikki aiemmat 181 testiä ja 8 uutta aineistotapausta; oikeudet, hyväksyntä, muuttumattomat julkaisut ja vanhan/tyhjän kannan migraatiot säilyivät. Kohdennettu ajo ei ole lisätestimäärä tämän päälle.
+- Sovelluskoodi, skeemamigraatiot ja käyttöliittymä eivät muutu tässä täydennyksessä. Web-buildia, Docker-imagea ja selaintestejä ei ajettu uudelleen; aiemmat tulokset alla ovat alkuperäisen 2H-toteutuksen ajoja, eivät tämän täydennyksen uusia ajoja. Ensimmäisen kohdennetun ajon järjestysoletus Type Metadatan claims-listasta korjattiin molempien polkujen sisältymistarkistukseksi; lopullinen koe läpäisee.
+
+### Alkuperäisen 2H-toteutuksen ajot
+
 - Koko API-/PostgreSQL-/migraatiosarja (README/CI:n 12 tiedostoa): **181 passed, 4 warnings in 298.49s (0:04:58)**. Ei epäonnistuneita tai ohitettuja. Mukana tyhjä/legacy-kanta, toistuvat migraatiot/startup, oikeudet, CSRF, ETag/idempotenssi, SHACL/johdannaiset, hyväksyntä, immutable-julkaisut ja elinkaari.
 - Uuden pakettimoduulin erillinen korjauksen jälkeinen ajo: **34 passed**; nämä sisältyvät yllä olevan täyden ajon 181 testiin. Mukana determinismi, kymmenen literaalityyppiä, sisäkkäisyys/moniarvoisuus, varatut/törmäävät nimet, alkuperäiset IRI:t, useat sanastot/lukitut riippuvuudet, Type Metadata, luku-/kirjoitusoikeudet, nykyinen tarjoaja, hyväksynnän mitätöinti ja julkiset artefaktit.
 - Oikea Chromium + Keycloak, lopullista Docker-toteutusta vasten: **13 passed, 1 warning in 99.15s (0:01:39)**. Mukana aiemmat 12 selainpolkua ja uusi 2H:n editori → mapping-ehdotus → generointi → tallennus/reload → eri käyttäjän hyväksyntä → julkaisu → artefakti sekä mapping-taulukon mobiilileveys.
@@ -49,13 +57,15 @@ Paikallisen tarkistuksen konkreettinen julkaisu oli `32a69862-a5e5-4a8b-ba5a-d6f
 
 ### Ajamattomat tai varmistamatta jääneet
 
-Aidosta muuttamattomasta Tietomallit-exportista ei voitu tehdä hyväksymiskoetta (HTTP 403); virallisen työkalun migraatiotestifixture ja erillinen suppea projektio testattiin, eikä niitä nimetä aidoksi exportiksi. Windows Docker Desktopia, oikean uuden Codespacen luontia/automaattista selainavausta/Private-portin ajonaikaista tilaa, ulkoisen pysyvän HTTPS-palvelun noutoa tai GitHub Actions -ajoa ei voitu varmistaa tässä ympäristössä. `.devcontainer`, Compose-portit ja toimitetut Alembic-revisiot säilyvät muuttumattomina. Kuorma-/tietoturva-auditointia tai ulkoisen myöntäjän/allekirjoituksen/lompakon integraatiotestejä ei ajettu; ne eivät ole tämän paikallisen generointivaiheen toteutusväitteitä.
+Alkuperäisessä ajossa nouto puuttui; 18.10. käyttäjän toimittamalla exportilla tehty koe on kuvattu yllä. Riippumatonta verkkopalveluun vertailua ei voitu tehdä (403). Windows Docker Desktopia, oikean uuden Codespacen luontia/automaattista selainavausta/Private-portin ajonaikaista tilaa, ulkoisen pysyvän HTTPS-palvelun noutoa tai GitHub Actions -ajoa ei voitu varmistaa tässä ympäristössä. `.devcontainer`, Compose-portit ja toimitetut Alembic-revisiot säilyvät muuttumattomina. Kuorma-/tietoturva-auditointia tai ulkoisen myöntäjän/allekirjoituksen/lompakon integraatiotestejä ei ajettu; ne eivät ole tämän paikallisen generointivaiheen toteutusväitteitä.
 
 
-## Avoin hyväksymiskriteeri ja yhdistämisen este
+## Aineistokokeen tulos ja yhdistämisjärjestys
 
-**Aidon julkisen, muuttamattoman Tietomallit-exportin hyväksymiskoe on tekemättä.** Tietomallit/iri.suomi.fi:n ja IETF archive/datatrackerin suorat verkkonoudot estyivät ympäristössä HTTP 403:lla. Viralliset Git-repositoriot toimivat: IETF-profiili lukittiin OAuth-työryhmän julkaistuun `draft-ietf-oauth-sd-jwt-vc-19`-tagiin, ei oletettu RFC:ksi.
+Käyttäjän toimittama alkuperäinen export on `fixtures/tietomallit/webcor-0.0.2/original.ttl`, 29 811 tavua / 429 kolmikkoa. SHA-256 on `2ad4331272558bb541b7804f194a74e261d8313985554015ccc4e23785286133`. Profiili-/versio-IRI ja owl:versionInfo täsmäävät käyttäjän ilmoittamaan 0.0.2:een. Alkuperä on käyttäjän ilmoittama tiedostovienti, ei riippumaton palvelusta noudettu vertailu; tiedostoreitti ei edellytä lisäksi toimivaa verkkonoutoa.
 
-`fixtures/tietomallit/fi-dcatap-upstream.ttl` on tavuntarkka virallisen työkalurepositorion migraatiotestiaineisto (commit/tarkiste/provenance mukana). Siinä on testimuokkauksia, joten se **ei täytä aidon muuttamattoman exportin vaatimusta**. Koko aineisto hylätään oikein tukemattomien sh:in/pattern-rajoitteiden vuoksi; erikseen merkitty suppea projektio testaa kansallisen shape-IRI:n ja ulkoisen dct:modified-IRI:n säilymisen. Alkuperäistä tiedostoa ei muokata.
+Kaikki 24 literaaliominaisuutta ovat ilman sh:datatypea. SKOS owl:imports on unresolved. Kaikki viisi juurimuotoa tuottavat hallitun eston, ja API estää valmiin paketin/tarkastukseen lähetyksen. Alkuperäistä mallia ei täydennetä arvauksilla. Koneellinen raportti ja alkuperä ovat lukittuina fixtureiden vieressä.
 
-En suosittele yhdistämistä ennen kuin oikea julkinen export saadaan, alkuperä ja tarkiste lukitaan ja vastaava realistisen aineiston testi ajetaan. Lisäksi GitHub Actionsin vaadittujen tarkistusten tulee läpäistä. PR on tarkoitettu tarkastettavaksi; automaattista yhdistämistä ei tehdä.
+Erillinen `family-name-test-projection.ttl` säilyttää Person/familyName-käyttöyhteyden ja alkuperäiset IRI:t mutta lisää **paikallisen xsd:string-testioletuksen**, jota ei ole lähteessä. Se ei ole julkaistava alkuperäinen 0.0.2-profiili: sillä on eri profiili-identiteetti ja paikallinen testiversio. Rajoittamattoman kardinaliteetin JSON-esitys säilyy valinnaisena taulukkona. Oikean JSON-LD-prosessorin graafi vastaa käsin kirjoitettua odotetta ja läpäisee projektion sekä alkuperäisen SHACLin offline-tarkistuksen yhdellä Person-fokussolmulla. SKOSia ei haeta eikä lähteen puuttuvia rajoitteita väitetä tarkistetuiksi.
+
+Tämä täyttää 2H-toimeksiannon vaihtoehdon: aidon aineiston rajoitukset raportoidaan ja rajattu tapaus testataan erikseen. Aiempi puuttuvan export-kokeen este on siten käsitelty. PR #12:n GitHub Actionsin vaadittujen tarkistusten ja katselmoinnin tulee edelleen läpäistä ennen yhdistämistä. Sen jälkeen jatko-PR #13:n pohja vaihdetaan mainiksi ja tarkistetaan; sen ETSI-/EU-alkutekstipuutetta ei suljeta tällä kokeella. Ei automaattista yhdistämistä.

@@ -105,7 +105,7 @@ Käyttäjän toimeksianto, pohjana main `ac002ad` (PR #11). Tämä korvaa aiemma
 - Oikea PyLD-prosessointi, lukittu paikallinen lataaja, RDF-graafivertailu ja offline SHACL. Ei JWT:tä, disclosureja, allekirjoitusta tai myöntämistä.
 - Versioitu, tarkistesidottu deterministinen paketti luonnoksessa/julkaisussa, normaali riippumaton hyväksyntä, pysyvät koneluettavat artefaktipolut; vanhojen julkaisujen ja withdrawn-artefaktien säilyminen. Ei uutta relaatiomigraatiota.
 - Useat sanastoviitteet sijainteineen ja riippuvuusaineistot käyttöliittymään. Ei mielivaltaisia verkkonoutoja.
-- Aidon muuttamattoman Tietomallit-live-exportin hyväksymiskoe on avoin ympäristön 403-eston vuoksi; virallinen migraatiotestiaineisto ei täytä tätä vaatimusta. DCAT-AP-viennit ja tämän generointiprofiilin laajentaminen jäävät myöhemmiksi.
+- Aidon aineiston koe täydennetty käyttäjän toimittamalla WE BUILD Certificate of Residence 0.0.2 -exportilla: alkuperäiset tavut/provenienssi/tarkiste, koko profiilin hallittu esto sekä erillinen rajattu JSON-LD/RDF/SHACL-koe. [Tulos ja tarkat rajoitteet](docs/webcor-acceptance.md). Literaalityyppien ja SKOS-riippuvuuden puute estävät koko profiilin generoinnin; sitä ei väitetä tuetuksi. DCAT-AP ja generointiprofiilin laajentaminen jäävät myöhemmiksi.
 
 ## 2H:n jatko — attribuuttikohtainen semantiikka
 
@@ -113,7 +113,7 @@ Erillinen tarkastettava jatkohaara 2H:n päällä: [sopimus ja lähdeversiot](do
 
 Versioitu oma laajennusprofiili, schema-/mapping-löydettävyys ja standardin base64-SRI-ketju julkaistaan artefakteina. Esimerkkikuluttaja lukee semantiikkaa ilman väitearvoja tai allekirjoituksen tarkistusta. Valinnaiset attribuutti-/järjestelykatalogivastaavuudet edellyttävät lähdettä, versiota, todistusaineiston tarkistetta ja normaalia hyväksyntää. TS11 1.0.1 ja molemmat viralliset tietomallit on lukittu muuttamattomina; pyydettyjen ETSI-versioiden ja EU-asetuksen ajantasaisen tekstin tarkistus on avoin 403-eston vuoksi. Koneellinen puuteraportti ei ole vaatimustenmukaisuusväite.
 
-Jäljellä: normatiivisten lähteiden tarkistus ja mahdolliset täsmennykset sen perusteella, 2H:n aito muuttamaton Tietomallit-exporti sekä erikseen tilattavat katalogirekisteröinti- ja ulkoisen myöntäjän integraatiot. Osittainen esitys ei osoita piilotetun attribuutin puuttumista alkuperäisestä todistuksesta.
+Jäljellä: normatiivisten lähteiden tarkistus ja mahdolliset täsmennykset sen perusteella sekä erikseen tilattavat katalogirekisteröinti- ja ulkoisen myöntäjän integraatiot. Osittainen esitys ei osoita piilotetun attribuutin puuttumista alkuperäisestä todistuksesta.
 
 ## Vaiheen 2 myöhemmät osat — erillinen toimeksianto
 

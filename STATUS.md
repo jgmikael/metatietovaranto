@@ -1,3 +1,33 @@
+# 2H:n aineistokokeen täydennys — WE BUILD 0.0.2 (18.10.2026)
+
+Käyttäjä toimitti alkuperäisen Turtle-exportin, profiilin <https://iri.suomi.fi/model/webcor/> ja version 0.0.2. Tiedosto on lukittu muuttamattomana `fixtures/tietomallit/webcor-0.0.2/original.ttl`: **29 811 tavua**, **429 kolmikkoa**, SHA-256 **2ad4331272558bb541b7804f194a74e261d8313985554015ccc4e23785286133**. Tiedoston profiili-/versiotiedot täsmäävät ilmoitukseen. Alkuperä on käyttäjän ilmoittama alustalta ladattu tiedosto; riippumatonta verkkovertausta ei väitetä tehdyksi (403). Provenienssi, raportti ja erillisen testiprojektion muutosluettelo/tarkiste tallennettu.
+
+Koko profiili **ei ole generaattorin tukema valmis paketti**: 24 literaaliominaisuudelta puuttuu sh:datatype ja SKOS owl:imports on unresolved. Viisi juurta tuottavat hallitun eston; API säilyttää alkuperäiset tavut/luonnoksen ja estää tarkastukseen lähettämisen. Tietotyyppejä, kardinaliteetteja tai OWL-riippuvuuksia ei päätellä tai haeta verkosta.
+
+Erillinen paikallinen synteettinen Person/familyName-projektio lisää xsd:stringin eksplisiittisenä testioletuksena, ei alkuperäisen profiilin määrityksenä. Sillä on eri profiili-identiteetti/testiversio; minCountia/maxCountia ei keksitä. Oikea PyLD + lukittu lataaja tuottaa käsin kirjoitetun odotteen kanssa isomorfisen RDF-graafin. Se tarkistetaan projektion sekä alkuperäisen SHACLin kanssa offline yhdellä Person-fokussolmulla; puuttuvia ulkoisia riippuvuuksia tai puuttuvia tyyppirajoitteita ei väitetä tarkistetuiksi. [Täsmällinen koeraportti](docs/webcor-acceptance.md).
+
+## Todella ajettu tässä täydennyksessä
+
+- Kohdennettu realistisen aineiston koe: **8 passed, 34 deselected, 1 warning in 5.45s**. Rajatut vanhat testit kuuluvat täyteen ajoon.
+- Perus-2H:n koko README/CI:n 12 tiedoston API-/PostgreSQL-/migraatiosarja: **189 passed, 4 warnings in 318.14s (0:05:18)**. Ei epäonnistuneita tai ohitettuja. Sisältää kaikki aiemmat 181 testiä ja 8 uutta aineistotapausta; oikeudet, hyväksyntä, muuttumattomat julkaisut ja vanhan/tyhjän kannan migraatiot säilyivät. Kohdennettu ajo ei ole lisätestimäärä tämän päälle.
+- Ensimmäisessä kohdennetussa ajossa testin oletus claims-listan järjestyksestä korjattiin: molempien standardipolkujen sisältyminen tarkistetaan järjestyksestä riippumatta. Lopullinen rajattu koe läpäisee.
+- Sovelluskoodia, skeemaa, UI:ta tai käynnistysasetuksia ei muutettu. Web-buildia, Docker-imagea, selaintestejä tai demokannan restartia ei ajettu uudelleen tässä testi-/dokumentaatiotäydennyksessä. Aiemmat tulokset ovat alla historiassa; niitä ei lasketa uusiksi ajoiksi. catalog-kantaa ei tyhjennetty, API-testit käyttävät catalog_test-kantaa.
+- Windowsin, uuden Codespacen ja GitHub Actionsin etätulosta ei varmistettu tässä ympäristössä. Ei allekirjoittamista tai lompakkotestausta.
+
+## Yhteensopivuus jatkohaaraan
+
+Perus-2H:n commit 8bc37dc tuotu attribuuttisemantiikan haaraan (PR #13). Myös paikallisen testiprojektion annotaatioissa ominaisuus-IRI erotetaan PropertyShapesta ja profiiliviite säilyy paikallisen testin viitteenä; sitä ei nimetä alkuperäiseksi webcor 0.0.2:ksi. Jatkohaaran paketti-/attribuuttisemantiikan sarja: **58 passed, 1 warning in 50.08s**. Ei epäonnistuneita tai ohitettuja. Mukana kaikki 42 pakettitestiä (myös 8 uutta aidon aineiston tapausta) sekä 16 attribuuttisemantiikan testiä; uusi testi varmistaa paikallisen projektion lähde-identiteetin ja alkuperäisen ominaisuus-/PropertyShape-IRI:n eron. Tämä ei ole uusi täysi API-/migraatioajo tässä jatkohaarassa, eikä päällekkäisiä testejä lasketa uutena kokonaismääränä.
+
+## PR-tilanne
+
+GitHubin git-viitteistä tarkistettiin käyttäjän avaamat **PR #12** (perus-2H) ja **PR #13** (attribuuttisemantiikka). Tämä koe täydentää PR #12:n aiemmin avoimen aineistovaatimuksen toimeksiannon sallimalla tavalla: koko aineiston raja raportoidaan ja erillinen rajattu tapaus testataan. Se ei väitä koko WE BUILD 0.0.2:n generointia tuetuksi. PR #12:n vaadittujen GitHub-tarkistusten ja katselmoinnin on edelleen läpäistävä. PR #13:n ETSI-/EU-alkutekstitarkistus jää avoimeksi.
+
+Toteutuscommit **9420d05** on työnnetty haaraan `feat/phase-2h-technical-packages`; olemassa oleva [PR #12](https://github.com/jgmikael/metatietovaranto/pull/12) saa nämä muutokset automaattisesti. PR:n kuvausta yritettiin päivittää sekä `gh pr edit 12 --body-file docs/pull-request.md` -komennolla (GraphQL) että REST PATCH /pulls/12 -pyynnöllä: molemmat estyivät **Forbidden**-vastaukseen. **Kuvaustekstiä ei ole päivitetty GitHubissa**: kopioi ajantasainen docs/pull-request.md olemassa olevan PR:n ensimmäisen kuvauksen Edit-kenttään. Main-haaraa ei muutettu. Pohjamuutos tuodaan myös jatkohaaraan/PR #13; se ei sulje jatkon normatiivisten alkutekstien tarkistuspuutetta.
+
+---
+
+Seuraavat ovat aiempien 2H-toimitusten historiatietoja ennen yllä olevaa aineistotäydennystä. Niiden aiempi puuttuvan exportin tila on korvattu yllä olevalla tuloksella. Jatko-PR:n ETSI-/EU-alkutekstitarkistus säilyy avoimena.
+
 # Vaiheen 2H jatko — attribuuttien semanttiset viittaukset (18.10.2026)
 
 Erillinen työhaara `feat/phase-2h-attribute-semantics`, pohja `feat/phase-2h-technical-packages` (`ace80e3`). Uudelleen tarkistettu origin/main on `ac002ad` (2G); 2H ei vielä sisälly päähaaraan. Tämä jatko on tarkastettava erillisenä PR:nä 2H-haaraa vasten ja siirrettävä main-pohjaiseksi vasta pohjan yhdistämisen jälkeen. Aiemman tehtävän historiatiedot ovat alempana.

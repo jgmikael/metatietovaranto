@@ -153,3 +153,19 @@ def test_pinned_ts11_source_checksums_and_unverified_normative_versions_explicit
     for name,digest in pins['ts11']['files'].items():assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest
     assert pins['ts11']['version'].startswith('1.0.1')
     assert len(pins['requestedUnverifiedSources'])==3
+
+
+def test_webcor_projection_annotations_preserve_source_iris_without_claiming_original_profile_version():
+    from test_technical_packages import webcor_source,WEBCOR,EU_CORE
+    from apps.api.profiles import ProfileInput,snapshot_manifest
+    source=snapshot_manifest(ProfileInput.model_validate(webcor_source(projected=True)))
+    package=generated(source,{'familyName':['Synteettinen Testiperhe']},rootShapeUri=WEBCOR+'Person')
+    schema=artifact(package,'content.schema.json');metadata=artifact(package,'sd-jwt-type-metadata.json')
+    ref=next(claim['x-mtv-semantic'] for claim in metadata['claims'] if claim['path']==['familyName',None])
+    assert schema['properties']['familyName']['x-term']==ref['term']==EU_CORE+'familyName'
+    assert schema['properties']['familyName']['x-mtv-shacl']==ref
+    assert ref['shacl']['propertyShapeUri']==WEBCOR+'familyName' and ref['shacl']['nodeShapeUri']==WEBCOR+'Person'
+    assert ref['sourceProfile']['uri']=='urn:metatietovaranto:test:webcor-family-name'
+    assert ref['sourceProfile']['version']=='0.0.2-local-test-1' and ref['sourceProfile']['snapshotSha256']==checksum(source)
+    raw=metadata_raw(package)
+    assert resolve_claim(raw,integrity(raw),['familyName',None],documents(package).__getitem__)['propertyIri']==EU_CORE+'familyName'

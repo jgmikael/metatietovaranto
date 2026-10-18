@@ -1,0 +1,26 @@
+{
+  "title": "WE BUILD Certificate of Residence",
+  "profileUri": "https://iri.suomi.fi/model/webcor/",
+  "sourceVersion": "0.0.2",
+  "versionIri": "https://iri.suomi.fi/model/webcor/0.0.2/",
+  "receivedOn": "2026-10-18",
+  "source": "User-supplied unmodified Tietomallit Turtle export; original public profile URL and version supplied with file",
+  "originalFileName": "WE BUILD Certificate of Residence.ttl",
+  "file": "original.ttl",
+  "byteLength": 29811,
+  "sha256": "2ad4331272558bb541b7804f194a74e261d8313985554015ccc4e23785286133",
+  "sourceVerification": "User-declared export; profile identity/version checked against the embedded ontology. Independent HTTPS comparison remains unavailable (403).",
+  "projection": {
+    "file": "family-name-test-projection.ttl",
+    "sha256": "f380ea43498983c32f88decdc40f343439be8270be8b2cfb21bebb9099b7b7d0",
+    "profileUri": "urn:metatietovaranto:test:webcor-family-name",
+    "status": "synthetic local test projection, not original export",
+    "changes": [
+      "Retain Person/familyName shape occurrence, OWL property type and original targetClass/path IRIs.",
+      "Add sh:datatype xsd:string as a local test assumption; this datatype is NOT declared by the original export.",
+      "Retain absence of minCount/maxCount; the representation is an optional unordered array.",
+      "Exclude other shapes/properties and ontology imports only in the separately named projection.",
+      "Use a distinct local test profile identity and version."
+    ]
+  }
+}

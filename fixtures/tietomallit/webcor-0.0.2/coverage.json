@@ -1,0 +1,128 @@
+{
+  "profileUri": "https://iri.suomi.fi/model/webcor/",
+  "version": "0.0.2",
+  "sourceSha256": "2ad4331272558bb541b7804f194a74e261d8313985554015ccc4e23785286133",
+  "triples": 429,
+  "nodeShapes": [
+    "https://iri.suomi.fi/model/webcor/Address",
+    "https://iri.suomi.fi/model/webcor/Identifier",
+    "https://iri.suomi.fi/model/webcor/Jurisdiction",
+    "https://iri.suomi.fi/model/webcor/Location",
+    "https://iri.suomi.fi/model/webcor/Person"
+  ],
+  "propertyShapeCount": 29,
+  "literalPropertiesWithoutDatatype": [
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/addressArea",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/addressArea"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/addressId",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/addressId"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/adminUnitLevel1",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/adminUnitLevel1"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/adminUnitLevel2",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/adminUnitLevel2"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/dateOfBirth",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/dateOfBirth"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/dateOfIssue",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/dateOfIssue"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/familyName",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/familyName"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/fullAddress",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/fullAddress"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/geographicIdentifier",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/geographicIdentifier"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/geographicName",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/geographicName"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/givenName",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/givenName"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/id",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/id"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/issuingAuthorityName",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/issuingAuthorityName"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/issuingAuthorityURI",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/issuingAuthorityURI"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/locatorDesignator",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/locatorDesignator"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/locatorName",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/locatorName"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/name",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/name"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/notation",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/notation"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/poBox",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/poBox"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/postCode",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/postCode"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/postName",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/postName"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/schemeName",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/schemeName"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/schemeURI",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/schemeURI"
+    },
+    {
+      "propertyShapeUri": "https://iri.suomi.fi/model/webcor/thoroughfare",
+      "propertyIri": "https://iri.suomi.fi/model/eu-core/thoroughfare"
+    }
+  ],
+  "owlImports": [
+    "http://www.w3.org/2004/02/skos/core#"
+  ],
+  "declaredRequires": [
+    "https://iri.suomi.fi/model/eu-core/",
+    "https://iri.suomi.fi/model/ncbv/0.0.7/",
+    "https://iri.suomi.fi/model/webuild/"
+  ],
+  "generationStatus": "blocked; never a ready package for the complete original export",
+  "limitations": [
+    "Unresolved owl:imports http://www.w3.org/2004/02/skos/core# blocks generation via SOURCE_NOT_READY.",
+    "All literal properties lack explicit sh:datatype; each root proposal stops with OBJECT_AMBIGUOUS. No OWL range/datatype inference is performed.",
+    "dcterms:requires references are retained as source statements; referenced vocabularies are not fetched or inferred.",
+    "The source does not declare minCount/maxCount. No required scalar cardinalities may be assumed."
+  ],
+  "separateProjection": "family-name-test-projection.ttl; explicitly adds xsd:string only for a synthetic local test, never treated as original semantics"
+}

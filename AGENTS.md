@@ -14,7 +14,7 @@ Lue `docs/vc-periaate-2.md`. Ensisijainen toimitusmuoto on W3C VC. Tuotesivu tar
 
 ## Työskentelyn käytännöt
 
-Käytä nykyistä checkoutia: pilvitehtävät ovat jo eristettyjä. Älä luo worktreea ilman käyttäjän pyyntöä. Säilytä käyttäjän muutokset. Kaikki fixturet ovat synteettisiä. Älä lisää salaisuuksia, aitoja rekisteritietoja tai väitteitä QEAA-/DCAT-AP-vaatimustenmukaisuudesta.
+Käytä nykyistä checkoutia: pilvitehtävät ovat jo eristettyjä. Älä luo worktreea ilman käyttäjän pyyntöä. Säilytä käyttäjän muutokset. Testattavat henkilö-/yrityssisällöt ovat synteettisiä. fixtures/tietomallit-hakemisto sisältää myös alkuperäisiä julkisia mallikuvauksia, joiden alkuperä ja tarkiste on lukittu. Älä lisää salaisuuksia, aitoja rekisteritietoja tai väitteitä QEAA-/DCAT-AP-vaatimustenmukaisuudesta.
 
 ## Käynnistys ja todennus
 
@@ -55,3 +55,5 @@ Lue docs/phase-2h.md. Paketilla ei muokata lähdeprofiilia tai OWLia. Säilytä 
 ## Attribuuttien semanttiset annotaatiot
 
 Lue docs/attribute-semantics.md. x-term on alkuperäinen ominaisuus-IRI, ei PropertyShapen URI tai JSON Schema $ref. Johda x-mtv-shacl ja x-mtv-semantic samoista lukituista SHACL-rajoitteista. Säilytä koko sisäkkäinen käyttöyhteys ja nimetön solmu nullina; älä keksi alkuperäiseksi väitettyä tunnistetta. IETF Claim Path käyttää nullia taulukon wildcardina. Omat x-mtv-kentät eivät ole IETF-/ETSI-standardikenttiä. Tarkisteketjun SRI käyttää standardin base64:ää. Säilytä vanhojen asiakkaiden katalogiviitteet ja muuttumattomat julkaisut. Aja tests/test_attribute_semantics.py ja olemassa olevat paketti-/hyväksyntä-/selaintestit. Älä käsittele paljastamatta jätettyä attribuuttia puuttuvana alkuperäisestä todistuksesta. Lähteiden 403-puutetta tai virallista migraatiotestifixtureä ei saa nimetä normatiiviseksi tarkistukseksi tai aidoksi exportiksi.
+
+WE BUILD -aineistokoe: lue docs/webcor-acceptance.md. Säilytä fixtures/tietomallit/webcor-0.0.2/original.ttl tavuntarkasti. Erillisen testiprojektion lisättyä xsd:string-rajoitetta ei saa väittää alkuperäiseksi eikä alkuperäisen profiilin generointia valmiiksi. Täysi testi on edelleen tests/test_technical_packages.py; kohdennettu ajo -k webcor sisältää 8 tapausta.

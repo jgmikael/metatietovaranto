@@ -2,7 +2,7 @@
 
 SD-JWT VC:n claim-polku ei yksin kerro alkuperäistä semanttista ominaisuutta tai sen SHACL-käyttöyhteyttä. Tämä 2H:n jatko johtaa attribuuttiviittaukset samasta lukitusta lähteestä JSON Schemaan (x-term/x-mtv-shacl), Type Metadataan (x-mtv-semantic) ja yhteiseen mappingiin. Sisäkkäinen rooli, nimetön PropertyShape, ulkoinen nimiavaruus sekä lähdeversio ja snapshotin SHA säilyvät. Ei uutta käsin ylläpidettävää sisältömallia.
 
-**Pohja:** `feat/phase-2h-technical-packages`, commit ace80e3. Origin/main on vielä 2G ac002ad. Tarkasta tämän PR:n erot 2H-haaraa vasten; yhdistä pohja ensin ja muuta tämän base mainiksi sen jälkeen. Ei automaattista yhdistämistä.
+**Pohja:** `feat/phase-2h-technical-packages`, alkuperäinen commit ace80e3, nyt aineistokokeen täydennys 8bc37dc mukana. Origin/main on vielä 2G ac002ad. Tarkasta tämän PR:n erot 2H-haaraa vasten; yhdistä pohja ensin ja muuta tämän base mainiksi sen jälkeen. Ei automaattista yhdistämistä.
 
 Oma semanttinen laajennusprofiili 1.0.0 määrittelee x-kentät ja eksplisiittisen skeeman/mappingin löydettävyyden; niitä ei esitetä IETF:n schema/schema_uri-standardikenttinä. SD-JWT VC pysyy draft-19:ssä. Type Metadata, skeema, mapping ja profiili julkaistaan muuttumattomina oikeista koneellisista reiteistä. Syklitön standardin base64-SRI-ketju ja myöntäjän vct#integrity-ohje eivät toteuta allekirjoittamista tai myöntäjän luottamuksen todentamista. Vanhoja julkaisuja ei päivitetä.
 
@@ -15,6 +15,14 @@ Synteettisen demo-SHACLin `ProductShape` → hyväksytty `/companyName`-mapping 
 `["companyName"]`-claimin x-mtv-semantic palauttaa ominaisuuden `https://example.org/metatietovaranto/demo/companyName`, erillisen PropertyShape-viitteen ja lähdesnapshotin version/tarkisteen. Type Metadatasta löytyvät profiloidut, tarkistesidotut mapping-/schema-osoitteet. `examples/semantic_consumer.py` lukee saman semantiikan suoraan julkaistuista kuvauksista ilman esimerkkien tai muiden väitteiden arvoja. Sisäkkäisen taulukon polku esitetään esimerkiksi `["groups",null,"members",null,"city"]`, ei sisäisellä /*-merkkijonolla. Sama `city` eri rooleissa säilyttää eri ominaisuus-IRI:n ja rajoitepolun.
 
 ## Todella suoritetut tarkistukset
+
+### Aineistokokeen tuonti perus-2H:sta
+
+Jatkohaaran paketti-/attribuuttisemantiikan sarja: **58 passed, 1 warning in 50.08s**. Ei epäonnistuneita tai ohitettuja. Mukana kaikki 42 pakettitestiä (myös 8 uutta aidon aineiston tapausta) sekä 16 attribuuttisemantiikan testiä; uusi testi varmistaa paikallisen projektion lähde-identiteetin ja alkuperäisen ominaisuus-/PropertyShape-IRI:n eron. Tämä ei ole uusi täysi API-/migraatioajo tässä jatkohaarassa, eikä päällekkäisiä testejä lasketa uutena kokonaismääränä.
+
+Perus-2H:ssa koko API-/migraatiosarja läpäisi **189 testiä**. Tässä jatkohaaraan tuonnissa testataan lisäksi projektioiden annotaatioiden alkuperä: eu-core:familyName-ominaisuus ja webcor:familyName-PropertyShape erottuvat, ja lähdeviite pysyy synteettisen paikallisen projektion versiona eikä alkuperäisenä webcor 0.0.2:na. Alkuperäinen 29 811 tavun export säilyy tavuntarkkana. [Täysi koeraportti](webcor-acceptance.md). Sovelluskoodi, UI ja skeema eivät muutu; selaintestejä, web-buildia tai Docker-imagea ei ajettu uudelleen tätä testitäydennystä varten.
+
+### Alkuperäisen jatkotoimituksen ajot
 
 - Koko README/CI:n 13 tiedoston API-/PostgreSQL-/migraatiosarja: **196 passed, 4 warnings in 317.51s (0:05:17)**. Ei epäonnistuneita tai ohitettuja. Mukana vanhojen kantojen päivitykset, tyhjä kanta/toistuvat migraatiot, käyttöoikeudet, hyväksynnän mitätöinti, muuttumattomat julkaisut, oikea PyLD + lukittu lataaja + RDF-graafivertailu + lähde-SHACL, sisäkkäiset taulukot/roolit, nimetön PropertyShape, ulkoinen nimiavaruus, ristiriitaisten annotaatioiden hylkäys ja SRI-ketjun muutosten havaitseminen.
 - Kohdennettu paketti-/attribuuttisemantiikan ajo: **49 passed** (sisältyy edellä olevaan 196 testiin). Näistä 15 on uuden jatkon testejä.
@@ -30,7 +38,7 @@ Synteettisen demo-SHACLin `ProductShape` → hyväksytty `/companyName`-mapping 
 ## Ajamattomat ja yhdistämisen esteet
 
 - ETSI TS 119 472-1 V1.2.1 / TS 119 478 V1.1.1 ja EU 2025/1569 artiklat 7/8 myöhempine muutoksineen: alkuperäislähteiden nouto **403**, joten tarkka normatiivinen vastaavuus ja ajantasaisuus vahvistamatta. TS11 itse viittaa 119 478 V0.0.7:ään, eikä sitä sekoiteta lopulliseen versioon. Tarvitaan alkutekstien tarkistus ennen yhdistämissuositusta.
-- Pohja-2H:n vaadittu aito muuttamaton Tietomallit-exportin koe puuttuu edelleen noutoeston vuoksi. Synteettiset tapaukset ja upstream-migraatiotestiaineisto eivät korvaa sitä.
+- Pohja-2H:n aito aineistokoe on nyt täydennetty käyttäjän toimittamalla WE BUILD Certificate of Residence 0.0.2 -exportilla. Koko profiilin puuttuvat literaalityypit ja SKOS-importti estävät valmiin paketin; erillinen nimetty paikallinen testiprojektio on testattu alkuperäistä muuttamatta. Tämä on toimeksiannossa sallittu rajattu tapaus, ei koko profiilin tukiväite.
 - Windows Docker Desktop, uuden Codespacen luonti/automaattinen selainavaus/Private-portin ajonaikainen tila, tuotanto-HTTPS ja GitHub Actionsin etätulos varmistamatta. Niiden asetuksia ei muutettu.
 - Ei katalogiin rekisteröintiä, täyttä katalogipalvelua, kryptografisia SD-JWT-tarkistuksia, oikeaa myöntämistä tai lompakkointegraatiota. Nämä eivät kuulu toimitukseen. Osittaisen esityksen piilotettuja attribuutteja ei tulkita alkuperäisestä todistuksesta puuttuviksi.
 
