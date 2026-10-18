@@ -31,7 +31,9 @@ Windows Docker Desktopia, uuden Codespacen todellista luontia/selainavausta/Priv
 
 ## Toimitus
 
-Erillinen tarkastettava PR kohdistetaan haaraan `feat/phase-2h-technical-packages`. PR:n avaamisen tulos kirjataan toimituksessa. Ei automaattista yhdistämistä. Kokeile uutta haaraa README:n Codespaces-linkillä.
+Toteutuscommit **86f90ae** on työnnetty GitHubiin haaraan `feat/phase-2h-attribute-semantics`. Draft-PR:n avaaminen yritettiin sekä `gh pr create` -komennolla (GraphQL) että REST POST /repos/jgmikael/metatietovaranto/pulls -pyynnöllä. Molemmat estyivät **Forbidden**-vastaukseen. **PR:ää ei ole luotu.** Native git push onnistui; uusia tunnuksia tai kiertotapaa ei käytetty.
+
+[Avaa erillinen draft-PR käsin](https://github.com/jgmikael/metatietovaranto/compare/feat/phase-2h-technical-packages...feat/phase-2h-attribute-semantics?expand=1), base `feat/phase-2h-technical-packages`, compare `feat/phase-2h-attribute-semantics`. Valmis kuvaus: [docs/pull-request-attribute-semantics.md](docs/pull-request-attribute-semantics.md). [Kokeile haaran Codespacessa](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2h-attribute-semantics); käynnistyksen tarkat ohjeet ovat READMEssä. Main on edelleen `ac002ad`. Ei automaattista yhdistämistä.
 
 ---
 
