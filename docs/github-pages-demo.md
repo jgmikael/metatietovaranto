@@ -10,7 +10,7 @@ Julkisen esittelyn osoite on **https://jgmikael.github.io/metatietovaranto/**. K
 | Tietolähde | FastAPI, PostgreSQL | Buildin staattinen demo/catalog.json |
 | Kirjautuminen/oikeudet | Keycloak ja palvelinistunto | Ei kirjautumista, demotunnuksia tai oikeuksia |
 | Luonnokset/hyväksyntä/julkaisut | Varsinainen riippumaton työnkulku | Ei toteuteta; esimerkkiversio ei ole hyväksymispäätös |
-| Generointi/validointi | Palvelimen rajattu generaattori ja offline-validointi | Buildin etukäteen muodostamat kuvaukset ja raportit |
+| Generointi/validointi | Palvelimen rajattu generaattori ja offline-validointi | Esittelyn etukäteen muodostamat kuvaukset/raportit sekä Oma kokeilu -tilan paikallinen rajattu generointi (ei täyttä SHACL-validointia) |
 | Todistuksen myöntäminen | Ulkoisen myöntäjän vastuulla | Ei myöntämistä, allekirjoitusta tai lompakkotoimitusta |
 
 Vite `--mode pages` valitsee `dataSource.ts`-adapterin ja `/metatietovaranto/`-resurssipolun. Tavallinen build käyttää edelleen nykyistä APIa ja `/`-polkua. Staattinen adapteri hyväksyy vain lukupyynnöt ja tuntee vain esittelyaineiston lukuoperaatiot; se ei lähetä loogisia /api-polkuja HTTP-palvelimelle. /auth/me-kutsua ei tehdä Pages-tilassa. Julkinen katalogi ei sisällä palvelimen ylläpitotoimintoja, kirjautumislinkkejä tai demotunnuksia. Oma kokeilu -tilan lomakkeet muuttavat vain selaimen omaa työtilaa, eivät käytä palvelinadapterin kirjoitusoperaatioita. Adapteri hylkää edelleen kirjoituspyynnöt.
@@ -88,3 +88,7 @@ npm run build --prefix apps/web
 ```
 
 Staattiset testit käyttävät tavallista HTTP-palvelinta aidossa /metatietovaranto/-alipolussa ja hylkäävät selaimen kaikki backend-/ulkoiset verkkopyynnöt. Mukana ovat lista, haku, teema/tarjoaja, mobiilileveys, suora tuoteversiolinkki ja reload, organisaatio, profiili, artefaktilataus, kaikki paketin tarkisteet ja semanttinen kuluttaja. Mukana myös deterministinen offline-build, eri julkaisuosoitteen vaikutus pakettitarkisteeseen sekä credential-/localhost-/tiedostoallowlist-tarkistus. Varsinaisen sovelluksen API-/migraatio- ja Keycloak-selaintestit ajetaan README:n nykyisillä komennoilla erikseen. Toteutuneet tulokset ja ajamattomat tarkistukset ovat STATUSissa.
+
+## Selaimen SHACL-generointi
+
+Oma kokeilu tukee nyt paikallisen Turtle-profiilin ja riippuvuustiedostojen tuontia sekä rajatun paketin muodostamista Web Workerissa. [Sopimus ja käyttö](browser-shacl-generation.md). Tiedostoja ei ladata verkkoon; pakettien suunniteltuja osoitteita ei julkaista Pagesiin. Julkisen esittelyn fixture-artefaktit säilyvät erillisinä. Sama build ja mainin Pages-workflow riittävät, ei uusia palveluasetuksia.

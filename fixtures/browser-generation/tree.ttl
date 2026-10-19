@@ -1,0 +1,18 @@
+# SYNTHETIC generator contract fixture; not a Tietomallit export.
+@prefix ex: <https://iri.suomi.fi/model/mtv-browser-test/> .
+@prefix ext: <https://external.example.org/vocab/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix iow: <http://uri.suomi.fi/datamodel/ns/iow#> .
+ex:profile a owl:Ontology ; owl:versionInfo "synthetic-1" .
+ex:PersonShape a sh:NodeShape ; sh:targetClass ex:Person ;
+ sh:property [ sh:path ext:registeredName ; iow:localName "companyName" ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ; sh:name "Yrityksen nimi"@fi, "Zed (synthetic English display)"@en ],
+ [ sh:path ex:home ; sh:node ex:AddressShape ; sh:minCount 1 ; sh:maxCount 2 ],
+ [ sh:path ex:work ; sh:node ex:AddressShape ; sh:maxCount 1 ],
+ [ sh:path ex:active ; sh:datatype xsd:boolean ; sh:maxCount 1 ],
+ [ sh:path ex:amount ; sh:datatype xsd:decimal ; sh:maxCount 1 ],
+ [ sh:path ex:count ; sh:datatype xsd:nonNegativeInteger ; sh:maxCount 1 ] .
+ex:AddressShape a sh:NodeShape ; sh:targetClass ext:Address ;
+ sh:property [ sh:path ext:city ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ],
+ [ sh:path ext:tags ; sh:datatype xsd:string ; sh:maxCount 3 ] .

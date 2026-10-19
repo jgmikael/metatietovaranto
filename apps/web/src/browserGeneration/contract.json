@@ -1,0 +1,445 @@
+{
+  "baseContext": {
+    "@context": {
+      "...": {
+        "@id": "https://www.iana.org/assignments/jwt#..."
+      },
+      "@protected": true,
+      "BitstringStatusList": {
+        "@context": {
+          "@protected": true,
+          "encodedList": {
+            "@id": "https://www.w3.org/ns/credentials/status#encodedList",
+            "@type": "https://w3id.org/security#multibase"
+          },
+          "id": "@id",
+          "statusPurpose": "https://www.w3.org/ns/credentials/status#statusPurpose",
+          "ttl": "https://www.w3.org/ns/credentials/status#ttl",
+          "type": "@type"
+        },
+        "@id": "https://www.w3.org/ns/credentials/status#BitstringStatusList"
+      },
+      "BitstringStatusListCredential": "https://www.w3.org/ns/credentials/status#BitstringStatusListCredential",
+      "BitstringStatusListEntry": {
+        "@context": {
+          "@protected": true,
+          "id": "@id",
+          "statusListCredential": {
+            "@id": "https://www.w3.org/ns/credentials/status#statusListCredential",
+            "@type": "@id"
+          },
+          "statusListIndex": "https://www.w3.org/ns/credentials/status#statusListIndex",
+          "statusMessage": {
+            "@context": {
+              "@protected": true,
+              "id": "@id",
+              "message": "https://www.w3.org/ns/credentials/status#message",
+              "status": "https://www.w3.org/ns/credentials/status#status",
+              "type": "@type"
+            },
+            "@id": "https://www.w3.org/ns/credentials/status#statusMessage"
+          },
+          "statusPurpose": "https://www.w3.org/ns/credentials/status#statusPurpose",
+          "statusReference": {
+            "@id": "https://www.w3.org/ns/credentials/status#statusReference",
+            "@type": "@id"
+          },
+          "statusSize": {
+            "@id": "https://www.w3.org/ns/credentials/status#statusSize",
+            "@type": "https://www.w3.org/2001/XMLSchema#integer"
+          },
+          "type": "@type"
+        },
+        "@id": "https://www.w3.org/ns/credentials/status#BitstringStatusListEntry"
+      },
+      "DataIntegrityProof": {
+        "@context": {
+          "@protected": true,
+          "challenge": "https://w3id.org/security#challenge",
+          "created": {
+            "@id": "http://purl.org/dc/terms/created",
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
+          },
+          "cryptosuite": {
+            "@id": "https://w3id.org/security#cryptosuite",
+            "@type": "https://w3id.org/security#cryptosuiteString"
+          },
+          "domain": "https://w3id.org/security#domain",
+          "expires": {
+            "@id": "https://w3id.org/security#expiration",
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
+          },
+          "id": "@id",
+          "nonce": "https://w3id.org/security#nonce",
+          "previousProof": {
+            "@id": "https://w3id.org/security#previousProof",
+            "@type": "@id"
+          },
+          "proofPurpose": {
+            "@context": {
+              "@protected": true,
+              "assertionMethod": {
+                "@container": "@set",
+                "@id": "https://w3id.org/security#assertionMethod",
+                "@type": "@id"
+              },
+              "authentication": {
+                "@container": "@set",
+                "@id": "https://w3id.org/security#authenticationMethod",
+                "@type": "@id"
+              },
+              "capabilityDelegation": {
+                "@container": "@set",
+                "@id": "https://w3id.org/security#capabilityDelegationMethod",
+                "@type": "@id"
+              },
+              "capabilityInvocation": {
+                "@container": "@set",
+                "@id": "https://w3id.org/security#capabilityInvocationMethod",
+                "@type": "@id"
+              },
+              "id": "@id",
+              "keyAgreement": {
+                "@container": "@set",
+                "@id": "https://w3id.org/security#keyAgreementMethod",
+                "@type": "@id"
+              },
+              "type": "@type"
+            },
+            "@id": "https://w3id.org/security#proofPurpose",
+            "@type": "@vocab"
+          },
+          "proofValue": {
+            "@id": "https://w3id.org/security#proofValue",
+            "@type": "https://w3id.org/security#multibase"
+          },
+          "type": "@type",
+          "verificationMethod": {
+            "@id": "https://w3id.org/security#verificationMethod",
+            "@type": "@id"
+          }
+        },
+        "@id": "https://w3id.org/security#DataIntegrityProof"
+      },
+      "EnvelopedVerifiableCredential": "https://www.w3.org/2018/credentials#EnvelopedVerifiableCredential",
+      "EnvelopedVerifiablePresentation": "https://www.w3.org/2018/credentials#EnvelopedVerifiablePresentation",
+      "JsonSchema": {
+        "@context": {
+          "@protected": true,
+          "id": "@id",
+          "jsonSchema": {
+            "@id": "https://www.w3.org/2018/credentials#jsonSchema",
+            "@type": "@json"
+          },
+          "type": "@type"
+        },
+        "@id": "https://www.w3.org/2018/credentials#JsonSchema"
+      },
+      "JsonSchemaCredential": "https://www.w3.org/2018/credentials#JsonSchemaCredential",
+      "VerifiableCredential": {
+        "@context": {
+          "@protected": true,
+          "confidenceMethod": {
+            "@id": "https://www.w3.org/2018/credentials#confidenceMethod",
+            "@type": "@id"
+          },
+          "credentialSchema": {
+            "@id": "https://www.w3.org/2018/credentials#credentialSchema",
+            "@type": "@id"
+          },
+          "credentialStatus": {
+            "@id": "https://www.w3.org/2018/credentials#credentialStatus",
+            "@type": "@id"
+          },
+          "credentialSubject": {
+            "@id": "https://www.w3.org/2018/credentials#credentialSubject",
+            "@type": "@id"
+          },
+          "description": "https://schema.org/description",
+          "evidence": {
+            "@id": "https://www.w3.org/2018/credentials#evidence",
+            "@type": "@id"
+          },
+          "id": "@id",
+          "issuer": {
+            "@id": "https://www.w3.org/2018/credentials#issuer",
+            "@type": "@id"
+          },
+          "name": "https://schema.org/name",
+          "proof": {
+            "@container": "@graph",
+            "@id": "https://w3id.org/security#proof",
+            "@type": "@id"
+          },
+          "refreshService": {
+            "@id": "https://www.w3.org/2018/credentials#refreshService",
+            "@type": "@id"
+          },
+          "relatedResource": {
+            "@id": "https://www.w3.org/2018/credentials#relatedResource",
+            "@type": "@id"
+          },
+          "renderMethod": {
+            "@id": "https://www.w3.org/2018/credentials#renderMethod",
+            "@type": "@id"
+          },
+          "termsOfUse": {
+            "@id": "https://www.w3.org/2018/credentials#termsOfUse",
+            "@type": "@id"
+          },
+          "type": "@type",
+          "validFrom": {
+            "@id": "https://www.w3.org/2018/credentials#validFrom",
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
+          },
+          "validUntil": {
+            "@id": "https://www.w3.org/2018/credentials#validUntil",
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
+          }
+        },
+        "@id": "https://www.w3.org/2018/credentials#VerifiableCredential"
+      },
+      "VerifiablePresentation": {
+        "@context": {
+          "@protected": true,
+          "holder": {
+            "@id": "https://www.w3.org/2018/credentials#holder",
+            "@type": "@id"
+          },
+          "id": "@id",
+          "proof": {
+            "@container": "@graph",
+            "@id": "https://w3id.org/security#proof",
+            "@type": "@id"
+          },
+          "termsOfUse": {
+            "@id": "https://www.w3.org/2018/credentials#termsOfUse",
+            "@type": "@id"
+          },
+          "type": "@type",
+          "verifiableCredential": {
+            "@container": "@graph",
+            "@context": null,
+            "@id": "https://www.w3.org/2018/credentials#verifiableCredential",
+            "@type": "@id"
+          }
+        },
+        "@id": "https://www.w3.org/2018/credentials#VerifiablePresentation"
+      },
+      "_sd": {
+        "@id": "https://www.iana.org/assignments/jwt#_sd",
+        "@type": "@json"
+      },
+      "_sd_alg": {
+        "@id": "https://www.iana.org/assignments/jwt#_sd_alg"
+      },
+      "aud": {
+        "@id": "https://www.iana.org/assignments/jwt#aud",
+        "@type": "@id"
+      },
+      "cnf": {
+        "@context": {
+          "@protected": true,
+          "jwk": {
+            "@id": "https://www.iana.org/assignments/jwt#jwk",
+            "@type": "@json"
+          },
+          "kid": {
+            "@id": "https://www.iana.org/assignments/jwt#kid",
+            "@type": "@id"
+          }
+        },
+        "@id": "https://www.iana.org/assignments/jwt#cnf"
+      },
+      "description": "https://schema.org/description",
+      "digestMultibase": {
+        "@id": "https://w3id.org/security#digestMultibase",
+        "@type": "https://w3id.org/security#multibase"
+      },
+      "digestSRI": {
+        "@id": "https://www.w3.org/2018/credentials#digestSRI",
+        "@type": "https://www.w3.org/2018/credentials#sriString"
+      },
+      "exp": {
+        "@id": "https://www.iana.org/assignments/jwt#exp",
+        "@type": "https://www.w3.org/2001/XMLSchema#nonNegativeInteger"
+      },
+      "iat": {
+        "@id": "https://www.iana.org/assignments/jwt#iat",
+        "@type": "https://www.w3.org/2001/XMLSchema#nonNegativeInteger"
+      },
+      "id": "@id",
+      "iss": {
+        "@id": "https://www.iana.org/assignments/jose#iss",
+        "@type": "@id"
+      },
+      "jku": {
+        "@id": "https://www.iana.org/assignments/jose#jku",
+        "@type": "@id"
+      },
+      "kid": {
+        "@id": "https://www.iana.org/assignments/jose#kid",
+        "@type": "@id"
+      },
+      "mediaType": {
+        "@id": "https://schema.org/encodingFormat"
+      },
+      "name": "https://schema.org/name",
+      "nbf": {
+        "@id": "https://www.iana.org/assignments/jwt#nbf",
+        "@type": "https://www.w3.org/2001/XMLSchema#nonNegativeInteger"
+      },
+      "sub": {
+        "@id": "https://www.iana.org/assignments/jose#sub",
+        "@type": "@id"
+      },
+      "type": "@type",
+      "x5u": {
+        "@id": "https://www.iana.org/assignments/jose#x5u",
+        "@type": "@id"
+      }
+    }
+  },
+  "baseContextSha256": "59955ced6697d61e03f2b2556febe5308ab16842846f5b586d7f1f7adec92734",
+  "baseContextUrl": "https://www.w3.org/ns/credentials/v2",
+  "datatypes": [
+    "anyURI",
+    "boolean",
+    "date",
+    "dateTime",
+    "decimal",
+    "double",
+    "integer",
+    "nonNegativeInteger",
+    "positiveInteger",
+    "string"
+  ],
+  "extensionDefinition": {
+    "arrayContainers": "Same property constraint; container path removes final null; claim semantic reference retains full element path.",
+    "claimPaths": "IETF draft-ietf-oauth-sd-jwt-vc-19 arrays of strings/null, not JSON Pointer wildcards",
+    "constraintLocator": {
+      "ambiguity": "Multiple properties for a step or multiple candidate node shapes are rejected.",
+      "blankNodes": "No original URI claimed. null propertyShapeUri/nodeShapeUri + snapshot and constraintPath identify the occurrence.",
+      "root": "rootShapeUri",
+      "steps": "sh:property with the direct propertyPath; then sh:node or unique sh:targetClass selection"
+    },
+    "id": "urn:placeholder:replaced-before-generation",
+    "integrity": "sha256- plus standard base64 of exact UTF-8 octets; never hexadecimal or base64url",
+    "keywords": {
+      "x-mtv-mapping": "Versioned mapping URI and sha256 SRI",
+      "x-mtv-profile": "Extension version, definition URI and sha256 SRI integrity",
+      "x-mtv-schema": "Explicit local schema discovery: URI and sha256 SRI; not standard schema/schema_uri",
+      "x-mtv-semantic": "Same complete reference in each Type Metadata claim",
+      "x-mtv-shacl": "Complete attribute reference including root, constraintPath and frozen source snapshot",
+      "x-term": "Original OWL/RDF property IRI, never a JSON Schema $ref"
+    },
+    "name": "Metatietovaranto semantic annotations",
+    "status": "local extension; no ETSI/EUDI conformance claim",
+    "trust": "Integrity is not issuer authentication, a signature check or catalogue registration.",
+    "unknownExtensions": "Standard consumers may ignore x-* members. No assumption that wallets interpret these semantics.",
+    "validationScope": "Full issuance content uses schema and SHACL. Missing disclosures in a presentation do not prove absence in the original credential.",
+    "version": "1.0.0"
+  },
+  "nodeAllowed": [
+    "closed",
+    "defaultValue",
+    "description",
+    "group",
+    "ignoredProperties",
+    "message",
+    "name",
+    "order",
+    "property",
+    "severity",
+    "targetClass"
+  ],
+  "policy": "shacl-tree-json-v1",
+  "propertyAllowed": [
+    "class",
+    "datatype",
+    "defaultValue",
+    "description",
+    "group",
+    "maxCount",
+    "message",
+    "minCount",
+    "name",
+    "node",
+    "order",
+    "path",
+    "severity"
+  ],
+  "reserved": [
+    "...",
+    "BitstringStatusList",
+    "BitstringStatusListCredential",
+    "BitstringStatusListEntry",
+    "DataIntegrityProof",
+    "EnvelopedVerifiableCredential",
+    "EnvelopedVerifiablePresentation",
+    "JsonSchema",
+    "JsonSchemaCredential",
+    "VerifiableCredential",
+    "VerifiablePresentation",
+    "__proto__",
+    "_sd",
+    "_sd_alg",
+    "aka_vcts",
+    "aud",
+    "cnf",
+    "constructor",
+    "credentialStatus",
+    "credentialSubject",
+    "description",
+    "digestMultibase",
+    "digestSRI",
+    "exp",
+    "iat",
+    "id",
+    "iss",
+    "issuer",
+    "jku",
+    "jti",
+    "kid",
+    "mediaType",
+    "name",
+    "nbf",
+    "proof",
+    "prototype",
+    "status",
+    "sub",
+    "type",
+    "validFrom",
+    "validUntil",
+    "vct",
+    "x5u"
+  ],
+  "sdSpecificationSha256": "3dc528160e18af37d62fad4ab7696b72e8c9bac4ceae4282bda4417b54fe788b",
+  "serverGenerator": "technical-package/1.1.1",
+  "sha256": "33adb80f8208dbacd42e41da1c898fe5b68c49d0f9a104376d72e56dd5d90270",
+  "standardSourcePins": {
+    "credentials-v2.jsonld": {
+      "canonicalUrl": "https://www.w3.org/ns/credentials/v2",
+      "commit": "69ebe41c2206e15da26473a800a405c5e4c4242f",
+      "path": "contexts/credentials/v2",
+      "profile": "W3C VCDM 2.0",
+      "repository": "https://github.com/w3c/vc-data-model",
+      "sha256": "59955ced6697d61e03f2b2556febe5308ab16842846f5b586d7f1f7adec92734"
+    },
+    "draft-ietf-oauth-sd-jwt-vc-19.md": {
+      "commit": "aa2f9713659fc593b4361874f0667255b0ead8ae",
+      "path": "draft-ietf-oauth-sd-jwt-vc.md",
+      "profile": "Internet-Draft; not an RFC",
+      "repository": "https://github.com/oauth-wg/oauth-sd-jwt-vc",
+      "sha256": "3dc528160e18af37d62fad4ab7696b72e8c9bac4ceae4282bda4417b54fe788b",
+      "tag": "draft-ietf-oauth-sd-jwt-vc-19"
+    }
+  },
+  "standards": {
+    "jsonLd": "1.1",
+    "jsonSchema": "2020-12",
+    "mtvSemanticExtension": "1.0.0",
+    "sdJwtVc": "draft-ietf-oauth-sd-jwt-vc-19",
+    "vcdm": "2.0"
+  }
+}
