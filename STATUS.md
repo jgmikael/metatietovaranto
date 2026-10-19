@@ -1,3 +1,45 @@
+# Oma kokeilu: PR:n CI-korjaus (19.10.2026)
+
+Käyttäjä on luonut PR:n haarasta `feat/pages-local-experiment`. Sen Pages-CI:ssä JSON-tuonnin testi ehti lukea vanhan tuotteen nimen. Syy toistettiin deterministisesti: korvausoperaatio ei vaihtanut edellistä `Tallennettu`-tilaa keskeneräiseksi ennen asynkronista kirjoitusta. Kyse ei osoittanut tuonnin jälkeistä palautumista alkuperäiseen aineistoon.
+
+Korvaus näyttää nyt heti `Tallennetaan…`; myöskään edeltävä automaattitallennus ei saa ilmoittaa kesken olevaa korvausta valmiiksi. Kaksi uutta selaintestiä jonottaa tuonnin/resetin oikean varatun Web Lockin taakse, tarkistaa vanhan tallenteen ja keskeneräisen tilan, vapauttaa lukon sekä tarkistaa korvatut tiedot ja reloadin. **Ennen korjausta molemmat epäonnistuivat** (2 failed in 14.65s).
+
+Korjauksen jälkeen `bash scripts/build-pages.sh`, `.venv/bin/pytest tests_static -q` (**30 passed in 63.99s**, ei ohituksia tai konsolivirheitä) ja `npm run build --prefix apps/web` läpäisivät. Mukana alkuperäinen epäonnistunut tuonti-/palautustesti sekä uudet lukitus-/reload-kokeet. `git diff --check` läpäisi. API-/tietokanta-/palvelinsovelluksen selaintestejä ei ajettu uudelleen tämän vain Pagesin korvaustilan korjauksen vuoksi; edellisen toteutuscommitin 24 API- ja 13 palvelinselaintestiä on raportoitu alla. GitHubin uutta etä-CI-tulosta ei ole varmennettu tässä ympäristössä. Korjaus toimitetaan samaan PR-haaraan, ei main-mergeä.
+
+---
+
+# Pagesin Oma kokeilu (19.10.2026)
+
+Työhaara `feat/pages-local-experiment` perustuu ajantasaiseen mainiin `edb4348` (PR #14 yhdistetty). Main tarkistettiin uudelleen ennen toimitusta; uusia päähaaran muutoksia ei ollut. Alla olevat aiempien vaiheiden raportit ovat historiallisia.
+
+Toteutettu selaimessa toimiva paikallinen metadatan ylläpito: tuotteet ja organisaatiot, kolme toimitustapaa, mukana toimitetun profiilin valinta, alkuperäisten artefaktien tarkastelu. Yhteiset tietotyypit, peruslomake sekä toimitustapa- ja pakettikomponentit; tavallinen palvelinbuild ei avaa kokeilutilaa. Julkinen katalogi säilyy muuttumattomana. Ei uusia taustapalveluja, riippuvuuksia, migraatioita tai muutoksia varsinaisen sovelluksen snapshotteihin/julkaisuihin.
+
+Versioitu localStorage, 500 ms automaattitallennus, onnistumisen takaisinluku, Web Locks ja edellisen tallenteen vertailu. Virhe-/kiintiö-/tuntematon versio- ja välilehtitilanteet säilyttävät aineiston. Koko työtilan JSON-siirtoformaatti 1, enintään 2 MiB, tiukka sallittujen kenttien ja viittausten tarkistus ennen vahvistettua korvaamista. Uusi demojulkaisu ei siemennä tallennetta uudelleen; puuttuvat tarkisteviitteet ilmoitetaan.
+
+Paikalliset tuotteet aina **Ei validoitu tässä kokeilussa**. Alkuperäisen paketin raportit näytetään vain erillisessä lähtöesimerkissä, eivät nykyisen tuotteen tuloksina. Myöntämis-/lähdetietotoiminnot estetty myös production-tilaisessa tuodussa metadatassa. Ei generointia, SHACL-validointia, hyväksyntää tai allekirjoittamista. [Käyttö ja siirtoformaatti](docs/own-experiment.md).
+
+## Tämän muutoksen todella ajetut tarkistukset
+
+- `bash scripts/build-pages.sh`: läpäisi, tietokannaton Pages-build sekä TypeScript/Vite-build.
+- `.venv/bin/pytest tests_static -q`: **28 passed in 70.32s**, ei ohituksia. Oikea staattinen HTTP-palvelin `/metatietovaranto/`-alipolussa, backend-/auth-/identity-/ulkoiset ja kirjoituspyynnöt kielletty. Kattaa aiemman julkisen esittelyn ja paikallisen ylläpidon, reloadin, viennin/tuonnin/peruutuksen, 8 virheellistä tuontitapausta, kiintiö-/käyttöestot, viallisen/oudon tallenneversion, oikean kahden välilehden Web Locks -kilpailun, puuttuvat profiili-/pakettiviitteet uuden demoversion jälkeen sekä validoimattoman tilan. Ei JavaScript- tai konsolivirheitä. Yksi väliajo paljasti lukituskokeen ajoitusoletuksen: korjattu odottamaan todellista jonojärjestystä; lopullinen täysi ajo läpäisi.
+- `.venv/bin/pytest tests/test_api.py tests/test_auth.py tests/test_publication.py tests/test_public_url.py -q`: **24 passed, 3 warnings in 25.16s**, erillinen catalog_test-PostgreSQL. Perustoiminnot, oikeudet/CSRF ja riippumaton julkaisu säilyivät.
+- `npm run build --prefix apps/web`: läpäisi. Normaali palvelinsovellus rakennettiin myös Docker-kuvaksi `bash scripts/cloud-build.sh` ja käynnistettiin `docker compose up -d --no-build --wait` (DOCKER_CONFIG ympäristön välimuistihakemistossa). Kaikki palvelut healthy.
+- Tietokannan 13 taulun rivien tavutarkisteet ja Alembic head vertailtiin ennen/jälkeen uudelleenkäynnistyksen: kaikki ennallaan. Ei volumen poistoa. Erillinen vanhojen julkaisujen lukukoe: **97 versiota**, **8 vanhan generaattorin pakettia**, **78 artefaktin tavutarkistusta** läpäisi.
+- `BROWSER_BASE_URL=http://localhost:8000 .venv/bin/pytest tests/test_browser.py -q`: **13 passed, 1 warning in 132.38s**, oikea Chromium/Keycloak uudelleenrakennettua palvelinta vasten. Tallennus/uudelleenavaaminen, oikeudet, hyväksyntä, julkaisu, elinkaari, tekniset paketit ja julkiset artefaktit läpäisivät. Selaintestit jättävät omat synteettiset muuttumattomat julkaisut historiaan; alkuperäisiä fixturetuotteita ei muutettu. Nykyisessä tehtävässä **65 eri pytest-testiä**, ei ohituksia. Varoitukset Starlette/httpx ja RDFLib.
+- Erillinen dokumentoitu preview `python -m scripts.preview_pages --port 4173`: HTTP 200, oikea selaimen aloitus/tallennus, desktop- ja 390 px mobiilikuvakaappaus tarkastettu; ei vaakavieritystä. Preview pysäytettiin. `git diff --check` läpäisi.
+
+## Rajat ja ajamattomat tarkistukset
+
+Ei toistettu koko taustapalvelimen 209 testin SHACL-/muunnos-/migraatiosarjaa: taustapalvelimen tai tietokantaskeeman toteutus ei muutu. Tyhjän/vanhan kannan migraatioajoja ei tässä tehtävässä ajettu; olemassa olevan kannan startup/säilyminen tarkistettiin yllä. Ei natiivia Windows-, Firefox-, Safari- tai oikean yksityisen selausprofiilin ajoa. Tallennuksen estyminen ja kiintiövirheet testattiin selaimen Storage-operaatioiden virheinjektiolla; fyysistä kiintiötä ei täytetty. Selain voi hävittää paikallistietoja eikä tallentamaton muistidata ole kaatumiskestävä: JSON-varmuuskopio on käyttäjän palautuskeino.
+
+Käyttäjä vahvisti aiemman julkisen Pages-julkaisun onnistuneen. Tämän haaran kokeilutilaa ei julkaistu tai HTTP-varmennettu julkisessa osoitteessa eikä mainiin yhdistetty. Yhdistämisen jälkeen nykyinen Public Pages demo -workflow julkaisee mainin; tarkista deploy ja Verify published HTTP responses. GitHubin etä-CI-tulos varmistetaan erikseen.
+
+## Toimitustila
+
+Toteutuscommit `fead6c7`, haara `feat/pages-local-experiment` pushattu GitHubiin. `gh pr create --base main --head feat/pages-local-experiment --title 'Pages: selaimessa toimiva Oma kokeilu' --body-file docs/pull-request-own-experiment.md` estyi: `Post https://api.github.com/graphql: Forbidden`. PR:ää ei siis saatu luotua automaattisesti. Valmis kuvaus on docs/pull-request-own-experiment.md; luontilinkki https://github.com/jgmikael/metatietovaranto/pull/new/feat/pages-local-experiment (base main). Ei main-mergeä tai julkista deployta.
+
+---
+
 # GitHub Pages -esittelydemo (19.10.2026)
 
 PR #13 on yhdistetty mainiin **6b48536**. Uusi työhaara `feat/github-pages-demo` perustuu siihen. Samalle React-sovellukselle on toteutettu erillinen Pages-build, yhteiset tyypit ja vain lukua tukeva tietolähdekerros. Neljä versionhallituista synteettisistä fixtureistä koottua tuotetta, kolme organisaatiota, yksi yhteisen SHACL-perustan ja kolmen planned-toimitustavan paketti. Ei tietokantavientiä, käyttäjäaineistoa, tunnuksia, istuntoja tai auditointitietueita. Ei kirjoitus-, hyväksyntä-, myöntämis- tai palvelinpuolen validointitoimintoja Pagesissa.

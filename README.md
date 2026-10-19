@@ -2,9 +2,13 @@
 
 ## Julkinen GitHub Pages -esittelydemo
 
-Valmisteltu tavoiteosoite: **https://jgmikael.github.io/metatietovaranto/**. **Julkaisua tai osoitteen HTTP-toimintaa ei ole vielä varmennettu.** Demo toimii julkaisun jälkeen ilman asennusta, kirjautumista tai käynnissä olevaa Codespacea/FastAPIa/PostgreSQL:ää/Keycloakia.
+Julkisen esittelyn osoite: **https://jgmikael.github.io/metatietovaranto/**. Käyttäjä on vahvistanut aiemman esittelyversion julkaisun onnistuneeksi. Tämän PR:n Oma kokeilu -tilaa ei ole vielä julkaistu tai HTTP-varmennettu julkisella sivustolla. Demo toimii ilman asennusta, kirjautumista tai käynnissä olevaa Codespacea/FastAPIa/PostgreSQL:ää/Keycloakia.
 
-Pages on erillinen build-tila samasta käyttöliittymästä: neljä synteettistä esimerkkituotetta, haku/suodatus, organisaatiot, SHACL-profiili ja kolmen toimitustavan kuvauspaketti tarkasteltavine/latautuvine artefakteineen. Kirjautuminen, muokkaus, hyväksyntä, julkaisu, generointi ja validointi kuuluvat varsinaiseen sovellukseen. Palvelut esitetään suunniteltuina, eikä demo myönnä todistuksia.
+Pages on erillinen build-tila samasta käyttöliittymästä: neljä synteettistä esimerkkituotetta, haku/suodatus, organisaatiot, SHACL-profiili ja kolmen toimitustavan kuvauspaketti tarkasteltavine/latautuvine artefakteineen. Julkinen kataloginäkymä on vain lukua varten. Kirjautuminen, yhteisten tietojen muokkaus, hyväksyntä, julkaisu, generointi ja validointi kuuluvat varsinaiseen sovellukseen. Palvelut esitetään suunniteltuina, eikä demo myönnä todistuksia.
+
+**Oma kokeilu:** valitse **Aloita oma kokeilu**. Muokkaa selaimeen kopioituja synteettisiä tuotteita, tarjoajaorganisaatioita ja kolmea toimitustapaa. Muutokset tallentuvat automaattisesti vain tähän selaimeen; odota **Tallennettu**-ilmoitusta. **Palaa julkiseen esittelyyn** säilyttää kokeilun ja alkuperäinen julkinen aineisto pysyy ennallaan. Kaikki paikalliset tuotteet ovat **Ei validoitu tässä kokeilussa**, ja palvelutoiminnot ovat pois käytöstä.
+
+Vie varmuuskopio **Vie kokeilu JSONina** -painikkeella. **JSON-tuonti ja alkuperäisten esimerkkien palautus** -osiossa voit palauttaa koko kokeilun tarkistetusta tiedostosta (enintään 2 MiB) tai palauttaa alkuperäiset esimerkit vahvistuksen jälkeen. Selaintietojen poisto tai yksityinen selaus voi hävittää kokeilun. Käytä vain synteettistä aineistoa. [Tallennus, ristiriidat, virheistä palautuminen ja versioitu siirtoformaatti](docs/own-experiment.md).
 
 **Yhdistämisen jälkeen:** Settings → Pages → Source: **GitHub Actions**, sitten Actions → **Public Pages demo** → Run workflow → **main**. Jos Pages on jo käytössä, main-merge käynnistää julkaisun automaattisesti. Varmista vihreä deploy ja **Verify published HTTP responses** ennen osoitteen jakamista toimivana. Asetusten/tilauksen tarkistus estyi tämän ympäristön API-oikeuksiin (Forbidden); näkyvyyttä tai maksullisia asetuksia ei muutettu.
 
