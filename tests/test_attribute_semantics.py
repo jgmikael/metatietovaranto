@@ -191,9 +191,27 @@ def test_generated_coverage_distinguishes_reviewed_texts_currentness_and_issuer_
     report=artifact(package,'catalogue-coverage.json')
     codes={row['code'] for row in report['missing']}
     assert 'NORMATIVE_SOURCES_UNVERIFIED' not in codes
-    assert {'EU_AMENDMENT_CURRENTNESS_UNVERIFIED','ETSI_SD_JWT_PROFILE_VERSION_DIFFERENCE','EXTERNAL_ISSUER_PROFILE_NOT_VERIFIED'}<=codes
+    assert {'EU_CORRIGENDUM_STATUS_UNVERIFIED','ETSI_SD_JWT_PROFILE_VERSION_DIFFERENCE','EXTERNAL_ISSUER_PROFILE_NOT_VERIFIED'}<=codes
     assert report['status']=='partial' and not report['conformanceClaim']
     assert any(row['target'].startswith('EU2025/1569 Article7(5)') for row in report['coverage'])
     assert any(row['target'].startswith('EU2025/1569 Article8(3)') for row in report['coverage'])
+    evidence=report['sources']['documentInformationEvidence']
+    assert evidence['observations']['latestDisplayedConsolidation']=='2026-08-11'
+    assert report['sources']['euConsolidation']['latestDisplayedVersionConfirmed'] is True
+    assert report['sources']['euConsolidation']['currentAsOfReviewDate'] is None
+    assert not evidence['observations']['separateCorrigendumRegisterDisplayed']
     assert package['generator']=='technical-package/1.1.1'
     assert package['standards']['sdJwtVc']=='draft-ietf-oauth-sd-jwt-vc-19'
+
+
+def test_document_information_evidence_is_pinned_without_inferring_corrigendum_absence():
+    import hashlib
+    pins=source_pins();evidence=pins['documentInformationEvidence']
+    raw=(Path('fixtures/catalog-standards')/evidence['file']).read_bytes()
+    assert raw.startswith(b'%PDF-') and len(raw)==evidence['byteLength']
+    assert hashlib.sha256(raw).hexdigest()==evidence['sha256']
+    assert evidence['observations']['relationshipSectionBasicAct']=='32025R1569'
+    assert pins['euConsolidation']['latestDisplayedVersionConfirmed'] is True
+    assert pins['euConsolidation']['currentAsOfReviewDate'] is None
+    assert any(row['code']=='EU_CORRIGENDUM_STATUS_UNVERIFIED' for row in pins['remainingReviewGaps'])
+    assert 'CELEX:32025R1569' in pins['requestedUnverifiedSources'][0]['url']

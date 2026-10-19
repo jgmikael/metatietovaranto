@@ -1,3 +1,23 @@
+# PR #13 — asiakirjatietoliitteen tarkistus (19.10.2026)
+
+Käyttäjän `Document Information.pdf` on vastaanotettu, luettu paikallisella OCR:llä ja sen tietosivu tarkastettu kuvana. Alkuperäinen kopio, koko ja SHA-256 on lukittu lähdeaineistoon. Aikajanassa viimeisin esitetty konsolidointi on **11.8.2026**, ja muutosviite **EU 2026/1735** vastaa aiempaa tekstikopiota.
+
+Liite näyttää **konsolidoidun tekstin** tiedot (02025R1569-20260811). Relationship between documents sisältää vain linkin alkuperäiseen asetukseen 32025R1569; sen muutos-/oikaisurekisteri ei ole esillä. Nyt vahvistettu viimeisin näytetty versio erotetaan todentamattomasta oikaisujen puuttumisesta. Generoidun raportin havainto tarkentuu `EU_CORRIGENDUM_STATUS_UNVERIFIED`-koodiksi. ETSI draft-13/draft-19 -ero ja ulkoisen myöntäjän vastuut säilyvät. [Täsmälliset havainnot ja jäljellä oleva tarkistus](docs/pr13-source-comparison.md).
+
+**Jäljellä ennen lopullista yhdistämissuositusta:** alkuperäisen asetuksen asiakirjatietosivun muutos-/oikaisusuhteet. Avaus liitteen sivun 1 **Access initial legal act** -linkistä tai suoraan CELEX:32025R1569-sivulta. Ei tarvetta toimittaa samoja ETSI-/konsolidointitekstejä uudelleen.
+
+## Asiakirjatietoliitteen täydennyksen tarkistukset 19.10.2026
+
+- `pytest tests/test_technical_packages.py tests/test_attribute_semantics.py -q`: **61 passed, 1 warning in 55.00s**. Ei epäonnistuneita tai ohitettuja. Mukana oikea paikallinen JSON-LD/RDF/SHACL, attribuuttien yhdenmukaisuus, pakettien tarkisteketju sekä uusi asiakirjatietokopion pinnaus ja generoituun raporttiin päätyvä täsmällinen näyttöraja. Varoitus koskee Starlette/httpx-deprekaatiota.
+- `git fetch origin main`: main on edelleen **9258fff** ja sisältyy työhaaraan. Työhaara vastasi etähaaraa ennen tätä lisäystä; ei muiden muutosten ylikirjoitusta. `git diff --check` läpäisi.
+- Tämä täydennys muuttaa lähdepinnit, raportin syötteet, testit ja dokumentaation. Sovelluskoodia, käyttöliittymää, tietokantaskeemaa tai käynnistysasetuksia ei muutettu. Ei uutta migraatiota. Muuttumattomia julkaisuja tai demokantaa ei päivitetty.
+- Koko API-/migraatiosarjaa, selaintestejä, web-buildia, Docker-buildia tai toimintakokeilua ei toistettu tässä liitetäydennyksessä. Alla oleva **207 API-/migraatiotestin ja 13 selaintestin** läpäisy sekä build-/säilymiskokeet ovat edellisen toteutusmuutoksen tuloksia, eivät uusia ajoja. Uusi 61 testin ajo menee osittain niiden kanssa päällekkäin, joten lukuja ei lasketa yhteen.
+- Avoin sisältötarkistus: alkuperäisen asetuksen muutos-/oikaisusuhteet ja mahdolliset niistä löytyvät uudet tekstit. GitHub API palauttaa edelleen **Forbidden**; PR:n kuvaus ja etätarkistusten tila eivät päivity tai varmistu tämän ympäristön kautta. Kuvausteksti on repositoriossa `docs/pull-request-attribute-semantics.md`. Ei automaattista yhdistämistä.
+
+---
+
+Alla on edellisen sisältövertailun tarkistushistoria. Sen asiakirjatietosivun puuttumista koskeva yleinen tila on tarkentunut yllä.
+
 # PR #13 — toimitettujen alkutekstien vertailu (18.10.2026)
 
 Käyttäjältä saatu kolme pyydettyä PDF:ää: ETSI TS 119 472-1 V1.2.1 (2026-02), ETSI TS 119 478 V1.1.1 (2026-01) ja EU 2025/1569:n konsolidointi 11.8.2026 / 001.001. Etusivut, yksilöidyt kohdat/artiklat ja EU-tekstin muutosmerkit luettu paikallisesti. Alkuperäiset kopiot ja SHA-256:t lukittu fixtures/catalog-standards/originals/ ja sources.json. Ei väitettä riippumattomasta verkkovertauksesta tai koko ETSI-/EU-vaatimustenmukaisuudesta. [Uusi lähdevertailu ja kohdan 4 asiakirjatietosivun ohje](docs/pr13-source-comparison.md).

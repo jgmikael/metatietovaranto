@@ -12,12 +12,12 @@
   },
   "requestedUnverifiedSources": [
     {
-      "id": "EU 2025/1569 subsequent amendment/corrigendum status after 2026-08-11",
-      "version": "currentness as of 2026-10-18 unknown",
+      "id": "EU 2025/1569 basic-act corrigendum relationships",
+      "version": "corrigendum status as of 2026-10-19 not established by supplied consolidated-document page",
       "url": "https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX:32025R1569"
     }
   ],
-  "unverifiedReason": "The three supplied PDF copies were read and checksummed. EUR-Lex document information is still needed to determine later amendments/corrigenda after 2026-08-11; no ETSI/EU conformance claim.",
+  "unverifiedReason": "All four supplied PDF copies were read and checksummed. The document-information timeline displays 2026-08-11 as its latest consolidation. Its relationship section identifies only the basic act, not the basic-act amendment/corrigendum register. Absence of later corrigenda is not established; no ETSI/EU conformance claim.",
   "reviewedProvidedCopies": [
     {
       "id": "ETSI TS 119 472-1",
@@ -72,13 +72,14 @@
     "listedAmendingAct": "EU 2026/1735 of 2026-07-15 (OJ 2026-07-22)",
     "articles7And8Marker": "B (base text in supplied consolidation)",
     "currentAsOfReviewDate": null,
-    "reviewDate": "2026-10-18",
-    "scope": "Supplied consolidation read; later amendments/corrigenda require EUR-Lex document information. Consolidated text is documentary; authentic acts are in the Official Journal."
+    "reviewDate": "2026-10-19",
+    "scope": "Supplied consolidation read; supplied document-information timeline displays 2026-08-11 as latest. Basic-act corrigendum register is not displayed, so currentAsOfReviewDate remains null. Consolidated text is documentary; authentic acts are in the Official Journal.",
+    "latestDisplayedVersionConfirmed": true
   },
   "remainingReviewGaps": [
     {
-      "code": "EU_AMENDMENT_CURRENTNESS_UNVERIFIED",
-      "detail": "Consolidated text through 2026-08-11 includes EU 2026/1735; later changes/corrigenda as of 2026-10-18 unknown pending EUR-Lex document information."
+      "code": "EU_CORRIGENDUM_STATUS_UNVERIFIED",
+      "detail": "The supplied document-information timeline displays 2026-08-11 as latest and the text lists EU 2026/1735. Its relationships section only links basic act 32025R1569; basic-act amendment/corrigendum relationships, including absence of later corrigenda as of 2026-10-19, remain unverified."
     },
     {
       "code": "ETSI_SD_JWT_PROFILE_VERSION_DIFFERENCE",
@@ -120,5 +121,29 @@
       "status": "partial",
       "missing": "scheme owner/contact/status/version, rules, trust/governance/revocation, provider/source requirements, declared attestation legal category, signed/sealed registration and Commission ID"
     }
-  ]
+  ],
+  "documentInformationEvidence": {
+    "file": "originals/eur-lex-document-information-2026-10-19.pdf",
+    "sha256": "18b574d05a9a15b6aabfdeded5aab829056bbd8653fd6eb50395305e9df34bb5",
+    "byteLength": 5816112,
+    "sourceUrl": "https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX:02025R1569-20260811",
+    "reviewDate": "2026-10-19",
+    "documentType": "consolidated-text document information, not basic-act document information",
+    "provenance": "User-uploaded print-to-PDF copy; image-only pages inspected visually and with local OCR. Independent web comparison unavailable (HTTP 403).",
+    "observations": {
+      "informationPage": 1,
+      "textAmendmentPage": 2,
+      "eli": "http://data.europa.eu/eli/reg_impl/2025/1569/2026-08-11",
+      "displayedTimelineDates": [
+        "2025-07-30",
+        "2026-08-11"
+      ],
+      "latestDisplayedConsolidation": "2026-08-11",
+      "timelineEndsAtToday": true,
+      "relationshipSectionBasicAct": "32025R1569",
+      "listedAmendingAct": "EU 2026/1735",
+      "separateCorrigendumRegisterDisplayed": false
+    },
+    "limitation": "The selected consolidation and latest date displayed in its timeline are evidenced. This page does not establish exhaustive basic-act amendment/corrigendum relationships or absence of later corrigenda."
+  }
 }
