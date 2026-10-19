@@ -24,6 +24,10 @@ Oma kokeilu -v1:n valinnaiset localProfiles/generation-laajennukset säilyttäv�
 
 Ei natiivia Windows-/Firefox-/Safari-ajoa. Worker-aikaraja testattiin deterministisellä pysäytetyllä testityöntekijällä; käyttöjärjestelmän muistikiintiötä ei ole. Ei oikeaa uutta Pages-deployta/julkista HTTP-tarkistusta tai GitHubin etä-CI-tuloksen varmistusta tässä tehtävässä. Suunniteltuja osoitteita ei noudettu tai väitetty saavutettaviksi. Ei ulkoista myöntäjä-/lompakkopalvelua, rekisteröintiä tai vaatimustenmukaisuusväitettä. Selainversion suljetut muodot, date/dateTime-arvojen tarkka XSD-leksikaalinen esimerkkivalidointi ja palvelimen täydellinen SHACL/julkaisuprosessi jäävät palvelinsovellukseen. Katso docs/browser-shacl-generation.md ja valmis PR-kuvaus docs/pull-request-browser-generation.md.
 
+## Toimitus
+
+Toteutuscommit `8d1f5ca`, haara `feat/pages-browser-shacl` pushattu GitHubiin. `gh pr create --base main --head feat/pages-browser-shacl --title 'Pages: paikallinen SHACL-tuonti ja tekninen generointi' --body-file docs/pull-request-browser-generation.md` estyi: `POST https://api.github.com/graphql: Forbidden`; myös REST-luku palautti Forbidden. PR:ää ei siis saatu avattua automaattisesti. Valmis kuvaus docs/pull-request-browser-generation.md, luontilinkki https://github.com/jgmikael/metatietovaranto/pull/new/feat/pages-browser-shacl (base main). Ei main-mergeä tai julkista deployta.
+
 ---
 
 # Oma kokeilu: PR:n CI-korjaus (19.10.2026)
