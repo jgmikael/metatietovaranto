@@ -19,6 +19,10 @@ Tavoite **https://jgmikael.github.io/metatietovaranto/** ei ole tässä tehtäv�
 - Ensimmäisessä determinismikokeessa löytynyt checkedAt-aikaleima poistettiin uuden staattisen aineiston ajokohtaisista tiedoista; lopullinen seitsemän testin sarja läpäisi. Palvelimen raportteja tai vanhoja julkaisuja ei muutettu.
 
 
+## Toimitus
+
+Toteutuscommit **581b3db** on työnnetty haaraan `feat/github-pages-demo`. `gh pr create --base main --head feat/github-pages-demo --title ... --body-file docs/pull-request-pages-demo.md` yritettiin, mutta GitHub GraphQL API palautti **Forbidden**. **PR:ää ei saatu avattua automaattisesti.** Käyttäjä voi avata sen GitHubin tarjoamasta linkistä https://github.com/jgmikael/metatietovaranto/pull/new/feat/github-pages-demo ja liittää valmiin docs/pull-request-pages-demo.md-kuvauksen. Mainia ei yhdistetty eikä Pages-deployta tehty. Tämä toimitusmerkintä ei muuta testattua sovelluskoodia tai aineistoa.
+
 ## Ajamattomat / julkaisuun jäävät
 
 Varsinainen GitHub Pages -deployment, julkisen tavoiteosoitteen ja CDN-otsakkeiden HTTP-koe, GitHub Actionsin etätulos, Windows Docker Desktop/PowerShell ja uuden Codespacen luonti/openBrowser/Private-portin ajonaikainen koe. Paikallinen staattinen alipolku ja nykyinen palvelinsovellus testattiin alla kuvatuilla ajoilla. Ei ulkoista myöntäjää, allekirjoitusta tai lompakkotestiä. GitHub Pages ei takaa .schema.json-tiedostolle application/schema+json-otsaketta; manifestissa mediatyyppi säilyy ja varsinaisen palvelimen otsakkeet säilyvät.
