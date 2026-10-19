@@ -10,3 +10,6 @@ test-results/
 /before-2a.sql
 
 /before-update.sql
+
+.pages-data/
+dist-pages/

@@ -128,3 +128,10 @@ Laajemmat JSON Schema/OpenAPI-kattavuuskartoitukset ja muunnoksen laajentaminen 
 Saman synteettisen sisällön JSON-haku sekä W3C VC- ja SD-JWT VC -myöntäminen yhteiseen profiiliin perustuen; yksi lähde-API/sovitin riittää. Erillinen myöntäjäsimulaattori, oikeat OpenID4VCI/lompakko-, QEAA- ja data-avaruuspalvelut, linkkien saavutettavuuden ja luottamuksen todennus sekä nimetyt EUDIW-/EBW-yhteentoimivuuskokeet. Katalogi ei toteuta Credential Endpointia tai tallenna henkilökohtaisia myöntämisistuntoja.
 
 Seuraavaan vaiheeseen siirrytään vain erillisellä toimeksiannolla. Työhaaroja ei yhdistetä automaattisesti main-haaraan.
+
+
+## Julkinen GitHub Pages -esittelydemo — erillinen toimitus
+
+Tilattu PR #13:n main-mergen 6b48536 jälkeen. Sama käyttöliittymä, tyypit ja komponentit; erillinen vain lukua tukeva staattinen tietolähde ja Vite Pages -build. Neljä versionhallituista synteettisistä fixtureistä koottua tuotetta, joista yksi käyttää nykyistä generaattoria kolmen toimitustavan tekniseen pakettiin. Ei tietokantavientiä, kirjautumista, ylläpitoa, hyväksyntää, myöntämistä tai uutta taustatoimintoa. Olemassa olevat palvelinsovelluksen julkaisut ja snapshotit säilyvät.
+
+Virallisiin Pages Actionseihin perustuva PR-tarkistus ja vain mainista julkaiseva työnkulku. Julkinen osoite on tavoite, kunnes oikea deploy ja HTTP-tarkistus on tehty. Pages-asetusten/näkyvyyden/tilauksen tarkistus estyi API:n Forbidden-vastaukseen; käyttäjän käyttöönotto-ohje on [docs/github-pages-demo.md](docs/github-pages-demo.md). Tämä ei aloita vaiheen 3 integraatioita.

@@ -32,9 +32,9 @@ def profile_definition(uri):
         'trust':'Integrity is not issuer authentication, a signature check or catalogue registration.'}
 
 
-def attach_references(tree, snapshot_id, snapshot_hash, manifest, base_url):
+def attach_references(tree, snapshot_id, snapshot_hash, manifest, base_url, *, snapshot_url=None):
     source={'uri':manifest['profileUri'],'version':manifest.get('sourceVersion'),'snapshotId':snapshot_id,
-            'snapshotSha256':snapshot_hash,'snapshotUrl':base_url+'/api/v1/profile-snapshots/'+snapshot_id}
+            'snapshotSha256':snapshot_hash,'snapshotUrl':snapshot_url or base_url+'/api/v1/profile-snapshots/'+snapshot_id}
     refs=[]
     def visit(node):
         for row in node['fields']:

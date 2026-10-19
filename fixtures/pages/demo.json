@@ -1,0 +1,22 @@
+{
+  "version": "1.0.0",
+  "snapshotDate": "2026-10-19T00:00:00Z",
+  "comprehensiveProduct": {
+    "id": "00000000-0000-4000-8000-000000000004",
+    "title": "Yrityssisältö — JSON API, W3C VC ja SD-JWT VC (synteettinen demo)",
+    "description": "Yksi synteettinen yrityssisältö ja yhteinen SHACL-perusta kolmelle suunnitellulle toimitustavalle.",
+    "theme": "Yritykset",
+    "source": "Versionhallittu synteettinen ohjelmistofixture. Ei oikea Tietomallit-export tai lähdetietovaranto.",
+    "purpose": "Havainnollistaa yhteistä semantiikkaa ja julkaistavia teknisiä kuvauksia.",
+    "limitations": "Ei oikeita yritystietoja, myöntämistä, allekirjoitusta, lompakkotoimitusta tai vaatimustenmukaisuusväitettä.",
+    "accessConditions": "Julkinen synteettinen esittelyaineisto. Ei tuotannolliseen tiedonluovutukseen."
+  },
+  "representation": {
+    "rootShapeUri": "https://example.org/metatietovaranto/demo/ProductShape",
+    "acceptRepresentation": true,
+    "replaceMappings": true,
+    "mappingVersion": "1.1.0",
+    "synthetic": true,
+    "acceptFormatPolicies": true
+  }
+}

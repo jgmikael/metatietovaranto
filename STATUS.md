@@ -1,3 +1,38 @@
+# GitHub Pages -esittelydemo (19.10.2026)
+
+PR #13 on yhdistetty mainiin **6b48536**. Uusi työhaara `feat/github-pages-demo` perustuu siihen. Samalle React-sovellukselle on toteutettu erillinen Pages-build, yhteiset tyypit ja vain lukua tukeva tietolähdekerros. Neljä versionhallituista synteettisistä fixtureistä koottua tuotetta, kolme organisaatiota, yksi yhteisen SHACL-perustan ja kolmen planned-toimitustavan paketti. Ei tietokantavientiä, käyttäjäaineistoa, tunnuksia, istuntoja tai auditointitietueita. Ei kirjoitus-, hyväksyntä-, myöntämis- tai palvelinpuolen validointitoimintoja Pagesissa.
+
+Nykyinen generaattori tuottaa kontekstin, scheman, Type Metadatan, mappingit, attribuuttiannotaatiot, synteettiset allekirjoittamattomat esimerkit ja raportit lopullisesta konfiguroidusta julkaisuosoitteesta. Rakentaja normalisoi vain uuden synteettisen build-snapshotin ajokohtaiset metatiedot; varsinaisen sovelluksen snapshotteja ja julkaisuja ei kirjoiteta uudelleen. JSON-LD-vienti jaettiin samaksi tietokannattomaksi apumoduuliksi. Generaattorin valinnainen snapshot_url säilyttää palvelimen nykyiset oletukset.
+
+Tavoite **https://jgmikael.github.io/metatietovaranto/** ei ole tässä tehtävässä julkaistu tai HTTP-varmistettu. Vain main saa deployata. PR ja muut workflow_dispatch-haarat rakentavat/testaavat ilman julkaisua. GitHub API:n Pages-/repoasetusten luku palautti Forbidden; näkyvyyttä, Pages-tilaa tai tilauksen tukea ei voitu varmistaa. Käyttäjän on valittava Settings → Pages → GitHub Actions ja ajettava Public Pages demo mainista yhdistämisen jälkeen. Näkyvyyttä/maksullisia asetuksia ei muutettu eikä uutta repositoriota luotu.
+
+## Todella suoritetut tarkistukset
+
+- Staattisen demon `pytest tests_static -q`: **7 passed in 6.14s**, ei ohituksia tai JavaScript-/konsolivirheitä. Tavallinen HTTP-palvelin /metatietovaranto/-alipolussa; kaikki backend-/ulkoiset selainpyynnöt estetty. Lista, haku, teema/tarjoaja, mobiilileveys, suora tuoteversiolinkki/reload, organisaatio, SHACL-tarkastelu, lataukset ja semanttinen kuluttaja läpäisivät. Luonnoshash ei avaa ylläpitoa. Determinismi, eri julkaisuosoitteen vaikutus tarkisteeseen, täydellinen SRI-ketju ja julkaisutiedostojen/credentialien allowlist tarkistettiin. Offline-data-buildissa socket-yhteydet ja SQLAlchemy-enginen luonti estettiin.
+- Varsinaisen sovelluksen koko 13 tiedoston API-/PostgreSQL-/migraatiosarja: **209 passed, 4 warnings in 357.73s (0:05:57)**. Erillinen catalog_test-kanta; oikeudet, CSRF, riippumaton hyväksyntä, muuttumattomat julkaisut, vanha/tyhjä kanta, toistuvat migraatiot ja nykyiset JSON-LD/RDF/SHACL-/attribuuttikokeet läpäisivät.
+- Oikea Chromium + Keycloak normaalia uudelleenrakennettua Docker-sovellusta vasten: **13 passed, 1 warning in 113.07s (0:01:53)**. Tallennus/uudelleenavaaminen, hyväksyntä/julkaisu, oikeudet ja artefaktit säilyivät. **229 eri pytest-testiä** yhteensä. Starlette/httpx- ja RDFLib-deprekaatiovaroitukset eivät ole ohituksia.
+- Molemmat web-buildit (`build` ja `build:pages`) läpäisivät. Pagesin lopullinen aineisto ja assets eivät sisällä demotunnuksia tai localhost-palveluosoitteita. Normaali dist ja staattinen dist-pages ovat erilliset.
+- Dokumentoitu `python -m scripts.preview_pages --port 4173` ajettiin: HTML ja demo/catalog.json palauttivat HTTP 200:n ja neljä tuotetta renderöityi oikeassa selaimessa. Näkymä tarkastettiin myös kuvakaappauksesta. Tilapäinen preview pysäytettiin kokeen jälkeen. Julkista GitHub Pages -osoitetta ei testattu tai väitetä toimivaksi.
+- Docker rakennettiin TLS-varmennukset säilyttävällä scripts/cloud-build.sh-reitillä ja käynnistettiin `docker compose up -d --no-build --wait` -komennolla. App/db/Keycloak healthy; viimeinen image **sha256:850c997f379d84a94bb0793851602373a249da79ea6ce36428160b34ecb07697**. Ennen uusia selaintestijulkaisuja **13 catalog-kannan metatietotaulua ja Alembic-head 0005_lifecycle säilyivät tarkalleen ennallaan restartissa**. Ei uutta migraatiota eikä live-kannan nollausta.
+- Yhteensopivuuden HTTP-koe: **92 julkaisuversiota luettavissa**, **8 vanhan generaattorin pakettia / 78 artefaktia** alkuperäisinä tavuina ja SHA-arvoina. Versio-API:n pakettisisällöt vastasivat tallennettuja snapshotteja.
+- GitHub Pages -workflow jäsennettiin YAMLina ja main/ei-PR-deployehto tarkistettiin. Varsinaista Actions-ajoa/deployta ei voitu tehdä PR-haarasta. `git diff --check` läpäisi. Uusin origin/main on edelleen 6b48536 ja sisältyy haaraan.
+- Ensimmäisessä determinismikokeessa löytynyt checkedAt-aikaleima poistettiin uuden staattisen aineiston ajokohtaisista tiedoista; lopullinen seitsemän testin sarja läpäisi. Palvelimen raportteja tai vanhoja julkaisuja ei muutettu.
+
+
+## Toimitus
+
+Toteutuscommit **581b3db** on työnnetty haaraan `feat/github-pages-demo`. `gh pr create --base main --head feat/github-pages-demo --title ... --body-file docs/pull-request-pages-demo.md` yritettiin, mutta GitHub GraphQL API palautti **Forbidden**. **PR:ää ei saatu avattua automaattisesti.** Käyttäjä voi avata sen GitHubin tarjoamasta linkistä https://github.com/jgmikael/metatietovaranto/pull/new/feat/github-pages-demo ja liittää valmiin docs/pull-request-pages-demo.md-kuvauksen. Mainia ei yhdistetty eikä Pages-deployta tehty. Tämä toimitusmerkintä ei muuta testattua sovelluskoodia tai aineistoa.
+
+## Ajamattomat / julkaisuun jäävät
+
+Varsinainen GitHub Pages -deployment, julkisen tavoiteosoitteen ja CDN-otsakkeiden HTTP-koe, GitHub Actionsin etätulos, Windows Docker Desktop/PowerShell ja uuden Codespacen luonti/openBrowser/Private-portin ajonaikainen koe. Paikallinen staattinen alipolku ja nykyinen palvelinsovellus testattiin alla kuvatuilla ajoilla. Ei ulkoista myöntäjää, allekirjoitusta tai lompakkotestiä. GitHub Pages ei takaa .schema.json-tiedostolle application/schema+json-otsaketta; manifestissa mediatyyppi säilyy ja varsinaisen palvelimen otsakkeet säilyvät.
+
+[Toteutus, aineisto, komennot ja käyttöönotto](docs/github-pages-demo.md). [Valmis PR-kuvaus yhdistämisen jälkeisine tehtävineen](docs/pull-request-pages-demo.md). Ei automaattista main-mergeä tai PR-haaran julkista deployta.
+
+---
+
+Alla on aiempien vaiheiden historia. PR #13 on nyt yhdistetty mainiin; sen vanhat PR-tilat eivät kuvaa tämän tehtävän haaraa.
+
 # PR #13 — lähdevertailun päätös (19.10.2026)
 
 Alkuperäisen asetuksen Relationship between documents -copy-paste on nyt arvioitu ja lukittu käyttäjätoimituksen käsin rakenteistettuna jäljennöksenä lähdeaineistoon. **PR #13:n EN-metatietoja ja teknisiä kuvauspaketteja koskeva lähdevertailu on päätetty ilmoitetuin rajauksin.** Ei havaittua tarvetta sovelluskoodin, attribuuttimallin tai relaatiomigraatioiden muutokseen. Main **9258fff** sisältyy työhaaraan; ei yhdistämistä.

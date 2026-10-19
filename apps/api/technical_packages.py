@@ -234,12 +234,12 @@ def graph_hash(graph):
     return checksum(sorted((s.n3(),p.n3(),o.n3()) for s,p,o in to_canonical_graph(graph)))
 
 
-def generate(manifest, profile_hash, body, data, base_url):
+def generate(manifest, profile_hash, body, data, base_url, *, snapshot_url=None):
     if manifest.get('issues'):
         fail('SOURCE_NOT_READY','/profileSnapshotId','Lähdeprofiilissa on ratkaisemattomia puutteita: '+'; '.join(manifest['issues'])[:1500])
     if len(data['exampleContent'].encode())>100000:fail('EXAMPLE_LIMIT','/exampleContent','JSON-esimerkin UTF-8-raja on 100 kB')
     tree, rows=inspect_profile(manifest,data['rootShapeUri'],data.get('names',[]))
-    refs=attach_references(tree,body['profileSnapshotId'],profile_hash,manifest,base_url)
+    refs=attach_references(tree,body['profileSnapshotId'],profile_hash,manifest,base_url,snapshot_url=snapshot_url)
     items=copy.deepcopy(body.get('distributions') or [])
     if len(items)!=3 or {item['type'] for item in items}!={'jsonApi','w3cVc','sdJwtVc'}:
         fail('THREE_DISTRIBUTIONS','/distributions','Paketti tarvitsee yhden kunkin kolmen toimitustyypin kuvauksen')
@@ -294,6 +294,7 @@ def generate(manifest, profile_hash, body, data, base_url):
             'catalogueReferences':body.get('catalogueReferences') or [],'catalogueSourcePins':source_pins(),
             'baseContextSha256':hashlib.sha256((FIXTURES/'credentials-v2.jsonld').read_bytes()).hexdigest(),
             'sdSpecificationSha256':hashlib.sha256((FIXTURES/(SD_STANDARD+'.md')).read_bytes()).hexdigest()}
+    if snapshot_url is not None:inputs['sourceSnapshotUrl']=snapshot_url
     package_id=checksum(inputs)
     prefix=base_url+'/id/technical-packages/'+package_id+'/'
     context={'@context':context_for(tree)}
