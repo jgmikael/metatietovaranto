@@ -33,7 +33,7 @@ export function LocalExperiment(){
   const snapshot=current.current;setSaveState('Tallennetaan…');let success=false;
   const work=(async()=>{try{
    const raw=await persist(snapshot,baseline.current);baseline.current=raw;
-   if(current.current===snapshot&&!blocked.current){dirty.current=false;setSaveState('Tallennettu');setError('');}success=true;
+   if(current.current===snapshot&&!blocked.current&&!replacing.current){dirty.current=false;setSaveState('Tallennettu');setError('');}success=true;
   }catch(e){setSaveState('Tallennus epäonnistui');if(e instanceof StorageConflict){blocked.current=true;setConflict(true);}setError('Tallennus epäonnistui. Muutokset ovat muistissa. Vie JSON-varmuuskopio. '+message(e));}})();
   inFlight.current=work;await work;inFlight.current=null;
   if(success&&dirty.current&&!blocked.current)timer.current=setTimeout(()=>void saveNow(),500);
@@ -48,7 +48,7 @@ export function LocalExperiment(){
  async function replace(value:Workspace){
   if(blocked.current&&conflict){setError('Avaa ensin toisessa välilehdessä muuttunut tallenne. Vie omat muutokset tarvittaessa JSONiksi.');return;}
   if(!window.confirm('Korvataanko koko paikallinen kokeilu? Vie nykyinen kokeilu ensin JSON-varmuuskopioksi, jos haluat säilyttää sen.'))return;
-  setBusy(true);replacing.current=true;clearTimeout(timer.current);
+  setBusy(true);replacing.current=true;setSaveState('Tallennetaan…');clearTimeout(timer.current);
   try{while(inFlight.current)await inFlight.current;const raw=await persist(value,baseline.current);install(value,raw,false);setPendingImport(null);setSelectedId(null);setOrgId(null);setEditing(false);}
   catch(e){setSaveState('Tallennus epäonnistui');if(e instanceof StorageConflict){blocked.current=true;setConflict(true);}setError('Korvaaminen epäonnistui. Nykyistä kokeilua ei muutettu. '+message(e));}
   finally{replacing.current=false;setBusy(false);}

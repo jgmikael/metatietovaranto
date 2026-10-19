@@ -8,15 +8,23 @@ Siirtoformaatti 1 sallii vain tunnetun rakenteen, enintään 2 MiB. Tuonti tarki
 
 Paikallinen tuote on aina **Ei validoitu tässä kokeilussa**; alkuperäisen paketin raportit ovat vain erillisen lähtöesimerkin tuloksia. Myöntämis- ja lähdetietotoiminnot estetään paikallisesti myös production-metadatalla. Ei uutta hyväksyntäprosessia, generointia, SHACL-validointia tai integraatioita. Ei muutoksia vanhoihin palvelinsovelluksen snapshotteihin/julkaisuihin tai tietokantaskeemaan.
 
+## CI:ssä löytyneen tuonnin ajoitusvirheen korjaus
+
+Vahvistettu JSON-tuonti ja alkuperäisten esimerkkien palautus jättivät näytölle edellisen operaation `Tallennettu`-tilan uuden asynkronisen kirjoituksen ajaksi. Alkuperäinen testi saattoi siksi jatkaa ennen uuden tallenteen valmistumista ja nähdä vanhan tuotteen nimen. Tämä ei osoittanut tietojen palautumista tuonnin jälkeen, vaan ennenaikaisen onnistumisilmoituksen.
+
+Korvaaminen näyttää nyt heti `Tallennetaan…`. Myös edeltävän automaattitallennuksen valmistuminen estetään merkitsemästä kesken olevaa korvaamista tallennetuksi. Uudet tuonnin ja resetin regressiokokeet varaavat oikean Web Lockin: ennen lukon vapautusta vanha tallenne säilyy ja tila on keskeneräinen; vapautuksen jälkeen uusi aineisto tallentuu ja säilyy reloadissa. Molemmat kokeet epäonnistuivat ennen sovelluskorjausta.
+
+Korjauksen jälkeen koko staattinen sarja: **30 passed in 63.99s**, Pages-build ja tavallinen web-build läpäisivät. API-/palvelinselaintulokset alla ovat aiemmalta toteutuscommitilta; niitä ei ajettu uudelleen tähän vain paikallisen korvaustilan muutokseen. GitHubin uusi PR-CI on tarkistettava erikseen.
+
 ## Ajetut tarkistukset
 
 - Pages-build ja normaali TypeScript/Vite-build: läpäisivät.
-- `pytest tests_static -q`: **28 passed**, ei ohituksia tai JavaScript-/konsolivirheitä. Todellinen staattinen HTTP-palvelin `/metatietovaranto/`-alipolussa, kaikki backend-, auth-, identity-, ulkoiset ja kirjoituspyynnöt kielletty. Kattaa julkisen esittelyn, CRUDin, reloadin, JSON-siirron ja virhetilanteet, kiintiö-/käyttöestot, kaksi oikeaa välilehteä Web Locks -jonossa, resetin ja puuttuvat profiili-/pakettiviitteet uuden version jälkeen. Väliajon ajoituksesta riippuva testijärjestys korjattiin odottamaan todellista lukkojonoa; lopullinen täysi ajo läpäisi.
+- `pytest tests_static -q`: **30 passed**, ei ohituksia tai JavaScript-/konsolivirheitä. Todellinen staattinen HTTP-palvelin `/metatietovaranto/`-alipolussa, kaikki backend-, auth-, identity-, ulkoiset ja kirjoituspyynnöt kielletty. Kattaa julkisen esittelyn, CRUDin, reloadin, JSON-siirron ja virhetilanteet, kiintiö-/käyttöestot, kaksi oikeaa välilehteä Web Locks -jonossa, resetin ja puuttuvat profiili-/pakettiviitteet uuden version jälkeen. Väliajon ajoituksesta riippuva testijärjestys korjattiin odottamaan todellista lukkojonoa; lopullinen täysi ajo läpäisi.
 - `pytest tests/test_api.py tests/test_auth.py tests/test_publication.py tests/test_public_url.py -q`: **24 passed**, 3 Starlette/RDFLib-varoitusta. Oma catalog_test-kanta.
 - Oikea Docker-build ja Compose-startup: kaikki palvelut healthy. Ennen/jälkeen vertailu: 13 tuotantodemon tietokantataulua ja Alembic head muuttumattomia. Volumet säilytettiin.
 - Vanhojen julkaisujen lisälukukoe: **97 versiota, 8 vanhaa pakettia, 78 artefaktia** läpäisi.
 - `BROWSER_BASE_URL=http://localhost:8000 pytest tests/test_browser.py -q`: **13 passed**, 1 Starlette-varoitus. Oikea Chromium + Keycloak: tallennus/uudelleenavaaminen, oikeudet, hyväksyntä, julkaisu, elinkaari ja paketit. Testit jättävät omat synteettiset julkaisut historiaan.
-- **65 eri pytest-testiä yhteensä**, ei ohituksia. Paikallinen dokumentoitu preview ja desktop-/390 px mobiilikuvakaappaus tarkastettu. `git diff --check` läpäisi.
+- **67 eri pytest-testiä yhteensä**, ei ohituksia. Paikallinen dokumentoitu preview ja desktop-/390 px mobiilikuvakaappaus tarkastettu. `git diff --check` läpäisi.
 
 ## Rajat / ajamatta
 

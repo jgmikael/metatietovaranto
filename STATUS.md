@@ -1,3 +1,13 @@
+# Oma kokeilu: PR:n CI-korjaus (19.10.2026)
+
+Käyttäjä on luonut PR:n haarasta `feat/pages-local-experiment`. Sen Pages-CI:ssä JSON-tuonnin testi ehti lukea vanhan tuotteen nimen. Syy toistettiin deterministisesti: korvausoperaatio ei vaihtanut edellistä `Tallennettu`-tilaa keskeneräiseksi ennen asynkronista kirjoitusta. Kyse ei osoittanut tuonnin jälkeistä palautumista alkuperäiseen aineistoon.
+
+Korvaus näyttää nyt heti `Tallennetaan…`; myöskään edeltävä automaattitallennus ei saa ilmoittaa kesken olevaa korvausta valmiiksi. Kaksi uutta selaintestiä jonottaa tuonnin/resetin oikean varatun Web Lockin taakse, tarkistaa vanhan tallenteen ja keskeneräisen tilan, vapauttaa lukon sekä tarkistaa korvatut tiedot ja reloadin. **Ennen korjausta molemmat epäonnistuivat** (2 failed in 14.65s).
+
+Korjauksen jälkeen `bash scripts/build-pages.sh`, `.venv/bin/pytest tests_static -q` (**30 passed in 63.99s**, ei ohituksia tai konsolivirheitä) ja `npm run build --prefix apps/web` läpäisivät. Mukana alkuperäinen epäonnistunut tuonti-/palautustesti sekä uudet lukitus-/reload-kokeet. `git diff --check` läpäisi. API-/tietokanta-/palvelinsovelluksen selaintestejä ei ajettu uudelleen tämän vain Pagesin korvaustilan korjauksen vuoksi; edellisen toteutuscommitin 24 API- ja 13 palvelinselaintestiä on raportoitu alla. GitHubin uutta etä-CI-tulosta ei ole varmennettu tässä ympäristössä. Korjaus toimitetaan samaan PR-haaraan, ei main-mergeä.
+
+---
+
 # Pagesin Oma kokeilu (19.10.2026)
 
 Työhaara `feat/pages-local-experiment` perustuu ajantasaiseen mainiin `edb4348` (PR #14 yhdistetty). Main tarkistettiin uudelleen ennen toimitusta; uusia päähaaran muutoksia ei ollut. Alla olevat aiempien vaiheiden raportit ovat historiallisia.

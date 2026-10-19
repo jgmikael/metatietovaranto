@@ -102,6 +102,29 @@ def test_export_import_confirmation_and_reset_only_own_key(page,static_site,tmp_
     assert page.evaluate("localStorage.getItem('unrelated.application')")=='preserve'
 
 
+@pytest.mark.parametrize('operation',['import','reset'])
+def test_replacement_reports_pending_and_survives_reload(page,static_site,tmp_path,operation):
+    start(page,static_site);original=stored(page);payload=export(page,tmp_path)
+    payload['products'][0]['metadata']['title']='Palautettu tiedostosta'
+    open_import(page);upload(page,payload)
+    if operation=='reset':replace(page)
+    before=stored(page)
+    expected=payload['products'] if operation=='import' else original['products']
+    # Keep the real persistence lock occupied: a successful state must not leak
+    # from the preceding save while this confirmed replacement is still queued.
+    page.evaluate("""(key)=>{navigator.locks.request(key,()=>new Promise(resolve=>{window.releaseReplacementLock=resolve;}));}""",KEY)
+    page.wait_for_function('typeof window.releaseReplacementLock === "function"')
+    button=page.get_by_role('button',name='Korvaa kokeilu tuodulla aineistolla' if operation=='import' else 'Palauta alkuperäiset esimerkit',exact=True)
+    page.once('dialog',lambda dialog:dialog.accept());button.click()
+    page.wait_for_function('(async()=> (await navigator.locks.query()).pending.length===1)')
+    expect(page.get_by_role('status',name='Paikallisen tallennuksen tila')).to_have_text('Tallennetaan…')
+    assert stored(page)==before
+    page.evaluate('window.releaseReplacementLock()');saved(page)
+    assert stored(page)['products']==expected
+    page.reload();saved(page)
+    assert stored(page)['products']==expected
+
+
 @pytest.mark.parametrize('problem',['invalid-json','version','too-large','duplicate-id','broken-org','validation-claim','oversized-field','wrong-format'])
 def test_invalid_import_is_atomic(page,static_site,tmp_path,problem):
     start(page,static_site);before=stored(page);payload=export(page,tmp_path);open_import(page)
