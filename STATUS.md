@@ -24,6 +24,10 @@ Ei toistettu koko taustapalvelimen 209 testin SHACL-/muunnos-/migraatiosarjaa: t
 
 Käyttäjä vahvisti aiemman julkisen Pages-julkaisun onnistuneen. Tämän haaran kokeilutilaa ei julkaistu tai HTTP-varmennettu julkisessa osoitteessa eikä mainiin yhdistetty. Yhdistämisen jälkeen nykyinen Public Pages demo -workflow julkaisee mainin; tarkista deploy ja Verify published HTTP responses. GitHubin etä-CI-tulos varmistetaan erikseen.
 
+## Toimitustila
+
+Toteutuscommit `fead6c7`, haara `feat/pages-local-experiment` pushattu GitHubiin. `gh pr create --base main --head feat/pages-local-experiment --title 'Pages: selaimessa toimiva Oma kokeilu' --body-file docs/pull-request-own-experiment.md` estyi: `Post https://api.github.com/graphql: Forbidden`. PR:ää ei siis saatu luotua automaattisesti. Valmis kuvaus on docs/pull-request-own-experiment.md; luontilinkki https://github.com/jgmikael/metatietovaranto/pull/new/feat/pages-local-experiment (base main). Ei main-mergeä tai julkista deployta.
+
 ---
 
 # GitHub Pages -esittelydemo (19.10.2026)
