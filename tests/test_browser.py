@@ -417,6 +417,19 @@ def test_technical_package_real_editor_review_publication_and_artifact_urls(page
     draft=created.json();product_id=draft['id'];review_context=None
     try:
         page.goto(base+'/#draft/'+product_id)
+        page.get_by_role('button',name='Muokkaa',exact=True).click()
+        page.get_by_text('Ulkoiset attribuutti- ja todistusjärjestelykatalogit',exact=True).click()
+        import json
+        from test_attribute_semantics import reference
+        catalogue=[reference()]
+        page.get_by_label('Katalogiviittaukset ja niiden alkuperä (JSON)',exact=True).fill(json.dumps(catalogue))
+        page.get_by_role('button',name='Tallenna',exact=True).click()
+        expect(page.get_by_role('heading',name=payload['title'],exact=True)).to_be_visible()
+        page.reload()
+        page.get_by_role('button',name='Muokkaa',exact=True).click()
+        page.get_by_text('Ulkoiset attribuutti- ja todistusjärjestelykatalogit',exact=True).click()
+        assert json.loads(page.get_by_label('Katalogiviittaukset ja niiden alkuperä (JSON)',exact=True).input_value())==catalogue
+        page.get_by_role('button',name='Peruuta',exact=True).click()
         page.get_by_text('Muodosta SHACL-pohjainen kuvauspaketti',exact=True).click()
         page.get_by_label('Generoinnin juurimuodon IRI',exact=True).fill('https://example.org/metatietovaranto/demo/ProductShape')
         page.get_by_role('button',name='Muodosta mapping-ehdotus',exact=True).click()
@@ -452,6 +465,17 @@ def test_technical_package_real_editor_review_publication_and_artifact_urls(page
         assert response.status==200 and response.headers['content-type'].startswith('application/ld+json')
         assert response.text()==package['artifacts']['context.jsonld']['content']
         assert review_page.request.get(base+'/api/v1/products/'+product_id+'/versions/1.0.0').json()['technicalPackage']==package
+        from apps.semantic_reader import resolve_claim,verify_bundle
+        artifacts=package['artifacts']
+        public={record['url']:review_page.request.get(record['url']).body() for record in artifacts.values()}
+        binding=json.loads(public[artifacts['issuer-metadata-binding.json']['url']])
+        metadata=public[artifacts['sd-jwt-type-metadata.json']['url']]
+        assert verify_bundle(metadata,binding['vct#integrity'],public.__getitem__)
+        semantic=resolve_claim(metadata,binding['vct#integrity'],['companyName'],public.__getitem__)
+        assert semantic['propertyIri']=='https://example.org/metatietovaranto/demo/companyName'
+        assert semantic['sourceProfile']['snapshotId']==saved['profileSnapshotId']
+        for name in ('semantic-extension-profile.json','catalogue-coverage.json'):
+            expect(review_page.get_by_role('link',name=name,exact=True)).to_be_visible()
     finally:
         if review_context:review_context.close()
         # Published audit history deliberately remains in the synthetic live demo.

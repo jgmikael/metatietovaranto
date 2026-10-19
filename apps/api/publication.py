@@ -87,6 +87,8 @@ def validation(session,draft):
                         'ruleId':item.get('ruleId')} for item in report.get('results',[])]
             if not report.get('results'):errors.append({'path':'syntheticExample','message':'SHACL-tarkistus ei läpäissyt'})
     if snapshot:errors+=derived_errors(snapshot,draft.content)
+    if draft.content.get('catalogueReferences') and not draft.content.get('technicalPackage'):
+        errors.append({'path':'catalogueReferences','message':'Muodosta tekninen paketti katalogivastaavuuksien SHACL-käyttöyhteyden tarkistamiseksi'})
     errors += package_errors(draft.content,snapshot)
     if draft.content.get('distributions') is not None:
         if snapshot:errors+=distribution_errors(snapshot,draft.content)
@@ -132,6 +134,7 @@ def write_content(session,request,product,draft,data,identity):
     provider=session.get(Organization,data.providerOrganizationId)
     if provider is None:raise HTTPException(422,'Tarjoaja puuttuu')
     body=draft.content|data.model_dump(mode='json')
+    if data.catalogueReferences is None and draft.content.get('catalogueReferences') is not None:body['catalogueReferences']=draft.content['catalogueReferences']
     snapshot=session.get(ProfileSnapshot,data.profileSnapshotId) if data.profileSnapshotId else None
     if data.profileSnapshotId and (snapshot is None or not can_read_snapshot(session,request,snapshot)):
         raise HTTPException(404,'Profiilisnapshotia ei löydy')

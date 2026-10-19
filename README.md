@@ -1,10 +1,16 @@
 # Metatietovaranto — synteettinen demo, vaihe 2H
 
+## 2H:n jatko: attribuuttien semanttiset viittaukset
+
+JSON Scheman `x-term`/`x-mtv-shacl`, SD-JWT Type Metadatan `x-mtv-semantic` ja yhteinen mapping yksilöivät saman SHACL-käyttöyhteyden, alkuperäiset IRI:t ja lähdesnapshotin. Laajennusprofiili 1.0.0, skeema ja mapping löytyvät Type Metadatan omista x-mtv-viitteistä tarkisteineen. Esimerkkikuluttaja lukee yhden väitepolun semantiikan ilman väitearvoja; [sopimus, ajettava esimerkki ja ETSI/EU-vastaavuustaulukko](docs/attribute-semantics.md).
+
+Perus-2H:n PR #12 on nyt mainissa. PR #13:n työhaaraan on tuotu main `9258fff`; PR:n base on vahvistettu `main`-haaraksi. ETSI-alkutekstit ja EU-konsolidointi 11.8.2026 on nyt saatu käyttäjältä ja tarkastettu. [Lähdevertailu ja vastaanotetun asiakirjatietosivun havainnot](docs/pr13-source-comparison.md). Vanhat julkaisut säilyvät muuttumattomina. Katalogiviitteitä voi lisätä **Muokkaa → Ulkoiset attribuutti- ja todistusjärjestelykatalogit** -osiossa. Viitteet tarvitsevat dokumentoidun alkuperän ja normaalin hyväksynnän. 19.10.2026 toimitetun aikajanan ja alkuperäisen asetuksen muutosluettelon arvio on valmis tämän englanninkielisen metatietotehtävän rajauksessa. PL-oikaisun ja tulevien 1.1.2027 muutosten koko tekstit sekä ulkoisen myöntäjän vaatimustenmukaisuus jäävät erikseen tarkistettaviksi; paikallinen laajennus ei väitä standardienmukaisuutta tai lompakkotukea.
+
 ## Vaihe 2H: tekninen kuvauspaketti
 
 SHACL-soveltamisprofiilista voi muodostaa yhteisen JSON-sisältöskeeman, W3C VC:n JSON-LD-kontekstin ja SD-JWT VC:n teknisen kuvauspaketin. [Täsmällinen rajaus, artefaktit ja standardiversiot](docs/phase-2h.md). DCAT-AP-vienti ei kuulu tähän vaiheeseen.
 
-Kokeile ennen yhdistämistä: avaa Codespace haarasta **feat/phase-2h-technical-packages** (New with options → Branch), tai valitse haara nykyisessä Codespacessa ja rakenna uudelleen `docker compose up --build -d --wait`. Säilytä portti 8000 Private-tilassa ja avaa sen Forwarded Address selaimessa. Käynnistyksen automaattinen selainavaus säilyy.
+Kokeile ennen yhdistämistä: avaa Codespace haarasta **feat/phase-2h-attribute-semantics** (New with options → Branch), tai valitse haara nykyisessä Codespacessa ja rakenna uudelleen `docker compose up --build -d --wait`. Säilytä portti 8000 Private-tilassa ja avaa sen Forwarded Address selaimessa. Käynnistyksen automaattinen selainavaus säilyy.
 
 1. Kirjaudu `vero / demo-vero`. Avaa **Omat luonnokset** ja kolmen toimitustavan synteettinen yritystuote. Jos se on jo julkaistu, luo ensin uusi työkopio.
 2. Avaa **Muodosta SHACL-pohjainen kuvauspaketti**. Juurimuoto on `https://example.org/metatietovaranto/demo/ProductShape`. Muodosta mapping-ehdotus ja tarkasta nimi `companyName`, alkuperäinen IRI, xsd:string ja määrä 1…1.
@@ -22,7 +28,7 @@ Vain synteettiseen demokäyttöön. Katalogi ei myönnä todistuksia eikä toteu
 
 ## Kokeile selaimessa ennen yhdistämistä
 
-Avaa [vaiheen 2H uusi Codespace](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2h-technical-packages), valitse haara **feat/phase-2h-technical-packages** ja **Create codespace**. Uusi Codespace pitää main-haaran kokeiludatan erillään. Sovellus, PostgreSQL ja Keycloak käynnistyvät automaattisesti. Selain avautuu automaattisesti tai valitse **PORTS → 8000 → Open in Browser**. Säilytä portin näkyvyys **Private**. Keycloak toimii saman osoitteen `/identity`-polussa; muita portteja ei tarvitse avata.
+Avaa [vaiheen 2H uusi Codespace](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2h-attribute-semantics), valitse haara **feat/phase-2h-attribute-semantics** ja **Create codespace**. Uusi Codespace pitää main-haaran kokeiludatan erillään. Sovellus, PostgreSQL ja Keycloak käynnistyvät automaattisesti. Selain avautuu automaattisesti tai valitse **PORTS → 8000 → Open in Browser**. Säilytä portin näkyvyys **Private**. Keycloak toimii saman osoitteen `/identity`-polussa; muita portteja ei tarvitse avata.
 
 Osoite on `https://<codespacen-nimi>-8000.app.github.dev`; täsmällinen oman ympäristön osoite näkyy PORTS-näkymässä. Älä vaihda portin sisäistä protokollaa HTTPS:ksi. [Verkkodemon ohje](docs/verkkodemo.md) kertoo pysäyttämisestä ja kiintiöistä.
 
@@ -65,7 +71,7 @@ Tarvitset Docker Desktopin käynnissä Linux-konteilla, Compose v2:n ja Gitin. K
 
 ```powershell
 git fetch origin
-git switch feat/phase-2h-technical-packages
+git switch feat/phase-2h-attribute-semantics
 docker compose up --build
 ```
 
@@ -91,7 +97,7 @@ docker compose stop app
 docker compose exec -T db sh -c 'pg_dump -U demo -d catalog > /tmp/before-update.sql'
 docker compose cp db:/tmp/before-update.sql ./before-update.sql
 git fetch origin
-git switch feat/phase-2h-technical-packages
+git switch feat/phase-2h-attribute-semantics
 docker compose up --build -d --wait
 docker compose exec -T app .venv/bin/alembic current
 ```
@@ -224,7 +230,7 @@ Testit käyttävät oikeaa PostgreSQL:ää ja tuhoavaa erillistä `catalog_test`
 
 ```bash
 docker compose exec -T db createdb -U demo catalog_test
-.venv/bin/pytest tests/test_api.py tests/test_publication.py tests/test_profiles.py tests/test_semantic_validation.py tests/test_derived_validation.py tests/test_distributions.py tests/test_conversion.py tests/test_technical_packages.py tests/test_lifecycle.py tests/test_auth.py tests/test_migrations.py tests/test_public_url.py -q
+.venv/bin/pytest tests/test_api.py tests/test_publication.py tests/test_profiles.py tests/test_semantic_validation.py tests/test_derived_validation.py tests/test_distributions.py tests/test_conversion.py tests/test_technical_packages.py tests/test_attribute_semantics.py tests/test_lifecycle.py tests/test_auth.py tests/test_migrations.py tests/test_public_url.py -q
 ```
 
 Älä aja tätä testikantaa käyttäviä pytest-ajoja rinnakkain. `TEST_DATABASE_URL` voi muuttaa yhteysosoitetta mutta kannan pitää olla `catalog_test`. Selaintestit käyttävät erikseen käynnistettyä demoa ja oikeaa Keycloak-kirjautumista:
@@ -234,6 +240,6 @@ docker compose exec -T db createdb -U demo catalog_test
 BROWSER_BASE_URL=http://localhost:8000 .venv/bin/pytest tests/test_browser.py -q
 ```
 
-Valmista paikallista Chromiumia käytetään automaattisesti; `CHROMIUM_EXECUTABLE` voi nimetä sen. Selaintestit luovat yksilöidyn testituotteen; julkaisutesti jättää muuttumattoman synteettisen julkaisun historiaan. Alkuperäisiä kolmea demotuotetta ei muuteta. Ilman `BROWSER_BASE_URL`-asetusta kaksitoista selaintestiä ohitetaan. Täysi ajo: `BROWSER_BASE_URL=http://localhost:8000 .venv/bin/pytest -q`. GitHub Actionsin etätulos varmistetaan erikseen.
+Valmista paikallista Chromiumia käytetään automaattisesti; `CHROMIUM_EXECUTABLE` voi nimetä sen. Selaintestit luovat yksilöidyn testituotteen; julkaisutesti jättää muuttumattoman synteettisen julkaisun historiaan. Alkuperäisiä kolmea demotuotetta ei muuteta. Ilman `BROWSER_BASE_URL`-asetusta kolmetoista selaintestiä ohitetaan. Täysi ajo: `BROWSER_BASE_URL=http://localhost:8000 .venv/bin/pytest -q`. GitHub Actionsin etätulos varmistetaan erikseen.
 
 Tässä pilviympäristössä Docker-build käyttää alustan proxy-/CA-reittiä: `./scripts/cloud-build.sh`, sitten `docker compose up -d --no-build --wait`. Tavallisen Docker Desktopin komento on yllä oleva `docker compose up --build`. Kirjoitussuojatun kotihakemiston yhteydessä aseta `UV_CACHE_DIR=/workspace/.cache/uv`, `npm_config_cache=/workspace/.cache/npm`, `DOCKER_CONFIG=/workspace/.cache/docker`. Nämä eivät kuulu Windowsin normaaliin käynnistykseen.

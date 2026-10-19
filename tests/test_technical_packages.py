@@ -90,7 +90,7 @@ def test_deterministic_contents_actual_jsonld_processor_shacl_and_immutable_sour
     with pytest.raises(Exception):jsonld.expand({'@context':'https://evil.example/unknown'},options={'documentLoader':loader})
     metadata=artifact(one,'sd-jwt-type-metadata.json');check_type_metadata(metadata)
     assert metadata['claims'][0]['path']==['companyName'] and metadata['claims'][0]['sd']=='always'
-    assert set(metadata)=={'vct','name','description','claims'}
+    assert set(metadata)=={'vct','name','description','claims','x-mtv-profile','x-mtv-mapping','x-mtv-schema'}
     assert one['artifacts']['context.jsonld']['url'].startswith('https://catalog.example.org/id/technical-packages/')
 
 

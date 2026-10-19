@@ -1,3 +1,120 @@
+# PR #13 — lähdevertailun päätös (19.10.2026)
+
+Alkuperäisen asetuksen Relationship between documents -copy-paste on nyt arvioitu ja lukittu käyttäjätoimituksen käsin rakenteistettuna jäljennöksenä lähdeaineistoon. **PR #13:n EN-metatietoja ja teknisiä kuvauspaketteja koskeva lähdevertailu on päätetty ilmoitetuin rajauksin.** Ei havaittua tarvetta sovelluskoodin, attribuuttimallin tai relaatiomigraatioiden muutokseen. Main **9258fff** sisältyy työhaaraan; ei yhdistämistä.
+
+- Oikaisu **32025R1569R(01)** on luettelossa kielimerkinnällä **PL**. Koko tekstiä ei saatu, eikä sen sisältöä tai PL-version vaatimustenmukaisuutta väitetä arvioiduksi. EN-lähde säilyy.
+- **EU 2026/1735**: seitsemän luettelon 11.8.2026 muutosta kohdistuu 3(2):een, 4 artiklaan ja liitteisiin I/II/IV. Myöntäjän, revokaation ja ulkoisen tarkistuspalvelun vastuut säilyvät erillisinä. Katalogin withdrawn ei peru myönnettyjä todistuksia.
+- **9(4) ja uusi 9(2a), 1.1.2027**: tulevat muutokset erotetaan nykyisestä konsolidoinnista. Koko sanamuoto jää tarkistettavaksi ennen autenttisen lähteen integraatiota; sitä ei päätellä pelkistä muutosotsikoista.
+- EN-konsolidoinnin 11 artiklan mukaan 6–9 artikloja sovelletaan **19.8.2026** alkaen. Konsolidoinnin 11.8.2026 päivää ei käytetä kaikkien säännösten soveltamispäivänä.
+
+Generaattori **1.1.1**, oma laajennus **1.0.0** ja IETF **draft-19** säilyvät. Lähdepinnit ja uuden paketin raportti tarkentuvat: yleinen luettelon puuttumishavainto korvataan tunnistetun PL-oikaisun ja tulevan 9 artiklan lukemattomien tekstien havainnoilla. Niitä ei esitetä luettuina tai tämän rajatun metatieto-PR:n yhdistämisesteinä. `status=partial`, `conformanceClaim=false`; ETSI:n draft-13-ero ja ulkoisen myöntäjän velvoitteet pysyvät raportissa. Vanhoja julkaisuja, hyväksyntöjä, profiilisnapshotteja tai raportteja ei kirjoiteta uudelleen. [Päätös, vastaavuudet ja lähderajat](docs/pr13-source-comparison.md).
+
+Riippumaton EUR-Lex- ja EU Publications/Cellar-haku estyi edelleen 403:een. Ei kaikenkattavaa säädös-/kieliversio-/ETSI-vaatimustenmukaisuusarviota. PL-oikaisun ja koko tulevan muutossäädöksen sanamuotojen lukua ei väitetä tehdyksi. `currentAsOfReviewDate=null` säilyy yleisen ajantasaisuuden kohdalla; rajattu päätös on `reviewClosure`-osiossa.
+
+## Tässä viimeistelyssä suoritetut tarkistukset
+
+- Koko README/CI:n 13 tiedoston API-/PostgreSQL-/migraatiosarja: **209 passed, 4 warnings in 355.05s (0:05:55)**. Ei epäonnistuneita tai ohitettuja. Oikeudet/CSRF, hyväksynnän mitätöityminen, julkaisuimmutabiliteetti, JSON-LD/RDF/SHACL, attribuuttiannotaatiot, tarkisteketju sekä vanhan/tyhjän kannan ja toistuvien migraatioiden kokeet mukana. Testit käyttivät vain erillistä catalog_test-kantaa.
+- Oikea Chromium + Keycloak uudelleen rakennettua ja käynnistettyä Docker-sovellusta vasten: **13 passed, 1 warning in 115.88s (0:01:55)**. Tallennus/uudelleenavaaminen, organisaatiorajat, riippumaton hyväksyntä, julkaisu ja julkiset artefaktit läpäisivät. **222 eri pytest-testiä** yhteensä; varoitukset ovat Starlette/httpx- ja RDFLib-deprekaatioita.
+- Uuden lähderegressiotestin lopullinen kohdennettu ajo: **1 passed, 1 warning in 0.21s**. Tarkistaa luettelon tarkisteen, alkuperän, PL-rajauksen, seitsemän nykyistä ja kaksi tulevaa muutosriviä, 19.8.2026 soveltamispäivän sekä niiden päätymisen generoituun raporttiin. Sama testitapaus kuuluu 209 testiin, eikä sitä lasketa lisätestiksi kokonaismäärään.
+- `npm run build --prefix apps/web`: läpäisi (Vite 1,59 s). `bash scripts/cloud-build.sh` läpäisi TLS-varmennuksen säilyttäen; viimeinen image **sha256:6c7b957f54486509745c2369ffed1a0b923eb01689dcc41241665047ffa80177**. `docker compose up -d --no-build --wait`: app, db ja Keycloak healthy. Käynnissä olevan sovelluksen sources.json- ja muutosluettelotiedoston SHA:t vastaavat checkoutia.
+- Ennen selaintestien uusia synteettisiä julkaisuja **13 catalog-kannan metatietotaulun kaikki rivit ja Alembic-head 0005_lifecycle säilyivät tarkalleen ennallaan uudelleenkäynnistyksessä**. Ei uutta relaatiomigraatiota tai fixtureiden palautusta; live-kantaa ei tyhjennetty.
+- Julkinen HTTP-yhteensopivuuskoe selaintestien jälkeen: **88 julkaisuversiota luettavissa**, **8 vanhan generaattorin pakettia / 78 artefaktia** alkuperäisillä tavuilla ja SHA-arvoilla. Versioiden technicalPackage-sisällöt vastasivat tallennettuja muuttumattomia sisältöjä.
+- Uuden paketin toimintakoe: kaikki **12 julkaistua artefaktia** palautuivat oikeilla mediatyypeillä ja tarkisteilla. Julkinen catalogue-coverage.json sisälsi täsmälleen uudet lähdepinnit ja rajatun päätöksen. Oikea `examples/semantic_consumer.py` palautti companyName-väitteen alkuperäisen ominaisuus-IRI:n, PropertyShapen ja lähdesnapshotin ilman väitearvoja tai JWT:n kryptografista tarkistusta.
+- Main **9258fff** sisältyy työhaaraan; PR #13:n GitHub-mergeviitteen ensimmäinen vanhempi oli sama main, joten base on teknisesti vahvistettu. `git diff --check` läpäisi. Ei automaattista yhdistämistä.
+
+
+## Ajamattomat tai rajauksen ulkopuolella
+
+Riippumaton EUR-Lex-verkkovertaus, PL-oikaisun ja tulevan 9 artiklan koko tekstit eivät olleet saatavilla (403). Windows Docker Desktopia, uuden Codespacen luontia/openBrowseria/Private-portin ajonaikaista tilaa, tuotanto-HTTPS:ää ja GitHub Actionsin etätulosta ei varmistettu. Tavallista docker compose up --build -reittiä ei ajettu tässä täydennyksessä; pilvirakennus ja Compose-käynnistys ajettiin yllä kuvatuilla komennoilla. Ei myöntämistä, allekirjoitusta, lompakkotestiä tai täydellistä ETSI-/EU-vaatimustenmukaisuusarviota.
+
+## Toimitus ja käyttäjän seuraava askel
+
+Lähdevertailun viimeistelycommit **bc85164** on työnnetty PR #13:n nykyiseen haaraan. `gh pr edit 13 --body-file docs/pull-request-attribute-semantics.md` palautti myös viimeistelyn jälkeen **Forbidden**, joten GitHubin ylin kuvaus ei päivittynyt automaattisesti. Tämä toimitusmerkintä on erillinen dokumentaatiotäydennys; sovellusta tai lähdepinnejä ei muuteta sen vuoksi. Muutokset ovat olemassa olevassa PR #13:ssa. Uutta PR:ää tai base-vaihtoa ei tarvita. GitHubin API on palauttanut Forbidden; valmis PR-kuvaus on `docs/pull-request-attribute-semantics.md`, eikä kuvauskentän päivitystä väitetä onnistuneeksi. GitHub Actionsin lopullinen etätulos on tarkistettava käyttöliittymässä. Yhdistäminen jää käyttäjälle, kun rajaus on arvioitu ja GitHubin tarkistukset ovat vihreät. Main-haaraa ei muuteta.
+
+---
+
+Alla on tarkistushistoria ennen viimeisen copy-paste-aineiston saamista. Sen avoin asiakirjasivu-/oikaisuluettelopyyntö on korvattu yllä olevalla rajatulla päätöksellä.
+
+# PR #13 — asiakirjatietoliitteen tarkistus (19.10.2026)
+
+Käyttäjän `Document Information.pdf` on vastaanotettu, luettu paikallisella OCR:llä ja sen tietosivu tarkastettu kuvana. Alkuperäinen kopio, koko ja SHA-256 on lukittu lähdeaineistoon. Aikajanassa viimeisin esitetty konsolidointi on **11.8.2026**, ja muutosviite **EU 2026/1735** vastaa aiempaa tekstikopiota.
+
+Liite näyttää **konsolidoidun tekstin** tiedot (02025R1569-20260811). Relationship between documents sisältää vain linkin alkuperäiseen asetukseen 32025R1569; sen muutos-/oikaisurekisteri ei ole esillä. Nyt vahvistettu viimeisin näytetty versio erotetaan todentamattomasta oikaisujen puuttumisesta. Generoidun raportin havainto tarkentuu `EU_CORRIGENDUM_STATUS_UNVERIFIED`-koodiksi. ETSI draft-13/draft-19 -ero ja ulkoisen myöntäjän vastuut säilyvät. [Täsmälliset havainnot ja jäljellä oleva tarkistus](docs/pr13-source-comparison.md).
+
+**Jäljellä ennen lopullista yhdistämissuositusta:** alkuperäisen asetuksen asiakirjatietosivun muutos-/oikaisusuhteet. Avaus liitteen sivun 1 **Access initial legal act** -linkistä tai suoraan CELEX:32025R1569-sivulta. Ei tarvetta toimittaa samoja ETSI-/konsolidointitekstejä uudelleen.
+
+## Asiakirjatietoliitteen täydennyksen tarkistukset 19.10.2026
+
+- `pytest tests/test_technical_packages.py tests/test_attribute_semantics.py -q`: **61 passed, 1 warning in 55.00s**. Ei epäonnistuneita tai ohitettuja. Mukana oikea paikallinen JSON-LD/RDF/SHACL, attribuuttien yhdenmukaisuus, pakettien tarkisteketju sekä uusi asiakirjatietokopion pinnaus ja generoituun raporttiin päätyvä täsmällinen näyttöraja. Varoitus koskee Starlette/httpx-deprekaatiota.
+- `git fetch origin main`: main on edelleen **9258fff** ja sisältyy työhaaraan. Työhaara vastasi etähaaraa ennen tätä lisäystä; ei muiden muutosten ylikirjoitusta. `git diff --check` läpäisi.
+- Tämä täydennys muuttaa lähdepinnit, raportin syötteet, testit ja dokumentaation. Sovelluskoodia, käyttöliittymää, tietokantaskeemaa tai käynnistysasetuksia ei muutettu. Ei uutta migraatiota. Muuttumattomia julkaisuja tai demokantaa ei päivitetty.
+- Koko API-/migraatiosarjaa, selaintestejä, web-buildia, Docker-buildia tai toimintakokeilua ei toistettu tässä liitetäydennyksessä. Alla oleva **207 API-/migraatiotestin ja 13 selaintestin** läpäisy sekä build-/säilymiskokeet ovat edellisen toteutusmuutoksen tuloksia, eivät uusia ajoja. Uusi 61 testin ajo menee osittain niiden kanssa päällekkäin, joten lukuja ei lasketa yhteen.
+- Avoin sisältötarkistus: alkuperäisen asetuksen muutos-/oikaisusuhteet ja mahdolliset niistä löytyvät uudet tekstit. GitHub API palauttaa edelleen **Forbidden**; PR:n kuvaus ja etätarkistusten tila eivät päivity tai varmistu tämän ympäristön kautta. Kuvausteksti on repositoriossa `docs/pull-request-attribute-semantics.md`. Ei automaattista yhdistämistä.
+
+---
+
+Alla on edellisen sisältövertailun tarkistushistoria. Sen asiakirjatietosivun puuttumista koskeva yleinen tila on tarkentunut yllä.
+
+# PR #13 — toimitettujen alkutekstien vertailu (18.10.2026)
+
+Käyttäjältä saatu kolme pyydettyä PDF:ää: ETSI TS 119 472-1 V1.2.1 (2026-02), ETSI TS 119 478 V1.1.1 (2026-01) ja EU 2025/1569:n konsolidointi 11.8.2026 / 001.001. Etusivut, yksilöidyt kohdat/artiklat ja EU-tekstin muutosmerkit luettu paikallisesti. Alkuperäiset kopiot ja SHA-256:t lukittu fixtures/catalog-standards/originals/ ja sources.json. Ei väitettä riippumattomasta verkkovertauksesta tai koko ETSI-/EU-vaatimustenmukaisuudesta. [Uusi lähdevertailu ja kohdan 4 asiakirjatietosivun ohje](docs/pr13-source-comparison.md).
+
+Generaattori 1.1.1 korjaa puuteraportin: luettuja tekstejä ei enää merkitä kokonaan puuttuviksi. Raportti erottaa vielä avoimen EU-muutosten ajantasaisuuden, ETSI:n SD-JWT draft-13 -viitteen ja sovelluksen draft-19:n eron sekä ulkoisen myöntäjän vct-löydettävyyden/integrityn ja profiilin todentamisen. ETSI 478:n attributeIdentifier/semanticDataSpecification/schemaDistribution-vaatimukset sekä EU art.7/8:n tietovaatimukset ja ulkoiset vastuut on lisätty koneelliseen peitto-/puuteraporttiin. IETF-profiilia tai semanttista laajennusta ei vaihdeta automaattisesti; suojaus/myöntäminen jää ulkoiselle palvelulle. Vanhoja muuttumattomia julkaisuja tai snapshotteja ei kirjoiteta uudelleen.
+
+**Jäljellä:** konsolidoinnin etusivu luettelee EU 2026/1735:n, mutta mahdolliset 11.8.2026 jälkeiset muutokset/oikaisut ja uusin versio pitää vielä varmistaa EUR-Lexin Document information / Asiakirjan tiedot -sivulta. Artiklat 7/8 ovat annetussa tekstissä B-merkittyjä. Myöhemmässä integraatiossa on huomioitava M1:n liite IV:n mukautukset ETSI 119 478:aan. Ei vielä lopullista yhdistämissuositusta.
+
+## Todella ajettu korjatulle toteutukselle
+
+- Mainin 9258fff sisältävän korjatun toteutuksen koko 13 tiedoston API-/PostgreSQL-/migraatiosarja: **207 passed, 4 warnings in 357.80s (0:05:57)**. Ei epäonnistuneita tai ohitettuja. Mukana aiemmat 205 testiä sekä kaksi uutta lähdekopioiden pinnaus-/tarkiste- ja puuteraporttitestiä.
+- Kohdennettu paketti-/attribuuttisarja: **60 passed, 1 warning in 51.17s**; nämä sisältyvät täyteen 207 testin ajoon.
+- Oikea Chromium + Keycloak, korjattua Docker-sovellusta vasten: **13 passed, 1 warning in 116.18s (0:01:56)**. Tallennus/uudelleenavaaminen, eri käyttäjän hyväksyntä, julkaisu, julkiset artefaktit ja semantiikan lukija säilyivät.
+- **220 eri pytest-testiä** yhteensä. Starlette/httpx- ja RDFLib-deprekaatiovaroitukset eivät ole ohituksia.
+- Web-build läpäisi. Docker-image rakennettiin varmennukset säilyttävällä scripts/cloud-build.sh-reitillä; `docker compose up -d --no-build --wait` käynnisti app/db/Keycloakin healthy-tilaan. Tavallista `docker compose up --build` -reittiä tai Windows Docker Desktopia ei ajettu tässä täydennyksessä.
+- **13 oikean catalog-kannan metatietotaulua säilyi tarkalleen ennallaan uudelleenkäynnistyksen yli** ennen uusia synteettisiä selainjulkaisuja. Ei uutta relaatiomigraatiota; aiemmat migraatiot tarkistettiin erillisessä catalog_test-kannassa. Demokantaa ei tyhjennetty.
+- Julkinen HTTP-yhteensopivuuskoe: **83 julkaisuversiota luettavissa**, **8 vanhan generaattorin pakettia / 78 artefaktia** tavuntarkasti alkuperäisillä SHA-arvoilla. Uusi lähdetarkistus ei kirjoittanut vanhojen julkaisujen raportteja uudelleen.
+- `git diff --check` läpäisi. PR #13:n GitHub-mergeviite vahvisti basen mainiksi 9258fff; käyttäjä vahvisti saman. Main-haaraa ei muutettu eikä PR:ää yhdistetty.
+- Ajamattomat: asiakirjatietosivun jälkeiset mahdolliset lisäsäädösten tarkistukset, Windows, uuden Codespacen luonti/Private-portin ajonaikainen tila, tuotanto-HTTPS ja GitHub Actionsin etätulos. Ei allekirjoittamista, lompakkoa, EU-katalogirekisteröintiä tai koko ETSI-profiilin vaatimustenmukaisuusarviota.
+
+
+## PR ja toimitus
+
+Main 9258fff sisältyy työhaaraan. Käyttäjä vahvisti PR #13:n baseksi mainin; GitHubin refs/pull/13/merge-viitteen ensimmäinen vanhempi 9258fff varmisti tämän myös teknisesti. Basea ei tarvitse vaihtaa uudelleen. Sovelluksen UI tai relaatiomigraatiot eivät muutu; generaattorin lähdepinnit ja puuteraportti muuttuvat, joten Docker-image rakennettiin ja käynnistettiin uudelleen. Normaalin restartin tiedonsäilyminen tarkistettiin ennen uusia synteettisiä selaintestijulkaisuja.
+
+Toteutuscommit **e79b453** (generaattori 1.1.1) on työnnetty PR #13:n nykyiseen haaraan. `gh pr edit 13 --body-file docs/pull-request-attribute-semantics.md` yritti päivittää kuvauksen mutta estyi **Forbidden**-vastaukseen: GitHubin kuvauskenttä ei siis päivittynyt automaattisesti. Ajantasainen valmis kuvausteksti on repositoriossa, ja haara-/tiedostomuutokset näkyvät olemassa olevassa PR:ssä. PR #13:n base on main, joten sitä ei tarvitse vaihtaa uudelleen. Main 9258fff säilyi ennallaan, yhdistämistä ei tehty. PR jää avoimeksi asiakirjatietosivun loppuvarmistusta varten.
+
+---
+
+Alla ovat aiempien tarkistusyritysten historiatiedot. Niiden kaikkien kolmen alkutekstin puuttumista ja vanhaa PR-basea koskevat tilat on korvattu yllä olevilla havainnoilla.
+
+# PR #13 — main-pohjan tarkistus ja estynyt normatiivinen vertailu (18.10.2026)
+
+PR #12 on yhdistetty mainiin `9258fffb4633c90240eddba1c09b6b135c3fb057`. Main on tuotu PR #13:n työhaaraan `feat/phase-2h-attribute-semantics` merge-commitissa `339824ece0127f13cc17494efc13ef7d0c030ba0`. Main-haaraa ei muutettu eikä PR #13:a yhdistetty. Main-pohjan päivitys ei muuttanut sovelluskoodia. Päivitettiin tarkistuksen loki, dokumentaatio ja vanhat pohjahaara-/export-tilaviittaukset.
+
+**Normatiivinen tarkistus ei ole valmis:** molempien ETSI-PDF:ien ja EU 2025/1569:n alkuperäistekstin noudot palauttivat edelleen HTTP 403:n. Myös viralliset EU:n CELEX- ja data.europa.eu-vaihtoehdot palauttivat 403:n. Alkutekstien tarkisteita, voimassa olevia muutoksia tai vaatimustenmukaisuutta ei väitetä tarkistetuiksi. TS11:n 1.0.1 kolme lähdetiedostoa verrattiin uudelleen virallisen Git-commitin täsmällisiin tavuihin/lukittuihin SHA-arvoihin; upstream HEAD `ee91a294c833af5188726fd8c302c641212192aa` on ennallaan. TS11:n V0.0.7-luonnosviite ei korvaa ETSI V1.1.1:tä.
+
+[Tarkistusyrityksen täsmällinen raportti ja tarvittavat lähdetiedostot](docs/pr13-normative-review.md); koneellinen loki fixtures/catalog-standards/review-attempt-2026-10-18.json. Alkuperäisiä sources.json-lukkoja tai generaattorin syötteitä ei muutettu, vanhoja paketteja ei generoitu uudelleen. Ilman alkutekstejä ei tehty arvauksiin perustuvia sovelluskoodin muutoksia.
+
+## Tässä main-päivityksessä todella ajettu
+
+- Koko README/CI:n 13 tiedoston API-/PostgreSQL-/migraatiosarja: **205 passed, 4 warnings in 344.76s (0:05:44)**. Ei epäonnistuneita tai ohitettuja. Mukana oikeudet/CSRF, hyväksynnän mitätöinti, muuttumattomat julkaisut, tyhjä/vanha kanta ja toistuvat migraatiot, todellinen JSON-LD/RDF/SHACL, uusi WE BUILD -aineistokoe, attribuuttiannotaatiot sekä tarkisteketju.
+- Oikea Chromium + Keycloak -selainajo käynnistettyä demoa vasten: **13 passed, 1 warning in 114.18s (0:01:54)**. Mukana tallennus/uudelleenavaaminen, riippumaton hyväksyntä/julkaisu, julkiset artefaktit ja semantiikan lukija. Vain erillinen API-sarja käyttää tyhjennettävää catalog_test-kantaa; live-katalogia ei nollattu.
+- Yhteensä **218 eri pytest-testiä**. Starlette/httpx- ja RDFLib-deprekaatiovaroitukset eivät ole ohituksia.
+- `npm run build --prefix apps/web`: läpäisi (Vite 1,13 s). Käynnissä olevan Docker-sovelluksen **20 API-/lukijalähdetiedoston** SHA-256:t vastaavat checkoutia, ja **3 web-build-tiedoston** SHA-256:t vastaavat tuoretta paikallista buildia. Selainajo testasi näin nykyisiä sovellustavuja, ei aiempaa erilaista versiota.
+- `git merge-base --is-ancestor origin/main HEAD`: läpäisi mainin 9258fff sisältävällä työhaaralla. `git diff --check` ja tarkistuslokin JSON-jäsennys läpäisivät.
+- Ei uutta tietokantamigraatiota tai sovelluskoodimuutosta. Docker-imagea/compose-käynnistystä ei rakennettu uudelleen tässä dokumentaatio-/pohjapäivityksessä; päällä olevien palveluiden vastaavuus varmistettiin yllä. Windows Docker Desktopia, uuden Codespacen luontia/Private-portin tilaa, tuotanto-HTTPS:ää tai GitHub Actionsin etätulosta ei ajettu tässä ympäristössä.
+- **Ajamattomat sisältötarkistukset:** pyydettyjen ETSI-alkutekstien kohta-/kenttävertailu, EU-asetuksen ajantasaisen konsolidoidun tekstin ja myöhempien muutosten/oikaisujen vertailu sekä niiden perusteella mahdollisesti tarvittavat koodikorjaukset. Näitä ei korvaa yllä oleva tekninen läpäisy.
+
+
+## Jäljellä ja toimitus
+
+- ETSI TS 119 472-1 V1.2.1 ja TS 119 478 V1.1.1 -PDF:t, EU 2025/1569:n ajantasainen konsolidoitu teksti tai alkuperäinen ja muutossäädökset sekä EUR-Lexin muutos-/oikaisutiedot tarvitaan sisältövertailun jatkamiseen. Ei vielä yhdistämissuositusta.
+- GitHubin refs/pull/13/merge-viitteen base-vanhempi oli 8bc37dc (vanha 2H-haara). Base-vaihto mainiksi yritettiin REST PATCH /pulls/13 -pyynnöllä; **Forbidden**. Käyttöliittymässä on varmistettava **PR #13 → Edit → base: main**. Paikallinen main-pohja ja PR:n kohdehaara eivät ole sama asetus.
+- Main-integrointi **339824e** ja tarkistusraportti **b9f2d68** on työnnetty nykyiseen PR #13:n haaraan. REST PATCH /pulls/13 -pyynnöllä yritettiin päivittää sekä `base: main` että valmis kuvausteksti: **Forbidden**. GitHubin base- tai kuvauskenttää ei siis ole päivitetty tämän työympäristön kautta; base pitää tarkistaa/vaihtaa ja ajantasainen docs/pull-request-attribute-semantics.md kopioida haluttaessa kuvauskenttään käsin. Koodi-/dokumentaatiomuutokset näkyvät olemassa olevassa PR:ssä. Main-haara säilyi commitissa 9258fff. Normatiivinen lähdevertailu odottaa yllä lueteltuja tiedostoja, eikä PR:ää yhdistetty.
+
+---
+
+Alla ovat aiempien vaiheiden ja tarkistusten historiatiedot. Niiden vanhat main-/PR-pohjat ja puuttuvan exportin tilat eivät korvaa yllä olevaa nykytilaa.
+
 # 2H:n aineistokokeen täydennys — WE BUILD 0.0.2 (18.10.2026)
 
 Käyttäjä toimitti alkuperäisen Turtle-exportin, profiilin <https://iri.suomi.fi/model/webcor/> ja version 0.0.2. Tiedosto on lukittu muuttamattomana `fixtures/tietomallit/webcor-0.0.2/original.ttl`: **29 811 tavua**, **429 kolmikkoa**, SHA-256 **2ad4331272558bb541b7804f194a74e261d8313985554015ccc4e23785286133**. Tiedoston profiili-/versiotiedot täsmäävät ilmoitukseen. Alkuperä on käyttäjän ilmoittama alustalta ladattu tiedosto; riippumatonta verkkovertausta ei väitetä tehdyksi (403). Provenienssi, raportti ja erillisen testiprojektion muutosluettelo/tarkiste tallennettu.
@@ -14,15 +131,58 @@ Erillinen paikallinen synteettinen Person/familyName-projektio lisää xsd:strin
 - Sovelluskoodia, skeemaa, UI:ta tai käynnistysasetuksia ei muutettu. Web-buildia, Docker-imagea, selaintestejä tai demokannan restartia ei ajettu uudelleen tässä testi-/dokumentaatiotäydennyksessä. Aiemmat tulokset ovat alla historiassa; niitä ei lasketa uusiksi ajoiksi. catalog-kantaa ei tyhjennetty, API-testit käyttävät catalog_test-kantaa.
 - Windowsin, uuden Codespacen ja GitHub Actionsin etätulosta ei varmistettu tässä ympäristössä. Ei allekirjoittamista tai lompakkotestausta.
 
+## Yhteensopivuus jatkohaaraan
+
+Perus-2H:n commit 8bc37dc tuotu attribuuttisemantiikan haaraan (PR #13). Myös paikallisen testiprojektion annotaatioissa ominaisuus-IRI erotetaan PropertyShapesta ja profiiliviite säilyy paikallisen testin viitteenä; sitä ei nimetä alkuperäiseksi webcor 0.0.2:ksi. Jatkohaaran paketti-/attribuuttisemantiikan sarja: **58 passed, 1 warning in 50.08s**. Ei epäonnistuneita tai ohitettuja. Mukana kaikki 42 pakettitestiä (myös 8 uutta aidon aineiston tapausta) sekä 16 attribuuttisemantiikan testiä; uusi testi varmistaa paikallisen projektion lähde-identiteetin ja alkuperäisen ominaisuus-/PropertyShape-IRI:n eron. Tämä ei ole uusi täysi API-/migraatioajo tässä jatkohaarassa, eikä päällekkäisiä testejä lasketa uutena kokonaismääränä.
+
 ## PR-tilanne
 
 GitHubin git-viitteistä tarkistettiin käyttäjän avaamat **PR #12** (perus-2H) ja **PR #13** (attribuuttisemantiikka). Tämä koe täydentää PR #12:n aiemmin avoimen aineistovaatimuksen toimeksiannon sallimalla tavalla: koko aineiston raja raportoidaan ja erillinen rajattu tapaus testataan. Se ei väitä koko WE BUILD 0.0.2:n generointia tuetuksi. PR #12:n vaadittujen GitHub-tarkistusten ja katselmoinnin on edelleen läpäistävä. PR #13:n ETSI-/EU-alkutekstitarkistus jää avoimeksi.
 
-Toteutuscommit **9420d05** on työnnetty haaraan `feat/phase-2h-technical-packages`; olemassa oleva [PR #12](https://github.com/jgmikael/metatietovaranto/pull/12) saa nämä muutokset automaattisesti. PR:n kuvausta yritettiin päivittää sekä `gh pr edit 12 --body-file docs/pull-request.md` -komennolla (GraphQL) että REST PATCH /pulls/12 -pyynnöllä: molemmat estyivät **Forbidden**-vastaukseen. **Kuvaustekstiä ei ole päivitetty GitHubissa**: kopioi ajantasainen docs/pull-request.md olemassa olevan PR:n ensimmäisen kuvauksen Edit-kenttään. Main-haaraa ei muutettu. Pohjamuutos tuodaan myös jatkohaaraan/PR #13; se ei sulje jatkon normatiivisten alkutekstien tarkistuspuutetta.
+Toteutuscommit **9420d05** on työnnetty haaraan `feat/phase-2h-technical-packages`; olemassa oleva [PR #12](https://github.com/jgmikael/metatietovaranto/pull/12) saa nämä muutokset automaattisesti. PR:n kuvausta yritettiin päivittää sekä `gh pr edit 12 --body-file docs/pull-request.md` -komennolla (GraphQL) että REST PATCH /pulls/12 -pyynnöllä: molemmat estyivät **Forbidden**-vastaukseen. **Kuvaustekstiä ei ole päivitetty GitHubissa**: kopioi ajantasainen docs/pull-request.md olemassa olevan PR:n ensimmäisen kuvauksen Edit-kenttään. Main-haaraa ei muutettu. Pohjamuutos on yhdistetty ja työnnetty myös jatkohaaraan/PR #13 commitissa **96454b9**, ja sen 58 kohdennettua testiä läpäisivät. PR #13:n kuvausta yritettiin päivittää `gh pr edit 13 --body-file docs/pull-request-attribute-semantics.md` -komennolla: **Forbidden**. Myös sen ajantasainen kuvaus pitää kopioida tiedostosta PR:n kuvauskenttään käsin. Aineistokoe ei sulje jatkon normatiivisten alkutekstien tarkistuspuutetta.
 
 ---
 
-Seuraavat ovat alkuperäisen 2H-toimituksen historiatietoja ennen yllä olevaa aineistotäydennystä. Niiden aiempi puuttuvan exportin tila on korvattu yllä olevalla tuloksella.
+Seuraavat ovat aiempien 2H-toimitusten historiatietoja ennen yllä olevaa aineistotäydennystä. Niiden aiempi puuttuvan exportin tila on korvattu yllä olevalla tuloksella. Jatko-PR:n ETSI-/EU-alkutekstitarkistus säilyy avoimena.
+
+# Vaiheen 2H jatko — attribuuttien semanttiset viittaukset (18.10.2026)
+
+Erillinen työhaara `feat/phase-2h-attribute-semantics`, pohja `feat/phase-2h-technical-packages` (`ace80e3`). Uudelleen tarkistettu origin/main on `ac002ad` (2G); 2H ei vielä sisälly päähaaraan. Tämä jatko on tarkastettava erillisenä PR:nä 2H-haaraa vasten ja siirrettävä main-pohjaiseksi vasta pohjan yhdistämisen jälkeen. Aiemman tehtävän historiatiedot ovat alempana.
+
+Toteutus: generaattori 1.1.0 johtaa lähde-SHACLista yhteiset attribuuttiviittaukset mappingiin, JSON Scheman x-term/x-mtv-shacl-kenttiin ja SD-JWT VC draft-19 Type Metadatan x-mtv-semantic-kenttiin. Viite erottaa alkuperäisen ominaisuus-IRI:n PropertyShapesta, säilyttää koko sisäkkäisen käyttöyhteyden sekä lähdeprofiilin version/snapshotin tarkisteen. Nimettömälle lähdesolmulle ei keksitä URI:a. IETF-väitepolut käyttävät taulukoille null-askelia. Oma versioitu laajennusprofiili määrittelee annotaatiot ja schema-/mapping-löydettävyyden.
+
+Paketissa on 12 julkista muuttumatonta artefaktia. SRI-tarkisteketju sitoo laajennusprofiilin, mappingin, skeeman ja Type Metadatan; issuer-metadata-binding.json ohjeistaa ulkoisen myöntäjän vct/vct#integrity-käytön. Esimerkkikuluttaja hakee yhden väitepolun semantiikan ilman väitearvoja tai JSON Schemaa. Se ei ole SD-JWT-/allekirjoitusverifioija. Valinnaiset attribuutti- ja järjestelykatalogiviitteet säilyttävät vastaavuusväitteen alkuperän ja kulkevat normaalissa hyväksynnässä. Vanhan asiakkaan puuttuva uusi kenttä ei poista jo tallennettuja viitteitä. Ei uutta relaatiomigraatiota, allekirjoittamista, katalogirekisteröintiä tai lompakkointegraatiota.
+
+Sopimus, vastaavuustaulukko, lähdeversiot ja kokeiluohje: [docs/attribute-semantics.md](docs/attribute-semantics.md).
+
+## Tässä jatkotehtävässä todella ajettu
+
+- Koko README/CI:n 13 tiedoston API-/PostgreSQL-/migraatiosarja: **196 passed, 4 warnings in 317.51s (0:05:17)**. Ei epäonnistuneita tai ohitettuja. Mukana vanhojen kantojen päivitykset, tyhjä kanta/toistuvat migraatiot, käyttöoikeudet, hyväksynnän mitätöinti, muuttumattomat julkaisut, oikea PyLD + lukittu lataaja + RDF-graafivertailu + lähde-SHACL, sisäkkäiset taulukot/roolit, nimetön PropertyShape, ulkoinen nimiavaruus, ristiriitaisten annotaatioiden hylkäys ja SRI-ketjun muutosten havaitseminen.
+- Kohdennettu paketti-/attribuuttisemantiikan ajo: **49 passed** (sisältyy edellä olevaan 196 testiin). Näistä 15 on uuden jatkon testejä.
+- Oikea Chromium ja Keycloak, lopullista Docker-imagea vasten: **13 passed, 1 warning in 106.27s (0:01:46)**. Aiempien polkujen lisäksi katalogiviitteen syöttö → tallennus → uudelleenavaaminen → paketin generointi → toisen käyttäjän hyväksyntä/julkaisu → julkisten kuvausten tarkisteketju ja yhden claimin semantiikka. Ensimmäinen selainajo löysi uuden JSON-kentän nimilappuongelman; eksplisiittinen label/id-yhteys korjattiin ja koko selainajo uusittiin onnistuneesti.
+- **209 eri pytest-testiä**, ei ohituksia. Deprekaatiovaroitukset ovat Starlette/httpx- ja RDFLib-varoituksia.
+- `npm run build --prefix apps/web` läpäisi (TypeScript/Vite). Docker-image rakennettiin varmennukset säilyttävällä `scripts/cloud-build.sh`-reitillä ja käynnistettiin `docker compose up -d --no-build --wait`: app/db/Keycloak healthy. Tavallista `docker compose up --build` -rakennusreittiä ei ajettu uudelleen tässä jatkossa; pilviympäristön aiemmin todettu build-DNS-rajaus edellytti proxy-/CA-asetukset säilyttävää apureittiä.
+- Olemassa olevan catalog-kannan uudelleenkäynnistys: **13 metatietotaulun kaikki rivit täsmälleen ennallaan**, mukana 71 tuotetta, 71 luonnosta, 36 profiilisnapshotia ja 64 julkaisua ennen selaintestien uusia synteettisiä julkaisuja. `alembic current`: **0005_lifecycle (head)**. Ei uutta skeemamigraatiota; toimitetut revisiot ennallaan. Tyhjentävät API-testit käyttivät vain erillistä catalog_test-kantaa.
+- Julkisten vanhojen tietojen erillinen HTTP-toimintakoe: **73 julkaisuversiota luettavissa**, mukaan lukien kaikki testien jättämät historiat. **6 vanhan 1.0.0-generaattorin pakettia / 54 artefaktia** haettiin ja alkuperäiset tavut/tarkisteet säilyivät.
+- Dockerissa ajettu `examples/semantic_consumer.py` luki oikean julkisen Type Metadatan ja palautti `["companyName"]`-polulle alkuperäisen ominaisuus-IRI:n, NameShape-kytkennän ja lähdesnapshotin/version/SHA:n. Kaikki **12 uuden paketin artefaktia** haettiin julkisista HTTP-reiteistä ja niiden tavut, mediatyypit ja SHA:t tarkistettiin. Tämä on kuvausten toimintakoe, ei SD-JWT:n kryptografinen verifiointi.
+- `git diff --check` läpäisi. `.devcontainer`/Private-portin määrityksiä, Composea tai Alembic-revisioita ei muutettu.
+
+
+## Avoimet / ajamattomat tarkistukset
+
+Virallinen TS11 1.0.1 (2026-01-30), commit `ee91a294c833af5188726fd8c302c641212192aa`, ja sen kaksi JSON-tietomallia on tallennettu muuttamattomina SHA-256-tarkisteineen. TS11 viittaa itse 119 478:n V0.0.7-luonnokseen: sitä ei esitetä pyydetyn V1.1.1:n vahvistuksena.
+
+Pyydettyjen ETSI TS 119 472-1 V1.2.1- ja TS 119 478 V1.1.1 -alkutekstien sekä EU 2025/1569:n artiklojen 7/8 ajantasaisen tekstin ja myöhempien muutosten varmistaminen estyi **HTTP 403** -verkkovastaukseen. Vastaavuustaulukko ja koneellinen catalogue-coverage.json erottavat vahvistamattomat kohdat. Ajantasaista oikeudellista tai ETSI-/EU-vaatimustenmukaisuusväitettä ei tehdä. Myös pohja-2H:n aito muuttamaton Tietomallit-exportin hyväksymiskoe säilyy avoimena. Näiden vuoksi toimitus on tarkastettava luonnos; en suosittele yhdistämistä ennen lähdetarkistusten täydentämistä.
+
+Windows Docker Desktopia, uuden Codespacen todellista luontia/selainavausta/Private-porttia, julkista tuotanto-HTTPS-palvelua ja GitHub Actionsin etäajoa ei ajettu. Compose, `.devcontainer` ja aiemmat Alembic-revisiot säilyvät ennallaan. Ei kuorma-/tietoturva-auditointia tai ulkoisen myöntäjän kryptografisia integraatiotestejä. Piilotettu väite osittaisessa esityksessä ei tarkoita puuttuvaa attribuuttia alkuperäisessä todistuksessa.
+
+## Toimitus
+
+Toteutuscommit **86f90ae** on työnnetty GitHubiin haaraan `feat/phase-2h-attribute-semantics`. Draft-PR:n avaaminen yritettiin sekä `gh pr create` -komennolla (GraphQL) että REST POST /repos/jgmikael/metatietovaranto/pulls -pyynnöllä. Molemmat estyivät **Forbidden**-vastaukseen. **PR:ää ei ole luotu.** Native git push onnistui; uusia tunnuksia tai kiertotapaa ei käytetty.
+
+[Avaa erillinen draft-PR käsin](https://github.com/jgmikael/metatietovaranto/compare/feat/phase-2h-technical-packages...feat/phase-2h-attribute-semantics?expand=1), base `feat/phase-2h-technical-packages`, compare `feat/phase-2h-attribute-semantics`. Valmis kuvaus: [docs/pull-request-attribute-semantics.md](docs/pull-request-attribute-semantics.md). [Kokeile haaran Codespacessa](https://codespaces.new/jgmikael/metatietovaranto?ref=feat%2Fphase-2h-attribute-semantics); käynnistyksen tarkat ohjeet ovat READMEssä. Main on edelleen `ac002ad`. Ei automaattista yhdistämistä.
+
+---
 
 # Vaihe 2H — SHACL-pohjaiset tekniset kuvauspaketit (17.10.2026)
 

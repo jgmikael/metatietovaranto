@@ -1,0 +1,118 @@
+{
+  "title": "Relationship between documents",
+  "basicAct": "32025R1569",
+  "sourceUrl": "https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX:32025R1569",
+  "providedOn": "2026-10-19",
+  "provenance": "User-pasted EUR-Lex basic-act relationship table in chat; manually transcribed to structured JSON. This is not an official machine-readable export or an independently fetched page. Empty table cells are represented as null and dates as ISO 8601.",
+  "treaty": "Treaty on the Functioning of the European Union",
+  "legalBasis": [
+    {
+      "act": "32014R0910",
+      "subdivision": "A45dP5"
+    },
+    {
+      "act": "32014R0910",
+      "subdivision": "A45eP2"
+    },
+    {
+      "act": "32014R0910",
+      "subdivision": "A45fP6"
+    },
+    {
+      "act": "32014R0910",
+      "subdivision": "A45fP7"
+    }
+  ],
+  "rows": [
+    {
+      "relation": "Corrected by",
+      "act": "32025R1569R(01)",
+      "language": "PL",
+      "comment": "(PL)",
+      "subdivision": null,
+      "from": null,
+      "to": null
+    },
+    {
+      "relation": "Modified by",
+      "act": "32026R1735",
+      "comment": "Replacement",
+      "subdivision": "article 3 paragraph 2",
+      "from": "2026-08-11",
+      "to": null
+    },
+    {
+      "relation": "Modified by",
+      "act": "32026R1735",
+      "comment": "Replacement",
+      "subdivision": "article 9 paragraph 4",
+      "from": "2027-01-01",
+      "to": null
+    },
+    {
+      "relation": "Modified by",
+      "act": "32026R1735",
+      "comment": "Addition",
+      "subdivision": "article 9 paragraph 2a",
+      "from": "2027-01-01",
+      "to": null
+    },
+    {
+      "relation": "Modified by",
+      "act": "32026R1735",
+      "comment": "Addition",
+      "subdivision": "annex IV",
+      "from": "2026-08-11",
+      "to": null
+    },
+    {
+      "relation": "Modified by",
+      "act": "32026R1735",
+      "comment": "Replacement",
+      "subdivision": "annex I",
+      "from": "2026-08-11",
+      "to": null
+    },
+    {
+      "relation": "Modified by",
+      "act": "32026R1735",
+      "comment": "Replacement",
+      "subdivision": "article 4 paragraph 3",
+      "from": "2026-08-11",
+      "to": null
+    },
+    {
+      "relation": "Modified by",
+      "act": "32026R1735",
+      "comment": "Replacement",
+      "subdivision": "annex II",
+      "from": "2026-08-11",
+      "to": null
+    },
+    {
+      "relation": "Modified by",
+      "act": "32026R1735",
+      "comment": "Replacement",
+      "subdivision": "article 4 paragraph 4",
+      "from": "2026-08-11",
+      "to": null
+    },
+    {
+      "relation": "Modified by",
+      "act": "32026R1735",
+      "comment": "Deletion",
+      "subdivision": "article 4 paragraph 1",
+      "from": "2026-08-11",
+      "to": null
+    }
+  ],
+  "instrumentsCited": [
+    "32002L0058",
+    "32016R0679",
+    "32018R1724",
+    "32018R1725",
+    "32021H0946",
+    "32024R0903",
+    "32024R1183"
+  ]
+}

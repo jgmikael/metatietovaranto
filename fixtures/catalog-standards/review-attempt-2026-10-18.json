@@ -1,0 +1,68 @@
+{
+  "reviewDate": "2026-10-18",
+  "reviewTimezone": "Europe/Helsinki",
+  "requestedPullRequest": 13,
+  "mainBase": "9258fffb4633c90240eddba1c09b6b135c3fb057",
+  "mainIntegratedIntoFeatureCommit": "339824ece0127f13cc17494efc13ef7d0c030ba0",
+  "status": "blockedAwaitingNormativeOriginals",
+  "conformanceClaim": false,
+  "verifiedTs11": {
+    "version": "1.0.1 (2026-01-30)",
+    "commit": "ee91a294c833af5188726fd8c302c641212192aa",
+    "upstreamHeadRechecked": "ee91a294c833af5188726fd8c302c641212192aa",
+    "fileChecksumsMatchOfficialGit": true,
+    "scope": "TS11 only, not proof of final ETSI versions or current EU legislation"
+  },
+  "normativeRetrievals": [
+    {
+      "id": "ETSI TS 119 472-1",
+      "version": "V1.2.1",
+      "url": "https://www.etsi.org/deliver/etsi_ts/119400_119499/11947201/01.02.01_60/ts_11947201v010201p.pdf",
+      "status": "unavailable",
+      "httpStatus": 403,
+      "contentSha256": null
+    },
+    {
+      "id": "ETSI TS 119 478",
+      "version": "V1.1.1",
+      "url": "https://www.etsi.org/deliver/etsi_ts/119400_119499/119478/01.01.01_60/ts_119478v010101p.pdf",
+      "status": "unavailable",
+      "httpStatus": 403,
+      "contentSha256": null
+    },
+    {
+      "id": "EU 2025/1569 Articles 7 and 8, subsequent amendments",
+      "version": "requested current consolidated text as of 2026-10-18; not verified",
+      "url": "https://eur-lex.europa.eu/eli/reg_impl/2025/1569/oj/eng",
+      "status": "unavailable",
+      "httpStatus": 403,
+      "contentSha256": null
+    }
+  ],
+  "officialEuAlternatives": [
+    {
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R1569",
+      "httpStatus": 403
+    },
+    {
+      "url": "https://data.europa.eu/eli/reg_impl/2025/1569/oj",
+      "httpStatus": 403
+    }
+  ],
+  "amendmentVerification": {
+    "status": "unknown",
+    "amendmentsAbsent": null,
+    "consolidatedTextVerified": false,
+    "requirement": "Original/consolidated legal text plus authoritative amendment/corrigendum relationships as of review date"
+  },
+  "pullRequestBase": {
+    "observedMergeRefBaseCommit": "8bc37dc5ed4584e4fbacce76a396aadd664db8ca",
+    "observedMergeRefHeadCommit": "15cab8ec75e7020127f8531b18b6246ca5904f9e",
+    "targetBase": "main",
+    "patchAttempt": "REST PATCH /repos/jgmikael/metatietovaranto/pulls/13",
+    "result": "Forbidden; UI base must be checked/changed manually",
+    "descriptionAndBasePatchAttempt": "REST PATCH /pulls/13 with base=main and prepared description returned Forbidden after branch push"
+  },
+  "immutablePackagesChanged": false,
+  "runtimeRule": "This audit records the review attempt; it is not imported as a generation source pin or used to rewrite existing packages."
+}

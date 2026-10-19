@@ -1,0 +1,32 @@
+{
+  "reviewDate": "2026-10-19",
+  "directEurLexRequests": [
+    {
+      "celex": "32025R1569R(01)",
+      "result": "Tunnel connection failed: 403 Forbidden"
+    },
+    {
+      "celex": "32026R1735",
+      "result": "Tunnel connection failed: 403 Forbidden"
+    },
+    {
+      "celex": "32025R1569",
+      "result": "Tunnel connection failed: 403 Forbidden"
+    }
+  ],
+  "officialPublicationServiceRequests": [
+    {
+      "key": "cellar-corrigendum",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "key": "cellar-amendment",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "key": "official-sparql",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    }
+  ],
+  "scope": "Source-retrieval observations only. No source content was obtained from these requests."
+}

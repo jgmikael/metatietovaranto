@@ -1,5 +1,7 @@
 # Vaihe 2H — SHACL-pohjainen tekninen kuvauspaketti
 
+**Attribuuttisemantiikan jatko:** generaattorin 1.1.0 laajennukset, 12 artefaktin paketti ja uudet lähdeviitteet kuvataan erikseen [attribute-semantics.md](attribute-semantics.md). Alla oleva alkuperäinen 1.0.0-toteutuskuvaus säilyy sen version dokumentaationa.
+
 Pohja `ac002ad` (2G / PR #11). Tämä käyttäjän toimeksianto korvaa aiemman ehdotuksen käyttää 2H-tunnusta DCAT-AP-vientiin. DCAT-AP jää myöhemmäksi. Tietomallit on sisältömallinnustyökalu; Metatietovaranto hyväksyy vain esitysvalintoja ja tuottaa niistä johdannaisia.
 
 ## Tuettu generointiprofiili `shacl-tree-json-v1`

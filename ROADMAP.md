@@ -107,6 +107,18 @@ Käyttäjän toimeksianto, pohjana main `ac002ad` (PR #11). Tämä korvaa aiemma
 - Useat sanastoviitteet sijainteineen ja riippuvuusaineistot käyttöliittymään. Ei mielivaltaisia verkkonoutoja.
 - Aidon aineiston koe täydennetty käyttäjän toimittamalla WE BUILD Certificate of Residence 0.0.2 -exportilla: alkuperäiset tavut/provenienssi/tarkiste, koko profiilin hallittu esto sekä erillinen rajattu JSON-LD/RDF/SHACL-koe. [Tulos ja tarkat rajoitteet](docs/webcor-acceptance.md). Literaalityyppien ja SKOS-riippuvuuden puute estävät koko profiilin generoinnin; sitä ei väitetä tuetuksi. DCAT-AP ja generointiprofiilin laajentaminen jäävät myöhemmiksi.
 
+## 2H:n jatko — attribuuttikohtainen semantiikka
+
+Erillinen tarkastettava jatkohaara 2H:n päällä: [sopimus ja lähdeversiot](docs/attribute-semantics.md). Generaattori 1.1.0 tuottaa alkuperäisen ominaisuus-IRI:n ja SHACL-rajoitteen käyttöyhteyden yhteiseen mappingiin, JSON Scheman x-term/x-mtv-shacl-annotaatioihin ja Type Metadatan x-mtv-semantic-annotaatioihin. Nimetön PropertyShape säilyy nimettömänä ja yksilöidään snapshotin, juurimuodon ja rajoitepolun avulla. Sisäkkäiset taulukot käyttävät IETF Claim Pathin null-askelia.
+
+Versioitu oma laajennusprofiili, schema-/mapping-löydettävyys ja standardin base64-SRI-ketju julkaistaan artefakteina. Esimerkkikuluttaja lukee semantiikkaa ilman väitearvoja tai allekirjoituksen tarkistusta. Valinnaiset attribuutti-/järjestelykatalogivastaavuudet edellyttävät lähdettä, versiota, todistusaineiston tarkistetta ja normaalia hyväksyntää. TS11 1.0.1 ja molemmat viralliset tietomallit on lukittu muuttamattomina; ETSI-versioiden ja EU-tekstin käyttäjän toimittamat kopiot on tarkistettu jäljempänä kuvatusti; suora verkkohaku on estynyt. Koneellinen puuteraportti ei ole vaatimustenmukaisuusväite.
+
+Main-pohja tuotu PR #13:n työhaaraan (main `9258fff`, merge `339824e`). [Uusi normatiivisen lähdetarkistuksen yritys](docs/pr13-normative-review.md): ETSI/EUR-Lex edelleen HTTP 403; TS11-lukot uudelleen varmennettu virallisesta Gitistä. Tämän aiemman yrityksen jälkeen saadut lähdeaineistot ja tulokset on kirjattu alle.
+
+ETSI V1.2.1/V1.1.1 ja EU-konsolidointi 11.8.2026 saatu käyttäjältä; [kohta-/artiklakohtainen vertailu](docs/pr13-source-comparison.md) ja tarkisteet lukittu. Generaattori 1.1.1 erottaa luetut lähteet jäljellä olevista tarkistusrajoista ja SD-JWT draft-13/draft-19 -profiilierosta.
+
+19.10.2026 saatu aikajana ja alkuperäisen asetuksen muutos-/oikaisuluettelon copy-paste on arvioitu ja lukittu lähdepinniksi. EN-metatietotehtävän lähdevertailu on päätetty ilmoitetuin rajauksin: PL-oikaisu tunnistettu (koko teksti lukematta), 1.1.2027 sovellettavat 9 artiklan muutokset erotettu nykyisestä konsolidoinnista. Ei havaittua tarvetta tämän PR:n metatietokoodin korjaukseen. Myöhemmän ulkoisen lähdeintegraation on tarkistettava koko muutossäädös ja tuleva sanamuoto; PL-kielen käyttöönotto tarvitsee oikaisutekstin. Katalogirekisteröinti ja myöntäjän vaatimustenmukaisuus ovat erillisiä tehtäviä. Osittainen esitys ei osoita piilotetun attribuutin puuttumista alkuperäisestä todistuksesta.
+
 ## Vaiheen 2 myöhemmät osat — erillinen toimeksianto
 
 Laajemmat JSON Schema/OpenAPI-kattavuuskartoitukset ja muunnoksen laajentaminen IRI-identiteetteihin, RDF-listoihin ja monijuurisiin profiileihin, laajemmat SHACL-profiilit, DCAT-AP-vientien vaatimustenmukaisuus, retired/archived-elinkaaret ja ajastettu lopetus, jäsenyyksien hallintakäyttöliittymä, tuotannon IdP, kielituen laajennukset ja kuormitusvaatimukset. Vaiheen 2D offline Core -tarkistus ja erillinen ihmistarkastus eivät korvaa näitä tai VC-kuoren/suojauksen tarkistusta.

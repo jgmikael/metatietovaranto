@@ -9,6 +9,7 @@ from typing import Literal as Choice
 
 from pydantic import Field
 from rdflib import Graph, Literal, RDF, SH, URIRef, XSD
+from apps.api.semantic_extension import attach_references, enrich, source_pins, VERSION as EXTENSION_VERSION
 from rdflib.compare import isomorphic, to_canonical_graph
 from jsonschema import Draft202012Validator
 from pyld import jsonld
@@ -18,10 +19,10 @@ from apps.api.profiles import checksum, canonical, Iri
 from apps.api.semantic_validation import locked_graph, validation_report, ENGINE as SHACL_ENGINE
 from apps.api.conversion import bounded_json, convert, tokens
 
-GENERATOR = 'technical-package/1.0.0'
+GENERATOR = 'technical-package/1.1.1'
 POLICY = 'shacl-tree-json-v1'
 SD_STANDARD = 'draft-ietf-oauth-sd-jwt-vc-19'
-STANDARDS = {'sdJwtVc': SD_STANDARD, 'vcdm': '2.0', 'jsonLd': '1.1', 'jsonSchema': '2020-12'}
+STANDARDS = {'sdJwtVc': SD_STANDARD, 'vcdm': '2.0', 'jsonLd': '1.1', 'jsonSchema': '2020-12', 'mtvSemanticExtension': EXTENSION_VERSION}
 BASE_CONTEXT = 'https://www.w3.org/ns/credentials/v2'
 FIXTURES = Path(__file__).resolve().parents[2] / 'fixtures' / 'standards'
 DATATYPES = {'string','boolean','integer','nonNegativeInteger','positiveInteger','decimal','double','date','dateTime','anyURI'}
@@ -84,7 +85,7 @@ def inspect_profile(manifest, root_uri, names):
         for p in sorted(set(graph.predicates(node)), key=str):
             if str(p).startswith(str(SH)) and str(p)[len(str(SH)):] not in allowed:
                 fail('SHACL_UNSUPPORTED', str(node), 'Generointiprofiilin ulkopuolinen rajoite: '+str(p))
-    def visit(shape, path, field_path, ancestors, declared_class=None):
+    def visit(shape, path, field_path, ancestors, declared_class=None, constraint_path=None):
         if shape in ancestors or len(path)>8:fail('RECURSION', '/'.join(path), 'Rekursio tai yli kahdeksan tason rakenne ei ole tuettu')
         supported(shape, NODE_ALLOWED)
         cls = one(shape, SH.targetClass, required=(not path)) or declared_class
@@ -136,10 +137,11 @@ def inspect_profile(manifest, root_uri, names):
             labels = sorted((str(v.language or 'und'),str(v)) for v in graph.objects(prop,SH.name))
             entry = {'shapeUri':root_uri,'semanticPath':semantic,'fieldPath':pointer,'valueKind':'literal' if datatype else 'object',
                      'datatype':str(datatype) if datatype else None,'classUri':None,'minCount':low,'maxCount':high,'disclosure':None}
-            row = {'name':name,'nameOrigin':origin,'labels':[{'locale':lang,'label':label} for lang,label in labels],
+            locator=(constraint_path or [])+[{'nodeShapeUri':str(shape) if isinstance(shape,URIRef) else None,'propertyPath':str(predicate),'propertyShapeUri':str(prop) if isinstance(prop,URIRef) else None}]
+            row = {'shacl':{'nodeShapeUri':str(shape) if isinstance(shape,URIRef) else None,'propertyShapeUri':str(prop) if isinstance(prop,URIRef) else None,'propertyShapeKind':'iri' if isinstance(prop,URIRef) else 'blankNode','constraintPath':locator},'name':name,'nameOrigin':origin,'labels':[{'locale':lang,'label':label} for lang,label in labels],
                    'mapping':entry,'multi':multi}
             if node is not None:
-                child=visit(node,semantic,pointer,ancestors|{shape},obj_class)
+                child=visit(node,semantic,pointer,ancestors|{shape},obj_class,locator)
                 entry['classUri']=child['classUri'];row['child']=child
             fields.append(row);result['fields'].append(row)
             if len(fields)>200:fail('FIELD_LIMIT', root_uri, 'Enintään 200 kenttää')
@@ -165,7 +167,8 @@ def proposal(manifest, data):
 
 
 def bindings(body, profile_hash):
-    return checksum({'profileSnapshotId':body.get('profileSnapshotId'),'profileSha256':profile_hash,
+    extra={'catalogueReferences':body['catalogueReferences']} if body.get('catalogueReferences') else {}
+    return checksum(extra|{'profileSnapshotId':body.get('profileSnapshotId'),'profileSha256':profile_hash,
                      'distributions':body.get('distributions'),'title':body['title'],'description':body['description']})
 
 
@@ -206,6 +209,7 @@ def schema_for(tree):
             value={'type':'array','items':value,'minItems':entry['minCount']}
             if entry['maxCount'] is not None:value['maxItems']=entry['maxCount']
             if entry['valueKind']=='literal':value['uniqueItems']=True
+        if 'semantic' in row:value.update({'x-term':row['semantic']['term'],'x-mtv-shacl':copy.deepcopy(row['semantic'])})
         schema['properties'][row['name']]=value
         if entry['minCount']>0:schema['required'].append(row['name'])
     return schema
@@ -235,6 +239,7 @@ def generate(manifest, profile_hash, body, data, base_url):
         fail('SOURCE_NOT_READY','/profileSnapshotId','Lähdeprofiilissa on ratkaisemattomia puutteita: '+'; '.join(manifest['issues'])[:1500])
     if len(data['exampleContent'].encode())>100000:fail('EXAMPLE_LIMIT','/exampleContent','JSON-esimerkin UTF-8-raja on 100 kB')
     tree, rows=inspect_profile(manifest,data['rootShapeUri'],data.get('names',[]))
+    refs=attach_references(tree,body['profileSnapshotId'],profile_hash,manifest,base_url)
     items=copy.deepcopy(body.get('distributions') or [])
     if len(items)!=3 or {item['type'] for item in items}!={'jsonApi','w3cVc','sdJwtVc'}:
         fail('THREE_DISTRIBUTIONS','/distributions','Paketti tarvitsee yhden kunkin kolmen toimitustyypin kuvauksen')
@@ -286,6 +291,7 @@ def generate(manifest, profile_hash, body, data, base_url):
             'representation':[{k:row[k] for k in ('name','nameOrigin','mapping')} for row in rows],
             'choices':data,'distributions':items,'title':body['title'],'description':body['description'],
             'generator':GENERATOR,'policy':POLICY,'standards':STANDARDS,'publicationBase':base_url,'engines':{'shacl':SHACL_ENGINE,'jsonLd':'PyLD/2.0.4'},
+            'catalogueReferences':body.get('catalogueReferences') or [],'catalogueSourcePins':source_pins(),
             'baseContextSha256':hashlib.sha256((FIXTURES/'credentials-v2.jsonld').read_bytes()).hexdigest(),
             'sdSpecificationSha256':hashlib.sha256((FIXTURES/(SD_STANDARD+'.md')).read_bytes()).hexdigest()}
     package_id=checksum(inputs)
@@ -328,8 +334,10 @@ def generate(manifest, profile_hash, body, data, base_url):
               'rootShapeUri':data['rootShapeUri'],'rootClassUri':tree['classUri'],'distributions':items,
               'formatPolicies':{'sdJwt':sd['sdJwt'],'security':sd['security']},'sourceVocabularyReferences':manifest['vocabularyReferences'],
               'dependencyChecksums':[{'uri':d['uri'],'sha256':d['artifact']['sha256']} for d in manifest['dependencies'] if 'artifact' in d]}
+    profile,issuer_binding,catalog_report=enrich(prefix,tree,refs,schema,type_metadata,semantic,body.get('catalogueReferences') or [])
     values={'context.jsonld':('application/ld+json',context),'content.schema.json':('application/schema+json',schema),
             'sd-jwt-type-metadata.json':('application/json',type_metadata),'semantic-mapping.json':('application/json',semantic),
+            'semantic-extension-profile.json':('application/json',profile),'issuer-metadata-binding.json':('application/json',issuer_binding),'catalogue-coverage.json':('application/json',catalog_report),
             'content-example.json':('application/json',example),'sd-jwt-claims-example.json':('application/json',example),
             'unsigned-vc-example.jsonld':('application/ld+json',vc),'validation.json':('application/json',validation)}
     artifacts={name:{'mediaType':media,'content':canonical(value),'sha256':hashlib.sha256(canonical(value).encode()).hexdigest(),'url':prefix+name}
@@ -345,8 +353,8 @@ def generate(manifest, profile_hash, body, data, base_url):
 
 
 def check_type_metadata(doc):
-    # Validate only the emitted IETF subset; extensions remain separate artifacts.
-    if not set(doc)<= {'vct','name','description','claims'} or not isinstance(doc.get('vct'),str) or not doc['vct']:
+    # IETF fields remain unchanged; x-mtv-* members are explicitly a local extension.
+    if not set(doc)<= {'vct','name','description','claims','x-mtv-profile','x-mtv-mapping','x-mtv-schema'} or not isinstance(doc.get('vct'),str) or not doc['vct']:
         fail('TYPE_METADATA','/vct','Virheellinen Type Metadata -tunniste tai ylimääräinen kenttä')
     seen=set()
     for claim in doc['claims']:
