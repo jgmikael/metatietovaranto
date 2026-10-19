@@ -12,12 +12,17 @@
   },
   "requestedUnverifiedSources": [
     {
-      "id": "EU 2025/1569 basic-act corrigendum relationships",
-      "version": "corrigendum status as of 2026-10-19 not established by supplied consolidated-document page",
-      "url": "https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX:32025R1569"
+      "id": "EU 2025/1569 Polish corrigendum full text",
+      "version": "32025R1569R(01); PL language scope listed in supplied relationship table",
+      "url": "https://eur-lex.europa.eu/legal-content/PL/TXT/?uri=CELEX:32025R1569R(01)"
+    },
+    {
+      "id": "EU 2026/1735 standalone amending-act full text",
+      "version": "Article 9(2a)/9(4) changes listed from 2027-01-01; full wording not available",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R1735"
     }
   ],
-  "unverifiedReason": "All four supplied PDF copies were read and checksummed. The document-information timeline displays 2026-08-11 as its latest consolidation. Its relationship section identifies only the basic act, not the basic-act amendment/corrigendum register. Absence of later corrigenda is not established; no ETSI/EU conformance claim.",
+  "unverifiedReason": "Relevant clauses in the supplied English consolidation and ETSI copies were read. User-pasted basic-act relationships identify one PL corrigendum and EU 2026/1735, with two Article 9 changes from 2027-01-01. Relationship review is complete for this English metadata change. Independent page comparison, the PL corrigendum wording and standalone amending-act wording are unavailable (HTTP 403); no exhaustive multilingual legal-currentness or conformance claim.",
   "reviewedProvidedCopies": [
     {
       "id": "ETSI TS 119 472-1",
@@ -62,7 +67,11 @@
         "Article 7",
         "Article 8",
         "Article 3(2)",
-        "Annex IV"
+        "Annex IV",
+        "Article 4",
+        "Article 11",
+        "Annex I (issuer scope only)",
+        "Annex II (issuer scope only)"
       ]
     }
   ],
@@ -73,13 +82,20 @@
     "articles7And8Marker": "B (base text in supplied consolidation)",
     "currentAsOfReviewDate": null,
     "reviewDate": "2026-10-19",
-    "scope": "Supplied consolidation read; supplied document-information timeline displays 2026-08-11 as latest. Basic-act corrigendum register is not displayed, so currentAsOfReviewDate remains null. Consolidated text is documentary; authentic acts are in the Official Journal.",
-    "latestDisplayedVersionConfirmed": true
+    "scope": "English consolidation through 2026-08-11 plus user-provided basic-act relationship table reviewed as of 2026-10-19 for metadata scope. PL corrigendum identified, not read; Article 9(2a)/9(4) future changes identified for 2027-01-01, not treated as current. currentAsOfReviewDate remains null because unrestricted legal-currentness was not independently established. Consolidation is documentary; authentic acts are in the Official Journal.",
+    "latestDisplayedVersionConfirmed": true,
+    "basicActRelationshipsReviewed": true
   },
   "remainingReviewGaps": [
     {
-      "code": "EU_CORRIGENDUM_STATUS_UNVERIFIED",
-      "detail": "The supplied document-information timeline displays 2026-08-11 as latest and the text lists EU 2026/1735. Its relationships section only links basic act 32025R1569; basic-act amendment/corrigendum relationships, including absence of later corrigenda as of 2026-10-19, remain unverified."
+      "code": "EU_POLISH_CORRIGENDUM_TEXT_NOT_REVIEWED",
+      "detail": "32025R1569R(01) is explicitly listed with PL language scope in user-provided basic-act relationships. Its full wording could not be retrieved. This review uses EN and does not assert that no corrigendum exists or assess the PL text.",
+      "blocksMetadataMerge": false
+    },
+    {
+      "code": "EU_FUTURE_ARTICLE9_TEXT_NOT_REVIEWED",
+      "detail": "EU 2026/1735 replaces Article 9(4) and adds Article 9(2a) from 2027-01-01 per supplied relationships. Full future wording must be reviewed for external authentic-source verification integration; no present metadata rule is inferred from it.",
+      "blocksMetadataMerge": false
     },
     {
       "code": "ETSI_SD_JWT_PROFILE_VERSION_DIFFERENCE",
@@ -120,6 +136,24 @@
       "local": "product/formats/mapping and optional scheme reference",
       "status": "partial",
       "missing": "scheme owner/contact/status/version, rules, trust/governance/revocation, provider/source requirements, declared attestation legal category, signed/sealed registration and Commission ID"
+    },
+    {
+      "target": "EU2025/1569 basic-act relationships; corrigendum 32025R1569R(01)",
+      "local": "PL language marker recorded with source provenance; reviewed metadata source is EN",
+      "status": "scopeLimited",
+      "missing": "PL full wording and independent source comparison; not a multilingual legal-conformity claim"
+    },
+    {
+      "target": "EU2026/1735 Article9(2a)/9(4) from2027-01-01",
+      "local": "future application dates recorded separately from 2026-08-11 consolidation",
+      "status": "deferredExternalIntegration",
+      "missing": "standalone full wording and external authentic-source verification implementation"
+    },
+    {
+      "target": "EU2025/1569 M1 Article4/AnnexI/AnnexII",
+      "local": "Catalogue lifecycle is separate from issued-attestation revocation; crypto, wallet authentication and issuer policy remain external",
+      "status": "externalIssuerScope",
+      "missing": "Full issuer/security conformance assessment, authentic signing/revocation implementation and applicable external standard review"
     }
   ],
   "documentInformationEvidence": {
@@ -145,5 +179,129 @@
       "separateCorrigendumRegisterDisplayed": false
     },
     "limitation": "The selected consolidation and latest date displayed in its timeline are evidenced. This page does not establish exhaustive basic-act amendment/corrigendum relationships or absence of later corrigenda."
+  },
+  "basicActRelationshipEvidence": {
+    "file": "eur-lex-basic-act-relationships-2026-10-19.json",
+    "sha256": "8e66a6d8a11c3d061a52769ccf475e69330926f69fd154b1fe458716236883ce",
+    "byteLength": 2901,
+    "sourceUrl": "https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX:32025R1569",
+    "reviewDate": "2026-10-19",
+    "provenance": "User-pasted EUR-Lex basic-act relationship table in chat; manually transcribed to structured JSON. This is not an official machine-readable export or an independently fetched page. Empty table cells are represented as null and dates as ISO 8601.",
+    "relations": [
+      {
+        "relation": "Corrected by",
+        "act": "32025R1569R(01)",
+        "language": "PL",
+        "comment": "(PL)",
+        "subdivision": null,
+        "from": null,
+        "to": null
+      },
+      {
+        "relation": "Modified by",
+        "act": "32026R1735",
+        "comment": "Replacement",
+        "subdivision": "article 3 paragraph 2",
+        "from": "2026-08-11",
+        "to": null
+      },
+      {
+        "relation": "Modified by",
+        "act": "32026R1735",
+        "comment": "Replacement",
+        "subdivision": "article 9 paragraph 4",
+        "from": "2027-01-01",
+        "to": null
+      },
+      {
+        "relation": "Modified by",
+        "act": "32026R1735",
+        "comment": "Addition",
+        "subdivision": "article 9 paragraph 2a",
+        "from": "2027-01-01",
+        "to": null
+      },
+      {
+        "relation": "Modified by",
+        "act": "32026R1735",
+        "comment": "Addition",
+        "subdivision": "annex IV",
+        "from": "2026-08-11",
+        "to": null
+      },
+      {
+        "relation": "Modified by",
+        "act": "32026R1735",
+        "comment": "Replacement",
+        "subdivision": "annex I",
+        "from": "2026-08-11",
+        "to": null
+      },
+      {
+        "relation": "Modified by",
+        "act": "32026R1735",
+        "comment": "Replacement",
+        "subdivision": "article 4 paragraph 3",
+        "from": "2026-08-11",
+        "to": null
+      },
+      {
+        "relation": "Modified by",
+        "act": "32026R1735",
+        "comment": "Replacement",
+        "subdivision": "annex II",
+        "from": "2026-08-11",
+        "to": null
+      },
+      {
+        "relation": "Modified by",
+        "act": "32026R1735",
+        "comment": "Replacement",
+        "subdivision": "article 4 paragraph 4",
+        "from": "2026-08-11",
+        "to": null
+      },
+      {
+        "relation": "Modified by",
+        "act": "32026R1735",
+        "comment": "Deletion",
+        "subdivision": "article 4 paragraph 1",
+        "from": "2026-08-11",
+        "to": null
+      }
+    ]
+  },
+  "reviewClosure": {
+    "status": "completed-with-disclosed-limitations",
+    "reviewDate": "2026-10-19",
+    "scope": "PR 13 English-language metadata, semantic annotations and technical-description packages; not an issuer, authentic-source verification service or multilingual legal conformity assessment",
+    "relationshipSource": "basicActRelationshipEvidence",
+    "consolidationLanguage": "EN",
+    "mergeBlockers": [],
+    "assessment": "No metadata code change identified from the supplied relationship table. Articles 7/8 remain the reviewed catalogue provisions; Annex IV and Article 3(2) changes are already documented. The sole listed corrigendum is marked PL; no claim about its wording. Future Article 9 changes belong to external source-verification integration and must be reviewed before that implementation.",
+    "futureApplication": [
+      {
+        "act": "32026R1735",
+        "subdivision": "article 9 paragraph 4",
+        "from": "2027-01-01",
+        "textReviewed": false,
+        "scope": "external authentic-source verification integration, not current metadata behaviour"
+      },
+      {
+        "act": "32026R1735",
+        "subdivision": "article 9 paragraph 2a",
+        "from": "2027-01-01",
+        "textReviewed": false,
+        "scope": "external authentic-source verification integration, not current metadata behaviour"
+      }
+    ],
+    "limitations": [
+      "Independent EUR-Lex page comparison failed with HTTP 403.",
+      "PL corrigendum full text not read; no blanket assertion that no corrigendum exists.",
+      "Standalone amending-act full text and exact future Article 9 wording not read; supplied relationship dates only.",
+      "No ETSI/EU conformance, wallet support, issuer signature or catalogue registration claim."
+    ],
+    "catalogueArticlesApplyFrom": "2026-08-19",
+    "applicationDateSource": "Supplied EN consolidation Article 11: Articles 6 to 9 shall apply from 19 August 2026. Consolidation date is not the application date of every provision."
   }
 }

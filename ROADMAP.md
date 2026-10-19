@@ -117,7 +117,7 @@ Main-pohja tuotu PR #13:n työhaaraan (main `9258fff`, merge `339824e`). [Uusi n
 
 ETSI V1.2.1/V1.1.1 ja EU-konsolidointi 11.8.2026 saatu käyttäjältä; [kohta-/artiklakohtainen vertailu](docs/pr13-source-comparison.md) ja tarkisteet lukittu. Generaattori 1.1.1 erottaa luetut lähteet jäljellä olevista tarkistusrajoista ja SD-JWT draft-13/draft-19 -profiilierosta.
 
-19.10.2026 saatu konsolidoidun tekstin asiakirjatietosivu vahvistaa aikajanassa viimeisimmäksi 11.8.2026. Jäljellä: alkuperäisen asetuksen muutos-/oikaisusuhteet (CELEX 32025R1569; vastaanotetulla sivulla on vain linkki siihen), mahdolliset täsmennykset sen perusteella sekä erikseen tilattavat katalogirekisteröinti- ja ulkoisen myöntäjän integraatiot. Osittainen esitys ei osoita piilotetun attribuutin puuttumista alkuperäisestä todistuksesta.
+19.10.2026 saatu aikajana ja alkuperäisen asetuksen muutos-/oikaisuluettelon copy-paste on arvioitu ja lukittu lähdepinniksi. EN-metatietotehtävän lähdevertailu on päätetty ilmoitetuin rajauksin: PL-oikaisu tunnistettu (koko teksti lukematta), 1.1.2027 sovellettavat 9 artiklan muutokset erotettu nykyisestä konsolidoinnista. Ei havaittua tarvetta tämän PR:n metatietokoodin korjaukseen. Myöhemmän ulkoisen lähdeintegraation on tarkistettava koko muutossäädös ja tuleva sanamuoto; PL-kielen käyttöönotto tarvitsee oikaisutekstin. Katalogirekisteröinti ja myöntäjän vaatimustenmukaisuus ovat erillisiä tehtäviä. Osittainen esitys ei osoita piilotetun attribuutin puuttumista alkuperäisestä todistuksesta.
 
 ## Vaiheen 2 myöhemmät osat — erillinen toimeksianto
 

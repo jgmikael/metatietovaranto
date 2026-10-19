@@ -152,7 +152,7 @@ def test_pinned_ts11_source_checksums_and_unverified_normative_versions_explicit
     import hashlib
     for name,digest in pins['ts11']['files'].items():assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest
     assert pins['ts11']['version'].startswith('1.0.1')
-    assert len(pins['requestedUnverifiedSources'])==1
+    assert len(pins['requestedUnverifiedSources'])==2
     assert pins['euConsolidation']['currentAsOfReviewDate'] is None
 
 
@@ -191,7 +191,7 @@ def test_generated_coverage_distinguishes_reviewed_texts_currentness_and_issuer_
     report=artifact(package,'catalogue-coverage.json')
     codes={row['code'] for row in report['missing']}
     assert 'NORMATIVE_SOURCES_UNVERIFIED' not in codes
-    assert {'EU_CORRIGENDUM_STATUS_UNVERIFIED','ETSI_SD_JWT_PROFILE_VERSION_DIFFERENCE','EXTERNAL_ISSUER_PROFILE_NOT_VERIFIED'}<=codes
+    assert {'EU_POLISH_CORRIGENDUM_TEXT_NOT_REVIEWED','EU_FUTURE_ARTICLE9_TEXT_NOT_REVIEWED','ETSI_SD_JWT_PROFILE_VERSION_DIFFERENCE','EXTERNAL_ISSUER_PROFILE_NOT_VERIFIED'}<=codes
     assert report['status']=='partial' and not report['conformanceClaim']
     assert any(row['target'].startswith('EU2025/1569 Article7(5)') for row in report['coverage'])
     assert any(row['target'].startswith('EU2025/1569 Article8(3)') for row in report['coverage'])
@@ -213,5 +213,37 @@ def test_document_information_evidence_is_pinned_without_inferring_corrigendum_a
     assert evidence['observations']['relationshipSectionBasicAct']=='32025R1569'
     assert pins['euConsolidation']['latestDisplayedVersionConfirmed'] is True
     assert pins['euConsolidation']['currentAsOfReviewDate'] is None
-    assert any(row['code']=='EU_CORRIGENDUM_STATUS_UNVERIFIED' for row in pins['remainingReviewGaps'])
-    assert 'CELEX:32025R1569' in pins['requestedUnverifiedSources'][0]['url']
+    assert pins['euConsolidation']['basicActRelationshipsReviewed'] is True
+    assert any(row['code']=='EU_POLISH_CORRIGENDUM_TEXT_NOT_REVIEWED' for row in pins['remainingReviewGaps'])
+    assert pins['basicActRelationshipEvidence']['sourceUrl'].endswith('CELEX:32025R1569')
+
+
+def test_generated_report_preserves_pinned_relationship_provenance_language_and_future_application():
+    import hashlib
+    from datetime import date
+    package=generated(unit_source(),{'companyName':'S'})
+    report=artifact(package,'catalogue-coverage.json');pins=report['sources']
+    evidence=pins['basicActRelationshipEvidence']
+    raw=(Path('fixtures/catalog-standards')/evidence['file']).read_bytes()
+    assert len(raw)==evidence['byteLength'] and hashlib.sha256(raw).hexdigest()==evidence['sha256']
+    original=json.loads(raw)
+    assert original['rows']==evidence['relations'] and 'User-pasted' in original['provenance']
+    corrections=[row for row in original['rows'] if row['relation']=='Corrected by']
+    assert len(corrections)==1 and corrections[0]['act']=='32025R1569R(01)' and corrections[0]['language']=='PL'
+    as_of=date.fromisoformat(pins['reviewClosure']['reviewDate'])
+    modifications=[row for row in original['rows'] if row['relation']=='Modified by']
+    assert {row['act'] for row in modifications}=={'32026R1735'}
+    future=[row for row in modifications if date.fromisoformat(row['from'])>as_of]
+    current=[row for row in modifications if date.fromisoformat(row['from'])<=as_of]
+    assert {(row['subdivision'],row['from']) for row in future}=={('article 9 paragraph 4','2027-01-01'),('article 9 paragraph 2a','2027-01-01')}
+    assert len(current)==7 and all(row['from']=='2026-08-11' for row in current)
+    closure=pins['reviewClosure']
+    assert closure['status']=='completed-with-disclosed-limitations' and closure['mergeBlockers']==[]
+    assert closure['catalogueArticlesApplyFrom']=='2026-08-19'
+    assert {(row['subdivision'],row['from']) for row in closure['futureApplication']}=={(row['subdivision'],row['from']) for row in future}
+    assert all(not row['textReviewed'] for row in closure['futureApplication'])
+    codes={row['code'] for row in report['missing']}
+    assert 'EU_CORRIGENDUM_STATUS_UNVERIFIED' not in codes
+    assert {'EU_POLISH_CORRIGENDUM_TEXT_NOT_REVIEWED','EU_FUTURE_ARTICLE9_TEXT_NOT_REVIEWED'}<=codes
+    assert report['status']=='partial' and report['conformanceClaim'] is False
+    assert pins['euConsolidation']['currentAsOfReviewDate'] is None

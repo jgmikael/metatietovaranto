@@ -1,3 +1,40 @@
+# PR #13 — lähdevertailun päätös (19.10.2026)
+
+Alkuperäisen asetuksen Relationship between documents -copy-paste on nyt arvioitu ja lukittu käyttäjätoimituksen käsin rakenteistettuna jäljennöksenä lähdeaineistoon. **PR #13:n EN-metatietoja ja teknisiä kuvauspaketteja koskeva lähdevertailu on päätetty ilmoitetuin rajauksin.** Ei havaittua tarvetta sovelluskoodin, attribuuttimallin tai relaatiomigraatioiden muutokseen. Main **9258fff** sisältyy työhaaraan; ei yhdistämistä.
+
+- Oikaisu **32025R1569R(01)** on luettelossa kielimerkinnällä **PL**. Koko tekstiä ei saatu, eikä sen sisältöä tai PL-version vaatimustenmukaisuutta väitetä arvioiduksi. EN-lähde säilyy.
+- **EU 2026/1735**: seitsemän luettelon 11.8.2026 muutosta kohdistuu 3(2):een, 4 artiklaan ja liitteisiin I/II/IV. Myöntäjän, revokaation ja ulkoisen tarkistuspalvelun vastuut säilyvät erillisinä. Katalogin withdrawn ei peru myönnettyjä todistuksia.
+- **9(4) ja uusi 9(2a), 1.1.2027**: tulevat muutokset erotetaan nykyisestä konsolidoinnista. Koko sanamuoto jää tarkistettavaksi ennen autenttisen lähteen integraatiota; sitä ei päätellä pelkistä muutosotsikoista.
+- EN-konsolidoinnin 11 artiklan mukaan 6–9 artikloja sovelletaan **19.8.2026** alkaen. Konsolidoinnin 11.8.2026 päivää ei käytetä kaikkien säännösten soveltamispäivänä.
+
+Generaattori **1.1.1**, oma laajennus **1.0.0** ja IETF **draft-19** säilyvät. Lähdepinnit ja uuden paketin raportti tarkentuvat: yleinen luettelon puuttumishavainto korvataan tunnistetun PL-oikaisun ja tulevan 9 artiklan lukemattomien tekstien havainnoilla. Niitä ei esitetä luettuina tai tämän rajatun metatieto-PR:n yhdistämisesteinä. `status=partial`, `conformanceClaim=false`; ETSI:n draft-13-ero ja ulkoisen myöntäjän velvoitteet pysyvät raportissa. Vanhoja julkaisuja, hyväksyntöjä, profiilisnapshotteja tai raportteja ei kirjoiteta uudelleen. [Päätös, vastaavuudet ja lähderajat](docs/pr13-source-comparison.md).
+
+Riippumaton EUR-Lex- ja EU Publications/Cellar-haku estyi edelleen 403:een. Ei kaikenkattavaa säädös-/kieliversio-/ETSI-vaatimustenmukaisuusarviota. PL-oikaisun ja koko tulevan muutossäädöksen sanamuotojen lukua ei väitetä tehdyksi. `currentAsOfReviewDate=null` säilyy yleisen ajantasaisuuden kohdalla; rajattu päätös on `reviewClosure`-osiossa.
+
+## Tässä viimeistelyssä suoritetut tarkistukset
+
+- Koko README/CI:n 13 tiedoston API-/PostgreSQL-/migraatiosarja: **209 passed, 4 warnings in 355.05s (0:05:55)**. Ei epäonnistuneita tai ohitettuja. Oikeudet/CSRF, hyväksynnän mitätöityminen, julkaisuimmutabiliteetti, JSON-LD/RDF/SHACL, attribuuttiannotaatiot, tarkisteketju sekä vanhan/tyhjän kannan ja toistuvien migraatioiden kokeet mukana. Testit käyttivät vain erillistä catalog_test-kantaa.
+- Oikea Chromium + Keycloak uudelleen rakennettua ja käynnistettyä Docker-sovellusta vasten: **13 passed, 1 warning in 115.88s (0:01:55)**. Tallennus/uudelleenavaaminen, organisaatiorajat, riippumaton hyväksyntä, julkaisu ja julkiset artefaktit läpäisivät. **222 eri pytest-testiä** yhteensä; varoitukset ovat Starlette/httpx- ja RDFLib-deprekaatioita.
+- Uuden lähderegressiotestin lopullinen kohdennettu ajo: **1 passed, 1 warning in 0.21s**. Tarkistaa luettelon tarkisteen, alkuperän, PL-rajauksen, seitsemän nykyistä ja kaksi tulevaa muutosriviä, 19.8.2026 soveltamispäivän sekä niiden päätymisen generoituun raporttiin. Sama testitapaus kuuluu 209 testiin, eikä sitä lasketa lisätestiksi kokonaismäärään.
+- `npm run build --prefix apps/web`: läpäisi (Vite 1,59 s). `bash scripts/cloud-build.sh` läpäisi TLS-varmennuksen säilyttäen; viimeinen image **sha256:6c7b957f54486509745c2369ffed1a0b923eb01689dcc41241665047ffa80177**. `docker compose up -d --no-build --wait`: app, db ja Keycloak healthy. Käynnissä olevan sovelluksen sources.json- ja muutosluettelotiedoston SHA:t vastaavat checkoutia.
+- Ennen selaintestien uusia synteettisiä julkaisuja **13 catalog-kannan metatietotaulun kaikki rivit ja Alembic-head 0005_lifecycle säilyivät tarkalleen ennallaan uudelleenkäynnistyksessä**. Ei uutta relaatiomigraatiota tai fixtureiden palautusta; live-kantaa ei tyhjennetty.
+- Julkinen HTTP-yhteensopivuuskoe selaintestien jälkeen: **88 julkaisuversiota luettavissa**, **8 vanhan generaattorin pakettia / 78 artefaktia** alkuperäisillä tavuilla ja SHA-arvoilla. Versioiden technicalPackage-sisällöt vastasivat tallennettuja muuttumattomia sisältöjä.
+- Uuden paketin toimintakoe: kaikki **12 julkaistua artefaktia** palautuivat oikeilla mediatyypeillä ja tarkisteilla. Julkinen catalogue-coverage.json sisälsi täsmälleen uudet lähdepinnit ja rajatun päätöksen. Oikea `examples/semantic_consumer.py` palautti companyName-väitteen alkuperäisen ominaisuus-IRI:n, PropertyShapen ja lähdesnapshotin ilman väitearvoja tai JWT:n kryptografista tarkistusta.
+- Main **9258fff** sisältyy työhaaraan; PR #13:n GitHub-mergeviitteen ensimmäinen vanhempi oli sama main, joten base on teknisesti vahvistettu. `git diff --check` läpäisi. Ei automaattista yhdistämistä.
+
+
+## Ajamattomat tai rajauksen ulkopuolella
+
+Riippumaton EUR-Lex-verkkovertaus, PL-oikaisun ja tulevan 9 artiklan koko tekstit eivät olleet saatavilla (403). Windows Docker Desktopia, uuden Codespacen luontia/openBrowseria/Private-portin ajonaikaista tilaa, tuotanto-HTTPS:ää ja GitHub Actionsin etätulosta ei varmistettu. Tavallista docker compose up --build -reittiä ei ajettu tässä täydennyksessä; pilvirakennus ja Compose-käynnistys ajettiin yllä kuvatuilla komennoilla. Ei myöntämistä, allekirjoitusta, lompakkotestiä tai täydellistä ETSI-/EU-vaatimustenmukaisuusarviota.
+
+## Toimitus ja käyttäjän seuraava askel
+
+Muutokset toimitetaan olemassa olevaan PR #13:n haaraan. Uutta PR:ää tai base-vaihtoa ei tarvita. GitHubin API on palauttanut Forbidden; valmis PR-kuvaus on `docs/pull-request-attribute-semantics.md`, eikä kuvauskentän päivitystä väitetä onnistuneeksi. GitHub Actionsin lopullinen etätulos on tarkistettava käyttöliittymässä. Yhdistäminen jää käyttäjälle, kun rajaus on arvioitu ja GitHubin tarkistukset ovat vihreät. Main-haaraa ei muuteta.
+
+---
+
+Alla on tarkistushistoria ennen viimeisen copy-paste-aineiston saamista. Sen avoin asiakirjasivu-/oikaisuluettelopyyntö on korvattu yllä olevalla rajatulla päätöksellä.
+
 # PR #13 — asiakirjatietoliitteen tarkistus (19.10.2026)
 
 Käyttäjän `Document Information.pdf` on vastaanotettu, luettu paikallisella OCR:llä ja sen tietosivu tarkastettu kuvana. Alkuperäinen kopio, koko ja SHA-256 on lukittu lähdeaineistoon. Aikajanassa viimeisin esitetty konsolidointi on **11.8.2026**, ja muutosviite **EU 2026/1735** vastaa aiempaa tekstikopiota.

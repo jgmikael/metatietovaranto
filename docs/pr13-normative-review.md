@@ -1,6 +1,6 @@
 # PR #13: normatiivisten lähteiden tarkistus ja main-pohja
 
-**Päivitetty tiedostotoimituksen jälkeen:** pyydetyt kolme PDF:ää on saatu ja niiden relevantit kohdat tarkastettu. [Nykyinen lähdevertailu, havainnot ja kohdan 4 asiakirjatietosivun ohje](pr13-source-comparison.md). Alla oleva noutoestoloki on aiemman yrityksen historiaa. Käyttäjä vahvisti PR #13:n baseksi mainin.
+**Päivitetty 19.10.2026:** pyydetyt PDF:t ja alkuperäisen asetuksen muutos-/oikaisuluettelon copy-paste on saatu. EN-metatietotehtävän lähdevertailu on päätetty ilmoitetuin rajauksin; PL-oikaisun ja tulevan 9 artiklan koko tekstejä ei saatu. [Nykyinen päätös, havainnot ja rajat](pr13-source-comparison.md). Alla oleva noutoestoloki on aiemman yrityksen historiaa. Käyttäjä vahvisti PR #13:n baseksi mainin.
 
 18.10.2026 (Europe/Helsinki). **Tarkistus on kesken lähdetiedostojen puuttumisen vuoksi. PR #13:a ei vielä suositella yhdistettäväksi.** Main-pohjan tekniset tarkistukset ja alkutekstien sisällön tarkistaminen ovat erillisiä tuloksia.
 
