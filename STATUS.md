@@ -29,7 +29,7 @@ Riippumaton EUR-Lex-verkkovertaus, PL-oikaisun ja tulevan 9 artiklan koko teksti
 
 ## Toimitus ja käyttäjän seuraava askel
 
-Muutokset toimitetaan olemassa olevaan PR #13:n haaraan. Uutta PR:ää tai base-vaihtoa ei tarvita. GitHubin API on palauttanut Forbidden; valmis PR-kuvaus on `docs/pull-request-attribute-semantics.md`, eikä kuvauskentän päivitystä väitetä onnistuneeksi. GitHub Actionsin lopullinen etätulos on tarkistettava käyttöliittymässä. Yhdistäminen jää käyttäjälle, kun rajaus on arvioitu ja GitHubin tarkistukset ovat vihreät. Main-haaraa ei muuteta.
+Lähdevertailun viimeistelycommit **bc85164** on työnnetty PR #13:n nykyiseen haaraan. `gh pr edit 13 --body-file docs/pull-request-attribute-semantics.md` palautti myös viimeistelyn jälkeen **Forbidden**, joten GitHubin ylin kuvaus ei päivittynyt automaattisesti. Tämä toimitusmerkintä on erillinen dokumentaatiotäydennys; sovellusta tai lähdepinnejä ei muuteta sen vuoksi. Muutokset ovat olemassa olevassa PR #13:ssa. Uutta PR:ää tai base-vaihtoa ei tarvita. GitHubin API on palauttanut Forbidden; valmis PR-kuvaus on `docs/pull-request-attribute-semantics.md`, eikä kuvauskentän päivitystä väitetä onnistuneeksi. GitHub Actionsin lopullinen etätulos on tarkistettava käyttöliittymässä. Yhdistäminen jää käyttäjälle, kun rajaus on arvioitu ja GitHubin tarkistukset ovat vihreät. Main-haaraa ei muuteta.
 
 ---
 
