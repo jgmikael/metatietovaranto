@@ -135,3 +135,10 @@ Seuraavaan vaiheeseen siirrytään vain erillisellä toimeksiannolla. Työhaaroj
 Tilattu PR #13:n main-mergen 6b48536 jälkeen. Sama käyttöliittymä, tyypit ja komponentit; erillinen vain lukua tukeva staattinen tietolähde ja Vite Pages -build. Neljä versionhallituista synteettisistä fixtureistä koottua tuotetta, joista yksi käyttää nykyistä generaattoria kolmen toimitustavan tekniseen pakettiin. Ei tietokantavientiä, kirjautumista, ylläpitoa, hyväksyntää, myöntämistä tai uutta taustatoimintoa. Olemassa olevat palvelinsovelluksen julkaisut ja snapshotit säilyvät.
 
 Virallisiin Pages Actionseihin perustuva PR-tarkistus ja vain mainista julkaiseva työnkulku. Julkinen osoite on tavoite, kunnes oikea deploy ja HTTP-tarkistus on tehty. Pages-asetusten/näkyvyyden/tilauksen tarkistus estyi API:n Forbidden-vastaukseen; käyttäjän käyttöönotto-ohje on [docs/github-pages-demo.md](docs/github-pages-demo.md). Tämä ei aloita vaiheen 3 integraatioita.
+
+## Pagesin Oma kokeilu — selainkohtainen jatkotehtävä
+
+- Toteutettu samasta käyttöliittymästä erillinen paikallinen metadatan ylläpito ja mukana toimitettujen profiilien valinta.
+- Versioitu localStorage, automaattitallennuksen tila, Web Locks / ristiriidat, JSON-tuonti ja vienti sekä vahvistettu palautus.
+- Julkinen aineisto ja varsinainen palvelinsovellus säilyvät; ei yhteisiä kirjoituksia, kirjautumista, generointia, validointia tai myöntämistä Pagesissa.
+- Paikalliset tuotteet aina validoimattomia; alkuperäisen paketin tarkisteviite erillinen. Katso docs/own-experiment.md. Tämä ei aloita ulkoisten integraatioiden vaihetta.

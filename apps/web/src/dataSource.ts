@@ -2,11 +2,11 @@
 import type {Item,Org,Profile} from './types';
 import type {Lifecycle} from './Lifecycle';
 export const pagesMode=import.meta.env.MODE==='pages';
-type Snapshot=Profile&{manifest:{sourceArtifacts:{id:string;serialization:string}[]}};
-type Catalogue={items:Item[];organizations:Org[];profiles:Snapshot[];resources:Record<string,string>};
+export type Snapshot=Profile&{manifest:{sourceArtifacts:{id:string;serialization:string;content:string}[]}};
+export type Catalogue={version:string;items:Item[];organizations:Org[];profiles:Snapshot[];resources:Record<string,string>};
 let catalogue:Catalogue|undefined;
 let pending:Promise<Catalogue>|undefined;
-function load(){
+export function loadCatalogue(){
  return pending??=(async()=>{
   const response=await fetch(import.meta.env.BASE_URL+'demo/catalog.json');
   if(!response.ok)throw new Error('Esittelyaineistoa ei voitu lukea.');
@@ -22,7 +22,7 @@ export function resourceUrl(path:string){
 }
 export async function staticRequest<T>(path:string,options:RequestInit={}):Promise<T>{
  if(options.method&&options.method!=='GET')throw new Error('Esittelydemo on vain lukua varten.');
- const data=await load(),url=new URL(path,'https://static.invalid'),parts=url.pathname.split('/').filter(Boolean);
+ const data=await loadCatalogue(),url=new URL(path,'https://static.invalid'),parts=url.pathname.split('/').filter(Boolean);
  let result:unknown;
  if(url.pathname==='/api/v1/products'){
   const text=(value:string)=>value.toLocaleLowerCase('fi');

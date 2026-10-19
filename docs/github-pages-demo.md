@@ -1,6 +1,6 @@
 # Julkinen staattinen esittelydemo
 
-Tavoiteosoite on **https://jgmikael.github.io/metatietovaranto/**. Tämän työhaaran toteutus ei ole vielä julkinen julkaisu: osoitteen toimivuutta ei väitetä ennen main-julkaisua ja sen oikean HTTP-vastauksen tarkistusta. PR #13:n merge mainiin varmistettiin Gitistä: `6b48536`. Tämä tehtävä on erillinen haara sen päältä.
+Julkisen esittelyn osoite on **https://jgmikael.github.io/metatietovaranto/**. Käyttäjä vahvisti PR #14:n jälkeisen julkaisun onnistuneeksi. Oma kokeilu -jatkotehtävä perustuu mainiin `edb4348`; sen uusia muutoksia ei ole vielä julkaistu tai julkisesti HTTP-varmennettu. [Selainkohtainen kokeilu ja siirtoformaatti](own-experiment.md).
 
 ## Kaksi build-tilaa, sama käyttöliittymä
 
@@ -13,7 +13,7 @@ Tavoiteosoite on **https://jgmikael.github.io/metatietovaranto/**. Tämän työh
 | Generointi/validointi | Palvelimen rajattu generaattori ja offline-validointi | Buildin etukäteen muodostamat kuvaukset ja raportit |
 | Todistuksen myöntäminen | Ulkoisen myöntäjän vastuulla | Ei myöntämistä, allekirjoitusta tai lompakkotoimitusta |
 
-Vite `--mode pages` valitsee `dataSource.ts`-adapterin ja `/metatietovaranto/`-resurssipolun. Tavallinen build käyttää edelleen nykyistä APIa ja `/`-polkua. Staattinen adapteri hyväksyy vain lukupyynnöt ja tuntee vain esittelyaineiston lukuoperaatiot; se ei lähetä loogisia /api-polkuja HTTP-palvelimelle. /auth/me-kutsua ei tehdä Pages-tilassa. Lomakkeet, kirjautumislinkit, demotunnukset ja ylläpitotoiminnot eivät näy Pagesissa. Myös kirjoituspyynnöt hylätään adapterissa.
+Vite `--mode pages` valitsee `dataSource.ts`-adapterin ja `/metatietovaranto/`-resurssipolun. Tavallinen build käyttää edelleen nykyistä APIa ja `/`-polkua. Staattinen adapteri hyväksyy vain lukupyynnöt ja tuntee vain esittelyaineiston lukuoperaatiot; se ei lähetä loogisia /api-polkuja HTTP-palvelimelle. /auth/me-kutsua ei tehdä Pages-tilassa. Julkinen katalogi ei sisällä palvelimen ylläpitotoimintoja, kirjautumislinkkejä tai demotunnuksia. Oma kokeilu -tilan lomakkeet muuttavat vain selaimen omaa työtilaa, eivät käytä palvelinadapterin kirjoitusoperaatioita. Adapteri hylkää edelleen kirjoituspyynnöt.
 
 Kaikki kolme toimitustapaa ovat **planned**. Metatietojen/artefaktien lataus on kuvausten latausta, ei tietosisällön haku tai todistuksen myöntäminen. Kolme vanhaa fixturetuotetta säilyvät esimerkkeinä ilman keksittyä profiilikytkentää tai uutta pakettia. Neljäs kattava esimerkki näyttää yhteisen SHACL-perustan, W3C-/SD-JWT-/JSON-mappingit, attribuuttiannotaatiot ja teknisen paketin.
 
