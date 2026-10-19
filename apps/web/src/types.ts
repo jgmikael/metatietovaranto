@@ -1,0 +1,13 @@
+import type {TechnicalPackage} from './TechnicalPackage';
+import type {Lifecycle} from './Lifecycle';
+import type {Distribution,DistributionReport} from './Distributions';
+import type {DerivedExample,DerivedValidation} from './Derived';
+export type Org={id:string;legalName:string;country:string;synthetic:boolean;identifiers:{scheme:string;value:string}[];legacyProductId?:string};
+export type Identity={authenticated:boolean;username?:string;csrfToken?:string;memberships:{organizationId:string;legalName:string;role:string}[]};
+export type Issuance={primaryDelivery:'w3cVc';serviceAvailability:'planned'|'sandbox'|'production'|'suspended';issuanceInitiationUrl?:string|null;issuerOrganizationId?:string|null;walletCompatibility?:{profile:string;version:string;status:string}[];fee?:string;[key:string]:unknown};
+export type SyntheticExample={serialization:'turtle'|'rdfxml'|'jsonld';content:string;synthetic:true};
+export type Validation={status:string;engine?:string;policy?:string;profileConforms?:boolean;exampleConforms?:boolean;focusNodeCount?:number;profileSnapshotSha256?:string;exampleSha256?:string;truncated?:boolean;results:{ruleId:string;path:string;message:string;focusNode?:string;resultPath?:string;sourceShape?:string}[]};
+export type Input={catalogueReferences:unknown[]|null;distributions:Distribution[]|null;primaryDistributionId:string|null;derivedExamples:DerivedExample[];syntheticExample:SyntheticExample|null;title:string;description:string;providerOrganizationId:string;theme:string;source:string;purpose:string;limitations:string;accessConditions:string;availability:'planned'|'sandbox';synthetic:true;profileSnapshotId:string|null;issuance:Issuance};
+export type Element={name:string;description:string;semanticUri:string|null;shapeUri?:string;propertyShapeUri?:string|null;subjectClassUri?:string|null;complexPath?:boolean};
+export type Profile={id:string;profileId:string;profileUri:string|null;sourceVersion:string|null;sha256:string;verificationStatus:string;issues:string[];elements:Element[];sourceDeclaration:string;manifest?:{sourceArtifacts:{id:string;serialization:string;content:string}[]};[key:string]:unknown};
+export type Item=Input&{technicalPackage?:TechnicalPackage;lifecycle?:Lifecycle;distributionValidation?:DistributionReport|null;derivedValidation?:DerivedValidation|null;semanticValidation?:Validation|null;id:string;provider:string;ownerOrganizationId?:string;dataElements:Element[];modifiedAt:string;draftId?:string;etag?:string;revision?:number;status?:string;version?:string;contentHash?:string;profileSnapshot?:Profile|null;semanticProfileSnapshot?:Profile;validationErrors?:{path:string;message:string}[]};

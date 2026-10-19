@@ -1,10 +1,32 @@
 # Metatietovaranto — synteettinen demo, vaihe 2H
 
+## Julkinen GitHub Pages -esittelydemo
+
+Valmisteltu tavoiteosoite: **https://jgmikael.github.io/metatietovaranto/**. **Julkaisua tai osoitteen HTTP-toimintaa ei ole vielä varmennettu.** Demo toimii julkaisun jälkeen ilman asennusta, kirjautumista tai käynnissä olevaa Codespacea/FastAPIa/PostgreSQL:ää/Keycloakia.
+
+Pages on erillinen build-tila samasta käyttöliittymästä: neljä synteettistä esimerkkituotetta, haku/suodatus, organisaatiot, SHACL-profiili ja kolmen toimitustavan kuvauspaketti tarkasteltavine/latautuvine artefakteineen. Kirjautuminen, muokkaus, hyväksyntä, julkaisu, generointi ja validointi kuuluvat varsinaiseen sovellukseen. Palvelut esitetään suunniteltuina, eikä demo myönnä todistuksia.
+
+**Yhdistämisen jälkeen:** Settings → Pages → Source: **GitHub Actions**, sitten Actions → **Public Pages demo** → Run workflow → **main**. Jos Pages on jo käytössä, main-merge käynnistää julkaisun automaattisesti. Varmista vihreä deploy ja **Verify published HTTP responses** ennen osoitteen jakamista toimivana. Asetusten/tilauksen tarkistus estyi tämän ympäristön API-oikeuksiin (Forbidden); näkyvyyttä tai maksullisia asetuksia ei muutettu.
+
+Build ja paikallinen staattinen kokeilu (Python 3.12, uv ja Node 24):
+
+```sh
+uv sync --locked
+npm ci --prefix apps/web
+bash scripts/build-pages.sh
+uv run --locked python -m scripts.preview_pages --port 4173
+```
+
+Omalla koneella avaa `http://127.0.0.1:4173/metatietovaranto/`; lopeta Ctrl+C. Build ja preview eivät käytä tietokantaa tai tunnistuspalvelua. Windows PowerShellissä Bash-komennon korvaavat `uv run --locked python -m scripts.build_pages_data` ja `npm run build:pages --prefix apps/web`.
+
+[Tarkka käyttöönotto, aineiston alkuperä, polut, testit ja rajoitukset](docs/github-pages-demo.md). Tavallinen paikallinen/Codespaces-sovellus käynnistetään edelleen jäljempänä olevilla ohjeilla. Sen tiedot, snapshotit ja käyttöoikeudet säilyvät.
+
+
 ## 2H:n jatko: attribuuttien semanttiset viittaukset
 
 JSON Scheman `x-term`/`x-mtv-shacl`, SD-JWT Type Metadatan `x-mtv-semantic` ja yhteinen mapping yksilöivät saman SHACL-käyttöyhteyden, alkuperäiset IRI:t ja lähdesnapshotin. Laajennusprofiili 1.0.0, skeema ja mapping löytyvät Type Metadatan omista x-mtv-viitteistä tarkisteineen. Esimerkkikuluttaja lukee yhden väitepolun semantiikan ilman väitearvoja; [sopimus, ajettava esimerkki ja ETSI/EU-vastaavuustaulukko](docs/attribute-semantics.md).
 
-Perus-2H:n PR #12 on nyt mainissa. PR #13:n työhaaraan on tuotu main `9258fff`; PR:n base on vahvistettu `main`-haaraksi. ETSI-alkutekstit ja EU-konsolidointi 11.8.2026 on nyt saatu käyttäjältä ja tarkastettu. [Lähdevertailu ja vastaanotetun asiakirjatietosivun havainnot](docs/pr13-source-comparison.md). Vanhat julkaisut säilyvät muuttumattomina. Katalogiviitteitä voi lisätä **Muokkaa → Ulkoiset attribuutti- ja todistusjärjestelykatalogit** -osiossa. Viitteet tarvitsevat dokumentoidun alkuperän ja normaalin hyväksynnän. 19.10.2026 toimitetun aikajanan ja alkuperäisen asetuksen muutosluettelon arvio on valmis tämän englanninkielisen metatietotehtävän rajauksessa. PL-oikaisun ja tulevien 1.1.2027 muutosten koko tekstit sekä ulkoisen myöntäjän vaatimustenmukaisuus jäävät erikseen tarkistettaviksi; paikallinen laajennus ei väitä standardienmukaisuutta tai lompakkotukea.
+Perus-2H:n PR #12 ja attribuuttisemantiikan PR #13 on yhdistetty mainiin; Pages-tehtävän pohja on main `6b48536`. ETSI-alkutekstit ja EU-konsolidointi 11.8.2026 on nyt saatu käyttäjältä ja tarkastettu. [Lähdevertailu ja vastaanotetun asiakirjatietosivun havainnot](docs/pr13-source-comparison.md). Vanhat julkaisut säilyvät muuttumattomina. Katalogiviitteitä voi lisätä **Muokkaa → Ulkoiset attribuutti- ja todistusjärjestelykatalogit** -osiossa. Viitteet tarvitsevat dokumentoidun alkuperän ja normaalin hyväksynnän. 19.10.2026 toimitetun aikajanan ja alkuperäisen asetuksen muutosluettelon arvio on valmis tämän englanninkielisen metatietotehtävän rajauksessa. PL-oikaisun ja tulevien 1.1.2027 muutosten koko tekstit sekä ulkoisen myöntäjän vaatimustenmukaisuus jäävät erikseen tarkistettaviksi; paikallinen laajennus ei väitä standardienmukaisuutta tai lompakkotukea.
 
 ## Vaihe 2H: tekninen kuvauspaketti
 

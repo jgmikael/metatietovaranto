@@ -78,33 +78,8 @@ def get_product(session, product_id):
     return product
 
 def jsonld(product):
-    p = product if isinstance(product, dict) else serialize(product)
-    return {"@context": {"dcat": "http://www.w3.org/ns/dcat#", "dct": "http://purl.org/dc/terms/",
-            "demo": "https://example.org/metatietovaranto/demo/", "xsd": "http://www.w3.org/2001/XMLSchema#"},
-            "@id": p.get("versionUri",p["uri"]), "@type": "dcat:Dataset",
-            "dcat:version": p.get("version", "unpublished"),
-            "dct:title": {"@value": p["title"], "@language": "fi"},
-            "dct:description": {"@value": p["description"], "@language": "fi"},
-            "dct:publisher": {"@id": f"{BASE_URL}/id/organizations/{p['providerOrganizationId']}", "@type": "dct:Agent", "dct:title": p["provider"]},
-            "dcat:keyword": p["theme"], "dct:source": p["source"],
-            "dct:modified": {"@value": p["modifiedAt"], "@type": "xsd:dateTime"},
-            "dct:accessRights": p["accessConditions"], "demo:synthetic": True,
-            "demo:primaryDelivery": next((item["type"] for item in p.get("distributions") or [] if item["id"]==p.get("primaryDistributionId")),p.get("issuance", {}).get("primaryDelivery", "w3cVc")),
-            "demo:serviceAvailability": p.get("issuance", {}).get("serviceAvailability", "planned"),
-            "demo:vcMetadata": json.dumps(p.get("issuance",{}), ensure_ascii=False),
-            **({"demo:semanticValidation": json.dumps(p["semanticValidation"], ensure_ascii=False)} if "semanticValidation" in p else {}),
-            **({"demo:syntheticExample": json.dumps(p["syntheticExample"], ensure_ascii=False)} if "syntheticExample" in p else {}),
-            **({"demo:derivedValidation": json.dumps(p["derivedValidation"], ensure_ascii=False)} if p.get("derivedValidation") is not None else {}),
-            **({"demo:derivedExamples": json.dumps(p["derivedExamples"], ensure_ascii=False)} if p.get("derivedExamples") else {}),
-            **({"demo:distributions": json.dumps(p["distributions"], ensure_ascii=False),"demo:primaryDistributionId":p.get("primaryDistributionId"),"demo:distributionBindings":json.dumps(p.get("distributionBindings",[]),ensure_ascii=False),"demo:distributionValidation":json.dumps(p.get("distributionValidation"),ensure_ascii=False)} if p.get("distributions") is not None else {}),
-            **({"demo:lifecycle": {"@id": p["lifecycle"]["uri"],
-                "demo:status": p["lifecycle"]["status"], "demo:revision": p["lifecycle"]["revision"],
-                "demo:reason": p["lifecycle"]["reason"],
-                **({"dct:isReplacedBy": {"@id":p["lifecycle"]["replacementVersionUri"]}} if p["lifecycle"]["replacementVersionUri"] else {})}} if p.get("lifecycle") else {}),
-            "demo:purpose": p["purpose"], "demo:limitations": p["limitations"],
-            "demo:availability": p["availability"],
-            "demo:dataElement": [{"demo:name": e["name"], "dct:description": e["description"],
-                                  **({"dct:conformsTo": {"@id": e["semanticUri"]}} if e.get("semanticUri") else {})} for e in p["dataElements"]]}
+    from apps.api.metadata_exports import product_jsonld
+    return product_jsonld(product if isinstance(product,dict) else serialize(product),BASE_URL)
 
 @asynccontextmanager
 async def lifespan(app):
