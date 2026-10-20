@@ -2,6 +2,8 @@
 
 ## Julkinen GitHub Pages -esittelydemo
 
+**Käyttöliittymän ohjeet:** navigaation **Käyttöohje** avaa saman Markdown-ohjeen selaimessa. Kentän **Ohje** avaa selitteen; **Lue lisää** vie oikeaan osioon. Paluu säilyttää keskeneräisen työn ja kohdistuksen. Ohje ei tarvitse palvelinta. Ylläpitotapa ja testit: [Pages-ohjeen ylläpito](docs/pages-help-maintenance.md).
+
 **Käyttäjälle:** [Oma kokeilu – vaiheittainen työnkulku ja kaikkien kenttien täyttöohje](docs/pages-kayttoohje.md). Aloita ohjeen valmiilla esimerkillä; kenttätaulukot kertovat, mitä pitää täyttää ja mitä voi jättää tyhjäksi.
 
 Julkisen esittelyn osoite: **https://jgmikael.github.io/metatietovaranto/**. Kokeilutila ja paikallinen SHACL-generointi on yhdistetty päähaaraan. Julkisen sivuston viimeisintä versiota ei varmennettu tämän ohjepäivityksen yhteydessä. Demo toimii ilman asennusta, kirjautumista tai käynnissä olevaa Codespacea/FastAPIa/PostgreSQL:ää/Keycloakia.

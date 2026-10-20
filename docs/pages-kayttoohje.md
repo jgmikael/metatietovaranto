@@ -1,19 +1,53 @@
 # Public Pages -demon käyttöohje: Oma kokeilu
 
-Kenttäkohtainen ohje ja työnkulku, tarkistettu main-version `0f26969` käyttöliittymästä 20.10.2026.
+Kenttäkohtainen ohje ja työnkulku, tarkistettu main-version `8398c02` käyttöliittymästä 20.10.2026.
 
 **Demo:** https://jgmikael.github.io/metatietovaranto/
+
+Käyttöliittymän **Käyttöohje** avaa tämän saman ohjeen sisällysluetteloineen. Kentän vieressä **Ohje** avaa tai sulkee lyhyen selitteen; **Lue lisää** avaa vastaavan ohjeosion. **Palaa edelliseen näkymään** tai selaimen Takaisin palauttaa kenttään ja säilyttää muokkaukset, keskeneräisen tiedostotuonnin ja mapping-ehdotuksen. Kokonaisen sivun uudelleenlataus säilyttää vain paikallisesti tallennetut tiedot, ei vielä liittämätöntä tiedostovalintaa.
+
+Suoran osiolinkin muoto on `/metatietovaranto/#ohje/shacl-tuonti` (SHACL-tuonti) tai `/metatietovaranto/#ohje/generointi` (esitysvalinnat). Markdown-versio on edelleen ladattavissa ohjenäkymästä. Ohje on mukana staattisessa buildissa eikä tarvitse palvelinsovellusta.
 
 Valitse **Aloita oma kokeilu**. Kirjautumista, asennusta tai Codespacea ei tarvita. Käytä vain synteettisiä organisaatioita ja esimerkkitietoja. Omat muutoksesi säilyvät tämän selaimen ja selainprofiilin paikallisessa tallennuksessa. Ne eivät muuta julkista esittelyä tai muiden käyttäjien tietoja.
 
 Ohjeessa **generointiin tarvittava** tarkoittaa nykyisen selaingeneraattorin vaatimusta. Kaikkia kuvattavissa olevia palvelutietoja ei tarvitse täyttää. Tyhjän kentän tallentuminen ei tarkoita, että kuvaus olisi täydellinen tai palvelu toimiva.
+
+## 0. Julkisen esittelyn selaaminen
+
+Julkinen näkymä on kaikkien luettavissa. Haku ja lataukset koskevat mukana toimitettua synteettistä aineistoa, eivät oman kokeilusi tuotteita. Siirry omaan työtilaan Aloita oma kokeilu -painikkeella. Käyttöohjeen paluupainike palauttaa edelliseen näkymään ja kenttään.
+
+| Kenttä | Täyttöohje |
+| --- | --- |
+| Hakusana | Hae tuotteen nimestä, kuvauksesta, tarjoajasta tai teemasta, esimerkiksi `yritys`. Valinnainen. Käytä Hae-painiketta. |
+| Teema | Rajaa aihealueella, esimerkiksi `Yritykset`. Tyhjä näyttää kaikki teemat. |
+| Tarjoaja | Rajaa tarjoajan nimellä, esimerkiksi `Demo-veroviranomainen`. Tämä ei vaihda tuotteen tarjoajaa. |
+| Version elinkaaritila | Rajaa näytettäviä versioita. Mukana toimitetut esimerkit ovat julkaistun tilan esimerkkejä; Poistumassa käytöstä / Poistettu käytöstä voi antaa tyhjän listan. Tämä valinta ei muuta tilaa. |
+
+## Sanasto ja vastuunjako
+
+| Käsite | Selite |
+| --- | --- |
+| Metatiedot | Kuvaus siitä, mitä tietotuote sisältää, kuka siitä vastaa ja miten sisältöä suunnitellaan toimitettavan. Katalogin JSON-/JSON-LD-vienti palauttaa näitä kuvauksia, ei rekisterin varsinaisia tietoja. |
+| Tietosisältö | Varsinaiset sisältökentät ja arvot, esimerkiksi yrityksen nimi. Kokeilussa vain synteettisiä arvoja. Sisältösopimus perustuu SHACL-lähteeseen. |
+| Todistuksen kuori | Sisältöä ympäröivä todistusrakenne, kuten W3C VC:n issuer ja credentialSubject tai SD-JWT VC:n vct. Paikallinen esimerkki ei ole myönnetty tai allekirjoitettu todistus. |
+| IRI | Kansainvälistetty resurssitunniste (Internationalized Resource Identifier), esimerkiksi ominaisuuden alkuperäinen URI. Ei sama asia kuin näyttönimi tai ladatun tiedoston polku. |
+| SHACL | Shapes Constraint Language: RDF-tietojen rakenteen ja rajoitteiden kuvauskieli. Tuo soveltamisprofiili Tietomallit-työkalusta; demo ei ole SHACL-mallinnustyökalu eikä täydellinen SHACL-validaattori. |
+| API | Ohjelmointirajapinta (Application Programming Interface). Tuotteen JSON API kuvaisi tulevaa sisältöpalvelua; Pages-demo ei toteuta sitä. |
+| VC | Verifiable Credential, todennettavan todistuksen tietorakenne. W3C VC ja SD-JWT VC ovat eri esitysmuotoja. Pelkkä kuvauksen generointi ei todenna todistusta. |
+| SD-JWT VC | Valikoivaa paljastamista tukeva todistusmuoto. JWT tarkoittaa JSON Web Tokenia. Kokeilussa muodostetaan vain sen tekniset kuvaukset, ei allekirjoitettua tokenia tai disclosureja. |
+| JSON-LD-konteksti | Sitoo JSON-kenttien nimet alkuperäisiin semanttisiin IRI:hin ja tyyppeihin. Ei korvaa SHACLia tai myöntämispalvelua. |
+| Type Metadata | SD-JWT VC:n tyyppikuvaus: vct, väitepolut, näyttönimet ja paljastamismääritykset sekä tämän demon omat semanttiset laajennukset. Ei sisällä myönnettyä todistusta. |
+| Semanttiset annotaatiot | x-term, x-mtv-shacl ja x-mtv-semantic kytkevät kentän alkuperäiseen ominaisuus-IRI:hin, SHACL-käyttöyhteyteen ja lukittuun profiiliin. Oma laajennus ei tarkoita kaikkien lompakoiden tukea. |
+| Omistajaorganisaatio | Varsinaisen palvelinsovelluksen pysyvä oikeuksien ja hyväksymisprosessin omistaja. Pagesissa ei ole omistajan vaihtokenttää tai käyttöoikeuksien hallintaa. Tarjoajan valinta ei myönnä oikeuksia. |
+| Organisaatioroolit | Tarjoaja tarjoaa tuotteen, lähdevastuu vastaa lähdetiedosta, operaattori operoi palvelua ja myöntäjä päättää todistuksesta. Ne voivat olla sama tai eri organisaatio. Nimi ei yksin tee tietueista samaa organisaatiota. |
+| UUID ja XSD | UUID on sovelluksen luoma tietueen tunniste. XSD tarkoittaa XML Schema Datatypes -tyyppejä, kuten xsd:string. Tietotyyppi otetaan lähde-SHACLista, ei keksitä itse. |
 
 ## 1. Ensimmäinen onnistuva kokeilu valmiilla esimerkillä
 
 Tee ensimmäinen kierros näin. Sen jälkeen voit kokeilla oman profiilisi tuontia tai uuden tuotteen lisäämistä.
 
 1. Valitse **Aloita oma kokeilu** ja avaa tuote **Yrityssisältö — JSON API, W3C VC ja SD-JWT VC (synteettinen demo)**. Tässä esimerkissä on jo kolme toimitustapaa ja generointiin sopivia synteettisiä asetuksia.
-2. Lataa repositoriosta [semantic-profile-demo.ttl](../fixtures/semantic-profile-demo.ttl) omalle koneellesi. GitHubin tiedostonäkymässä valitse **Download raw file** tai **Raw** ja tallenna tekstitiedosto `.ttl`-päätteellä. Älä tallenna GitHubin HTML-sivua Turtle-tiedostoksi. Tämä tiedosto on ohjelmiston synteettinen testiprofiili, ei aito Tietomallit-export.
+2. Lataa repositoriosta [semantic-profile-demo.ttl](../fixtures/semantic-profile-demo.ttl) omalle koneellesi. Käyttöliittymän ohjeessa linkki lataa mukana toimitetun tiedoston. Jos luet ohjetta GitHubissa, valitse tiedostonäkymässä **Download raw file** tai **Raw** ja tallenna tekstitiedosto `.ttl`-päätteellä. Älä tallenna GitHubin HTML-sivua Turtle-tiedostoksi. Tämä tiedosto on ohjelmiston synteettinen testiprofiili, ei aito Tietomallit-export.
 3. Vieritä tuotteen kohtaan **Tuo SHACL-profiili ja muodosta paikallinen paketti**. Valitse tiedosto kenttään **SHACL Turtle -tiedosto**. Riippuvuustiedostoja ei tarvita tälle esimerkille.
 4. Odota ilmoitusta **Turtle jäsennetty**. Tunnisteeksi pitäisi tulla `https://example.org/metatietovaranto/demo/profile`. Lähdeprofiilin version voi tässä esimerkissä jättää tyhjäksi: tiedosto ei ilmoita sitä. Valitse **Liitä tuotu profiili tuotteeseen** ja odota liittämisen vahvistus sekä **Tallennettu**.
 5. Valitse **Näytä tuodun profiilin luokkamuodot** ja listasta juureksi `https://example.org/metatietovaranto/demo/ProductShape`. Saman arvon voi kirjoittaa suoraan kenttään **Generoinnin juurimuodon IRI**.
@@ -24,7 +58,11 @@ Tee ensimmäinen kierros näin. Sen jälkeen voit kokeilla oman profiilisi tuont
    | --- | --- |
    | Mappingin paikallinen versio | `1.0.0` |
    | Suunniteltu HTTPS-julkaisemisen perusosoite | `https://julkaisut.example.org` |
-   | Synteettinen yhteisen sisällön JSON-esimerkki | `{"companyName":"Synteettinen Esimerkki Oy"}` |
+   | Synteettinen yhteisen sisällön JSON-esimerkki | Kopioi alla oleva JSON. |
+
+   ```json
+   {"companyName":"Synteettinen Esimerkki Oy"}
+   ```
 
    Esimerkkiosoite ei ole toimiva julkaisupalvelu. Sen antaminen ei lähetä tiedostoja sinne.
 8. Tarkasta kolme toimitustapaa tarvittaessa **Muokkaa paikallista tuotetta** -näkymästä. Valmiin yritysesimerkin asetuksia ei tarvitse muuttaa tätä kierrosta varten. Jos muutat niitä, sulje muokkaus, palaa generointikohtaan ja tarkasta mapping-ehdotus tarvittaessa uudelleen.
@@ -48,6 +86,7 @@ Tee ensimmäinen kierros näin. Sen jälkeen voit kokeilla oman profiilisi tuont
 
 | Toiminto tai kenttä | Käyttöohje |
 | --- | --- |
+| Tallennuksen tila | Muutos tallentuu noin puolen sekunnin viiveellä vain tähän selaimeen. Odota Tallennettu-ilmoitusta; virheessä vie kokeilu JSONiksi. Tämä ei ole julkaisu tai riippumaton hyväksyntä. |
 | Omat tietotuotteet | Avaa omien paikallisten tuotteiden lista. Tuotteen nimeä painamalla avaat sen. |
 | Lisää paikallinen tietotuote | Luo uuden tuotteen ja vakaan UUID-tunnisteen. Ennen lisäystä pitää olla vähintään yksi organisaatio. |
 | Muokkaa paikallista tuotetta / Sulje muokkaus | Avaa tai sulje perustietojen ja toimitustapojen lomake. Muutokset tallentuvat automaattisesti, erillistä Tallenna-painiketta ei ole. |

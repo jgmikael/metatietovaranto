@@ -6,7 +6,12 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "tsc --noEmit && vite build",
-    "build:pages": "tsc --noEmit && vite build --mode pages"
+    "build:pages": "tsc --noEmit && vite build --mode pages",
+    "build:help": "node scripts/build-help.mjs",
+    "prebuild": "npm run build:help",
+    "prebuild:pages": "npm run build:help",
+    "test:help": "node --test tests/help.test.mjs",
+    "predev": "npm run build:help"
   },
   "dependencies": {
     "ajv": "^8.20.0",
@@ -20,7 +25,10 @@
     "@types/n3": "^1.26.4",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "remark-gfm": "^4.0.1",
+    "remark-parse": "^11.0.0",
     "typescript": "~5.8.3",
+    "unified": "^11.0.5",
     "vite": "^6.3.0"
   }
 }

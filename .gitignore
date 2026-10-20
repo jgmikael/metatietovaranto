@@ -13,3 +13,5 @@ test-results/
 
 .pages-data/
 dist-pages/
+
+/apps/web/src/help/generated/

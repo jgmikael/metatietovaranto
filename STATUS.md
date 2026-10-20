@@ -1,3 +1,30 @@
+# Pagesin käyttöliittymän ohjeet (20.10.2026)
+
+Pohja ajantasainen main `8398c02` (käyttöohje-PR #17 yhdistetty), haara `feat/pages-inline-help`. Sama **docs/pages-kayttoohje.md** toimii nyt käyttöliittymän kokonaisohjeena ja lyhyiden kenttäselitteiden lähteenä. Buildin kenttärekisterissä on **104 yhteistä kenttä-/käsiteavainta ja 19 pysyvää osiota**. Navigaatiossa Käyttöohje, sisällysluettelo, suorat/reloadia kestävät `#ohje/<tunniste>`-linkit ja Markdown-lataus. Kentän Ohje on natiivi avaus-/sulkupainike (type=button, aria-expanded/controls), ja kenttä viittaa selitteeseen aria-describedby-attribuutilla. Lue lisää vie oikeaan osioon. Paluu palauttaa kohdistuksen ja vierityksen; myös keskeneräinen Turtle-tuonti, mapping-ehdotus ja kuittaukset säilyvät ohjevierailun ajan.
+
+Kattavuus: julkinen haku, paikalliset organisaatiot ja tuotteen perustiedot, JSON API / W3C VC / SD-JWT VC, myöntäjä-/lompakkoasetukset, mappingit, SHACL-tuonti ja generointi, tallennus/tuonti/vienti/palautus sekä keskeiset johdetut tulokset. Kattavuustestissä käytiin läpi myös olio- ja lompakkokenttien ehdolliset haarat. Nykyisiä Pagesin muokattavia kenttiä ei tunnistettu jääneen ohjeistamatta. Omistajaorganisaation oikeudet selitetään käsitteenä; Pagesiin ei keksitä omistajan vaihtokenttää. Palvelinsovelluksen omat ylläpitolomakkeet säilyvät ilman uutta Pages-ohjenäkymää.
+
+Markdown jäsennetään buildissa unified/remark-parse/remark-gfm-kirjastoilla rajattuun rakenteeseen. Selaimessa ei suoriteta koodia, renderöidä raakaa HTML:ää tai haeta ohjetta ulkopuolelta. Markdown, Turtle-esimerkki ja raportti sisältyvät buildiin. Kenttätekstejä ei kopioida Reactiin. Ohjekääntäjä tarkistaa rekisterin lähderivit/otsikot. Ohjeiden ylläpito: **docs/pages-help-maintenance.md**. Molempien buildien ja kehityskäynnistyksen esivaihe generoi ohjeen. Dockerin web-stage huomioi ohjeen lähdetiedostot. Ei migraatiota tai muutosta olemassa oleviin julkaisuihin, käyttöoikeuksiin tai paikallisen kokeilun tallennusformaattiin.
+
+## Tämän muutoksen todennus
+
+- Ohjekääntäjän `npm run test:help --prefix apps/web`: **3 läpäisi** (otsikko-/kenttäkytkennät, puutteiden/duplikaattien hylkäys, HTML/linkkien turvallisuus ja koodiesimerkin käsittely tekstinä).
+- `npm run build --prefix apps/web` sekä `UV_CACHE_DIR=/workspace/.cache/uv bash scripts/build-pages.sh`: **läpäisivät**. Pages-build ajaa myös ohjekääntäjän testit. `node apps/web/scripts/build-help.mjs --check` ja `git diff --check`: läpäisivät.
+- `.venv/bin/pytest tests_static -q`: **62 läpäisi** lopullisesta buildista `/metatietovaranto/`-alipolussa. Kuusi uutta ohjekoetta: avaus/sulku/näppäimistö ilman lomakelähetystä, suorat linkit/reload/Markdown-rakenteet/lataukset, ehdollisten kenttien kattavuus, keskeneräinen tiedostotuonti ja muokkaus, mapping/kuittaukset/fokus/vieritys sekä julkisen tuotesivun paluu ja Chromium-kosketustapahtuma kapeassa näkymässä. Kaikki ulkoiset/API-/tunnistuspyynnöt estetty; ei yrityksiä niihin tai JavaScript-/konsolivirheitä. Nykyiset vienti-/palautus-, Worker-parity-, JSON-LD/RDF- ja generointikokeet mukana.
+- Palvelinregressiot: **193 läpäisi** (`test_api`, `test_auth`, `test_publication`, `test_public_url`, `test_semantic_validation`, `test_derived_validation`, `test_distributions`, `test_conversion`, `test_lifecycle`, `test_technical_packages`, `test_attribute_semantics`) ja tämän jälkeen **16 läpäisi** (`test_migrations`, `test_profiles`). Yhteensä **209** erilliseen testikantaan; tyhjentäviä testisarjoja ei ajettu rinnakkain samaan kantaan.
+- Lopullinen Docker-image rakennettu `DOCKER_CONFIG=/workspace/.cache/docker bash scripts/cloud-build.sh` -komennolla (ympäristön välityspalvelin/CA huomioitu); `DOCKER_CONFIG=/workspace/.cache/docker docker compose up -d --no-build --wait` käynnisti terveen sovelluksen. Kaikkien 13 katalogitaulun sisältöhashit ja Alembic-head verrattu ennen/jälkeen: **muuttumattomat**. PostgreSQL-volumeja ei poistettu. Levytilan loppuminen korjattiin poistamalla käyttämätön Docker-build-välimuisti, minkä jälkeen lopulliset buildit ja testit ajettiin uudelleen.
+- `BROWSER_BASE_URL=http://localhost:8000 .venv/bin/pytest tests/test_browser.py -q`: **13 läpäisi** lopullista imagea vasten, oikea Keycloak-kirjautuminen mukana. Sarjoissa vain nykyisten Starlette/rdflib-riippuvuuksien deprekaatiovaroituksia.
+- Erillinen HTTP-yhteensopivuuskoe: **108 vanhaa julkaisuversiota luettavissa**, **8 vanhaa generaattoripakettia** ja **78 artefaktin** alkuperäiset tavut/tarkisteet varmennettu. Hakunäkymä/avoin selite ja ohjeosio tarkastettu lisäksi kuvakaappauksista Chromiumissa.
+
+
+Rajat: ei NVDA-/VoiceOver-koetta tai fyysistä puhelinta, Firefoxia/Safaria, Windows Docker Desktopia tai Codespaces-ympäristön omaa käynnistystä tällä kierroksella. Ohjelmalliset saavutettavuus-, näppäimistö- ja kosketuskokeet ajetaan Chromiumissa. GitHub Actionsin tai julkisen Pages-deployn tulosta ei ole tarkistettu; PR-haara ei julkaise. Julkista URLia ei väitetä tässä muutoksessa päivitettynä toimivaksi.
+
+## Toimitus
+
+Haara `feat/pages-inline-help`, valmis PR-kuvaus **docs/pull-request-pages-help.md**. Ei main-yhdistämistä. GitHub API:n PR-operaation tulos kirjataan toimitukseen.
+
+---
+
 # Public Pages -demon kenttäkohtainen käyttöohje (20.10.2026)
 
 Pohja main `0f26969`, paikallinen SHACL-generointi yhdistetty. Uusi dokumentti **docs/pages-kayttoohje.md** kuvaa Aloita oma kokeilu -työnkulun vaihe vaiheelta: valmiin esimerkin ensikokeilu, oma organisaatio/tuote, kaikki perustieto-/toimitustapa-/myöntäjä-/lompakko-/mapping-kentät, SHACL-tuonti, esitysvalinnat ja kuittaukset, tulokset/lataukset, palautus ja virhetilanteet. Generointiin tarvittavat ja valinnaiset tiedot erotellaan; ei kehoteta keksimään toimivaa myöntäjäpalvelua, QEAA-näyttöä tai lompakkotukea. Kenttänimet vastaavat nykyistä käyttöliittymää. Linkit READMEssä ja nykyisissä kokeilu-/generaattoriohjeissa. Ei sovelluskoodin tai tietokannan muutoksia.
