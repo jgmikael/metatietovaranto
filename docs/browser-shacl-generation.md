@@ -1,5 +1,7 @@
 # Paikallinen SHACL-tuonti ja selaingenerointi
 
+[Käyttäjän ohje: ensikokeilu ja kaikkien kenttien selitteet](pages-kayttoohje.md). Alla on toteutuksen tekninen rajaus.
+
 Toteutuspohja on main `f1f4de6`, joka sisältää PR #15:n Oma kokeilu -tilan. Palvelinsovelluksen tuonti, generaattori, hyväksyntä, julkaisut, Private-Codespaces ja julkinen esittely säilyvät. Selainpolku ei käytä APIa, PostgreSQL:ää tai Keycloakia. Käyttäjän aineistoa ei lähetetä palvelimelle.
 
 ## Käyttö

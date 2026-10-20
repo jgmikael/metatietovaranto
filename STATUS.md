@@ -1,3 +1,15 @@
+# Public Pages -demon kenttäkohtainen käyttöohje (20.10.2026)
+
+Pohja main `0f26969`, paikallinen SHACL-generointi yhdistetty. Uusi dokumentti **docs/pages-kayttoohje.md** kuvaa Aloita oma kokeilu -työnkulun vaihe vaiheelta: valmiin esimerkin ensikokeilu, oma organisaatio/tuote, kaikki perustieto-/toimitustapa-/myöntäjä-/lompakko-/mapping-kentät, SHACL-tuonti, esitysvalinnat ja kuittaukset, tulokset/lataukset, palautus ja virhetilanteet. Generointiin tarvittavat ja valinnaiset tiedot erotellaan; ei kehoteta keksimään toimivaa myöntäjäpalvelua, QEAA-näyttöä tai lompakkotukea. Kenttänimet vastaavat nykyistä käyttöliittymää. Linkit READMEssä ja nykyisissä kokeilu-/generaattoriohjeissa. Ei sovelluskoodin tai tietokannan muutoksia.
+
+Tarkistettu lähdekoodista 49 toimitustapa-/mapping-kenttäselitettä, 10 generointikenttää, 5 kokeilun/organisaation kirjaimellista labelia ja 7 perustietokentän nimeä sekä dokumenttien suhteelliset tiedostolinkit. `git diff --check` läpäisi. `bash scripts/build-pages.sh` läpäisi.
+
+Ohjeen ensikokeilun arvot ajettiin oikealla Chromiumilla staattisessa `/metatietovaranto/`-alipolussa: synteettinen Turtle → juurimuoto ja ehdotus → `1.0.0`, `https://julkaisut.example.org`, `{"companyName":"Synteettinen Esimerkki Oy"}` ja kolme kuittausta → **13 artefaktia**, context.jsonld-lataus ja työtilan reload läpäisivät. Kaikki ulkoiset/kirjoituspyynnöt oli estetty; ei yrityksiä niihin tai JS-/konsolivirheitä. Preview pysäytettiin. Julkista sivustoa ei tarkistettu tässä ohjepäivityksessä.
+
+Koko API-/migraatio-/palvelinselaintestisarjaa tai 56 testin staattista regressiosarjaa ei toistettu pelkän dokumentaatiomuutoksen vuoksi. Edellisen toteutuksen tulokset ovat alla historiallisina raportteina. Dokumentti ei lisää kenttäkohtaisia tooltippejä sovellukseen vaan antaa yhden luettavan, esimerkeillä täydennetyn täyttöohjeen.
+
+---
+
 # Pagesin paikallinen SHACL-tuonti ja generointi (19.10.2026)
 
 Pohja main `f1f4de6` (PR #15 / Oma kokeilu yhdistetty), uusi haara `feat/pages-browser-shacl`. Main tarkistettu uudelleen ennen toimitusta ja ennallaan. Toteutettu UTF-8 Turtle -tuonti ja paikalliset riippuvuudet, muodot/ominaisuudet/nimiavaruudet/importit, juuren valinta, tarkastettavat deterministiset nimet ja esitysvalinnat sekä rajattu planned-toimitustapojen tekninen kuvauspaketti Web Workerissa.
