@@ -21,7 +21,7 @@ Rajat: ei NVDA-/VoiceOver-koetta tai fyysistä puhelinta, Firefoxia/Safaria, Win
 
 ## Toimitus
 
-Haara `feat/pages-inline-help`, valmis PR-kuvaus **docs/pull-request-pages-help.md**. Ei main-yhdistämistä. GitHub API:n PR-operaation tulos kirjataan toimitukseen.
+Toteutuscommit `7bf7363`, haara `feat/pages-inline-help` pushattu. Valmis PR-kuvaus **docs/pull-request-pages-help.md**. `gh pr create --base main --head feat/pages-inline-help --title "Pages: käyttöohje ja kenttäkohtaiset ohjeet" --body-file docs/pull-request-pages-help.md` estyi GitHub GraphQL API:n **Forbidden**-vastaukseen. PR:ää ei siksi luotu tässä ympäristössä eikä sille ilmoiteta keksittyä numeroa. Luontilinkki: https://github.com/jgmikael/metatietovaranto/pull/new/feat/pages-inline-help (base main, compare feat/pages-inline-help). Kopioi valmiin kuvauksen sisältö PR:n kuvauskenttään. Ei main-yhdistämistä tai Pages-julkaisua.
 
 ---
 
