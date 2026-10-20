@@ -8,6 +8,8 @@ Ohjeen ensikokeilun arvot ajettiin oikealla Chromiumilla staattisessa `/metatiet
 
 Koko API-/migraatio-/palvelinselaintestisarjaa tai 56 testin staattista regressiosarjaa ei toistettu pelkän dokumentaatiomuutoksen vuoksi. Edellisen toteutuksen tulokset ovat alla historiallisina raportteina. Dokumentti ei lisää kenttäkohtaisia tooltippejä sovellukseen vaan antaa yhden luettavan, esimerkeillä täydennetyn täyttöohjeen.
 
+Toimitus: commit `4f3ce80`, haara `docs/pages-workflow-guide` pushattu. PR:n avaaminen komennolla `gh pr create --base main --head docs/pages-workflow-guide --body-file docs/pull-request-pages-guide.md` estyi GitHub GraphQL API:n Forbidden-vastaukseen. Ohje on jo luettavissa haarassa. Valmis PR-kuvaus docs/pull-request-pages-guide.md ja luontilinkki https://github.com/jgmikael/metatietovaranto/pull/new/docs/pages-workflow-guide. Ei main-mergeä.
+
 ---
 
 # Pagesin paikallinen SHACL-tuonti ja generointi (19.10.2026)
