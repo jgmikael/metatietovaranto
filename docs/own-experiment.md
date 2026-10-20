@@ -1,5 +1,7 @@
 # Oma kokeilu: vain selaimessa
 
+[Käyttäjän kenttäkohtainen täyttöohje ja työnkulku](pages-kayttoohje.md).
+
 Pagesin **Aloita oma kokeilu** avaa osoitteen `#kokeilu`. Ensimmäinen avaus kopioi julkaisuun sisältyvien neljän synteettisen tuotteen ja organisaatioiden muokattavan metadatan. Myöhemmät avaukset jatkavat tallennettua kokeilua. Julkisen esittelyn aineisto ei muutu. Kirjautumista tai palvelinpalveluja ei tarvita.
 
 Tuotteita ja organisaatioita voi lisätä, muokata ja poistaa. Tarjoajan ja toimitustapojen organisaatioviittausten on säilyttävä: käytössä olevaa organisaatiota ei voi poistaa. JSON API-, W3C VC- ja SD-JWT VC -metatietoja muokataan samoilla komponenteilla kuin varsinaisessa sovelluksessa. Profiilin voi valita mukana toimitetuista lukituista snapshoteista; lähde-SHACLia voi tarkastella ja ladata. Paikallinen Turtle-tuonti ja rajattu tekninen generointi on nyt lisätty: [tarkka käyttö ja rajaus](browser-shacl-generation.md). Täydellistä SHACL-validointia, hyväksyntää tai julkaisua ei tehdä.

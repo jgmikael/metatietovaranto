@@ -2,7 +2,9 @@
 
 ## Julkinen GitHub Pages -esittelydemo
 
-Julkisen esittelyn osoite: **https://jgmikael.github.io/metatietovaranto/**. Käyttäjä on vahvistanut aiemman esittelyversion julkaisun onnistuneeksi. Tämän PR:n Oma kokeilu -tilaa ei ole vielä julkaistu tai HTTP-varmennettu julkisella sivustolla. Demo toimii ilman asennusta, kirjautumista tai käynnissä olevaa Codespacea/FastAPIa/PostgreSQL:ää/Keycloakia.
+**Käyttäjälle:** [Oma kokeilu – vaiheittainen työnkulku ja kaikkien kenttien täyttöohje](docs/pages-kayttoohje.md). Aloita ohjeen valmiilla esimerkillä; kenttätaulukot kertovat, mitä pitää täyttää ja mitä voi jättää tyhjäksi.
+
+Julkisen esittelyn osoite: **https://jgmikael.github.io/metatietovaranto/**. Kokeilutila ja paikallinen SHACL-generointi on yhdistetty päähaaraan. Julkisen sivuston viimeisintä versiota ei varmennettu tämän ohjepäivityksen yhteydessä. Demo toimii ilman asennusta, kirjautumista tai käynnissä olevaa Codespacea/FastAPIa/PostgreSQL:ää/Keycloakia.
 
 Pages on erillinen build-tila samasta käyttöliittymästä: neljä synteettistä esimerkkituotetta, haku/suodatus, organisaatiot, SHACL-profiili ja kolmen toimitustavan kuvauspaketti tarkasteltavine/latautuvine artefakteineen. Julkinen kataloginäkymä on vain lukua varten. Kirjautuminen, yhteisten tietojen muokkaus, hyväksyntä, julkaisu ja täydellinen palvelinpuolen validointi kuuluvat varsinaiseen sovellukseen. Palvelut esitetään suunniteltuina, eikä demo myönnä todistuksia.
 
