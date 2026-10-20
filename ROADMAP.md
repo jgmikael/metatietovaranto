@@ -149,3 +149,9 @@ Virallisiin Pages Actionseihin perustuva PR-tarkistus ja vain mainista julkaisev
 - Yhteiset palvelimesta johdetut määritykset ja oikean selaimen vertailutestit; rajaus/erot docs/browser-shacl-generation.md. Ei mielivaltaista SHACLia, etätuontia tai CORS-välitystä.
 - Versioitu paikallinen sidonta ja tarkisteketju, vanheneminen ja palautettavat lähteet kokeilun v1-laajennuksessa. Ei oikeaa julkaisua, riippumatonta hyväksyntää tai täyttä selain-SHACL-validointia.
 - Varsinainen lähdetietopalvelu, myöntäminen, allekirjoitus ja lompakkotoimitus jäävät ulkoiselle myöntäjälle. Julkinen demo ja palvelinsovellus säilyvät.
+
+## Pagesin käyttöohje ja kenttäkohtainen apu
+
+- Sama Markdown-ohje käyttöliittymän näkymänä, sisällysluettelo ja 19 pysyvää osiolinkkiä. Kenttäselitteet poimitaan saman lähteen taulukoista; 104 yhteistä kenttä-/käsiteavainta kattaa nykyisen Pagesin haun ja paikallisen kokeilun kentät sekä keskeiset tulokset ja roolit.
+- Natiivin Ohje-painikkeen avattava selite, kenttään sidottu kuvaus ja Lue lisää. Ohjevierailu säilyttää keskeneräisen työn, kohdistuksen ja vierityksen. Ei muutosta sisältömalliin, tallennusformaattiin, oikeuksiin tai hyväksymiseen.
+- Markdownin turvallinen build-käsittely, kattavuus- ja selainregressiot. Ylläpitotapa: [docs/pages-help-maintenance.md](docs/pages-help-maintenance.md).
