@@ -142,3 +142,10 @@ Virallisiin Pages Actionseihin perustuva PR-tarkistus ja vain mainista julkaisev
 - Versioitu localStorage, automaattitallennuksen tila, Web Locks / ristiriidat, JSON-tuonti ja vienti sekä vahvistettu palautus.
 - Julkinen aineisto ja varsinainen palvelinsovellus säilyvät; ei yhteisiä kirjoituksia, kirjautumista, generointia, validointia tai myöntämistä Pagesissa.
 - Paikalliset tuotteet aina validoimattomia; alkuperäisen paketin tarkisteviite erillinen. Katso docs/own-experiment.md. Tämä ei aloita ulkoisten integraatioiden vaihetta.
+
+## Pagesin paikallinen SHACL-tuonti ja tekninen generointi
+
+- Toteutettu paikalliset UTF-8 Turtle -lähteet/riippuvuudet, juuren valinta, tarkastettavat esitysehdotukset ja planned-toimitustapojen tekninen paketti Web Workerissa.
+- Yhteiset palvelimesta johdetut määritykset ja oikean selaimen vertailutestit; rajaus/erot docs/browser-shacl-generation.md. Ei mielivaltaista SHACLia, etätuontia tai CORS-välitystä.
+- Versioitu paikallinen sidonta ja tarkisteketju, vanheneminen ja palautettavat lähteet kokeilun v1-laajennuksessa. Ei oikeaa julkaisua, riippumatonta hyväksyntää tai täyttä selain-SHACL-validointia.
+- Varsinainen lähdetietopalvelu, myöntäminen, allekirjoitus ja lompakkotoimitus jäävät ulkoiselle myöntäjälle. Julkinen demo ja palvelinsovellus säilyvät.

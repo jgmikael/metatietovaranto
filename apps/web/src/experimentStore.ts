@@ -1,13 +1,14 @@
 /** Versioned, bounded metadata only. No network, content evaluation or server identity. */
 import type {Input,Item,Org} from './types';
 import {metadataFields as textFields} from './types';
+import type {ImportedProfile,GenerationState} from './browserGeneration/model';
 import type {Catalogue} from './dataSource';
 export const STORE_KEY='fi.metatietovaranto.pages.own-experiment.v1';
 export const FORMAT='fi.metatietovaranto.own-experiment';
 export const MAX_BYTES=2*1024*1024;
 export type LocalMetadata=Pick<Input,typeof textFields[number][0]|'providerOrganizationId'|'distributions'|'primaryDistributionId'|'profileSnapshotId'|'synthetic'|'availability'>;
-export type LocalProduct={id:string;metadata:LocalMetadata;profileReference:{snapshotId:string;sha256:string}|null;originalPackageReference:{productId:string;version:string;packageId:string;sha256:string}|null};
-export type Workspace={format:typeof FORMAT;schemaVersion:1;synthetic:true;sourceDemoVersion:string;products:LocalProduct[];organizations:Org[]};
+export type LocalProduct={id:string;metadata:LocalMetadata;profileReference:{snapshotId:string;sha256:string}|null;originalPackageReference:{productId:string;version:string;packageId:string;sha256:string}|null;generation?:GenerationState};
+export type Workspace={format:typeof FORMAT;schemaVersion:1;synthetic:true;sourceDemoVersion:string;products:LocalProduct[];organizations:Org[];localProfiles?:ImportedProfile[]};
 type Rule=(value:unknown,path:string)=>void;
 const invalid=(path:string,message:string):never=>{throw new Error(path+': '+message);};
 const str=(max:number):Rule=>(value,path)=>{if(typeof value!=='string'||value.length>max)invalid(path,`Tekstin enimmäispituus on ${max}.`);};
@@ -32,16 +33,25 @@ const distribution=obj({id,type:choice('jsonApi','w3cVc','sdJwtVc'),format:choic
  api:optional(obj({serviceUrl:nullable(iri),descriptionUrl:nullable(iri),openApiArtifactId:nullable(id),jsonSchemaArtifactId:nullable(id),authentication:choice('none','oauth2','apiKey','mtls'),requiredRights:strings(100,200),freshness:str(2000)})),credential:optional(credential),w3c:optional(obj({vcdmVersion:choice('2.0'),vcTypes:strings(20),contexts:strings(20),contentPath:str(1000)})),sdJwt:optional(obj({vct:nullable(iri),profileVersion:str(100),selectiveDisclosure:choice('perClaim','always','never'),holderBinding:choice('required','optional','none'),nonDisclosableClaims:strings(200,1000)}))});
 const metadata=obj({...Object.fromEntries(textFields.map(([key,,max])=>[key,str(max)])),providerOrganizationId:id,distributions:nullable(arr(10,distribution)),primaryDistributionId:nullable(id),profileSnapshotId:nullable(id),synthetic:choice(true),availability:choice('planned','sandbox')});
 const organization=obj({id,legalName:str(200),country:str(2),synthetic:choice(true),identifiers:arr(20,obj({scheme:str(200),value:str(200)}))});
-const product=obj({id,metadata,profileReference:nullable(obj({snapshotId:id,sha256:hash})),originalPackageReference:nullable(obj({productId:id,version:str(100),packageId:hash,sha256:hash}))});
-const workspaceShape=obj({format:choice(FORMAT),schemaVersion:choice(1),synthetic:choice(true),sourceDemoVersion:str(100),products:arr(100,product),organizations:arr(50,organization)});
+const sourceFile=obj({name:str(200),content:str(256*1024),sha256:hash});
+const importedProfile=obj({id,profileUri:str(2048),sourceVersion:nullable(str(200)),sha256:hash,sources:arr(10,sourceFile)});
+const artifact=obj({mediaType:choice('application/json','application/schema+json','application/ld+json','application/n-quads','text/turtle'),sha256:hash,content:str(1000000),url:str(4096)});
+const localArtifacts:Rule=(value,path)=>{if(!value||typeof value!=='object'||Array.isArray(value))invalid(path,'Artefaktit puuttuvat.');const entries=Object.entries(value as object);if(entries.length>30)invalid(path,'Liikaa artefakteja.');for(const [key,v] of entries){if(!/^(context.jsonld|content.schema.json|semantic-mapping.json|semantic-extension-profile.json|sd-jwt-type-metadata.json|issuer-metadata-binding.json|content-example.json|sd-jwt-claims-example.json|unsigned-vc-example.jsonld|example.nq|validation.json|manifest.json|source-[0-9].ttl)$/.test(key))invalid(path,'Tuntematon artefakti.');artifact(v,path+'/'+key);}};
+const localPackage=obj({status:choice('local'),binding:str(500000),packageId:hash,artifacts:localArtifacts,validation:obj({turtle:choice('parsed'),generationSupport:choice('checked-browser-subset'),jsonSchema:choice('conforms'),jsonLdProcessor:choice('jsonld.js'),jsonLdExpansion:choice('succeeded-locked-loader'),shacl:choice('not-run'),graphComparison:choice('not-run-in-browser'),publication:choice('not-published'),scope:str(1000)})});
+const generation=obj({profileId:id,rootShapeUri:str(2048),names:arr(200,obj({semanticPath:strings(10),fieldName:str(100)})),mappingVersion:str(100),publicationBase:str(2048),exampleContent:str(100000),acceptRepresentation:choice(true,false),acceptFormatPolicies:choice(true,false),synthetic:choice(true,false),package:optional(localPackage)});
+const product=obj({id,metadata,profileReference:nullable(obj({snapshotId:id,sha256:hash})),originalPackageReference:nullable(obj({productId:id,version:str(100),packageId:hash,sha256:hash})),generation:optional(generation)});
+const workspaceShape=obj({format:choice(FORMAT),schemaVersion:choice(1),synthetic:choice(true),sourceDemoVersion:str(100),products:arr(100,product),organizations:arr(50,organization),localProfiles:optional(arr(10,importedProfile))});
 function unique(values:string[],path:string){if(new Set(values.map(v=>v.toLowerCase())).size!==values.length)invalid(path,'Tunnisteet eivät ole yksilöllisiä.');}
 export function orgReferences(product:LocalProduct){return [product.metadata.providerOrganizationId,...(product.metadata.distributions||[]).flatMap(d=>[d.providerOrganizationId,d.operatorOrganizationId,d.sourceProviderOrganizationId,...(d.credential?.issuerOrganizationId?[d.credential.issuerOrganizationId]:[])])];}
 export function validateWorkspace(value:unknown):Workspace{
  workspaceShape(value,'kokeilu');const data=value as Workspace;
  if(!data.sourceDemoVersion.trim())invalid('sourceDemoVersion','Lähtöaineiston versiotunniste puuttuu.');
+ unique((data.localProfiles||[]).map(p=>p.id),'paikalliset profiilit');
+ for(const profile of data.localProfiles||[])if(profile.sources.reduce((n,s)=>n+new TextEncoder().encode(s.content).length,0)>256*1024)invalid(profile.id,'Turtle-lähteiden yhteisraja on 256 KiB.');
  unique(data.products.map(p=>p.id),'tuotteet');unique(data.organizations.map(o=>o.id),'organisaatiot');
  const orgs=new Set(data.organizations.map(o=>o.id));
  for(const p of data.products){
+  if(p.generation&&(!(data.localProfiles||[]).some(profile=>profile.id===p.generation!.profileId)))invalid(p.id,'Paikallisen generaation profiiliviittaus puuttuu tai on ristiriidassa.');
   if(orgReferences(p).some(ref=>!orgs.has(ref)))invalid(p.id,'Organisaatioviittaus puuttuu.');
   if((p.profileReference?.snapshotId||null)!==p.metadata.profileSnapshotId)invalid(p.id,'Profiiliviittaukset ovat ristiriidassa.');
   const distributions=p.metadata.distributions||[];unique(distributions.map(d=>d.id),p.id+'/toimitustavat');

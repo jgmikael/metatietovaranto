@@ -1,0 +1,79 @@
+{
+  "owlImports": [
+    {
+      "resolved": true,
+      "scope": "OWL-viite; ei verkkonoutoa. Tarvittava sh:node tarkistetaan erikseen.",
+      "uri": "http://www.w3.org/2004/02/skos/core#"
+    }
+  ],
+  "parser": "N3.js/2.13.12",
+  "profileUri": "https://iri.suomi.fi/model/webcor/",
+  "roots": [
+    {
+      "propertyCount": 11,
+      "rootShapeUri": "https://iri.suomi.fi/model/webcor/Address",
+      "support": {
+        "message": "Eksplisiittinen tuettu sh:datatype tai yksi lukittu sisäkkäinen sh:node/sh:class-muoto tarvitaan.",
+        "path": "https://iri.suomi.fi/model/eu-core/addressArea",
+        "ruleId": "OBJECT_AMBIGUOUS"
+      },
+      "targetClasses": [
+        "https://iri.suomi.fi/model/eu-core/Address"
+      ]
+    },
+    {
+      "propertyCount": 6,
+      "rootShapeUri": "https://iri.suomi.fi/model/webcor/Identifier",
+      "support": {
+        "message": "Eksplisiittinen tuettu sh:datatype tai yksi lukittu sisäkkäinen sh:node/sh:class-muoto tarvitaan.",
+        "path": "https://iri.suomi.fi/model/eu-core/dateOfIssue",
+        "ruleId": "OBJECT_AMBIGUOUS"
+      },
+      "targetClasses": [
+        "https://iri.suomi.fi/model/eu-core/Identifier"
+      ]
+    },
+    {
+      "propertyCount": 2,
+      "rootShapeUri": "https://iri.suomi.fi/model/webcor/Jurisdiction",
+      "support": {
+        "message": "Eksplisiittinen tuettu sh:datatype tai yksi lukittu sisäkkäinen sh:node/sh:class-muoto tarvitaan.",
+        "path": "https://iri.suomi.fi/model/eu-core/id",
+        "ruleId": "OBJECT_AMBIGUOUS"
+      },
+      "targetClasses": [
+        "https://iri.suomi.fi/model/eu-core/Jurisdiction"
+      ]
+    },
+    {
+      "propertyCount": 2,
+      "rootShapeUri": "https://iri.suomi.fi/model/webcor/Location",
+      "support": {
+        "message": "Eksplisiittinen tuettu sh:datatype tai yksi lukittu sisäkkäinen sh:node/sh:class-muoto tarvitaan.",
+        "path": "https://iri.suomi.fi/model/eu-core/geographicIdentifier",
+        "ruleId": "OBJECT_AMBIGUOUS"
+      },
+      "targetClasses": [
+        "https://iri.suomi.fi/model/eu-core/Location"
+      ]
+    },
+    {
+      "propertyCount": 8,
+      "rootShapeUri": "https://iri.suomi.fi/model/webcor/Person",
+      "support": {
+        "message": "Eksplisiittinen tuettu sh:datatype tai yksi lukittu sisäkkäinen sh:node/sh:class-muoto tarvitaan.",
+        "path": "https://iri.suomi.fi/model/eu-core/id",
+        "ruleId": "OBJECT_AMBIGUOUS"
+      },
+      "targetClasses": [
+        "https://iri.suomi.fi/model/eu-core/Person"
+      ]
+    }
+  ],
+  "sha256": "2ad4331272558bb541b7804f194a74e261d8313985554015ccc4e23785286133",
+  "source": "fixtures/tietomallit/webcor-0.0.2/original.ttl",
+  "sourceVerification": "User-declared export; no independent network verification",
+  "sourceVersion": "0.0.2",
+  "stage": "Turtle parsed; every named root checked; no complete package generated",
+  "tripleCount": 429
+}

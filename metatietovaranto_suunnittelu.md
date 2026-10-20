@@ -1,3 +1,5 @@
+> Pagesin paikallinen SHACL-generointi: [tuettu profiili ja käyttö](docs/browser-shacl-generation.md). Selain muodostaa vain paikallisia kuvauksia rajatuista Turtle-lähteistä; ei täyttä SHACL-validointia, hyväksyntää, julkaisemista tai ulkoista myöntäjäpalvelua. Palvelimen 2H-sopimus ja sen laajemmat tarkistukset säilyvät.
+
 > Vaiheen 2H käyttäjärajaus: [docs/phase-2h.md](docs/phase-2h.md). SHACLista ja hyväksytyistä esitysvalinnoista muodostetaan versionhallittu JSON-/W3C-/SD-JWT-tekninen kuvauspaketti. Generoinnin rajat, standardilukot, JSON-LD-prosessointi ja rajatun aidon aineistokokeen tulokset on dokumentoitu erikseen. DCAT-AP ei kuulu tähän toimeksiantoon.
 
 > Vaiheen 2G toteutusrajaus: [docs/phase-2g.md](docs/phase-2g.md). Deprecated ja withdrawn ovat version erillisiä elinkaaritapahtumia; alkuperäinen sisältö säilyy. Archived/retired, ajastukset ja ulkoisten palveluiden oikeuksien peruminen jäävät myöhemmiksi.
