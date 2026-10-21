@@ -24,7 +24,7 @@ Huomio: xsd:int-luvun hyväksyntä lukijassa ei tarkoita SHACL-metavalidoinnin l
 - **Ajamattomat:** Firefox/Safari, oikea NVDA/VoiceOver, fyysinen puhelin, Windows Docker Desktop ja Codespacesin oma käynnistys. Julkista deployta tai GitHub Actionsin tulosta ei tarkistettu tästä haarasta; PR-haara ei julkaise.
 
 
-Haara `fix/browser-shacl-diagnostics`, valmis PR-kuvaus docs/pull-request-shacl-diagnostics.md. Ei main-yhdistämistä. PR:n luonti yritetään toimituksessa GitHub CLI:llä.
+Toteutuscommit `a4cdcf3`, haara `fix/browser-shacl-diagnostics` pushattu. Valmis PR-kuvaus docs/pull-request-shacl-diagnostics.md. `gh pr create --base main --head fix/browser-shacl-diagnostics --title "Korjaa SHACL-määrärajoitteet ja lähdeprofiilin diagnostiikka" --body-file docs/pull-request-shacl-diagnostics.md` estyi GitHub GraphQL API:n **Forbidden**-vastaukseen. PR:ää ei luotu tässä ympäristössä. Luontilinkki https://github.com/jgmikael/metatietovaranto/pull/new/fix/browser-shacl-diagnostics (base main, compare fix/browser-shacl-diagnostics). Kopioi valmis kuvaus PR:n kuvauskenttään. Ei main-yhdistämistä tai Pages-deployta.
 
 ---
 
