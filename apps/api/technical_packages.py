@@ -14,12 +14,13 @@ from rdflib.compare import isomorphic, to_canonical_graph
 from jsonschema import Draft202012Validator
 from pyld import jsonld
 
+from apps.api.shacl_cardinality import read_count, CardinalityError
 from apps.api.contracts import Contract
 from apps.api.profiles import checksum, canonical, Iri
 from apps.api.semantic_validation import locked_graph, validation_report, ENGINE as SHACL_ENGINE
 from apps.api.conversion import bounded_json, convert, tokens
 
-GENERATOR = 'technical-package/1.1.1'
+GENERATOR = 'technical-package/1.1.2'
 POLICY = 'shacl-tree-json-v1'
 SD_STANDARD = 'draft-ietf-oauth-sd-jwt-vc-19'
 STANDARDS = {'sdJwtVc': SD_STANDARD, 'vcdm': '2.0', 'jsonLd': '1.1', 'jsonSchema': '2020-12', 'mtvSemanticExtension': EXTENSION_VERSION}
@@ -71,7 +72,7 @@ def technical_name(iri):
 
 
 def inspect_profile(manifest, root_uri, names):
-    graph = locked_graph(manifest)
+    graph = locked_graph(manifest,preserve_turtle_lexical=True)
     root = URIRef(root_uri)
     if (root, RDF.type, SH.NodeShape) not in graph:fail('ROOT_SHAPE', root_uri, 'Valitse lähteessä oleva IRI-luokkamuoto')
     overrides = {tuple(row['semanticPath']):row['fieldName'] for row in names}
@@ -97,21 +98,37 @@ def inspect_profile(manifest, root_uri, names):
             if not ignored or RDF.type not in list(graph.items(ignored)):
                 fail('CLOSED_TYPE', str(shape), 'Suljetun muodon on sallittava generoitu rdf:type ignoredProperties-listassa')
         result = {'shapeUri':str(shape), 'classUri':str(cls), 'fields':[]}
-        properties = list(graph.objects(shape, SH.property))
+        properties = {}
+        for prop in graph.objects(shape, SH.property):
+            predicate = one(prop, SH.path, True)
+            properties.setdefault(predicate, []).append(prop)
         if not properties:fail('EMPTY_SHAPE', str(shape), 'Tyhjä sisältömuoto ei riitä valmiiksi kuvaukseksi')
         siblings = set(); paths = set()
         # Order cannot depend on blank node IDs or Turtle statement order.
-        for prop in sorted(properties, key=lambda p:str(graph.value(p, SH.path) or p)):
-            supported(prop, PROP_ALLOWED)
+        for predicate, group in sorted(properties.items(), key=lambda item:str(item[0])):
+            group.sort(key=str); prop=group[0]
+            for member in group:supported(member, PROP_ALLOWED)
+            def group_values(predicate):
+                return set(value for member in group for value in graph.objects(member,predicate))
+            def read(predicate):
+                values=group_values(predicate)
+                if len(values)>1:fail('PROPERTY_CONSTRAINT_UNSUPPORTED',str(predicate),'Saman polun rajoitteille ei voida johtaa yhtä arvotyyppiä; generaattorin tukirajoite, ei SHACL-syntaksivirhe')
+                return next(iter(values),None)
+            if len(group)>1:
+                if str(predicate)=='http://www.w3.org/2002/07/owl#topObjectProperty':
+                    fail('SEMANTIC_TOP_PROPERTY',str(predicate),'Useat rajoitteet käyttävät owl:topObjectProperty-polkua: '+', '.join(str(p) for p in group)+'. Generaattori ei voi päätellä niistä eri sisältöominaisuuksia; korjaa lähdemallin tarkoitetut polut. Ei itsessään SHACL-syntaksivirhe.')
+                if any(not isinstance(member,URIRef) for member in group) or not group_values(SH.datatype):fail('PROPERTY_CONSTRAINT_UNSUPPORTED',str(predicate),'Saman polun yhdistäminen tarvitsee yksiselitteiset nimetyt PropertyShapet ja yhden literaalityypin; generaattorin tukirajoite')
             predicate = one(prop, SH.path, True)
             if not isinstance(predicate, URIRef):fail('COMPLEX_PATH', str(shape), 'Vain suora ominaisuus-IRI-polku tuetaan')
-            if predicate in paths:fail('PROPERTY_AMBIGUOUS', str(predicate), 'Sama ominaisuus on määritelty useasti samassa muodossa')
             paths.add(predicate); semantic = path+[str(predicate)]
-            minimum = one(prop, SH.minCount); maximum = one(prop, SH.maxCount)
-            low = int(minimum) if minimum is not None else 0; high = int(maximum) if maximum is not None else None
-            if low<0 or high is not None and (high<low or high>10000) or low>10000:
-                fail('CARDINALITY', str(predicate), 'Kardinaliteetti on virheellinen tai ylittää rajan')
-            datatype = one(prop, SH.datatype); node = one(prop, SH.node); obj_class = one(prop, SH['class'])
+            try:
+                low=max(read_count(one(member,SH.minCount),0) for member in group)
+                maxima=[read_count(one(member,SH.maxCount),None) for member in group]
+                high=min((value for value in maxima if value is not None),default=None)
+            except CardinalityError as error:fail(error.code,str(predicate),str(error))
+            if high is not None and high<low:fail('CARDINALITY_CONFLICT',str(predicate),'Samalle polulle kohdistuvien määrärajoitteiden leikkaus on tyhjä: maxCount on minCountia pienempi.')
+            datatype = read(SH.datatype); node = read(SH.node); obj_class = read(SH['class'])
+            if datatype is not None and not isinstance(datatype,URIRef):fail('DATATYPE_TERM',str(predicate),'sh:datatype tarvitsee IRI:n, ei literaalia. Esimerkiksi sh:datatype <http://www.w3.org/2001/XMLSchema#boolean> . Korjaa lähdeprofiili tai export ja tuo uusi Turtle-export.')
             if datatype and (node or obj_class):fail('VALUE_AMBIGUOUS', str(predicate), 'Kenttä ei voi olla sekä literaali että olio')
             if datatype and str(datatype) not in {str(XSD)+value for value in DATATYPES}:
                 fail('DATATYPE_UNSUPPORTED', str(predicate), 'Tukematon literaalityyppi: '+str(datatype))
@@ -119,7 +136,7 @@ def inspect_profile(manifest, root_uri, names):
                 candidates = list(graph.subjects(SH.targetClass,obj_class))
                 if len(candidates)==1:node=candidates[0]
             if not datatype and node is None:fail('OBJECT_AMBIGUOUS', str(predicate), 'Oliolle tarvitaan yksi lukittu sisäkkäinen muoto')
-            explicit = list(graph.objects(prop, URIRef('http://uri.suomi.fi/datamodel/ns/iow#localName')))
+            explicit = list(group_values(URIRef('http://uri.suomi.fi/datamodel/ns/iow#localName')))
             explicit += [Literal(m['propertyName']) for a in manifest.get('derivedArtifacts',[]) for m in a.get('semanticMappings',[])
                          if m['shapeUri']==str(shape) and m['semanticUri']==str(predicate)]
             explicit = {str(value) for value in explicit}
@@ -134,7 +151,7 @@ def inspect_profile(manifest, root_uri, names):
             siblings.add(name)
             multi = high != 1
             pointer = field_path+'/'+name+('/*' if multi else '')
-            labels = sorted((str(v.language or 'und'),str(v)) for v in graph.objects(prop,SH.name))
+            labels = sorted((str(v.language or 'und'),str(v)) for v in group_values(SH.name))
             entry = {'shapeUri':root_uri,'semanticPath':semantic,'fieldPath':pointer,'valueKind':'literal' if datatype else 'object',
                      'datatype':str(datatype) if datatype else None,'classUri':None,'minCount':low,'maxCount':high,'disclosure':None}
             locator=(constraint_path or [])+[{'nodeShapeUri':str(shape) if isinstance(shape,URIRef) else None,'propertyPath':str(predicate),'propertyShapeUri':str(prop) if isinstance(prop,URIRef) else None}]
@@ -143,6 +160,8 @@ def inspect_profile(manifest, root_uri, names):
             if node is not None:
                 child=visit(node,semantic,pointer,ancestors|{shape},obj_class,locator)
                 entry['classUri']=child['classUri'];row['child']=child
+            if len(group)>1:
+                row['shacl']['contributingConstraints']=[{'nodeShapeUri':str(shape) if isinstance(shape,URIRef) else None,'propertyPath':str(predicate),'propertyShapeUri':str(member)} for member in group]
             fields.append(row);result['fields'].append(row)
             if len(fields)>200:fail('FIELD_LIMIT', root_uri, 'Enintään 200 kenttää')
         return result

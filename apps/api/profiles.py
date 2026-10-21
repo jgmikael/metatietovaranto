@@ -12,7 +12,7 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import Response
 from pydantic import Field, HttpUrl, AfterValidator, StringConstraints
 from typing import Annotated
-from rdflib import Graph, Dataset, URIRef, RDF, OWL, SH, BNode
+from rdflib import Graph, Dataset, URIRef, RDF, OWL, SH, BNode, Literal
 from rdflib.compare import to_isomorphic
 from sqlalchemy import select, text
 from sqlalchemy.orm import Session
@@ -105,7 +105,7 @@ def reject_remote_contexts(value):
         for item in value:reject_remote_contexts(item)
 
 
-def parse_artifact(artifact):
+def parse_artifact(artifact, *, preserve_turtle_lexical=False):
     content=artifact.content
     if len(content.encode())>MAX_BYTES:raise ValueError('Tiedosto ylittää 1 MB rajan')
     raw_hash=hashlib.sha256(content.encode()).hexdigest()
@@ -131,6 +131,17 @@ def parse_artifact(artifact):
             if context!=dataset.default_graph.identifier:
                 raise ValueError('Nimettyjä JSON-LD-graafeja ei tueta; toimita yksi täydellinen oletusgraafi')
             graph.add((s,p,o))
+    elif artifact.serialization=='turtle' and preserve_turtle_lexical:
+        # Per-parser sink: retain typed literal spelling for count checks, without
+        # changing rdflib.NORMALIZE_LITERALS process-wide or altering snapshots.
+        from io import StringIO
+        from rdflib.plugins.parsers.notation3 import RDFSink, SinkParser
+        class LexicalSink(RDFSink):
+            def newLiteral(self, value, datatype, language):
+                return Literal(value, datatype=datatype, lang=None if datatype else language, normalize=False)
+        parser=SinkParser(LexicalSink(graph),baseURI='urn:metatietovaranto:unresolved-base:',turtle=True)
+        parser.loadStream(StringIO(content))
+        for prefix,namespace in parser._bindings.items():graph.bind(prefix,namespace)
     else:
         graph.parse(data=content,format=FORMATS[artifact.serialization],publicID='urn:metatietovaranto:unresolved-base:')
     result['mediaType']={'turtle':'text/turtle','rdfxml':'application/rdf+xml','jsonld':'application/ld+json'}[artifact.serialization]

@@ -54,14 +54,14 @@ def profile_check(graph):
     return {'conforms': bool(conforms), 'results': result_items(report, 'profile')}
 
 
-def locked_graph(manifest):
+def locked_graph(manifest, *, preserve_turtle_lexical=False):
     graph = Graph()
     sources = list(manifest['sourceArtifacts'])
     sources += [dep['artifact'] for dep in manifest['dependencies'] if 'artifact' in dep]
     for source in sources:
         if hashlib.sha256(source['content'].encode()).hexdigest() != source['sha256']:
             raise ValueError('Lukitun artefaktin tarkiste ei täsmää')
-        parsed, _ = parse_artifact(ArtifactInput(serialization=source['serialization'], content=source['content']))
+        parsed, _ = parse_artifact(ArtifactInput(serialization=source['serialization'], content=source['content']),preserve_turtle_lexical=preserve_turtle_lexical)
         if parsed is not None:
             # Scope blank nodes separately across imported documents.
             from rdflib import BNode

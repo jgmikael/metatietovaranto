@@ -155,3 +155,7 @@ Virallisiin Pages Actionseihin perustuva PR-tarkistus ja vain mainista julkaisev
 - Sama Markdown-ohje käyttöliittymän näkymänä, sisällysluettelo ja 19 pysyvää osiolinkkiä. Kenttäselitteet poimitaan saman lähteen taulukoista; 104 yhteistä kenttä-/käsiteavainta kattaa nykyisen Pagesin haun ja paikallisen kokeilun kentät sekä keskeiset tulokset ja roolit.
 - Natiivin Ohje-painikkeen avattava selite, kenttään sidottu kuvaus ja Lue lisää. Ohjevierailu säilyttää keskeneräisen työn, kohdistuksen ja vierityksen. Ei muutosta sisältömalliin, tallennusformaattiin, oikeuksiin tai hyväksymiseen.
 - Markdownin turvallinen build-käsittely, kattavuus- ja selainregressiot. Ylläpitotapa: [docs/pages-help-maintenance.md](docs/pages-help-maintenance.md).
+
+## Selaingeneraattorin määrärajoitteet ja lähdediagnostiikka
+
+Täsmällinen XSD-kokonaislukuperheen count-lukija ja yhteinen selain-/palvelinsopimus. Read-only-esitarkistus, luokitellut usean havainnon raportit, datatype-termin ja toistuvan owl:topObjectProperty-polun yksilöinti. Rajattu nimettyjen literaalirajoitteiden leikkaus säilyttää kaikki alkuperäiset rajoiteviitteet. Ei lähdeontologian korjausta, julkaisuehtojen keventämistä tai integraatioita. Verovelkatiedot-export mukana muuttumattomana testiaineistona; lähde-/exportkorjaukset jäävät sen ylläpitäjälle. Tekniset versiot ja validoinnin erot dokumentissa docs/browser-shacl-generation.md.

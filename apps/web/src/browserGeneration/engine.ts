@@ -1,3 +1,4 @@
+import {readCount,CountError,recordSource,preflight,groupProperties,propertyValues,propertyLocator} from './diagnostics';
 import {Parser,Store,DataFactory,type Term} from 'n3';
 import Ajv2020 from 'ajv/dist/2020';
 import jsonld from 'jsonld';
@@ -7,7 +8,7 @@ import type {Distribution} from '../Distributions';
 const {namedNode}=DataFactory;
 const SH='http://www.w3.org/ns/shacl#',RDF='http://www.w3.org/1999/02/22-rdf-syntax-ns#',XSD='http://www.w3.org/2001/XMLSchema#',OWL='http://www.w3.org/2002/07/owl#';
 const GENERATOR=BROWSER_GENERATOR;
-export class GenerationError extends Error {finding:Finding;constructor(ruleId:string,path:string,message:string){super(message);this.finding={ruleId,path,message};}}
+export class GenerationError extends Error {findings?:Finding[];finding:Finding;constructor(ruleId:string,path:string,message:string){super(message);this.finding={ruleId,path,message,category:ruleId.endsWith('_LIMIT')?'resourceLimit':['TURTLE_SYNTAX','TURTLE_PROFILE','RELATIVE_IRI','CARDINALITY_TERM','CARDINALITY_LEXICAL','CARDINALITY_VALUE','CARDINALITY_CONFLICT','DATATYPE_TERM'].includes(ruleId)?'sourceError':'generatorLimit'};}}
 function fail(rule:string,path:string,message:string):never{throw new GenerationError(rule,path,message);}
 function compare(a:string,b:string){const left=Array.from(a,v=>v.codePointAt(0)!),right=Array.from(b,v=>v.codePointAt(0)!);for(let i=0;i<Math.min(left.length,right.length);i++)if(left[i]!==right[i])return left[i]-right[i];return left.length-right.length;}
 export function absolute(value:string){return /^[a-zA-Z][a-zA-Z0-9+.-]*:\S+$/.test(value);}
@@ -19,7 +20,7 @@ export function parseSources(sources:SourceFile[]){
   for(const q of quads!){
    if(q.graph.termType!=='DefaultGraph'||[q.subject,q.predicate,q.object].some(t=>!['NamedNode','BlankNode','Literal'].includes(t.termType)))fail('TURTLE_PROFILE',source.name,'Vain Turtle / RDF 1.1 ilman nimettyjä graafeja tai RDF-star-rakenteita.');
    for(const t of [q.subject,q.predicate,q.object])if(t.termType==='NamedNode'&&!absolute(t.value))fail('RELATIVE_IRI',source.name,'Suhteellinen IRI tarvitsee tiedostossa eksplisiittisen @base-määrityksen: '+t.value);
-   graph.addQuad(q);if(graph.size>TRIPLE_LIMIT)fail('TRIPLE_LIMIT',source.name,'Profiilin kolmikkoraja on 10 000.');
+   recordSource(graph,q.subject,source.name);graph.addQuad(q);if(graph.size>TRIPLE_LIMIT)fail('TRIPLE_LIMIT',source.name,'Profiilin kolmikkoraja on 10 000.');
   }
  }
  return graph;
@@ -50,11 +51,13 @@ export async function inspectProfile(profile:ImportedProfile,rootUri:string,name
  await inspectFiles(profile.sources);
  const graph=parseSources(profile.sources),root=namedNode(rootUri),rows:Row[]=[];
  if(!graph.countQuads(root,namedNode(RDF+'type'),namedNode(SH+'NodeShape'),null))fail('ROOT_SHAPE',rootUri,'Valitse lähteessä oleva IRI-luokkamuoto.');
+ const findings=preflight(graph,root),errors=findings.filter(f=>f.category!=='warning');
+ if(errors.length){const first=errors[0],error=new GenerationError(first.ruleId,first.path,first.message);error.finding=first;error.findings=findings;throw error;}
  const overrides=new Map(names.map(n=>[canonical(n.semanticPath),n.fieldName])),used=new Set<string>();
  if(overrides.size!==names.length)fail('NAME_DUPLICATE',rootUri,'Saman polun nimivalinta on annettu kahdesti.');
  const one=(s:Term,p:string,required=false)=>{const list=values(graph,s,SH+p);if(list.length>1||required&&list.length!==1)fail('SHACL_AMBIGUOUS',s.termType==='BlankNode'?rootUri:s.value,'Tarvitaan yksi sh:'+p);return list[0];};
  function supported(s:Term,allowed:string[]){for(const q of graph.getQuads(s,null,null,null))if(q.predicate.value.startsWith(SH)&&!allowed.includes(q.predicate.value.slice(SH.length)))fail('SHACL_UNSUPPORTED',s.termType==='BlankNode'?rootUri:s.value,'Generointiprofiilin ulkopuolinen rajoite: '+q.predicate.value);}
- function count(t:Term|undefined,def:number|null,path:string){if(!t)return def;if(t.termType!=='Literal'||!['integer','nonNegativeInteger','positiveInteger'].some(v=>t.datatype.value===XSD+v)||!/^\+?[0-9]+$/.test(t.value)||Number(t.value)>10000)fail('CARDINALITY',path,'Kardinaliteetin on oltava kokonaisluku 0–10 000.');return Number(t.value);}
+ function count(t:Term|undefined,def:number|null,path:string){try{return readCount(t,def);}catch(e){const error=e as CountError;fail(error.code,path,error.message);}}
  async function visit(shape:Term,path:string[],pointer:string,ancestors:Set<string>,declared?:Term,constraints:Record<string,string|null>[]=[]):Promise<Tree>{
   const shapeKey=shape.termType+shape.value;
   if(ancestors.has(shapeKey)||path.length>DEPTH_LIMIT)fail('RECURSION',path.join(' → '),'Rekursio tai yli kahdeksan tason rakenne ei ole tuettu.');
@@ -63,24 +66,25 @@ export async function inspectProfile(profile:ImportedProfile,rootUri:string,name
   const cls=one(shape,'targetClass',!path.length)||declared;
   if(!cls||cls.termType!=='NamedNode')fail('CLASS_REQUIRED',rootUri,'Oliolle tarvitaan yksi luokka-IRI. Ratkaise tarvittava sh:node paikallisella riippuvuustiedostolla.');
   if(declared&&cls.value!==declared.value)fail('CLASS_CONFLICT',rootUri,'sh:class ja kohdemuodon luokka eroavat.');
-  const props=values(graph,shape,SH+'property');if(!props.length)fail('EMPTY_SHAPE',shape.termType==='BlankNode'?rootUri:shape.value,'Tyhjä tai ratkaisematon sisältömuoto; liitä tarvittaessa paikallinen Turtle-riippuvuus.');
+  const props=groupProperties(graph,shape);if(!props.length)fail('EMPTY_SHAPE',shape.termType==='BlankNode'?rootUri:shape.value,'Tyhjä tai ratkaisematon sisältömuoto; liitä tarvittaessa paikallinen Turtle-riippuvuus.');
   const result:Tree={shapeUri:shape.termType==='NamedNode'?shape.value:'',classUri:cls.value,fields:[]},siblings=new Set<string>(),paths=new Set<string>();
-  props.sort((a,b)=>compare(one(a,'path')?.value||'',one(b,'path')?.value||''));
-  for(const prop of props){
-   supported(prop,contract.propertyAllowed);
+
+  for(const group of props){
+   const prop=group[0];for(const member of group)supported(member,contract.propertyAllowed);
+   const read=(p:string,required=false)=>{const list=propertyValues(graph,group,SH+p);if(list.length>1||required&&list.length!==1)fail('SHACL_AMBIGUOUS',rootUri,'Tarvitaan yksi yhteinen sh:'+p);return list[0];};
    const predicate=one(prop,'path',true)!;
    if(predicate.termType!=='NamedNode')fail('COMPLEX_PATH',rootUri,'Vain suora ominaisuus-IRI sh:path tuetaan.');
-   if(paths.has(predicate.value))fail('PROPERTY_AMBIGUOUS',predicate.value,'Sama ominaisuus on määritelty useasti samassa muodossa.');paths.add(predicate.value);
-   const semantic=[...path,predicate.value],low=count(one(prop,'minCount'),0,predicate.value)!,high=count(one(prop,'maxCount'),null,predicate.value);
-   if(high!==null&&high<low)fail('CARDINALITY',predicate.value,'maxCount on minCountia pienempi.');
-   const datatype=one(prop,'datatype'),objClass=one(prop,'class');let node=one(prop,'node');
+   paths.add(predicate.value);
+   const semantic=[...path,predicate.value],low=Math.max(...group.map(p=>count(one(p,'minCount'),0,predicate.value)!)),highValue=Math.min(...group.map(p=>count(one(p,'maxCount'),null,predicate.value)??Infinity)),high=highValue===Infinity?null:highValue;
+   if(high!==null&&high<low)fail('CARDINALITY_CONFLICT',predicate.value,'maxCount on minCountia pienempi.');
+   const datatype=read('datatype'),objClass=read('class');let node=read('node');
    if(datatype&&(node||objClass))fail('VALUE_AMBIGUOUS',predicate.value,'Kenttä ei voi olla sekä literaali että olio.');
    if(datatype&&(datatype.termType!=='NamedNode'||!contract.datatypes.some(v=>datatype.value===XSD+v)))fail('DATATYPE_UNSUPPORTED',predicate.value,'Tukematon literaalityyppi: '+datatype.value);
    if(objClass&&objClass.termType!=='NamedNode')fail('CLASS_REQUIRED',predicate.value,'sh:class tarvitsee IRI:n.');
    if(!datatype&&!node&&objClass){const candidates=subjects(graph,SH+'targetClass',objClass);if(candidates.length===1)node=candidates[0];}
    if(!datatype&&!node)fail('OBJECT_AMBIGUOUS',predicate.value,'Eksplisiittinen tuettu sh:datatype tai yksi lukittu sisäkkäinen sh:node/sh:class-muoto tarvitaan.');
    if(node&&!graph.countQuads(node,null,null,null))fail('UNRESOLVED_SHAPE',node.value,'Ratkaisematon sh:node: liitä sen sisältävä paikallinen Turtle-riippuvuus.');
-   const explicit=[...new Set(values(graph,prop,'http://uri.suomi.fi/datamodel/ns/iow#localName').map(t=>t.value))];
+   const explicit=[...new Set(propertyValues(graph,group,'http://uri.suomi.fi/datamodel/ns/iow#localName').map(t=>t.value))];
    if(explicit.length>1)fail('TECHNICAL_NAME_AMBIGUOUS',predicate.value,'Lähteen eksplisiittiset tekniset nimet eroavat.');
    const local=predicate.value.replace(/[/#]+$/,'').split(/[/#:]/).pop()!;
    let name=explicit[0]||(/^[A-Za-z][A-Za-z0-9_]*$/.test(local)?local:'field_'+(await sha256(predicate.value)).slice(0,12));
@@ -90,7 +94,7 @@ export async function inspectProfile(profile:ImportedProfile,rootUri:string,name
    if(siblings.has(name))fail('NAME_COLLISION',predicate.value,'Nimi törmää samassa oliossa: '+name);siblings.add(name);
    const multi=high!==1,fieldPath=pointer+'/'+name+(multi?'/*':'');
    const locator=[...constraints,{nodeShapeUri:shape.termType==='NamedNode'?shape.value:null,propertyPath:predicate.value,propertyShapeUri:prop.termType==='NamedNode'?prop.value:null}];
-   const row:Row={name,nameOrigin:origin,labels:values(graph,prop,SH+'name').filter(t=>t.termType==='Literal').map(t=>({locale:t.termType==='Literal'?t.language||'und':'und',label:t.value})).sort((a,b)=>compare(a.locale,b.locale)||compare(a.label,b.label)),mapping:{shapeUri:rootUri,semanticPath:semantic,fieldPath,valueKind:datatype?'literal':'object',datatype:datatype?.value||null,classUri:null,minCount:low,maxCount:high,disclosure:null},multi,shacl:{nodeShapeUri:shape.termType==='NamedNode'?shape.value:null,propertyShapeUri:prop.termType==='NamedNode'?prop.value:null,propertyShapeKind:prop.termType==='NamedNode'?'iri':'blankNode',constraintPath:locator}};
+   const row:Row={name,nameOrigin:origin,labels:propertyValues(graph,group,SH+'name').filter(t=>t.termType==='Literal').map(t=>({locale:t.termType==='Literal'?t.language||'und':'und',label:t.value})).sort((a,b)=>compare(a.locale,b.locale)||compare(a.label,b.label)),mapping:{shapeUri:rootUri,semanticPath:semantic,fieldPath,valueKind:datatype?'literal':'object',datatype:datatype?.value||null,classUri:null,minCount:low,maxCount:high,disclosure:null},multi,shacl:{nodeShapeUri:shape.termType==='NamedNode'?shape.value:null,propertyShapeUri:prop.termType==='NamedNode'?prop.value:null,propertyShapeKind:prop.termType==='NamedNode'?'iri':'blankNode',constraintPath:locator,...(group.length>1?{contributingConstraints:group.map(p=>propertyLocator(shape,p,predicate.value))}:{})}};
    rows.push(row);if(rows.length>FIELD_LIMIT)fail('FIELD_LIMIT',rootUri,'Enintään 200 kenttää.');
    if(node){row.child=await visit(node,semantic,fieldPath,new Set([...ancestors,shapeKey]),objClass,locator);row.mapping.classUri=row.child.classUri;}
    result.fields.push(row);
@@ -99,7 +103,7 @@ export async function inspectProfile(profile:ImportedProfile,rootUri:string,name
  }
  const tree=await visit(root,[],'',new Set());
  if([...overrides.keys()].some(k=>!used.has(k)))fail('NAME_UNKNOWN',rootUri,'Nimivalinta viittaa puuttuvaan semanttiseen polkuun.');
- return {tree,rows};
+ return {tree,rows,findings};
 }
 export async function contextFor(tree:Tree):Promise<Record<string,any>>{
  const ctx:Record<string,any>={'@version':1.1,'@protected':true};ctx['Class_'+(await sha256(tree.classUri)).slice(0,12)]=tree.classUri;

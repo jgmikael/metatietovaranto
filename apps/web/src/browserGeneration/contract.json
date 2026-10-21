@@ -302,6 +302,61 @@
   },
   "baseContextSha256": "59955ced6697d61e03f2b2556febe5308ab16842846f5b586d7f1f7adec92734",
   "baseContextUrl": "https://www.w3.org/ns/credentials/v2",
+  "countLimit": 10000,
+  "countTypes": {
+    "byte": [
+      "-128",
+      "127"
+    ],
+    "int": [
+      "-2147483648",
+      "2147483647"
+    ],
+    "integer": [
+      null,
+      null
+    ],
+    "long": [
+      "-9223372036854775808",
+      "9223372036854775807"
+    ],
+    "negativeInteger": [
+      null,
+      "-1"
+    ],
+    "nonNegativeInteger": [
+      "0",
+      null
+    ],
+    "nonPositiveInteger": [
+      null,
+      "0"
+    ],
+    "positiveInteger": [
+      "1",
+      null
+    ],
+    "short": [
+      "-32768",
+      "32767"
+    ],
+    "unsignedByte": [
+      "0",
+      "255"
+    ],
+    "unsignedInt": [
+      "0",
+      "4294967295"
+    ],
+    "unsignedLong": [
+      "0",
+      "18446744073709551615"
+    ],
+    "unsignedShort": [
+      "0",
+      "65535"
+    ]
+  },
   "datatypes": [
     "anyURI",
     "boolean",
@@ -415,8 +470,8 @@
     "x5u"
   ],
   "sdSpecificationSha256": "3dc528160e18af37d62fad4ab7696b72e8c9bac4ceae4282bda4417b54fe788b",
-  "serverGenerator": "technical-package/1.1.1",
-  "sha256": "33adb80f8208dbacd42e41da1c898fe5b68c49d0f9a104376d72e56dd5d90270",
+  "serverGenerator": "technical-package/1.1.2",
+  "sha256": "60dc2dfe7efc3c0a7136ca7626446e3c7ef950e03116f5ff5ef0c7b6bab0de37",
   "standardSourcePins": {
     "credentials-v2.jsonld": {
       "canonicalUrl": "https://www.w3.org/ns/credentials/v2",

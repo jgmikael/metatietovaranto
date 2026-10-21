@@ -2,6 +2,8 @@
 
 ## Julkinen GitHub Pages -esittelydemo
 
+**SHACL-tuonnin diagnostiikka:** määrärajoitteiden lukija tukee myös xsd:int-arvoja täsmällisesti. Tarkistuspainikkeen alla näkyvä raportti erottaa lähdevirheet, mappingin tukirajoitteet ja resurssirajat. Se ei korjaa lähdeaineistoa eikä korvaa täydellistä SHACL-validointia; palvelimen pySHACL tarkistaa erikseen myös parametrien xsd:integer-vaatimuksen. [Rajaus ja yhteensopivuus](docs/browser-shacl-generation.md#lähdeprofiilin-diagnostiikka-21102026).
+
 **Käyttöliittymän ohjeet:** navigaation **Käyttöohje** avaa saman Markdown-ohjeen selaimessa. Kentän **Ohje** avaa selitteen; **Lue lisää** vie oikeaan osioon. Paluu säilyttää keskeneräisen työn ja kohdistuksen. Ohje ei tarvitse palvelinta. Ylläpitotapa ja testit: [Pages-ohjeen ylläpito](docs/pages-help-maintenance.md).
 
 **Käyttäjälle:** [Oma kokeilu – vaiheittainen työnkulku ja kaikkien kenttien täyttöohje](docs/pages-kayttoohje.md). Aloita ohjeen valmiilla esimerkillä; kenttätaulukot kertovat, mitä pitää täyttää ja mitä voi jättää tyhjäksi.
