@@ -1,0 +1,960 @@
+PREFIX dcap:       <http://purl.org/ws-mmi-dc/terms/>
+PREFIX dcterms:    <http://purl.org/dc/terms/>
+PREFIX ftaxcv:     <https://iri.suomi.fi/model/ftaxcv/>
+PREFIX geo:        <http://www.opengis.net/ont/geosparql#>
+PREFIX http:       <http://www.w3.org/2011/http#>
+PREFIX jhs:        <https://iri.suomi.fi/model/jhs/0.1.0/>
+PREFIX kmr:        <https://iri.suomi.fi/model/kmr/1.0.0/>
+PREFIX owl:        <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:        <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:       <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX sh:         <http://www.w3.org/ns/shacl#>
+PREFIX skos:       <http://www.w3.org/2004/02/skos/core#>
+PREFIX suomi-meta: <https://iri.suomi.fi/model/suomi-meta/>
+PREFIX verovelka:  <https://iri.suomi.fi/model/verovelka/>
+PREFIX xsd:        <http://www.w3.org/2001/XMLSchema#>
+
+verovelka:PaymentPlan
+        rdf:type                      sh:NodeShape;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Payment Plan"@en , "Maksuohjelma"@fi;
+        dcterms:created               "2026-09-01T07:33:25.016Z"^^xsd:dateTime;
+        dcterms:identifier            "PaymentPlan"^^xsd:NCName;
+        dcterms:modified              "2026-09-01T07:56:46.706Z"^^xsd:dateTime;
+        sh:property                   verovelka:startDate , verovelka:endDate;
+        sh:targetClass                ftaxcv:PaymentPlan;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:hasPaymentPlan
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "hasPaymentPlan"@en , "maksuohjelma"@fi;
+        dcterms:created               "2026-09-01T07:35:55.71Z"^^xsd:dateTime;
+        dcterms:identifier            "hasPaymentPlan"^^xsd:NCName;
+        dcterms:modified              "2026-09-01T07:57:20.682Z"^^xsd:dateTime;
+        sh:class                      ftaxcv:PaymentPlan;
+        sh:path                       owl:topObjectProperty;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:taxType  rdf:type           sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Tax Type"@en , "Verolaji"@fi;
+        dcterms:created               "2024-05-30T11:44:30.739Z"^^xsd:dateTime;
+        dcterms:identifier            "taxType"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T07:13:59.975Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/verotus2026/concept-5000>;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "1"^^xsd:int;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:hasTemporaryDenial
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "väliaikainen kielto"@fi , "temporary denial"@en;
+        dcterms:created               "2026-08-24T12:00:37.185Z"^^xsd:dateTime;
+        dcterms:identifier            "hasTemporaryDenial"^^xsd:NCName;
+        dcterms:modified              "2026-08-24T12:01:12.674Z"^^xsd:dateTime;
+        sh:class                      ftaxcv:TemporaryDenial;
+        sh:path                       ftaxcv:hasTemporaryDenial;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:voluntaryArrangement
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tieto siitä, että veroerä kuuluu velalliselle myönnetyn vapaaehtoisen järjestelyn piiriin."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Voluntary Arrangement"@en , "Vapaaehtoinen järjestely"@fi;
+        dcterms:created               "2024-05-30T11:44:33.035Z"^^xsd:dateTime;
+        dcterms:identifier            "voluntaryArrangement"^^xsd:NCName;
+        dcterms:modified              "2026-08-24T11:37:55.871Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#boolean";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:identifier  rdf:type        sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Diaarinumero"@fi;
+        dcterms:created               "2026-08-24T11:36:32.861Z"^^xsd:dateTime;
+        dcterms:identifier            "identifier"^^xsd:NCName;
+        dcterms:modified              "2026-08-24T11:36:58.442Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "1"^^xsd:int;
+        sh:path                       jhs:tunnus;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:legalName  rdf:type         sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Organisaatio joka harjoittaa elinkeinotoimintaa käyttää yleensä elikeino- eli yritystoiminnassaan toiminimeksi rekisteröityä nimeään."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Legal Name"@en , "Toiminimi"@fi;
+        dcterms:created               "2024-05-30T11:44:34.643Z"^^xsd:dateTime;
+        dcterms:identifier            "legalName"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T10:31:15.466Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       jhs:toiminimi;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:givenNames  rdf:type        sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "A person's all given names"@en , "henkilön kaikki etunimet lueteltuna"@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Given Names"@en , "Etunimet"@fi;
+        dcterms:created               "2024-05-30T11:44:32.407Z"^^xsd:dateTime;
+        dcterms:identifier            "givenNames"^^xsd:NCName;
+        dcterms:modified              "2026-08-24T11:35:41.208Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       jhs:etunimet;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:personalIdentityCode
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "a permanent and unique means of identification issued by a competent authority"@en , "henkilön yksilöivä tunnus, jonka toimivaltainen viranomainen on antanut henkilölle"@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Personal Identity Code"@en , "Henkilötunnus"@fi;
+        dcterms:created               "2024-05-30T11:44:30.557Z"^^xsd:dateTime;
+        dcterms:identifier            "personalIdentityCode"^^xsd:NCName;
+        dcterms:modified              "2026-08-24T11:33:38.748Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       jhs:henkilotunnus;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:familyName  rdf:type        owl:DatatypeProperty , sh:PropertyShape;
+        rdfs:comment                  "pääasiallisesti sukuun viittaava rekisteröidyn henkilönnimen osa"@fi , "part of the registered name of a person referring to a [suku]"@en;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Sukunimi"@fi , "Family Name"@en;
+        dcterms:created               "2024-05-30T11:44:34.517Z"^^xsd:dateTime;
+        dcterms:identifier            "familyName"^^xsd:NCName;
+        dcterms:modified              "2026-08-24T11:34:00.924Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/jhs/J14>;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       jhs:sukunimi;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:paymentPlanEndDate
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Payment Plan End Date"@en , "Maksuohjelman päättymispäivämäärä"@fi;
+        dcterms:created               "2024-05-30T11:44:33.352Z"^^xsd:dateTime;
+        dcterms:identifier            "paymentPlanEndDate"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T10:43:03.226Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "1"^^xsd:int;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:paymentPlanStartDate
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Payment Plan Start Date"@en , "Maksuohjelman alkamispäivämäärä"@fi;
+        dcterms:created               "2024-05-30T11:44:34.019Z"^^xsd:dateTime;
+        dcterms:identifier            "paymentPlanStartDate"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T10:42:27.577Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/verotus2026/c203>;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "1"^^xsd:int;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:name  rdf:type              sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Organisaation nimi"@fi , "A primary name, e.g. a legally recognized name"@en;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Name"@en , "Nimi"@fi;
+        dcterms:created               "2024-05-30T11:44:33.241Z"^^xsd:dateTime;
+        dcterms:identifier            "name"^^xsd:NCName;
+        dcterms:modified              "2026-08-24T11:35:23.51Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       jhs:nimi;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:neglicenceToFile
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tieto siitä, onko toimija laiminlyönyt ilmoitusvelvollisuutensa."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Ilmoituslaiminlyönti"@fi , "Negligence to file"@en;
+        dcterms:created               "2024-05-30T11:44:32.008Z"^^xsd:dateTime;
+        dcterms:identifier            "neglicenceToFile"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T11:44:32.008Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#boolean";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:prepaymentRegister
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Information about an actors prepayment registration status."@en , "Tieto siitä, onko toimija rekisteröity ennakkoperintärekisteriin."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Prepayment Register"@en , "Ennakkoperintärekisteri"@fi;
+        dcterms:created               "2024-05-30T11:44:33.906Z"^^xsd:dateTime;
+        dcterms:identifier            "prepaymentRegister"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T11:44:33.906Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#boolean";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:VATRegister
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Information about an actors VAT registration status."@en , "Tieto siitä, onko toimija rekisteröity arvonlisävel\nvollisten rekisteriin."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "VAT Register"@en , "ALV-rekisteri"@fi;
+        dcterms:created               "2024-05-30T11:44:32.218Z"^^xsd:dateTime;
+        dcterms:identifier            "VATRegister"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T11:44:32.218Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#boolean";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:consistsOf  rdf:type        sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "Veroerät, joista verovelka koostuu."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "consists of"@en , "koostuu"@fi;
+        dcterms:created               "2024-05-30T11:44:32.104Z"^^xsd:dateTime;
+        dcterms:identifier            "consistsOf"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T10:34:51.068Z"^^xsd:dateTime;
+        sh:class                      ftaxcv:TaxLiabilityItem;
+        sh:minCount                   "1"^^xsd:int;
+        sh:path                       owl:topObjectProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:VATID  rdf:type             sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Arvonlisäverovelvollisuuden toteamista varten EU:n alueella on käytössä arvonlisäverotunniste eli alv-numero. Kansainvälistä kauppaa käyvän yrityksen liikekumppani voi alv-numeron avulla varmistaa yrityksen arvonlisäverovelvollisuuden.\n\nAlv-numeron saa hakeutumalla Verohallinnon pitämään arvonlisäverovelvollisten rekisteriin.\n\nNumeron muodostaminen\nAlv-numeroa saavat käyttää vain arvonlisäverovelvollisten rekisteriin merkityt yritykset ja henkilöt.\n\nAlv-numero muodostetaan Y-tunnuksesta 1234567-8 lisäämällä sen alkuun kaksikirjaiminen maatunnus FI ja jättämällä tunnuksesta väliviiva pois: FI12345678.\n\nMerkinnät kansainvälisissä tilanteissa\nKun arvonlisäverovelvollinen yritys käy kauppaa toisessa EU:n jäsenvaltiossa arvonlisäverovelvolliseksi rekisteröityneen yrityksen kanssa, yritys merkitsee laskuun Y-tunnuksensa lisäksi alv-numeronsa.\nAlv-numero on ruotsiksi \"mervärdesskattenummer\" tai \"momsnummer\" ja englanniksi\n\"VAT number\"."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "VAT ID"@en , "Alv-numero"@fi;
+        dcterms:created               "2024-05-30T11:44:31.208Z"^^xsd:dateTime;
+        dcterms:identifier            "VATID"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T10:33:34.954Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       ftaxcv:identifierValue;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:BusinessIdentityCode
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Organisaation yritys- ja yhteisötunnus."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Business Identity Code"@en , "Y-tunnus"@fi;
+        dcterms:created               "2024-05-30T11:44:35.146Z"^^xsd:dateTime;
+        dcterms:identifier            "BusinessIdentityCode"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T10:32:28.643Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       jhs:ytunnus;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:LegalForm  rdf:type         sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Organisaation oikeudellinen muoto. Organisaatiomuotoja ovat mm. Patentti- ja rekisterihallitukselle ilmoitettavat yritysmuodot."@fi , "An organizational category, e.g. charity, committee, etc."@en;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Legal Form"@en , "Organisaatiomuoto"@fi;
+        dcterms:created               "2024-05-30T11:44:34.266Z"^^xsd:dateTime;
+        dcterms:identifier            "LegalForm"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T10:31:56.267Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "1"^^xsd:int;
+        sh:path                       jhs:organisaatiomuoto;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:totalAmountExceeds10000Euro
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Yhteismäärä yli 10.000 euroa"@fi , "Total Amount Over 10.000 Euros"@en;
+        dcterms:created               "2024-05-30T11:44:31.092Z"^^xsd:dateTime;
+        dcterms:identifier            "totalAmountExceeds10000Euro"^^xsd:NCName;
+        dcterms:modified              "2026-08-24T11:35:12.937Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#boolean";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:estimatedTurnover
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Arvioitu liikevaihto"@fi , "Uppskattad omsättning"@sv , "Estimated Turnover"@en;
+        dcterms:created               "2026-08-21T10:23:16.736Z"^^xsd:dateTime;
+        dcterms:identifier            "estimatedTurnover"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T10:23:16.736Z"^^xsd:dateTime;
+        sh:path                       ftaxcv:estimatedTurnover;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:DeclarationBehaviour
+        rdf:type                      sh:NodeShape;
+        rdfs:comment                  "Information about how a tax declarant has fulfilled his or her obligations."@en , "Tieto siitä, miten toimija on hoitanut ilmoitusvelvollisuutensa."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Declaration Behaviour"@en , "Ilmoituskäyttäytyminen"@fi;
+        dcterms:created               "2020-07-02T12:51:59.983Z";
+        dcterms:identifier            "DeclarationBehaviour"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T10:23:16.749Z"^^xsd:dateTime;
+        sh:property                   verovelka:neglicenceToFile;
+        sh:targetClass                ftaxcv:Activity;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:hasTaxFilingCompliance
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "ilmoituskäyttäytyminen"@fi , "declaration behaviour"@en;
+        dcterms:created               "2024-05-30T11:44:32.732Z"^^xsd:dateTime;
+        dcterms:identifier            "hasTaxFilingCompliance"^^xsd:NCName;
+        dcterms:modified              "2026-08-24T11:34:22.87Z"^^xsd:dateTime;
+        sh:class                      ftaxcv:Activity;
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       owl:topObjectProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:latePaymentInterest
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Veroerään liittyvän viivästyskoron määrä."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Late-Payment Interest"@en , "Viivästyskorko"@fi;
+        dcterms:created               "2024-05-30T11:44:30.824Z"^^xsd:dateTime;
+        dcterms:identifier            "latePaymentInterest"^^xsd:NCName;
+        dcterms:modified              "2026-08-24T11:37:13.779Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/verotus2026/c133>;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#decimal";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:taxPaymentArrangement
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tieto siitä, että kyseinen veroerä kuuluu velalliselle myönnetyn maksujärjestelyn piiriin."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Tax Payment Arrangement"@en , "Verojen maksujärjestely"@fi;
+        dcterms:created               "2024-05-30T11:44:32.511Z"^^xsd:dateTime;
+        dcterms:identifier            "taxPaymentArrangement"^^xsd:NCName;
+        dcterms:modified              "2026-08-24T11:58:05.34Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/verotus2026/c147>;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#boolean";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:TaxLiabilityItem
+        rdf:type                      sh:NodeShape;
+        rdfs:comment                  "Yksittäisen verolajin tietyltä verokaudelta maksettavaksi määrättävä suoritus. Verovelkatiedoissa verovelka koostuu yhdestä tai useammasta maksamattomasta veroerästä."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Veroerä"@fi , "Tax Liability Item"@en;
+        dcterms:created               "2020-07-02T12:46:41.197Z";
+        dcterms:identifier            "TaxLiabilityItem"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T08:43:19.76Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/verotus/concept-9000>;
+        sh:property                   verovelka:taxType , verovelka:hasTemporaryDenial , verovelka:voluntaryArrangement , verovelka:latePaymentInterest , verovelka:taxPaymentArrangement , verovelka:punitiveTaxIncrease , verovelka:taxYear , verovelka:taxPeriod , verovelka:stayOfExecution , verovelka:lateFilingPenalty , verovelka:negligencePenalty , verovelka:unpaidAmount , verovelka:bankruptcy , verovelka:veronmaara , verovelka:vanhentumispaiva , verovelka:ulosottoperusteenmaaraaika , verovelka:hasCompanyReorganisation , verovelka:hasDebtAdjustment , verovelka:hasCourtRuling , verovelka:dueDate;
+        sh:targetClass                ftaxcv:TaxLiabilityItem;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:punitiveTaxIncrease
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "verovelvolliselle kuulemisen jälkeen määrättävä seuraamusmaksu siitä, että verovelvollinen, tiedonantovelvollinen tai suorituksen maksaja on laiminlyönyt verotusta koskevat velvoitteensa"@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Punitive Tax Increase"@en , "Veronkorotus"@fi;
+        dcterms:created               "2024-05-30T11:44:32.619Z"^^xsd:dateTime;
+        dcterms:identifier            "punitiveTaxIncrease"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T08:31:02.82Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/verotus2026/c45>;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#decimal";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:taxYear  rdf:type           sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "verotuksen toimittamisessa sovellettava ajanjakso, jolta veroilmoitus (1) on annettava, jolta vero määrätään tai jolloin verovelvollisuus syntyy"@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Tax Year"@en , "Verovuosi"@fi;
+        dcterms:created               "2024-05-30T11:44:32.922Z"^^xsd:dateTime;
+        dcterms:identifier            "taxYear"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T08:29:58.34Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/verotus2026/c50>;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#integer";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:totalAmount
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Verovelan yhteismäärä tiettynä ajankohtana."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Yhteismäärä"@fi , "Total Amount"@en;
+        dcterms:created               "2024-05-30T11:44:34.769Z"^^xsd:dateTime;
+        dcterms:identifier            "totalAmount"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T10:28:13.834Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/verotus2026/c198>;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#decimal";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "1"^^xsd:int;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:Person  rdf:type            sh:NodeShape;
+        rdfs:comment                  "A real person, alive or dead"@en , "Verovelka-kontekstissa luonnollinen henkilö, jolla on verovelkaa tai jonka verovelkatietoja halutaan selvittää."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Henkilö"@fi , "Person"@en;
+        dcterms:created               "2020-07-02T12:26:45.478Z";
+        dcterms:identifier            "Person"^^xsd:NCName;
+        dcterms:modified              "2021-02-03T09:17:34.28Z";
+        dcterms:subject               <https://iri.suomi.fi/terminology/jhs/J754>;
+        sh:property                   verovelka:ytunnus-1 , verovelka:familyName , verovelka:personalIdentityCode , verovelka:givenNames , verovelka:legalName;
+        sh:targetClass                jhs:Henkilo;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:Registration
+        rdf:type                      sh:NodeShape;
+        rdfs:comment                  "Velallisen rekisteröintiasema, eli tietoja siitä onko verovelallinen merkitty mm. ennakkoperintärekisteriin tai ALV-rekisteriin."@fi , "Information about an actors registration status."@en;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Registration"@en , "Rekisteröinti"@fi;
+        dcterms:created               "2020-08-28T10:47:06.861Z";
+        dcterms:identifier            "Registration"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T07:24:35.56Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/jhs/J412>;
+        sh:property                   verovelka:prepaymentRegister , verovelka:VATRegister;
+        sh:targetClass                ftaxcv:Registration;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:Organization
+        rdf:type                      sh:NodeShape;
+        rdfs:comment                  "a social system set up for a specific purpose/for a specific activity, which has defined objectives and a deliberately created structure"@en , "Verovelka-kontekstissa velallinen tai muu toimija, joka toimii tietyssä oikeudellisessa muodossa esim. yhtiönä tai muuna yhteisönä."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Organisaatio"@fi , "Organization"@en;
+        dcterms:created               "2020-07-02T12:26:23.016Z";
+        dcterms:identifier            "Organization"^^xsd:NCName;
+        dcterms:modified              "2021-02-03T09:17:15.847Z";
+        dcterms:subject               <https://iri.suomi.fi/terminology/jhs/J132>;
+        sh:property                   verovelka:LegalForm , verovelka:BusinessIdentityCode , verovelka:VATID , verovelka:name , verovelka:legalName;
+        sh:targetClass                jhs:Organisaatio;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:TemporaryDenial
+        rdf:type                      sh:NodeShape;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Väliaikainen kielto"@fi , "Temporary Denial"@en;
+        dcterms:created               "2026-08-21T08:01:56.938Z"^^xsd:dateTime;
+        dcterms:identifier            "TemporaryDenial"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T08:01:56.938Z"^^xsd:dateTime;
+        sh:property                   verovelka:startDate;
+        sh:targetClass                ftaxcv:TemporaryDenial;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:Period  rdf:type            sh:NodeShape;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Kausi"@fi , "Period"@en;
+        dcterms:created               "2026-08-21T07:57:43.74Z"^^xsd:dateTime;
+        dcterms:identifier            "Period"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T07:57:43.74Z"^^xsd:dateTime;
+        sh:property                   verovelka:startDate , verovelka:endDate;
+        sh:targetClass                ftaxcv:Period;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:startDate  rdf:type         sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Alkupäivä"@fi , "Startdatum"@sv , "Start Date"@en;
+        dcterms:created               "2026-08-21T07:57:43.808Z"^^xsd:dateTime;
+        dcterms:identifier            "startDate"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T10:37:55.801Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "1"^^xsd:int;
+        sh:path                       ftaxcv:startDate;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:endDate  rdf:type           sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Loppupäivä"@fi , "Slutdatum"@sv , "End Date"@en;
+        dcterms:created               "2026-08-21T07:57:43.814Z"^^xsd:dateTime;
+        dcterms:identifier            "endDate"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T10:38:18.656Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       ftaxcv:endDate;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:taxPeriod  rdf:type         sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "verokausi"@fi , "tax period"@en;
+        dcterms:created               "2026-08-21T07:56:20.014Z"^^xsd:dateTime;
+        dcterms:identifier            "taxPeriod"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T07:58:32.891Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/verotus2026/c49>;
+        sh:class                      ftaxcv:Period;
+        sh:maxCount                   "1"^^xsd:int;
+        sh:path                       owl:topObjectProperty;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:isPerson  rdf:type          sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "person debtor"@en , "henkilövelallinen"@fi;
+        dcterms:created               "2024-05-30T11:44:33.573Z"^^xsd:dateTime;
+        dcterms:identifier            "isPerson"^^xsd:NCName;
+        dcterms:modified              "2026-08-24T11:34:14.882Z"^^xsd:dateTime;
+        sh:class                      jhs:Henkilo;
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       owl:topObjectProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:isOrganisation
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "debtor organisation"@en , "organisaatiovelallinen"@fi;
+        dcterms:created               "2024-05-30T11:44:31.623Z"^^xsd:dateTime;
+        dcterms:identifier            "isOrganisation"^^xsd:NCName;
+        dcterms:modified              "2026-08-24T11:34:31.064Z"^^xsd:dateTime;
+        sh:class                      jhs:Organisaatio;
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       owl:topObjectProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:hasRegistration
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "tietojen merkitseminen rekisteriin"@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "has registration"@en , "rekisteröinti"@fi;
+        dcterms:created               "2024-05-30T11:44:31.914Z"^^xsd:dateTime;
+        dcterms:identifier            "hasRegistration"^^xsd:NCName;
+        dcterms:modified              "2026-08-24T11:34:37.918Z"^^xsd:dateTime;
+        sh:class                      ftaxcv:Registration;
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       owl:topObjectProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:TaxDebt  rdf:type           sh:NodeShape;
+        rdfs:comment                  "Tiedot velallisen maksamattomien verojen ja muiden velvoitteiden sekä näihin liittyvien erilaisten viivästysseuraamuksien muodostamasta kokonaisuudesta."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Tax Debt"@en , "Verovelka"@fi;
+        dcterms:created               "2020-07-02T12:32:32.408Z";
+        dcterms:identifier            "TaxDebt"^^xsd:NCName;
+        dcterms:modified              "2026-08-20T07:24:32.861Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/verotus/concept-9001>;
+        sh:property                   verovelka:consistsOf , verovelka:totalAmountExceeds10000Euro , verovelka:totalAmount;
+        sh:targetClass                ftaxcv:TaxDebt;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:Debtor  rdf:type            sh:NodeShape;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Debtor"@en , "Velallinen"@fi;
+        dcterms:created               "2021-02-03T09:13:28.734Z";
+        dcterms:identifier            "Debtor"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T10:50:39.944Z"^^xsd:dateTime;
+        sh:property                   verovelka:hasTaxFilingCompliance , verovelka:isPerson , verovelka:isOrganisation , verovelka:hasRegistration , verovelka:hasTaxDebt , verovelka:vakuus;
+        sh:targetClass                owl:Thing;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:stayOfExecution
+        rdf:type                      owl:DatatypeProperty , sh:PropertyShape;
+        rdfs:comment                  "Tieto siitä, kuuluuko veroerä velalliseen kohdistuvan täytäntöönpanon keskeytyksen piiriin. Koodisto."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Täytäntöönpanon keskeytys"@fi , "Stay of Execution"@en;
+        dcterms:created               "2024-05-30T11:44:30.473Z"^^xsd:dateTime;
+        dcterms:identifier            "stayOfExecution"^^xsd:NCName;
+        dcterms:modified              "2026-08-24T11:57:19.764Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/verotus2026/c200>;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/verotus/taytpan>;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:lateFilingPenalty
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "seuraamusmaksu siitä, että verovelvollinen, tiedonantovelvollinen tai suorituksen maksaja on antanut veroilmoituksen (1) tai tulotietoilmoituksen myöhässä tai korjannut puutteellisen ilmoituksen myöhässä"@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Myöhästymismaksu"@fi , "Late Filing Penalty"@en;
+        dcterms:created               "2024-05-30T11:44:31.817Z"^^xsd:dateTime;
+        dcterms:identifier            "lateFilingPenalty"^^xsd:NCName;
+        dcterms:modified              "2026-08-24T11:57:32.577Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/verotus2026/c44>;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#decimal";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:negligencePenalty
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Veroerään liittyvän laiminlyöntimaksun määrä."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Negligence Penalty"@en , "Laiminlyöntimaksu"@fi;
+        dcterms:created               "2024-05-30T11:44:34.396Z"^^xsd:dateTime;
+        dcterms:identifier            "negligencePenalty"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T07:31:56.304Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/verotus2026/c109>;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#decimal";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:unpaidAmount
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Unpaid Amount"@en , "Maksamaton määrä"@fi;
+        dcterms:created               "2024-05-30T11:44:33.46Z"^^xsd:dateTime;
+        dcterms:identifier            "unpaidAmount"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T11:44:33.46Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#decimal";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:bankruptcy  rdf:type        sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tieto siitä, että veroerä kuuluu velallisen ... konkurssipesään?"@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Konkurssi"@fi , "Bankruptcy"@en;
+        dcterms:created               "2024-05-30T11:44:33.683Z"^^xsd:dateTime;
+        dcterms:identifier            "bankruptcy"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T07:29:32.697Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#boolean";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:dueDate  rdf:type           sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Eräpäivä"@fi , "Due Date"@en;
+        dcterms:created               "2024-05-30T11:44:30.642Z"^^xsd:dateTime;
+        dcterms:identifier            "dueDate"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T11:44:30.642Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:IssuanceDate
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Issuance Date"@en , "Antopäivä"@fi;
+        dcterms:created               "2024-05-30T11:44:32.311Z"^^xsd:dateTime;
+        dcterms:identifier            "IssuanceDate"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T07:27:55.678Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "1"^^xsd:int;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:court  rdf:type             sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "court"@en , "tuomioistuin"@fi;
+        dcterms:created               "2024-05-30T11:44:33.137Z"^^xsd:dateTime;
+        dcterms:identifier            "court"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T07:26:37.818Z"^^xsd:dateTime;
+        sh:class                      jhs:Organisaatio;
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "1"^^xsd:int;
+        sh:path                       owl:topObjectProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:hasCourtRuling
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "has court ruling"@en , "tuomio"@fi;
+        dcterms:created               "2024-05-30T11:44:30.303Z"^^xsd:dateTime;
+        dcterms:identifier            "hasCourtRuling"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T10:45:49.391Z"^^xsd:dateTime;
+        sh:class                      ftaxcv:CourtRuling;
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       owl:topObjectProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:hasTaxDebt  rdf:type        sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "Velallisen verovelka."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "skatteskuld"@sv , "verovelka"@fi , "has tax debt"@en;
+        dcterms:created               "2024-05-30T11:44:34.141Z"^^xsd:dateTime;
+        dcterms:identifier            "hasTaxDebt"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T10:34:29.429Z"^^xsd:dateTime;
+        sh:class                      ftaxcv:TaxDebt;
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "1"^^xsd:int;
+        sh:path                       owl:topObjectProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:hasDebtAdjustment
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "velkajärjestelyn määritelmä"@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "has debt adjustment"@en , "velkajärjestely"@fi;
+        dcterms:created               "2024-05-30T11:44:32.827Z"^^xsd:dateTime;
+        dcterms:identifier            "hasDebtAdjustment"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T07:28:37.791Z"^^xsd:dateTime;
+        sh:class                      ftaxcv:DebtAdjustment;
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       owl:topObjectProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:CompanyReorganisation
+        rdf:type                      sh:NodeShape;
+        rdfs:comment                  "Tiedot yrityssaneerauksesta, jonka piiriin tietty verovelkaan kuuluva veroerä kuuluu."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Company Reorganisation"@en , "Yrityssaneeraus"@fi;
+        dcterms:created               "2021-02-22T13:13:14.739Z";
+        dcterms:identifier            "CompanyReorganisation"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T07:03:05.277Z"^^xsd:dateTime;
+        sh:property                   verovelka:hasPaymentPlan;
+        sh:targetClass                ftaxcv:CompanyReorganisation;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:hasCompanyReorganisation
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "Tieto sellaisesta yrityssaneerauksesta, jonka piiriin veroerä kuuluu."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "hasCompanyReorganisation"@en , "yrityssaneeraus"@fi;
+        dcterms:created               "2024-05-30T11:44:30.916Z"^^xsd:dateTime;
+        dcterms:identifier            "hasCompanyReorganisation"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T07:28:56.225Z"^^xsd:dateTime;
+        sh:class                      ftaxcv:CompanyReorganisation;
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       owl:topObjectProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:DebtAdjustment
+        rdf:type                      sh:NodeShape;
+        rdfs:comment                  "Velkajärjestely, jonka maksuohjelmaan verovelkaan lukeutuva veroerä kuuluu."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Debt Adjustment"@en , "Velkajärjestely"@fi;
+        dcterms:created               "2021-02-16T09:25:07.919Z";
+        dcterms:identifier            "DebtAdjustment"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T06:33:05.425Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/verotus/concept-9002>;
+        sh:property                   verovelka:hasPaymentPlan;
+        sh:targetClass                ftaxcv:DebtAdjustment;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:CourtRuling
+        rdf:type                      sh:NodeShape;
+        rdfs:comment                  "Tiedot toimivaltaisen tuomioistuimen velallista koskevasta tuomiosta, jolla on merkitystä verovelan muodostumisen kannalta."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Court Ruling"@en , "Tuomio"@fi;
+        dcterms:created               "2021-02-03T12:22:08.312Z";
+        dcterms:identifier            "CourtRuling"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T06:23:36.787Z"^^xsd:dateTime;
+        sh:property                   verovelka:identifier , verovelka:IssuanceDate , verovelka:court;
+        sh:targetClass                ftaxcv:CourtRuling;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:ulosottoperusteenmaaraaika
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Mikäli veroerä perustuu vastuuhenkilöiltä perittävään vahingonkorvaukseen, ilmoitetaan ulosottoperusteen määräaika."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Ulosottoperusteen määräaika"@fi;
+        dcterms:created               "2024-05-30T11:44:35.395Z"^^xsd:dateTime;
+        dcterms:identifier            "ulosottoperusteenmaaraaika"^^xsd:NCName;
+        dcterms:modified              "2026-08-24T11:57:45.743Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:vanhentumispaiva
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Veroerän vanhentumispäivämäärä."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Vanhentumispäivä"@fi;
+        dcterms:created               "2024-05-30T11:44:34.895Z"^^xsd:dateTime;
+        dcterms:identifier            "vanhentumispaiva"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T11:44:34.895Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:verokausi  rdf:type         sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Ajanjakso, jolta verolajikohtainen veroerä maksetaan."@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Verokausi"@fi , "Tax Period"@en;
+        dcterms:created               "2024-05-30T11:44:31.724Z"^^xsd:dateTime;
+        dcterms:identifier            "verokausi"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T07:13:31.919Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/verotus2026/c49>;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "1"^^xsd:int;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:veronmaara  rdf:type        sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Tax Amount"@en , "Veron määrä"@fi;
+        dcterms:created               "2024-05-30T11:44:31.529Z"^^xsd:dateTime;
+        dcterms:identifier            "veronmaara"^^xsd:NCName;
+        dcterms:modified              "2026-08-21T07:46:51.242Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#decimal";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "1"^^xsd:int;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:vakuus  rdf:type            sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Valmisteverojen yhteydessä asiakkaalta on voitu vaatia vakuutta, ehtona rekisteröitymiselle. Vakuutta voidaan realisoida ja käyttää valmisteveron suoritukseksi. "@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Vakuus"@fi;
+        dcterms:created               "2024-05-30T11:44:31.415Z"^^xsd:dateTime;
+        dcterms:identifier            "vakuus"^^xsd:NCName;
+        dcterms:modified              "2026-08-24T11:57:54.647Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#boolean";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:maksuohjelmanalkamispaivamaara-1
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Maksuohjelman alkamispäivämäärä"@fi;
+        dcterms:created               "2024-05-30T11:44:35.027Z"^^xsd:dateTime;
+        dcterms:identifier            "maksuohjelmanalkamispaivamaara-1"^^xsd:NCName;
+        dcterms:modified              "2026-08-19T10:07:11.321Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "1"^^xsd:int;
+        sh:path                       jhs:alkamispaivamaara;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:maksuohjelmanpaattymispaivamaara
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Maksuohjelman päättymispäivämäärä"@fi;
+        dcterms:created               "2024-05-30T11:44:31.319Z"^^xsd:dateTime;
+        dcterms:identifier            "maksuohjelmanpaattymispaivamaara"^^xsd:NCName;
+        dcterms:modified              "2026-08-19T10:07:53.293Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "1"^^xsd:int;
+        sh:path                       jhs:paattymispaivamaara;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:ytunnus-1  rdf:type         sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "rekisteriviranomaisen antama yksilöivä tunnus elinkeinotoimintaa harjoittavalle henkilölle tai oikeushenkilölle"@fi;
+        rdfs:isDefinedBy              verovelka:;
+        rdfs:label                    "Business identity code"@en , "Y-tunnus"@fi;
+        dcterms:created               "2024-05-30T11:44:35.274Z"^^xsd:dateTime;
+        dcterms:identifier            "ytunnus-1"^^xsd:NCName;
+        dcterms:modified              "2026-08-24T11:33:49.124Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   "1"^^xsd:int;
+        sh:minCount                   "0"^^xsd:int;
+        sh:path                       jhs:ytunnus;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .
+
+verovelka:  rdf:type                  owl:Ontology , suomi-meta:ApplicationProfile;
+        rdfs:comment                  "Yhdistelmä verovelkatodistuksen ja verovelkarekisterin tiedoista, käyttötarkoitus Verohallinnon API-rajapintakehitys."@fi;
+        rdfs:label                    "Verovelkatiedot"@sv , "Verovelkatiedot"@fi , "Tax Debt Information"@en;
+        dcterms:contributor           <urn:uuid:0e7e4f57-be57-4f99-bb1f-bfdcf0b6948a>;
+        dcterms:created               "2020-07-02T12:25:54.552Z";
+        dcterms:identifier            "1e019962-dc85-44c5-9762-a8801eb3ac3d";
+        dcterms:isPartOf              <http://urn.fi/URN:NBN:fi:au:ptvl:v1126>;
+        dcterms:language              "fi" , "sv" , "en";
+        dcterms:modified              "2026-08-21T07:12:02.8Z"^^xsd:dateTime;
+        dcterms:requires              "https://iri.suomi.fi/terminology/jhs" , "https://iri.suomi.fi/terminology/verotus2026";
+        dcterms:requires              <https://iri.suomi.fi/terminology/verotus2026/> , ftaxcv: , <http://uri.suomi.fi/codelist/verotus/taytpan> , <https://iri.suomi.fi/terminology/jhs/> , kmr: , jhs:;
+        dcap:preferredXMLNamespace    "https://iri.suomi.fi/model/verovelka/";
+        dcap:preferredXMLNamespacePrefix
+                "verovelka";
+        owl:versionIRI                <https://iri.suomi.fi/model/verovelka/0.0.1/>;
+        owl:versionInfo               "0.0.1";
+        suomi-meta:contentModified    "2024-05-30T11:44:24.342Z"^^xsd:dateTime;
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/SUGGESTED> .

@@ -200,7 +200,7 @@ def test_generated_coverage_distinguishes_reviewed_texts_currentness_and_issuer_
     assert report['sources']['euConsolidation']['latestDisplayedVersionConfirmed'] is True
     assert report['sources']['euConsolidation']['currentAsOfReviewDate'] is None
     assert not evidence['observations']['separateCorrigendumRegisterDisplayed']
-    assert package['generator']=='technical-package/1.1.1'
+    assert package['generator']=='technical-package/1.1.2'
     assert package['standards']['sdJwtVc']=='draft-ietf-oauth-sd-jwt-vc-19'
 
 

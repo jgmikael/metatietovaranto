@@ -1,0 +1,12 @@
+{
+  "source": "user-supplied Tietomallit Turtle export; not independently retrieved or verified",
+  "suppliedFilename": "Verovelkatiedot (1).ttl",
+  "receivedDate": "2026-10-21",
+  "profileUri": "https://iri.suomi.fi/model/verovelka/",
+  "rootShapeUri": "https://iri.suomi.fi/model/verovelka/Debtor",
+  "sourceVersion": null,
+  "sha256": "576c4e7dbded346df0da2626eaac0b556ace059d36d6c8b2316416aced5969aa",
+  "bytes": 70390,
+  "unchanged": true,
+  "scope": "Public model description, not tax records or a synthetic credential. Test fixture only; not included in Pages catalogue."
+}

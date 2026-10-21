@@ -249,7 +249,7 @@ Nämä löytyvät tuotesivun kohdasta **Tuo SHACL-profiili ja muodosta paikallin
 
 | Kenttä tai toiminto | Täyttöohje |
 | --- | --- |
-| SHACL Turtle -tiedosto | Valitse omalta koneelta Tietomallit-työkalusta ladattu UTF-8 `.ttl`-tiedosto. Osoitetta ei voi liittää tähän. Uusi päätiedoston valinta korvaa keskeneräisen tuontivalinnan; jo liitetty profiili säilyy, kunnes liität uuden. |
+| SHACL Turtle -tiedosto | Valitse omalta koneelta Tietomallit-työkalusta ladattu UTF-8 `.ttl`-tiedosto. Osoitetta ei voi liittää tähän. Uusi päätiedoston valinta korvaa keskeneräisen tuontivalinnan; jo liitetty profiili säilyy, kunnes liität uuden. Tuonti ei korjaa virheellisiä tietotyyppejä tai semanttisia polkuja. |
 | Paikalliset Turtle-riippuvuudet | Valitse paikalliset `.ttl`-tiedostot, jos tarvittava sisäkkäinen sh:node-muoto on toisessa aineistossa. Lisää ne ennen Liitä-painiketta. Pelkkä ulkoisen ominaisuuden IRI tai owl:imports ei tarkoita, että koko sanasto pitää liittää. |
 | Lähdeprofiilin tunniste | Profiilin alkuperäinen absoluuttinen IRI, esim. `https://iri.suomi.fi/model/webcor/`. Täyttyy, jos tiedostosta löytyy yksiselitteinen ontologiatunniste; muuten kirjoita itse. Ei paikallinen tiedostonimi, juurimuodon IRI tai keksitty palveluosoite. |
 | Lähdeprofiilin versio (jos tiedossa) | Alkuperäisen profiilin versio, esimerkiksi `0.0.2`. Voi jättää tyhjäksi, jos sitä ei ilmoiteta. Älä korvaa puuttuvaa versiota arvaamalla. |
@@ -266,7 +266,7 @@ Tiedostoja enintään 10, yhteensä 256 KiB; jäsennettyjä kolmikoita enintää
 
 | Kenttä | Täyttöohje / vaatimus |
 | --- | --- |
-| Generoinnin juurimuodon IRI | **Tarvitaan.** Valitse yksi tiedostossa oleva IRI-muotoinen sh:NodeShape, joka kuvaa halutun sisällön juurta. Esimerkkiprofiilissa `https://example.org/metatietovaranto/demo/ProductShape`. Ei ontologian yleisosoitetta tai luokka-IRI:tä. |
+| Generoinnin juurimuodon IRI | **Tarvitaan.** Valitse yksi tiedostossa oleva IRI-muotoinen sh:NodeShape, joka kuvaa halutun sisällön juurta. Esimerkkiprofiilissa `https://example.org/metatietovaranto/demo/ProductShape`. Ei ontologian yleisosoitetta tai luokka-IRI:tä. Tarkistuksen havainnot näkyvät tarkistuspainikkeen alla. |
 | Valitse juurimuoto | Sama valinta pudotusvalikkona. Saat näkyviin painamalla Näytä tuodun profiilin luokkamuodot. Kenttä ja tekstisyöte ovat vaihtoehtoiset tavat antaa sama tieto. |
 | Kenttänimi [semanttinen polku] | Ilmestyy onnistuneen ehdotuksen jälkeen. Tarkasta ehdotettu JSON-avain, esim. `companyName`. Jos muutat, käytä kirjaimella alkavaa ASCII-nimeä: kirjaimia, numeroita ja alaviivoja, enintään 100 merkkiä. Ei välilyöntejä tai varattuja nimiä kuten `name`, `id`, `type`, `issuer`, `vct`. Sisarusten nimet eivät saa törmätä; eri olioissa nimi voi toistua. Tarkista ehdotus uudelleen muutoksen jälkeen. |
 | Mappingin paikallinen versio | **Tarvitaan.** Paketissa käytettävien mappingien versio muodossa `1.0.0`. Kasvata omia versioita esitysratkaisun muuttuessa. Tämä ei muuta SHACL-lähteen versiota tai tuotteen editorimappingeja. |
@@ -276,7 +276,7 @@ Tiedostoja enintään 10, yhteensä 256 KiB; jäsennettyjä kolmikoita enintää
 | Olen tarkastanut toimitustapojen vct-, suojaus-, algoritmi-, haltijasidonta- ja paljastamisvalinnat | **Kuittaus tarvitaan.** Varmista erityisesti kohdat 6, 9 ja 10. Tuotteen metadatan muuttaminen poistaa tämän kuittauksen. |
 | Vahvistan JSON-esimerkin synteettiseksi | **Kuittaus tarvitaan.** Esimerkin muuttaminen poistaa kuittauksen. Älä käytä oikeita henkilö- tai rekisteritietoja. |
 
-**Tarkista tuki ja muodosta mapping-ehdotus** on tehtävä onnistuneesti ennen generointia. Ehdotuksen yhteydessä näkyvät tietotyyppi/luokka, määrä ja polku ovat vain luettavia johdoksia. Kokeilu ei korjaa lähteen SHACLia.
+**Tarkista tuki ja muodosta mapping-ehdotus** on tehtävä onnistuneesti ennen generointia. Havainnot näkyvät heti painikkeen alla. Virheraportti kohdistuu näkyviin ja erottaa lähdeaineiston virheen, generaattorin tukirajoitteen, resurssirajan ja huomion. Se kokoaa turvallisesti todettavia riippumattomia havaintoja; se ei ole täydellinen SHACL-validointi. Ehdotuksen yhteydessä näkyvät tietotyyppi/luokka, määrä ja polku ovat vain luettavia johdoksia. Kokeilu ei korjaa lähteen SHACLia.
 
 **Muodosta paikallinen tekninen paketti** aktivoituu, kun ehdotus ja kolme kuittausta ovat olemassa sekä valittu tuotu profiili vastaa tuotteen profiilia. Aktiivinen painike ei takaa, että kaikki tekniset asetukset tai esimerkin sisältö ovat kunnossa: puutteet tarkistetaan suorituksessa ja näytetään virheinä.
 
@@ -314,6 +314,16 @@ Tiedostoja enintään 10, yhteensä 256 KiB; jäsennettyjä kolmikoita enintää
 | --- | --- |
 | Generointikohdan asetuksia ei näy | Liitä ensin Turtle-profiili tuotteeseen. Pelkkä tiedoston valinta tai mukana toimitetun snapshotin valinta ei riitä tähän polkuun. |
 | Muodosta-painike ei aktivoidu | Tee onnistunut mapping-ehdotus, kuittaa kolme ruutua ja varmista sama tuotu profiili tuotteella ja generoinnilla. Uudelleenavauksen jälkeen ehdotus pitää muodostaa uudelleen. |
+| CARDINALITY_TERM | Määrärajoitteen RDF-termi tai tietotyyppi ei kelpaa. Lähteen sh:minCount/sh:maxCount tarvitsee XSD-kokonaislukuliteraalin, esimerkiksi `"0"^^xsd:int` tai `1`. Tavallinen `"1"`-merkkijono tai desimaalitietotyyppi ei kelpaa. |
+| CARDINALITY_LEXICAL | Kokonaisluvun kirjoitusasu on virheellinen, esimerkiksi `"1.5"^^xsd:integer` tai eksponenttiesitys. Korjaa lähde/export; lomakkeen mapping ei muuta lähdettä. |
+| CARDINALITY_VALUE | Arvo on negatiivinen tai ilmoitetun XSD-tietotyypin ulkopuolella. Esimerkiksi xsd:positiveInteger ei salli nollaa ja xsd:byte ei salli arvoa 128. |
+| CARDINALITY_CONFLICT | Samalle ominaisuuspolulle kohdistuvien määrärajoitteiden yhteinen maxCount on yhteistä minCountia pienempi. Tarkista kaikki raportin lähderajoitteet. |
+| CARDINALITY_LIMIT | Kelvollinen kokonaisluku ylittää generaattorin oman 10 000:n resurssirajan. Tämä ei itsessään tarkoita RDF-/SHACL-syntaksivirhettä. Arvoja 0 ja 1 tyypillä xsd:int tuetaan. |
+| DATATYPE_TERM | sh:datatype-arvo on IRI:n sijaan esimerkiksi Literal. Virheellinen: `sh:datatype "http://www.w3.org/2001/XMLSchema#boolean"`. Odotettu: `sh:datatype <http://www.w3.org/2001/XMLSchema#boolean>`. Korjaa lähdeprofiili tai exportin tuottaminen ja tuo uusi Turtle-export. |
+| SEMANTIC_TOP_PROPERTY | Useat rajoitteet käyttävät samaa owl:topObjectProperty-polkua. Generaattori ei voi päätellä niistä eri sisältöominaisuuksia. Tarkista kaikki nimet/tunnisteet raportista ja määrittele tarkoitetut semanttiset ominaisuudet lähdemallissa. Tämä on mapping-este, ei itsessään RDF-/SHACL-syntaksivirhe. |
+| PROPERTY_CONSTRAINT_INTERSECTION | Huomio: saman polun yhteensopivat nimetyt literaalirajoitteet muodostavat yhden kentän. Määrärajoitteista käytetään leikkausta ja kaikki alkuperäiset rajoiteviitteet säilyvät. Ei erillisiä keksittyjä ominaisuuksia. |
+| PROPERTY_CONSTRAINT_UNSUPPORTED | Saman polun rajoitteiden yhdistelmä ylittää tuen, esimerkiksi eri tyypit, nimetön moninkertainen rajoite tai moninkertaiset oliomuodot. Tämä ei yksin todista SHACLia virheelliseksi. |
+| FIELD_LIMIT / DIAGNOSTIC_LIMIT | Esitarkistus on rajattu 200 kenttään ja 200 havaintoon. Raportin resurssieston jälkeen pakettia ei muodosteta; tarkista lähde ja aja uudelleen. |
 | THREE_DISTRIBUTIONS | Tarvitaan yksi kutakin kolmesta toimitustavasta. Poista ylimääräinen saman tyypin kuvaus. |
 | BROWSER_SERVICE_SCOPE | Aseta kaikille saatavuudeksi Suunnitteilla. |
 | FORMAT_POLICY_REQUIRED / SDJWT_PROFILE_REQUIRED | Tarkista vct, nimetty SD-JWT-profiiliversio, W3C-sisältöpolku, suojausprofiilit ja tarvittavat algoritmit. |
@@ -327,6 +337,8 @@ Tiedostoja enintään 10, yhteensä 256 KiB; jäsennettyjä kolmikoita enintää
 | BROWSER_EXAMPLE_LEXICAL | Date/dateTime-arvon tarkka XSD-esimerkkitarkistus puuttuu selainversiosta. Älä muuta lähteen tyyppiä stringiksi vain virheen kiertämiseksi. |
 | Kokoraja / aikaraja | Lähteille yhteensä 256 KiB, 10 000 kolmikkoa; enintään 8 tasoa / 200 kenttää. Esimerkki 100 kB, koko kokeilu 2 MiB. Suuri johdannaispaketti voi ylittää kokonaisrajan, vaikka lähde mahtuu. Aiempi kokeilu säilyy virheessä. |
 | SOURCE_HASH / ARTIFACT_HASH / vioittunut tallenne | Älä korvaa toimivaa työtilaa vioittuneella tiedostolla. Ota raakatallenne talteen ja käytä aiempaa ehjää JSON-varmuuskopiota. |
+
+Lomakkeen lisäkenttien täyttäminen ei korjaa lähdeprofiilin tietotyyppi- tai ominaisuuspolkumäärityksiä. Korjaa lähde ja tuo uusi Turtle-export. Demo ei muuta URI:n näköistä merkkijonoa automaattisesti IRI:ksi eikä keksi polkuja näyttönimistä.
 
 **WE BUILD Certificate of Residence 0.0.2:** alkuperäinen export voidaan tuoda ja sen sisältöä tarkastella, mutta kaikki viisi juurta ylittävät nykyisen generointituen. Ensimmäiset esteet liittyvät epäselvään literaali-/oliorakenteeseen. Tämä ei tarkoita, että alkuperäinen Tietomallit-profiili olisi yleisesti virheellinen. [Juurikohtainen tukiraportti](browser-webcor-report.json).
 
