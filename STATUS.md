@@ -15,7 +15,7 @@ Toteutuksen todennus:
 - Erillinen lopullisen imagen **HTTP-yhteensopivuuskoe** luki **129 julkaisuversiota** ja vertasi valittujen **11 tallennetun paketin 114 artefaktin** sisältöjä/tarkisteita tietokantaan tallennettuihin alkuperäisiin tavuihin. Aiempi tämän tehtävän koe luki 124 versiota ja 102 artefaktia; välissä oikeat selaintestit loivat uusia synteettisiä julkaisuja. Vanhoja snapshoteja ei kirjoitettu uudelleen.
 - **Ajamattomat / varmentamatta:** alkuperäinen Nordic Signatory Rights.ttl -tapaus (tiedosto puuttuu), Firefox/Safari, Windows Docker Desktop, Codespacesin käynnistys, oikea ruudunlukija ja fyysinen puhelin. Julkista Pages-deployta tai GitHub Actions -ajoa ei suoritettu tästä PR-haarasta. Rajattu OWL-tarkistus ei todista koko ontologian ristiriidattomuutta. rdf:langString-generointi ja date/dateTime-esimerkkien selainleksikaali jäävät dokumentoiduiksi tukirajoitteiksi.
 
-Toimitus: valmis PR-kuvaus docs/pull-request-owl-shacl-datatypes.md. Haaraa ei yhdistetä mainiin automaattisesti.
+Toteutuscommit `bad12e0`, haara `fix/owl-shacl-datatypes` pushattu. Valmis PR-kuvaus docs/pull-request-owl-shacl-datatypes.md. PR:n luonti yritettiin `gh pr create --base main --head fix/owl-shacl-datatypes --body-file docs/pull-request-owl-shacl-datatypes.md` -komennolla sekä REST POST /repos/jgmikael/metatietovaranto/pulls -kutsulla. Molemmat estyivät GitHub API:n **Forbidden**-vastaukseen; PR:ää ei luotu tässä ympäristössä. Käyttäjän luontilinkki: https://github.com/jgmikael/metatietovaranto/pull/new/fix/owl-shacl-datatypes (base main, compare fix/owl-shacl-datatypes). Kopioi valmis kuvaus PR:n kuvauskenttään. Mainia ei yhdistetty eikä Pages-haaraa julkaistu.
 
 ---
 
