@@ -54,7 +54,7 @@ def profile_check(graph):
     return {'conforms': bool(conforms), 'results': result_items(report, 'profile')}
 
 
-def locked_graph(manifest, *, preserve_turtle_lexical=False):
+def locked_graph(manifest, *, preserve_turtle_lexical=False, source_locations=None):
     graph = Graph()
     sources = list(manifest['sourceArtifacts'])
     sources += [dep['artifact'] for dep in manifest['dependencies'] if 'artifact' in dep]
@@ -69,7 +69,10 @@ def locked_graph(manifest, *, preserve_turtle_lexical=False):
             def scoped(node):
                 return nodes.setdefault(node, BNode()) if isinstance(node, BNode) else node
             for s, p, o in parsed:
-                graph.add((scoped(s), p, scoped(o)))
+                subject=scoped(s)
+                graph.add((subject, p, scoped(o)))
+                if source_locations is not None:
+                    source_locations.setdefault(subject,set()).add(source.get('name') or source.get('sourceUrl') or source.get('id') or 'lukittu lähde')
         if len(graph) > 10000:
             raise ValueError('Profiilin kolmikkoraja ylittyi')
     return graph

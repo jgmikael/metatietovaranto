@@ -12,7 +12,7 @@ def contract():
         'standardSourcePins':json.loads((server.FIXTURES/'provenance.json').read_text()),
         'baseContextSha256':hashlib.sha256((server.FIXTURES/'credentials-v2.jsonld').read_bytes()).hexdigest(),
         'sdSpecificationSha256':hashlib.sha256((server.FIXTURES/(server.SD_STANDARD+'.md')).read_bytes()).hexdigest(),
-        'countTypes':{name:list(bounds) for name,bounds in COUNT_TYPES.items()},'countLimit':COUNT_LIMIT,'datatypes':sorted(server.DATATYPES),'reserved':sorted(server.RESERVED),
+        'rangePolicy':server.RANGE_POLICY,'countTypes':{name:list(bounds) for name,bounds in COUNT_TYPES.items()},'countLimit':COUNT_LIMIT,'datatypes':sorted(server.DATATYPES),'reserved':sorted(server.RESERVED),
         'nodeAllowed':sorted(server.NODE_ALLOWED),'propertyAllowed':sorted(server.PROP_ALLOWED),
         'baseContextUrl':server.BASE_CONTEXT,'baseContext':json.loads((server.FIXTURES/'credentials-v2.jsonld').read_text()),
         'extensionDefinition':profile_definition('urn:placeholder:replaced-before-generation')}

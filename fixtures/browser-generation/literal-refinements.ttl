@@ -1,0 +1,13 @@
+# Synthetic regression fixture, not an original Tietomallit export.
+@prefix ex: <https://example.org/literal-refinements/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+ex:Root a sh:NodeShape; sh:targetClass ex:Subject;
+  sh:property ex:Date, ex:Text, ex:Sequence .
+ex:Date sh:path ex:dateOfIssue; sh:datatype xsd:date; sh:maxCount 1 .
+ex:Text sh:path ex:label; sh:datatype xsd:string; sh:nodeKind sh:Literal; sh:maxCount 1 .
+ex:Sequence sh:path ex:sequence; sh:datatype xsd:positiveInteger; sh:maxCount 1 .
+ex:dateOfIssue rdfs:range rdfs:Literal .
+ex:label rdfs:range rdfs:Literal .
+ex:sequence rdfs:range rdfs:Literal .

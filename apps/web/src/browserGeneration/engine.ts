@@ -1,4 +1,4 @@
-import {readCount,CountError,recordSource,preflight,groupProperties,propertyValues,propertyLocator} from './diagnostics';
+import {readCount,CountError,termInfo,rangeInfo,recordSource,preflight,groupProperties,propertyValues,propertyLocator} from './diagnostics';
 import {Parser,Store,DataFactory,type Term} from 'n3';
 import Ajv2020 from 'ajv/dist/2020';
 import jsonld from 'jsonld';
@@ -35,7 +35,7 @@ export async function inspectFiles(sources:SourceFile[]){
  const versions=oneOntology?values(graph,oneOntology,OWL+'versionInfo'):[];
  const iriVersions=oneOntology?values(graph,oneOntology,OWL+'versionIRI'):[];
  const imports=graph.getQuads(null,namedNode(OWL+'imports'),null,null).map(q=>({uri:q.object.value,resolved:graph.countQuads(q.object,null,null,null)>0,scope:'OWL-viite; ei verkkonoutoa. Tarvittava sh:node tarkistetaan erikseen.'}));
- const shapes=subjects(graph,RDF+'type',namedNode(SH+'NodeShape')).map(s=>({iri:s.termType==='NamedNode'?s.value:null,targets:values(graph,s,SH+'targetClass').map(t=>t.value),properties:values(graph,s,SH+'property').map(p=>({shape:p.termType==='NamedNode'?p.value:null,paths:values(graph,p,SH+'path').map(t=>t.value)}))})).sort((a,b)=>(a.iri||'').localeCompare(b.iri||''));
+ const shapes=subjects(graph,RDF+'type',namedNode(SH+'NodeShape')).map(s=>({iri:s.termType==='NamedNode'?s.value:null,targets:values(graph,s,SH+'targetClass').map(t=>t.value),properties:values(graph,s,SH+'property').map(p=>({shape:p.termType==='NamedNode'?p.value:null,paths:values(graph,p,SH+'path').map(t=>t.value),datatypes:values(graph,p,SH+'datatype').map(termInfo),owlRanges:values(graph,p,SH+'path').flatMap(t=>rangeInfo(graph,t))}))})).sort((a,b)=>(a.iri||'').localeCompare(b.iri||''));
  const namespaces=[...new Set(graph.getQuads(null,null,null,null).flatMap(q=>[q.subject,q.predicate,q.object].filter(t=>t.termType==='NamedNode').map(t=>t.value.replace(/[^/#:]*$/,''))))].sort();
  return {tripleCount:graph.size,shapes,namespaces,imports,profileUri:oneOntology?.value||'',sourceVersion:versions.length===1?versions[0].value:iriVersions.length===1?iriVersions[0].value:null};
 }

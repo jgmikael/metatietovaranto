@@ -1,9 +1,11 @@
+import {SourceFindings} from './SourceFindings';
+import type {Finding} from './browserGeneration/model';
 import {TopicHelp} from './help/Help';
 import React,{useState} from 'react';
 export type TechnicalPackage={status:string;packageId?:string;sha256?:string;generator?:string;policy?:string;standards?:Record<string,string>;validation?:Record<string,unknown>;artifacts?:Record<string,{mediaType:string;sha256:string;url:string;content:string}>};
 type Name={semanticPath:string[];fieldName:string};
 type Row={name:string;nameOrigin:string;mapping:{semanticPath:string[];datatype:string|null;classUri:string|null;minCount:number;maxCount:number|null;fieldPath:string}};
-type Proposal={status:string;fields:Row[];results:{ruleId:string;path:string;message:string}[]};
+type Proposal={status:string;fields:Row[];results:Finding[]};
 export function TechnicalPackagePanel({value,editable,privateView=false,inspectable=false,request}:{value?:TechnicalPackage;editable:boolean;privateView?:boolean;inspectable?:boolean;request?:(action:string,data:unknown)=>Promise<any>}){
  const [root,setRoot]=useState(''),[names,setNames]=useState<Name[]>([]),[proposal,setProposal]=useState<Proposal|null>(null),[example,setExample]=useState(''),[version,setVersion]=useState('1.1.0');
  const [accepted,setAccepted]=useState(false),[replace,setReplace]=useState(false),[policies,setPolicies]=useState(false),[synthetic,setSynthetic]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState(''),[findings,setFindings]=useState<Proposal['results']>([]);
@@ -21,7 +23,7 @@ export function TechnicalPackagePanel({value,editable,privateView=false,inspecta
  <label className="check"><input type="checkbox" checked={replace} onChange={e=>setReplace(e.target.checked)}/>Korvaa nykyiset toimitustapamappingit tällä ehdotuksella</label>
  <label className="check"><input type="checkbox" checked={policies} onChange={e=>setPolicies(e.target.checked)}/>Olen tarkastanut toimitustapojen paljastamis-, haltijasidonta- ja suojauspäätökset</label>
  <button disabled={busy||!accepted||!replace||!policies||!synthetic||!example} onClick={()=>void run(async()=>{const result=await request('',{rootShapeUri:root,names,acceptRepresentation:true,replaceMappings:replace,mappingVersion:version,exampleContent:example,synthetic:true,acceptFormatPolicies:true});setFindings(result.generation.results||[]);})}>Muodosta ja tallenna kuvauspaketti</button></>}
- {busy&&<p role="status">Muodostetaan ja validoidaan…</p>}{error&&<p role="alert">{error}</p>}<ul>{findings.map((finding,i)=><li key={i}><strong>{finding.ruleId}</strong> · {finding.path}: {finding.message}</li>)}</ul>
+ {busy&&<p role="status">Muodostetaan ja validoidaan…</p>}{error&&<p role="alert">{error}</p>}{findings.length>0&&<SourceFindings findings={findings}/>}
  </details>}</section>;
 }
 
