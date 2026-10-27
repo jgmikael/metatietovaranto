@@ -1,0 +1,10 @@
+{
+  "originalFileName": "DigiOne - Oppijan opintotiedot (OSAD).ttl",
+  "receivedOn": "2026-10-27",
+  "source": "User-provided Turtle export; no independent platform fetch or authenticity verification",
+  "profileUri": "https://iri.suomi.fi/model/digioneots/",
+  "declaredVersion": "1.0.0",
+  "sha256": "2ec18648da935748d2371d76885ee998279aa5b458e41d2cff12461bbb49cf75",
+  "bytes": 65833,
+  "use": "Read-only test fixture; not included in public demo catalogue"
+}

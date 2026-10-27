@@ -1,0 +1,960 @@
+PREFIX dcap:       <http://purl.org/ws-mmi-dc/terms/>
+PREFIX dcterms:    <http://purl.org/dc/terms/>
+PREFIX digione:    <https://iri.suomi.fi/model/digione/1.0.0/>
+PREFIX digioneots: <https://iri.suomi.fi/model/digioneots/>
+PREFIX geo:        <http://www.opengis.net/ont/geosparql#>
+PREFIX http:       <http://www.w3.org/2011/http#>
+PREFIX jhs:        <https://iri.suomi.fi/model/jhs/0.1.0/>
+PREFIX owl:        <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:        <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:       <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX sh:         <http://www.w3.org/ns/shacl#>
+PREFIX skos:       <http://www.w3.org/2004/02/skos/core#>
+PREFIX suomi-meta: <https://iri.suomi.fi/model/suomi-meta/>
+PREFIX xsd:        <http://www.w3.org/2001/XMLSchema#>
+
+digioneots:learner-4  rdf:type        sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Learner"@en , "Oppija"@fi;
+        dcterms:created               "2024-04-02T09:10:20.542Z"^^xsd:dateTime;
+        dcterms:identifier            "learner-4"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:20.542Z"^^xsd:dateTime;
+        sh:class                      digione:Learner;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:learner_;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:custodianId
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Huoltaja kirjaaja UUID"@fi , "Custodian id"@en;
+        dcterms:created               "2024-04-02T09:10:20.272Z"^^xsd:dateTime;
+        dcterms:identifier            "custodianId"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:20.272Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:path                       digione:custodianId;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:learnerId  rdf:type        sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Oppijan yksilöivä tunnus"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Oppija kirjaaja UUID"@fi , "Learner id"@en;
+        dcterms:created               "2024-04-02T09:10:18.791Z"^^xsd:dateTime;
+        dcterms:identifier            "learnerId"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:18.791Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:learnerId;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:absenceEnds-3
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "päättymisajankohta päivämäärän ja kellonajan tarkkuudella ilmaistuna"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Ends"@en , "Päättymishetki"@fi;
+        dcterms:created               "2024-04-02T09:10:18.545Z"^^xsd:dateTime;
+        dcterms:identifier            "absenceEnds-3"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:18.545Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#dateTime";
+        sh:maxCount                   1;
+        sh:path                       jhs:paattymispaivamaara;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:absenceStarts-3
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "alkamisajankohta päivämäärän ja kellonajan tarkkuudella ilmaistuna"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Starts"@en , "Alkamishetki"@fi;
+        dcterms:created               "2024-04-02T09:10:17.764Z"^^xsd:dateTime;
+        dcterms:identifier            "absenceStarts-3"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:17.764Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#dateTime";
+        sh:maxCount                   1;
+        sh:path                       jhs:alkamispaivamaara;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:caseType  rdf:type         sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Poissaolon tyyppi: \nSelvittämätön\nLuvaton poissaolo\nMuu luvallinen syy\nTerveydelliset syyt"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Poissaoloselvityksen tyyppi"@fi , "Type"@en;
+        dcterms:created               "2024-04-02T09:10:17.201Z"^^xsd:dateTime;
+        dcterms:identifier            "caseType"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:17.201Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:path                       digione:caseType;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/digione/absence_statement_type>;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:issuer-1  rdf:type         sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Viittaus kirjaajaan tunnisteella"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Henkilökunta kirjaaja UUID"@fi , "Issuer"@en;
+        dcterms:created               "2024-04-02T09:10:15.243Z"^^xsd:dateTime;
+        dcterms:identifier            "issuer-1"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:15.243Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:issuer;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:createdAt  rdf:type        sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Luontihetki"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Luontihetki"@fi , "Created at"@en;
+        dcterms:created               "2024-04-02T09:10:15.15Z"^^xsd:dateTime;
+        dcterms:identifier            "createdAt"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:15.15Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#dateTime";
+        sh:maxCount                   1;
+        sh:path                       digione:createdAt;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:description
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Poissaolon vapaamuotoinen kuvaus / selvitys"@fi , "a textual description of the entity"@en;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Description"@en , "Kuvaus"@fi;
+        dcterms:created               "2024-04-02T09:10:14.28Z"^^xsd:dateTime;
+        dcterms:identifier            "description"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:14.28Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:path                       jhs:kuvaus;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:AbsenceStatement
+        rdf:type                      sh:NodeShape;
+        rdfs:comment                  "Huoltajan tai täysi-ikäisen oppijan tekemä selvitys poissaolosta. Poissaoloselvitys voidaan tehdä etu- tai jälkikäteen."@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Poissaoloselvitys"@fi , "Absence statement"@en;
+        dcterms:created               "2023-03-03T08:49:58.079Z";
+        dcterms:identifier            "AbsenceStatement"^^xsd:NCName;
+        dcterms:modified              "2023-03-15T09:00:19.83Z";
+        sh:property                   digioneots:learner-4 , digioneots:description , digioneots:createdAt , digioneots:issuer-1 , digioneots:caseType , digioneots:absenceStarts-3 , digioneots:absenceEnds-3 , digioneots:learnerId , digioneots:custodianId;
+        sh:targetClass                digione:AbsenceStatement;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:rightToStudyId
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Opiskeluoikeuden paikallinen tunnus"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Opiskeluoikeuden UUID"@fi , "Right to study UUID"@en;
+        dcterms:created               "2024-04-02T09:10:16.368Z"^^xsd:dateTime;
+        dcterms:identifier            "rightToStudyId"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:16.368Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:rightToStudyId;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:id-1  rdf:type             sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "DigiOne:n määrittämä paikallinen UUID tunnus"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Oppijan UUID"@fi , "Id"@en;
+        dcterms:created               "2024-04-02T09:10:16.275Z"^^xsd:dateTime;
+        dcterms:identifier            "id-1"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:16.275Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:path                       digione:id;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:Learner  rdf:type          sh:NodeShape;
+        rdfs:comment                  "Henkilö, joka suorittaa opintoja eri opintoasteilla"@fi , ""@en;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Learner"@en , "Oppija"@fi;
+        dcterms:created               "2023-03-03T08:28:20.946Z";
+        dcterms:identifier            "Learner"^^xsd:NCName;
+        dcterms:modified              "2023-03-03T12:21:48.934Z";
+        dcterms:subject               <https://iri.suomi.fi/terminology/jhs/J754>;
+        sh:property                   digioneots:rightToStudyId , digioneots:id-1;
+        sh:targetClass                digione:Learner;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:class-3  rdf:type          sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "Viittaus opetuksen toteutukseen"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Opetuksen toteutus"@fi;
+        dcterms:created               "2024-04-02T09:10:17.647Z"^^xsd:dateTime;
+        dcterms:identifier            "class-3"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:17.647Z"^^xsd:dateTime;
+        sh:class                      digione:Class;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:class_;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:description-1
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Oppitunnin kuvaus"@fi , "a textual description of the entity"@en;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Oppitunnin kuvaus"@fi , "Description"@en;
+        dcterms:created               "2024-04-02T09:10:17.415Z"^^xsd:dateTime;
+        dcterms:identifier            "description-1"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:17.415Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:path                       jhs:kuvaus;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:absenceStarts-2
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "alkamisajankohta päivämäärän tarkkuudella ilmaistuna"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Starts"@en , "Alkamishetki"@fi;
+        dcterms:created               "2024-04-02T09:10:17.309Z"^^xsd:dateTime;
+        dcterms:identifier            "absenceStarts-2"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:17.309Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#dateTime";
+        sh:maxCount                   1;
+        sh:path                       jhs:alkamispaivamaara;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:absenceEnds-2
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "päättymisajankohta päivämäärän tarkkuudella ilmaistuna"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Ends"@en , "Päättymishetki"@fi;
+        dcterms:created               "2024-04-02T09:10:16.074Z"^^xsd:dateTime;
+        dcterms:identifier            "absenceEnds-2"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:16.074Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#dateTime";
+        sh:maxCount                   1;
+        sh:path                       jhs:paattymispaivamaara;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:id  rdf:type               sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Paikallinen tunnus"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Id"@fi , "Id"@en;
+        dcterms:created               "2024-04-02T09:10:14.419Z"^^xsd:dateTime;
+        dcterms:identifier            "id"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:14.419Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:id;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:Lesson  rdf:type           sh:NodeShape;
+        rdfs:comment                  "Opetuksen toteutuksen yksittäinen oppitunti"@fi , "Single lesson of a class"@en;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Oppitunti"@fi , "Lesson"@en;
+        dcterms:created               "2023-04-27T09:20:24.657Z";
+        dcterms:identifier            "Lesson"^^xsd:NCName;
+        dcterms:modified              "2023-04-27T09:20:24.657Z";
+        sh:property                   digioneots:class-3 , digioneots:description-1 , digioneots:absenceStarts-2 , digioneots:absenceEnds-2 , digioneots:id;
+        sh:targetClass                digione:Lesson;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:lesson-2  rdf:type         sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "Oppitunti"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Oppitunti"@fi , "Lesson"@en;
+        dcterms:created               "2024-04-02T09:10:20.912Z"^^xsd:dateTime;
+        dcterms:identifier            "lesson-2"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:20.912Z"^^xsd:dateTime;
+        sh:class                      digione:Lesson;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:lesson_;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:class-4  rdf:type          sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "Viittaus opetuksen toteutukseen"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Opetuksen toteutus"@fi;
+        dcterms:created               "2024-04-02T09:10:19.287Z"^^xsd:dateTime;
+        dcterms:identifier            "class-4"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:19.287Z"^^xsd:dateTime;
+        sh:class                      digione:Class;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:class_;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:caseType-1
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Poissaolon tyyppi: \nSelvittämätön\nLuvaton poissaolo\nMuu luvallinen syy\nTerveydelliset syyt"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Poissaolon tyyppi"@fi , "Type"@en;
+        dcterms:created               "2024-04-02T09:10:18.975Z"^^xsd:dateTime;
+        dcterms:identifier            "caseType-1"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:18.975Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:path                       digione:caseType;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/digione/absence_type>;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:learner-2  rdf:type        sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Learner"@en , "Oppija"@fi;
+        dcterms:created               "2024-04-02T09:10:16.887Z"^^xsd:dateTime;
+        dcterms:identifier            "learner-2"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:16.887Z"^^xsd:dateTime;
+        sh:class                      digione:Learner;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:learner_;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:createdAt-1
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Luontihetki"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Created at"@en , "Kirjaushetki"@fi;
+        dcterms:created               "2024-04-02T09:10:16.565Z"^^xsd:dateTime;
+        dcterms:identifier            "createdAt-1"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:16.565Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#dateTime";
+        sh:maxCount                   1;
+        sh:path                       digione:createdAt;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:absenceStarts-1
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "alkamisajankohta päivämäärän ja kellonajan tarkkuudella ilmaistuna"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Starts"@en , "Alkamishetki"@fi;
+        dcterms:created               "2024-04-02T09:10:15.82Z"^^xsd:dateTime;
+        dcterms:identifier            "absenceStarts-1"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:15.82Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#dateTime";
+        sh:maxCount                   1;
+        sh:path                       jhs:alkamispaivamaara;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:absenceEnds
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "päättymisajankohta päivämäärän ja kellonajan tarkkuudella ilmaistuna"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Ends"@en , "Päättymishetki"@fi;
+        dcterms:created               "2024-04-02T09:10:14.81Z"^^xsd:dateTime;
+        dcterms:identifier            "absenceEnds"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:14.81Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#dateTime";
+        sh:maxCount                   1;
+        sh:path                       jhs:paattymispaivamaara;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:issuer  rdf:type           sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Viittaus kirjaajaan tunnisteella"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Henkilökunta kirjaaja UUID"@fi , "Issuer"@en;
+        dcterms:created               "2024-04-02T09:10:14.562Z"^^xsd:dateTime;
+        dcterms:identifier            "issuer"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:14.562Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:issuer;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:info  rdf:type             sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Lisätietoa poissaolomerkinnästä"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Additional info"@en , "Lisätieto"@fi;
+        dcterms:created               "2024-04-02T09:10:14.488Z"^^xsd:dateTime;
+        dcterms:identifier            "info"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:14.488Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:path                       digione:info;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:absenceStatement-1
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "Poissaolon selvitys"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Absence statement"@en , "Poissaoloselvitys"@fi;
+        dcterms:created               "2024-04-02T09:10:14.354Z"^^xsd:dateTime;
+        dcterms:identifier            "absenceStatement-1"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:14.354Z"^^xsd:dateTime;
+        sh:class                      digione:AbsenceStatement;
+        sh:maxCount                   1;
+        sh:path                       digione:absenceStatement_;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:Absence  rdf:type          sh:NodeShape;
+        rdfs:comment                  "Oppijan poissaolo"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Absence"@en , "Poissaolomerkintä"@fi;
+        dcterms:created               "2023-03-03T08:48:41.778Z";
+        dcterms:identifier            "Absence"^^xsd:NCName;
+        dcterms:modified              "2023-04-27T09:23:29.271Z";
+        sh:property                   digioneots:lesson-2 , digioneots:class-4 , digioneots:absenceStatement-1 , digioneots:info , digioneots:issuer , digioneots:absenceEnds , digioneots:absenceStarts-1 , digioneots:createdAt-1 , digioneots:learner-2 , digioneots:caseType-1;
+        sh:targetClass                digione:Absence;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:createdAt-3
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tuntimerkinnän luontihetki"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Created at"@en , "Kirjaushetki"@fi;
+        dcterms:created               "2024-04-02T09:10:20.041Z"^^xsd:dateTime;
+        dcterms:identifier            "createdAt-3"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:20.041Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#dateTime";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:createdAt;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:oid  rdf:type              sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Merkinnän yksilöivä tunnus"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Id"@fi , "Id"@en;
+        dcterms:created               "2024-04-02T09:10:19.395Z"^^xsd:dateTime;
+        dcterms:identifier            "oid"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:19.395Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       jhs:tunnus;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:classId  rdf:type          sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Opetuksen toteutuksen yksilöivä tunnus"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Opetuksen toteutuksen tunnus"@fi , "Class identifier"@en;
+        dcterms:created               "2024-04-02T09:10:18.036Z"^^xsd:dateTime;
+        dcterms:identifier            "classId"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:18.036Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:path                       digione:classId;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:kuvaus-2  rdf:type         sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tuntikirjauksen tektimuotoinen sisältö"@fi , "a textual description of the entity"@en;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Description"@en , "Kuvaus"@fi;
+        dcterms:created               "2024-04-02T09:10:16.992Z"^^xsd:dateTime;
+        dcterms:identifier            "kuvaus-2"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:16.992Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       jhs:kuvaus;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:learningInstanceIdentifier
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Oppitunnin tai muun oppimistapahtuman tunnus"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Oppitunnin tunnus"@fi , "Learning instance identifier"@en;
+        dcterms:created               "2024-04-02T09:10:16.781Z"^^xsd:dateTime;
+        dcterms:identifier            "learningInstanceIdentifier"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:16.781Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:path                       digione:learningInstanceIdentifier;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:class-2  rdf:type          sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "Viittaus opetuksen toteutukseen"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Class"@en , "Opetuksen toteutus"@fi;
+        dcterms:created               "2024-04-02T09:10:16.668Z"^^xsd:dateTime;
+        dcterms:identifier            "class-2"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:16.668Z"^^xsd:dateTime;
+        sh:class                      digione:Class;
+        sh:maxCount                   1;
+        sh:path                       digione:class_;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:draft-1  rdf:type          sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tieto siitä onko merkintä luonnos"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Luonnos"@fi , "Draft"@en;
+        dcterms:created               "2024-04-02T09:10:16.465Z"^^xsd:dateTime;
+        dcterms:identifier            "draft-1"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:16.465Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#boolean";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:draft;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:creator  rdf:type          sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tuntimerkinnän luojan yksilöivä tunnus"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Henkilökunta kirjaaja UUID"@fi , "Creator"@en;
+        dcterms:created               "2024-04-02T09:10:14.888Z"^^xsd:dateTime;
+        dcterms:identifier            "creator"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:14.888Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:creator;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:ClassDiaryEntry
+        rdf:type                      sh:NodeShape;
+        rdfs:comment                  "Opetuksen päiväkirjamerkintä, joka voi olla tarkoitettu joko oppijoille/huoltajille tai pelkästään henkilökunnalle."@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Class diary"@en , "Opetuksen päiväkirjamerkintä"@fi;
+        dcterms:created               "2023-04-27T08:35:02.231Z";
+        dcterms:identifier            "ClassDiaryEntry"^^xsd:NCName;
+        dcterms:modified              "2023-09-22T12:38:46.057Z";
+        sh:property                   digioneots:creator , digioneots:draft-1 , digioneots:class-2 , digioneots:learningInstanceIdentifier , digioneots:kuvaus-2 , digioneots:classId , digioneots:oid , digioneots:createdAt-3;
+        sh:targetClass                digione:ClassDiaryEntry;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:creator-1  rdf:type        sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tuntimerkinnän luojan yksilöivä tunnus"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Luoja"@fi , "Creator"@en;
+        dcterms:created               "2024-04-02T09:10:21.441Z"^^xsd:dateTime;
+        dcterms:identifier            "creator-1"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:21.441Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:creator;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:oid-1  rdf:type            sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Merkinnän yksilöivä tunnus"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Id"@fi , "Id"@en;
+        dcterms:created               "2024-04-02T09:10:21.315Z"^^xsd:dateTime;
+        dcterms:identifier            "oid-1"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:21.315Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       jhs:tunnus;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:koodi  rdf:type            sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Yksilöintikoodi, jonka tietotyyppi ja koodisto on määriteltävä tapauskohtaisesti"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Kirjauksen tyyppi"@fi , "Code"@en;
+        dcterms:created               "2024-04-02T09:10:21.033Z"^^xsd:dateTime;
+        dcterms:identifier            "koodi"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:21.033Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       jhs:koodi_;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:lesson-1  rdf:type         sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "Oppitunti"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Oppitunti"@fi , "Lesson"@en;
+        dcterms:created               "2024-04-02T09:10:20.676Z"^^xsd:dateTime;
+        dcterms:identifier            "lesson-1"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:20.676Z"^^xsd:dateTime;
+        sh:class                      digione:Lesson;
+        sh:maxCount                   1;
+        sh:path                       digione:lesson_;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:supportMeasure-1
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Tukitoimi"@fi , "Support measure"@en;
+        dcterms:created               "2024-04-02T09:10:20.405Z"^^xsd:dateTime;
+        dcterms:identifier            "supportMeasure-1"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:20.405Z"^^xsd:dateTime;
+        sh:class                      digione:SupportMeasure;
+        sh:maxCount                   1;
+        sh:path                       digione:supportMeasure_;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:eventTime  rdf:type        sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Hetki, jolloin tuntimerkinnässä kuvattu on tapahtunut"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Event time"@en , "Tapahtumahetki"@fi;
+        dcterms:created               "2024-04-02T09:10:20.153Z"^^xsd:dateTime;
+        dcterms:identifier            "eventTime"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:20.153Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#dateTime";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:eventTime;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:issuer-3  rdf:type         sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Viittaus kirjaajaan tunnisteella"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Henkilökunta kirjaaja UUID"@fi , "Issuer"@en;
+        dcterms:created               "2024-04-02T09:10:19.664Z"^^xsd:dateTime;
+        dcterms:identifier            "issuer-3"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:19.664Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:issuer;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:supportTypeDescription
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tukitoimen tyypin tarkenne, tarkemmalla tasolla mitä tukea on annettu."@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Tuen tyyppi"@fi;
+        dcterms:created               "2024-04-02T09:10:19.155Z"^^xsd:dateTime;
+        dcterms:identifier            "supportTypeDescription"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:19.155Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:path                       digione:supportTypeDescription;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/digione/support_type>;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:createdAt-2
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tuntimerkinnän luontihetki"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Luontihetki"@fi , "Created at"@en;
+        dcterms:created               "2024-04-02T09:10:18.661Z"^^xsd:dateTime;
+        dcterms:identifier            "createdAt-2"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:18.661Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#dateTime";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:createdAt;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:objectiveIds
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Viittaus opetussuunnitelmassa määritettyyn oppiaineen tavoitteeseen"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Oppiaineen tavoitteen tunnus"@fi , "Objectives"@en;
+        dcterms:created               "2024-04-02T09:10:15.719Z"^^xsd:dateTime;
+        dcterms:identifier            "objectiveIds"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:15.719Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:path                       digione:objectiveIds;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:kuvaus-1  rdf:type         sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tuntikirjauksen tektimuotoinen sisältö"@fi , "a textual description of the entity"@en;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Description"@en , "Kuvaus"@fi;
+        dcterms:created               "2024-04-02T09:10:15.433Z"^^xsd:dateTime;
+        dcterms:identifier            "kuvaus-1"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:15.433Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       jhs:kuvaus;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:learner-1  rdf:type        sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Learner"@en , "Oppija"@fi;
+        dcterms:created               "2024-04-02T09:10:14.97Z"^^xsd:dateTime;
+        dcterms:identifier            "learner-1"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:14.97Z"^^xsd:dateTime;
+        sh:class                      digione:Learner;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:learner_;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:class-1  rdf:type          sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "Viittaus opetuksen toteutukseen"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Opetuksen toteutus"@fi;
+        dcterms:created               "2024-04-02T09:10:14.643Z"^^xsd:dateTime;
+        dcterms:identifier            "class-1"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:14.643Z"^^xsd:dateTime;
+        sh:class                      digione:Class;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:class_;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:LessonEntry
+        rdf:type                      sh:NodeShape;
+        rdfs:comment                  "Oppijan toiminnasta kirjattu tunti- / tukimerkintä"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Lesson entry"@en , "Tunti- tai tukimerkintä"@fi;
+        dcterms:created               "2023-03-03T08:29:01.513Z";
+        dcterms:identifier            "LessonEntry"^^xsd:NCName;
+        dcterms:modified              "2023-09-21T07:25:24.323Z";
+        sh:property                   digioneots:creator-1 , digioneots:oid-1 , digioneots:koodi , digioneots:lesson-1 , digioneots:supportMeasure-1 , digioneots:class-1 , digioneots:learner-1 , digioneots:kuvaus-1 , digioneots:objectiveIds , digioneots:createdAt-2 , digioneots:supportTypeDescription , digioneots:issuer-3 , digioneots:eventTime;
+        sh:targetClass                digione:LessonEntry;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:createdAt-4
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tuntimerkinnän luontihetki"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Luontihetki"@fi , "Created at"@en;
+        dcterms:created               "2024-04-02T09:10:21.188Z"^^xsd:dateTime;
+        dcterms:identifier            "createdAt-4"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:21.188Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#dateTime";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:createdAt;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:PlannedSupport
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tieto siitä, onko tukitoimen antamisesta tehty päätös"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Päätetty tukitoimi"@fi;
+        dcterms:created               "2024-04-02T09:10:20.788Z"^^xsd:dateTime;
+        dcterms:identifier            "PlannedSupport"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:20.788Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#boolean";
+        sh:maxCount                   1;
+        sh:minCount                   0;
+        sh:path                       digione:isPlanned;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:learner-3  rdf:type        sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Learner"@en , "Oppija"@fi;
+        dcterms:created               "2024-04-02T09:10:19.912Z"^^xsd:dateTime;
+        dcterms:identifier            "learner-3"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:19.912Z"^^xsd:dateTime;
+        sh:class                      digione:Learner;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:learner_;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:subjectCodes
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Viittaukset perusteissa määriteltäviin oppiaineisiin"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Oppiainekoodit"@fi , "Subject codes"@en;
+        dcterms:created               "2024-04-02T09:10:19.782Z"^^xsd:dateTime;
+        dcterms:identifier            "subjectCodes"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:19.782Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:minCount                   0;
+        sh:path                       digione:subjectCodes;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:SupportType
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tukitoimen ylätason tyyppi"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Tuen tyyppi"@fi , "Code"@en;
+        dcterms:created               "2024-04-02T09:10:18.427Z"^^xsd:dateTime;
+        dcterms:identifier            "SupportType"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:18.427Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2000/01/rdf-schema#Literal";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       jhs:koodi_;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/digione/support_type>;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:documentId
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Asiahallinnassa määriteltävän asiakirjan yksilöivä tunnus"@en;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Asiakirjan tunniste"@fi , "Document id"@en;
+        dcterms:created               "2024-04-02T09:10:18.26Z"^^xsd:dateTime;
+        dcterms:identifier            "documentId"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:18.26Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:path                       digione:documentId;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:SupportDescription
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Vapaamuotoinen kuvaus tuesta ja sen toteuttamisesta. Tässä voidaan hyödyntää fraasikirjastoa tarvittaessa."@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Tuen kuvaus"@fi;
+        dcterms:created               "2024-04-02T09:10:18.14Z"^^xsd:dateTime;
+        dcterms:identifier            "SupportDescription"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:18.14Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   0;
+        sh:path                       digione:supportDescription;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:SupportTypeSpecification
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tukitoimen tyypin tarkenne (koodisto), tarkemmalla tasolla mitä tukea on suunniteltu/annettu. Linkitys Tuen tyyppi -koodistoon."@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Tuen tyypin tarkenne"@fi;
+        dcterms:created               "2024-04-02T09:10:17.938Z"^^xsd:dateTime;
+        dcterms:identifier            "SupportTypeSpecification"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:17.938Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:supportTypeDescription;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/digione/support_type>;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:issuer-2  rdf:type         sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Viittaus kirjaajaan tunnisteella"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Henkilökunta kirjaaja UUID"@fi , "Issuer"@en;
+        dcterms:created               "2024-04-02T09:10:15.95Z"^^xsd:dateTime;
+        dcterms:identifier            "issuer-2"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:15.95Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:issuer;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:absenceEnds-1
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "päättymisajankohta päivämäärän ja kellonajan tarkkuudella ilmaistuna"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Ends"@en , "Päättymispäivämäärä"@fi;
+        dcterms:created               "2024-04-02T09:10:15.63Z"^^xsd:dateTime;
+        dcterms:identifier            "absenceEnds-1"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:15.63Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   1;
+        sh:path                       jhs:paattymispaivamaara;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:draft  rdf:type            sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tieto siitä onko merkintä luonnos"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Luonnos"@fi , "Draft"@en;
+        dcterms:created               "2024-04-02T09:10:15.534Z"^^xsd:dateTime;
+        dcterms:identifier            "draft"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:15.534Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#boolean";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:draft;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:kuvaus  rdf:type           sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tuntikirjauksen tektimuotoinen sisältö"@fi , "a textual description of the entity"@en;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Description"@en , "Kuvaus"@fi;
+        dcterms:created               "2024-04-02T09:10:15.063Z"^^xsd:dateTime;
+        dcterms:identifier            "kuvaus"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:15.063Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       jhs:kuvaus;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:absenceStarts
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "alkamisajankohta päivämäärän ja kellonajan tarkkuudella ilmaistuna"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Starts"@en , "Alkupäivämäärä"@fi;
+        dcterms:created               "2024-04-02T09:10:14.726Z"^^xsd:dateTime;
+        dcterms:identifier            "absenceStarts"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:14.726Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       jhs:alkamispaivamaara;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:SupportMeasure
+        rdf:type                      sh:NodeShape;
+        rdfs:comment                  "Oppijalle suunniteltu tukitoimi, joka perustuu joko yleiseen tukeen tai erikseen tehtyyn päätökseen."@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Suunniteltu tukitoimi"@fi , "Support measure"@en;
+        dcterms:created               "2023-05-16T12:01:39.698Z";
+        dcterms:identifier            "SupportMeasure"^^xsd:NCName;
+        dcterms:modified              "2023-09-22T12:39:03.299Z";
+        dcterms:subject               <https://iri.suomi.fi/terminology/oksa/c1619>;
+        sh:property                   digioneots:createdAt-4 , digioneots:PlannedSupport , digioneots:learner-3 , digioneots:subjectCodes , digioneots:SupportType , digioneots:documentId , digioneots:absenceStarts , digioneots:kuvaus , digioneots:draft , digioneots:absenceEnds-1 , digioneots:issuer-2 , digioneots:SupportTypeSpecification , digioneots:SupportDescription;
+        sh:targetClass                digione:SupportMeasure;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:uuid  rdf:type             sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Kurssin tunnus DigiOne:ssa"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Kurssin tunnus"@fi;
+        dcterms:created               "2024-04-02T09:10:19.509Z"^^xsd:dateTime;
+        dcterms:identifier            "uuid"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:19.509Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:path                       digione:id;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:id-2  rdf:type             sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Opetuksen toteutukselle määritelty lyhyt tunnus"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Opetuksen toteutuksen tunnus"@fi , "Id"@en;
+        dcterms:created               "2024-04-02T09:10:17.526Z"^^xsd:dateTime;
+        dcterms:identifier            "id-2"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:17.526Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:classId;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:subjectId  rdf:type        sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Opetussuunnitelmassa määritelty oppiaineen tai opintojakson yksilöivä tunnus"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Oppiaineen tunnus"@fi , "OID"@en;
+        dcterms:created               "2024-04-02T09:10:16.177Z"^^xsd:dateTime;
+        dcterms:identifier            "subjectId"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:16.177Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       digione:ophOid;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:name  rdf:type             sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Oppiaineesta yleiskielessä käytettävä nimitys tai selite."@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Name"@en , "Nimi"@fi;
+        dcterms:created               "2024-04-02T09:10:15.335Z"^^xsd:dateTime;
+        dcterms:identifier            "name"^^xsd:NCName;
+        dcterms:modified              "2024-04-02T09:10:15.335Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString";
+        sh:path                       jhs:nimi;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:Class  rdf:type            sh:NodeShape;
+        rdfs:comment                  "Kurssista muodostettu ja lukujärjestyksessä aikataulutettu opetuksen toteutus"@fi;
+        rdfs:isDefinedBy              digioneots:;
+        rdfs:label                    "Class"@en , "Opetuksen toteutus"@fi;
+        dcterms:created               "2023-03-03T08:25:25.464Z";
+        dcterms:identifier            "Class"^^xsd:NCName;
+        dcterms:modified              "2023-04-27T07:58:57.287Z";
+        sh:property                   digioneots:uuid , digioneots:id-2 , digioneots:subjectId , digioneots:name;
+        sh:targetClass                digione:Class;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+digioneots:  rdf:type                 owl:Ontology , suomi-meta:ApplicationProfile;
+        rdfs:label                    "DigiOne - Oppijan opintotiedot (OSAD)"@fi , "DigiOne - Oppijan opintotiedot (OSAD)"@en , "DigiOne - Oppijan opintotiedot (OSAD)"@sv;
+        dcterms:contributor           <urn:uuid:d3ad0f33-638b-46e1-a5be-753532d376cf>;
+        dcterms:created               "2023-03-03T08:24:37.133Z";
+        dcterms:identifier            "67c82c93-fae9-43b4-a51c-a4968214c4d0";
+        dcterms:isPartOf              <http://urn.fi/URN:NBN:fi:au:ptvl:v1060>;
+        dcterms:language              "fi" , "sv" , "en";
+        dcterms:modified              "2023-12-05T08:54:45.978Z";
+        dcterms:requires              <https://iri.suomi.fi/terminology/digione/> , <http://uri.suomi.fi/codelist/digione/absence_type> , <http://uri.suomi.fi/codelist/digione/support_type> , <http://uri.suomi.fi/codelist/digione/absence_statement_type> , jhs: , <https://iri.suomi.fi/terminology/jhs> , <https://iri.suomi.fi/terminology/oksa>;
+        dcap:preferredXMLNamespace    "https://iri.suomi.fi/model/digioneots/";
+        dcap:preferredXMLNamespacePrefix
+                "digioneots";
+        owl:imports                   digione: , owl:;
+        owl:versionIRI                <https://iri.suomi.fi/model/digioneots/1.0.0/>;
+        owl:versionInfo               "1.0.0";
+        suomi-meta:contentModified    "2024-04-02T09:10:12.146Z"^^xsd:dateTime;
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/VALID> .
+
+owl:    rdfs:label  "owl"@sv , "owl"@en , "owl"@fi;
+        dcap:preferredXMLNamespacePrefix
+                "owl" .

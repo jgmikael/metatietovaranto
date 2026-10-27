@@ -1,9 +1,10 @@
+import {repairProposals,applyRepairs,verifyRepair} from './repair';
 import {readCount,CountError,termInfo,rangeInfo,recordSource,preflight,groupProperties,propertyValues,propertyLocator} from './diagnostics';
 import {Parser,Store,DataFactory,type Term} from 'n3';
 import Ajv2020 from 'ajv/dist/2020';
 import jsonld from 'jsonld';
 import contract from './contract.json';
-import {BROWSER_GENERATOR,FILE_LIMIT,TRIPLE_LIMIT,FIELD_LIMIT,DEPTH_LIMIT,canonical,sha256,bytes,profileBody,generationBinding,type ImportedProfile,type SourceFile,type GenerationSettings,type Tree,type Row,type Finding,type LocalPackage} from './model';
+import {BROWSER_GENERATOR,FILE_LIMIT,TRIPLE_LIMIT,FIELD_LIMIT,DEPTH_LIMIT,canonical,sha256,bytes,profileBody,generationBinding,type RepairReport,type ImportedProfile,type SourceFile,type GenerationSettings,type Tree,type Row,type Finding,type LocalPackage} from './model';
 import type {Distribution} from '../Distributions';
 const {namedNode}=DataFactory;
 const SH='http://www.w3.org/ns/shacl#',RDF='http://www.w3.org/1999/02/22-rdf-syntax-ns#',XSD='http://www.w3.org/2001/XMLSchema#',OWL='http://www.w3.org/2002/07/owl#';
@@ -39,15 +40,17 @@ export async function inspectFiles(sources:SourceFile[]){
  const namespaces=[...new Set(graph.getQuads(null,null,null,null).flatMap(q=>[q.subject,q.predicate,q.object].filter(t=>t.termType==='NamedNode').map(t=>t.value.replace(/[^/#:]*$/,''))))].sort();
  return {tripleCount:graph.size,shapes,namespaces,imports,profileUri:oneOntology?.value||'',sourceVersion:versions.length===1?versions[0].value:iriVersions.length===1?iriVersions[0].value:null};
 }
-export async function prepareProfile(sources:SourceFile[],profileUri:string,sourceVersion:string|null):Promise<ImportedProfile>{
+export async function prepareProfile(sources:SourceFile[],profileUri:string,sourceVersion:string|null,repair?:RepairReport):Promise<ImportedProfile>{
  await inspectFiles(sources);
  if(!absolute(profileUri)||profileUri.length>2048)fail('PROFILE_URI','/profileUri','Anna lähdeprofiilin absoluuttinen tunniste.');
- const checksum=await sha256(canonical(profileBody({profileUri,sourceVersion,sources})));
+ const checksum=await sha256(canonical(profileBody({profileUri,sourceVersion,sources,repair})));
  const id=checksum.slice(0,8)+'-'+checksum.slice(8,12)+'-5'+checksum.slice(13,16)+'-a'+checksum.slice(17,20)+'-'+checksum.slice(20,32);
- return {id,profileUri,sourceVersion,sha256:checksum,sources};
+ const profile={id,profileUri,sourceVersion,sha256:checksum,sources,...(repair?{repair}:{})};
+ await verifyRepair(profile);return profile;
 }
 export async function inspectProfile(profile:ImportedProfile,rootUri:string,names:GenerationSettings['names']){
  if(await sha256(canonical(profileBody(profile)))!==profile.sha256)fail('PROFILE_HASH',profile.id,'Profiilisnapshotin tarkiste ei täsmää.');
+ await verifyRepair(profile);
  await inspectFiles(profile.sources);
  const graph=parseSources(profile.sources),root=namedNode(rootUri),rows:Row[]=[];
  if(!graph.countQuads(root,namedNode(RDF+'type'),namedNode(SH+'NodeShape'),null))fail('ROOT_SHAPE',rootUri,'Valitse lähteessä oleva IRI-luokkamuoto.');
@@ -172,17 +175,35 @@ export async function generate(profile:ImportedProfile,settings:GenerationSettin
  const values:Record<string,[string,unknown]>={'context.jsonld':['application/ld+json',context],'content.schema.json':['application/schema+json',annotatedSchema],'semantic-mapping.json':['application/json',mapping],'semantic-extension-profile.json':['application/json',ext],'sd-jwt-type-metadata.json':['application/json',typeMetadata],'issuer-metadata-binding.json':['application/json',{vct:sd.sdJwt!.vct,'vct#integrity':integrity(await sha256(canonical(typeMetadata))),typeMetadataUri:prefix+'sd-jwt-type-metadata.json',scope:'PLANNED PUBLICATION; NOT A CREDENTIAL'}],'content-example.json':['application/json',example],'sd-jwt-claims-example.json':['application/json',example],'unsigned-vc-example.jsonld':['application/ld+json',vc],'example.nq':['application/n-quads',rdf],'validation.json':['application/json',validation]};
  const artifacts:LocalPackage['artifacts']={};
  for(const [index,file] of profile.sources.entries())values['source-'+index+'.ttl']=['text/turtle',file.content];
+ if(profile.repair){values['repair-report.json']=['application/json',profile.repair];for(const [index,file] of profile.repair.originalSources.entries())values['original-source-'+index+'.ttl']=['text/turtle',file.content];}
  for(const [name,[mediaType,value]] of Object.entries(values)){const content=typeof value==='string'?value:canonical(value);artifacts[name]={mediaType,content,sha256:await sha256(content),url:prefix+name};}
- const manifest={packageId,generator:GENERATOR,serverReference:contract.serverGenerator,policy:contract.policy,standards:contract.standards,standardSourcePins:contract.standardSourcePins,baseContextSha256:contract.baseContextSha256,sdSpecificationSha256:contract.sdSpecificationSha256,scope:'local experiment; planned URLs are not published or verified',inputs:{sourceProfile:source,sourceFiles:profile.sources.map(({name,sha256})=>({name,sha256})),settings,metadata,bindingSha256:packageId},artifacts:Object.fromEntries(Object.entries(artifacts).map(([name,{content:_,...rest}])=>[name,rest])),validation};
+ const manifest={packageId,generator:GENERATOR,serverReference:contract.serverGenerator,policy:contract.policy,standards:contract.standards,standardSourcePins:contract.standardSourcePins,baseContextSha256:contract.baseContextSha256,sdSpecificationSha256:contract.sdSpecificationSha256,scope:'local experiment; planned URLs are not published or verified',inputs:{sourceProfile:source,...(profile.repair?{repair:{ruleId:profile.repair.ruleId,version:profile.repair.version,reportArtifact:'repair-report.json'}}:{}),sourceFiles:profile.sources.map(({name,sha256})=>({name,sha256})),settings,metadata,bindingSha256:packageId},artifacts:Object.fromEntries(Object.entries(artifacts).map(([name,{content:_,...rest}])=>[name,rest])),validation};
  const content=canonical(manifest);artifacts['manifest.json']={mediaType:'application/json',content,sha256:await sha256(content),url:prefix+'manifest.json'};
  return {status:'local',binding,packageId,artifacts,validation};
+}
+async function verifyPackageRepair(pkg:LocalPackage,manifest:any,profiles:ImportedProfile[]){
+ const bound=JSON.parse(pkg.binding),known=profiles.find(p=>p.sha256===bound.profileSha256);
+ if(!manifest.inputs?.repair&&!pkg.artifacts['repair-report.json']&&!known?.repair)return;
+ if(!manifest.inputs?.repair||!pkg.artifacts['repair-report.json'])fail('REPAIR_REPORT','/package','Korjatun paketin alkuperä-/korjausraportti puuttuu.');
+ const repair=JSON.parse(pkg.artifacts['repair-report.json'].content) as RepairReport;
+ const source=manifest.inputs.sourceProfile;
+ const files=manifest.inputs.sourceFiles.map((file:any,index:number)=>({name:file.name,sha256:file.sha256,content:pkg.artifacts['source-'+index+'.ttl']?.content}));
+ const profile=await prepareProfile(files,source.uri,source.version,repair);
+ if(profile.sha256!==source.snapshotSha256||profile.id!==source.snapshotId||profile.sha256!==bound.profileSha256)fail('REPAIR_REPORT','/package','Paketin korjaus ei vastaa sidottua profiilia.');
+ for(const [index,file] of repair.originalSources.entries()){
+  const artifact=pkg.artifacts['original-source-'+index+'.ttl'];
+  if(!artifact||artifact.content!==file.content||artifact.sha256!==file.sha256)fail('REPAIR_REPORT','/package','Paketin alkuperäinen lähde ei vastaa korjausraporttia.');
+ }
+ if(canonical(manifest.inputs.repair)!==canonical({ruleId:repair.ruleId,version:repair.version,reportArtifact:'repair-report.json'}))fail('REPAIR_REPORT','/package','Paketin korjaussäännön viite ei täsmää.');
 }
 export async function execute(request:any){
  switch(request.action){
   case 'verify':{
-   for(const profile of request.profiles||[]){for(const source of profile.sources)if(await sha256(source.content)!==source.sha256)fail('SOURCE_HASH',source.name,'Tuotavan lähteen tarkiste ei täsmää.');const prepared=await prepareProfile(profile.sources,profile.profileUri,profile.sourceVersion);if(prepared.sha256!==profile.sha256||prepared.id!==profile.id)fail('PROFILE_HASH',profile.id,'Tuotavan profiilin tarkiste ei täsmää.');}
-   for(const pkg of request.packages||[]){if(await sha256(pkg.binding)!==pkg.packageId)fail('PACKAGE_HASH','/package','Paketin syötehash ei täsmää.');for(const [name,artifact] of Object.entries(pkg.artifacts) as [string,any][])if(await sha256(artifact.content)!==artifact.sha256)fail('ARTIFACT_HASH',name,'Tuotavan artefaktin tarkiste ei täsmää.');const manifest=JSON.parse(pkg.artifacts['manifest.json'].content);if(manifest.packageId!==pkg.packageId)fail('PACKAGE_HASH','/manifest','Manifestin pakettitunniste ei täsmää.');for(const [name,entry] of Object.entries(manifest.artifacts) as [string,any][]){if(pkg.artifacts[name]?.sha256!==entry.sha256)fail('ARTIFACT_HASH',name,'Manifestin artefaktiviite ei täsmää.');}}return true;
+   for(const profile of request.profiles||[]){for(const source of profile.sources)if(await sha256(source.content)!==source.sha256)fail('SOURCE_HASH',source.name,'Tuotavan lähteen tarkiste ei täsmää.');const prepared=await prepareProfile(profile.sources,profile.profileUri,profile.sourceVersion,profile.repair);if(prepared.sha256!==profile.sha256||prepared.id!==profile.id)fail('PROFILE_HASH',profile.id,'Tuotavan profiilin tarkiste ei täsmää.');}
+   for(const pkg of request.packages||[]){if(await sha256(pkg.binding)!==pkg.packageId)fail('PACKAGE_HASH','/package','Paketin syötehash ei täsmää.');for(const [name,artifact] of Object.entries(pkg.artifacts) as [string,any][])if(await sha256(artifact.content)!==artifact.sha256)fail('ARTIFACT_HASH',name,'Tuotavan artefaktin tarkiste ei täsmää.');const manifest=JSON.parse(pkg.artifacts['manifest.json'].content);if(manifest.packageId!==pkg.packageId)fail('PACKAGE_HASH','/manifest','Manifestin pakettitunniste ei täsmää.');for(const [name,entry] of Object.entries(manifest.artifacts) as [string,any][]){if(pkg.artifacts[name]?.sha256!==entry.sha256)fail('ARTIFACT_HASH',name,'Manifestin artefaktiviite ei täsmää.');}await verifyPackageRepair(pkg,manifest,request.profiles||[]);}return true;
   }
+  case 'repair-proposals':return repairProposals(request.profile);
+  case 'apply-repairs':{const result=await applyRepairs(request.profile,request.selected);return prepareProfile(result.sources,request.profile.profileUri,request.profile.sourceVersion,result.repair);}
   case 'inspect':return inspectFiles(request.sources);
   case 'prepare':return prepareProfile(request.sources,request.profileUri,request.sourceVersion);
   case 'proposal':return inspectProfile(request.profile,request.settings.rootShapeUri,request.settings.names);

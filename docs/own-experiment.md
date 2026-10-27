@@ -55,3 +55,6 @@ PR:n yhdistämisen jälkeen nykyinen **Public Pages demo** -workflow rakentaa, t
 ## Valinnainen SHACL-generoinnin laajennus
 
 Formaatti 1 hyväksyy nyt myös `localProfiles`-kokoelman sekä tuotteen `generation`-asetukset/paketin. Vanhoja v1-tallenteita ei nollata tai muuteta avauksessa. Tuodut profiilit sisältävät alkuperäiset Turtle-tavut UTF-8-merkkijonoina ja hashit; ne eivät ole toimimattomia File-/blob-viittauksia. Laajennuksen tarkka rakenne ja rajat: [browser-shacl-generation.md](browser-shacl-generation.md). Sama 2 MiB kokonaisraja ja alkuperäisen avaimen reset-/ristiriitasuoja säilyvät.
+
+
+Valinnainen `ImportedProfile.repair` säilyttää alkuperäiset tiedostot, hyväksytyt termikorjaukset ja tarkisteet uuden korjatun profiilin rinnalla. `generation.repairSelection` kuuluu paketin sidontaan. Korjauksen tuonti ja tallenteen avaus toistavat sallittujen muutosten tarkistuksen Workerissa ennen asennusta käyttöön; vanhoja v1-tallenteita ei tarvitse muuntaa. Katso [korjauksen tarkka sopimus](browser-shacl-generation.md#hyväksytty-paikallinen-tuontikorjaus-27102026). Korjattu kopio ei ole alkuperäinen export, riippumaton hyväksyntä tai julkaisu.
