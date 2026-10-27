@@ -1,5 +1,5 @@
 import contract from './contract.json';
-export const BROWSER_GENERATOR='browser-technical-package/1.0.1';
+export const BROWSER_GENERATOR='browser-technical-package/1.0.2';
 /** Local, untrusted files and derived descriptions. Never an application publication. */
 export const FILE_LIMIT=256*1024,TRIPLE_LIMIT=10000,FIELD_LIMIT=200,DEPTH_LIMIT=8;
 export const WORKER_LIMIT_MS=15000;
@@ -10,7 +10,7 @@ export type GenerationSettings={profileId:string;rootShapeUri:string;names:NameC
 export type Artifact={mediaType:string;sha256:string;content:string;url:string};
 export type LocalPackage={status:'local';binding:string;packageId:string;artifacts:Record<string,Artifact>;validation:Record<string,string>};
 export type GenerationState=GenerationSettings&{package?:LocalPackage};
-export type Finding={ruleId:string;path:string;message:string;category?:'sourceError'|'generatorLimit'|'resourceLimit'|'warning';rootShapeUri?:string;nodeShapeUri?:string|null;predicate?:string;observed?:{value:string;termType:string;datatype?:string};expected?:string;suggestion?:string;propertyShapes?:{uri:string|null;kind:string;labels:string[];sources:string[];localIndex:number}[]};
+export type Finding={ruleId:string;path:string;message:string;category?:'sourceError'|'generatorLimit'|'resourceLimit'|'warning';rootShapeUri?:string;nodeShapeUri?:string|null;predicate?:string;observed?:{value:string;termType:string;datatype?:string;language?:string};owlRanges?:{value:string;termType:string;datatype?:string;sources?:string[]}[];expected?:string;suggestion?:string;propertyShapes?:{uri:string|null;kind:string;labels:string[];sources:string[];localIndex:number}[]};
 export type Mapping={shapeUri:string;semanticPath:string[];fieldPath:string;valueKind:'literal'|'object';datatype:string|null;classUri:string|null;minCount:number;maxCount:number|null;disclosure:null|'selective'|'always'};
 export type Row={name:string;nameOrigin:string;labels:{locale:string;label:string}[];mapping:Mapping;multi:boolean;shacl:{nodeShapeUri:string|null;propertyShapeUri:string|null;propertyShapeKind:string;constraintPath:Record<string,string|null>[];contributingConstraints?:Record<string,string|null>[]};child?:Tree;semantic?:Record<string,any>};
 export type Tree={shapeUri:string;classUri:string;fields:Row[]};

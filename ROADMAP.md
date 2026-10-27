@@ -159,3 +159,10 @@ Virallisiin Pages Actionseihin perustuva PR-tarkistus ja vain mainista julkaisev
 ## Selaingeneraattorin määrärajoitteet ja lähdediagnostiikka
 
 Täsmällinen XSD-kokonaislukuperheen count-lukija ja yhteinen selain-/palvelinsopimus. Read-only-esitarkistus, luokitellut usean havainnon raportit, datatype-termin ja toistuvan owl:topObjectProperty-polun yksilöinti. Rajattu nimettyjen literaalirajoitteiden leikkaus säilyttää kaikki alkuperäiset rajoiteviitteet. Ei lähdeontologian korjausta, julkaisuehtojen keventämistä tai integraatioita. Verovelkatiedot-export mukana muuttumattomana testiaineistona; lähde-/exportkorjaukset jäävät sen ylläpitäjälle. Tekniset versiot ja validoinnin erot dokumentissa docs/browser-shacl-generation.md.
+
+
+## OWL-arvoalueiden ja SHACL-tietotyyppien erottaminen
+
+- Johdannaisten konkreettiset tietotyypit tulevat SHACLista; OWL:n yleinen rdfs:Literal ei estä tarkennusta.
+- RDF-termivirhe, tukematon tietotyyppi, avoin esitys ja eksplisiittinen owl:disjointWith-ristiriita erotetaan. Muut arvoalueet ovat arvioimattomia huomioita; ei täyttä OWL-päättelyä.
+- Jaettu rajattu käytäntö, lähdetietojen read-only-diagnostiikka ja selain-/palvelinregressiot. Ei kielitiedon hävittämistä, string-oletuksia tai vanhojen lähteiden/julkaisujen muokkausta. Nordic Signatory Rights -alkuperäistapauksen varmennus edellyttää alkuperäistä tiedostoa.

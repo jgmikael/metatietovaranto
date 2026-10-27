@@ -2,6 +2,8 @@
 
 ## Julkinen GitHub Pages -esittelydemo
 
+**OWL ja SHACL:** OWL:n `rdfs:range rdfs:Literal` sallii SHACLin konkreettisen literaalityypin tarkennuksen. Johdannaiset käyttävät SHACL-tyyppiä. Raportti erottaa RDF-termivirheen, tukemattoman tyypin, puuttuvan konkreettisen esitysratkaisun ja eksplisiittisesti todetun ristiriidan. Kielitietoa ei poisteta eikä avointa tyyppiä oleteta stringiksi. [Tarkat säännöt ja rajat](docs/browser-shacl-generation.md#owl-arvoalue-ja-shacl-tietotyyppi-22102026).
+
 **SHACL-tuonnin diagnostiikka:** määrärajoitteiden lukija tukee myös xsd:int-arvoja täsmällisesti. Tarkistuspainikkeen alla näkyvä raportti erottaa lähdevirheet, mappingin tukirajoitteet ja resurssirajat. Se ei korjaa lähdeaineistoa eikä korvaa täydellistä SHACL-validointia; palvelimen pySHACL tarkistaa erikseen myös parametrien xsd:integer-vaatimuksen. [Rajaus ja yhteensopivuus](docs/browser-shacl-generation.md#lähdeprofiilin-diagnostiikka-21102026).
 
 **Käyttöliittymän ohjeet:** navigaation **Käyttöohje** avaa saman Markdown-ohjeen selaimessa. Kentän **Ohje** avaa selitteen; **Lue lisää** vie oikeaan osioon. Paluu säilyttää keskeneräisen työn ja kohdistuksen. Ohje ei tarvitse palvelinta. Ylläpitotapa ja testit: [Pages-ohjeen ylläpito](docs/pages-help-maintenance.md).

@@ -10,6 +10,10 @@ export const objects=(g:Store,s:Term,p:string)=>g.getObjects(s,named(p),null);
 const sourceLocations=new WeakMap<Store,Map<string,Set<string>>>();
 const key=(t:Term)=>t.termType+':'+t.value;
 export function recordSource(g:Store,s:Term,name:string){let map=sourceLocations.get(g);if(!map){map=new Map();sourceLocations.set(g,map);}const names=map.get(key(s))||new Set<string>();names.add(name);map.set(key(s),names);}
+/** Diagnostic DTO only. Generation always reparses the original source terms. */
+export const termInfo=(t:Term)=>({value:t.value,termType:t.termType,...(t.termType==='Literal'?{datatype:t.datatype.value,language:t.language}:{})});
+export const rangeInfo=(g:Store,path:Term)=>objects(g,path,contract.rangePolicy.range).map(t=>({...termInfo(t),sources:[...(sourceLocations.get(g)?.get(key(path))||[])].sort()}));
+function datatypeSuggestion(value:string){return /^[A-Za-z][A-Za-z0-9+.-]*:[^\s<>"{}|^`\\]+$/.test(value)?'sh:datatype <'+value+'> .':'Anna sh:datatype-arvoksi tarkoitetun konkreettisen tietotyypin IRI.';}
 export class CountError extends Error{constructor(public code:string,message:string){super(message);}}
 export function readCount(term:Term|undefined,defaultValue:number|null=null):number|null{
  if(!term)return defaultValue;
@@ -50,7 +54,25 @@ export function preflight(g:Store,root:Term):Finding[]{
      if(terms.length>1){numericError=true;add('CARDINALITY_TERM','Yhdellä ominaisuusrajoitteella saa olla yksi sh:'+predicate+'-arvo.',shape,[prop],SH+predicate,path);continue;}
      if(terms.length)try{const value=readCount(terms[0])!;(predicate==='minCount'?lows:highs).push(value);}catch(e){numericError=true;const error=e as CountError;add(error.code,error.message,shape,[prop],SH+predicate,path,{category:error.code==='CARDINALITY_LIMIT'?'resourceLimit':'sourceError',observed:{value:terms[0].value,termType:terms[0].termType,datatype:terms[0].termType==='Literal'?terms[0].datatype.value:undefined},expected:'XSD-kokonaislukuliteraali, arvo 0–10 000'});}
     }
-    for(const term of objects(g,prop,SH+'datatype'))if(term.termType!=='NamedNode')add('DATATYPE_TERM','sh:datatype tarvitsee IRI:n. URI:n näköinen merkkijono on literaali eikä tietotyypin IRI.',shape,[prop],SH+'datatype',path,{observed:{value:term.value,termType:term.termType,datatype:term.termType==='Literal'?term.datatype.value:undefined},expected:'IRI',suggestion:'Esimerkiksi sh:datatype <http://www.w3.org/2001/XMLSchema#boolean> . Korjaa lähdeprofiili tai exportin tuottaminen ja tuo uusi Turtle-export. Lähdettä ei muuteta automaattisesti.'});
+    const datatypes=objects(g,prop,SH+'datatype'),kinds=objects(g,prop,SH+'nodeKind');
+    const owlRanges=paths[0]?.termType==='NamedNode'?rangeInfo(g,paths[0]):[];
+    const detail=(term:Term)=>({observed:termInfo(term),owlRanges});
+    for(const term of datatypes){
+     if(term.termType!=='NamedNode')add('DATATYPE_TERM','sh:datatype tarvitsee IRI:n. URI:n näköinen merkkijono on literaali eikä tietotyypin IRI.',shape,[prop],SH+'datatype',path,{...detail(term),expected:'IRI',suggestion:datatypeSuggestion(term.value)+' Korjaa lähdeprofiili tai exportin tuottaminen ja tuo uusi Turtle-export. Lähdettä ei muuteta automaattisesti.'});
+     else if(term.value===contract.rangePolicy.literal)add('DATATYPE_REPRESENTATION_REQUIRED','Konkreettinen literaalin esitysratkaisu puuttuu. sh:datatype rdfs:Literal ei tarkoita mitä tahansa literaalia; tyyppiä ei oleteta merkkijonoksi.',shape,[prop],SH+'datatype',path,{...detail(term),category:'generatorLimit'});
+     else if(!contract.datatypes.some(name=>term.value===XSD+name))add('DATATYPE_UNSUPPORTED','Kelvollinen tietotyyppi-IRI ei kuulu generointiprofiiliin. Kielimerkittyjä arvoja ei muuteta merkkijonoiksi eikä kielitietoa poisteta: '+term.value,shape,[prop],SH+'datatype',path,{...detail(term),category:'generatorLimit'});
+     else for(const range of owlRanges){
+      const r=objects(g,paths[0],contract.rangePolicy.range).find(t=>t.termType===range.termType&&t.value===range.value)!,disjoint=contract.rangePolicy.disjoint;
+      const conflict=g.countQuads(term,named(disjoint),r,null)>0||g.countQuads(r,named(disjoint),term,null)>0;
+      const ruleId=conflict?'OWL_SHACL_CONFLICT':range.termType==='NamedNode'&&range.value===term.value?'OWL_RANGE_COMPATIBLE':range.termType==='NamedNode'&&range.value===contract.rangePolicy.literal?'OWL_RANGE_REFINEMENT':'OWL_RANGE_UNASSESSED';
+      const messages={OWL_SHACL_CONFLICT:'Lukitussa aineistossa on eksplisiittinen owl:disjointWith SHACL-tietotyypin ja OWL-arvoalueen välillä.',OWL_RANGE_COMPATIBLE:'SHACL-tietotyyppi ja paikallinen OWL-arvoalue ovat samat.',OWL_RANGE_REFINEMENT:'OWL:n rdfs:Literal sallii SHACLin konkreettisen literaalityypin tarkennuksen.',OWL_RANGE_UNASSESSED:'Rajattu tarkistus ei ratkaise tämän OWL-arvoalueen yhteensopivuutta. Eri IRI ei yksin todista ristiriitaa; OWL-päättelyä ei suoritettu.'};
+      add(ruleId,messages[ruleId],shape,[prop],SH+'datatype',path,{observed:termInfo(term),owlRanges:[range],category:conflict?'sourceError':'warning'});
+     }
+    }
+    for(const kind of kinds){
+     if(!datatypes.length&&kind.termType==='NamedNode'&&kind.value===SH+'Literal')add('DATATYPE_REPRESENTATION_REQUIRED','sh:nodeKind sh:Literal jättää konkreettisen tietotyypin ja esitysratkaisun avoimeksi; tyyppiä ei oleteta merkkijonoksi.',shape,[prop],SH+'nodeKind',path,{...detail(kind),category:'generatorLimit'});
+     else if(kind.termType!=='NamedNode'||kind.value!==SH+'Literal')add('NODE_KIND_UNSUPPORTED','Vain konkreettista literaalityyppiä täydentävä sh:nodeKind sh:Literal on tuettu.',shape,[prop],SH+'nodeKind',path,{...detail(kind),category:'generatorLimit'});
+    }
    }
    if(!numericError&&Math.max(0,...lows)>Math.min(Infinity,...highs))add('CARDINALITY_CONFLICT','Samalle polulle kohdistuvien määrärajoitteiden leikkaus on tyhjä: maxCount on minCountia pienempi.',shape,group,SH+'maxCount',path);
    if(group.length>1){

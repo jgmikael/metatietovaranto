@@ -14,13 +14,14 @@ from rdflib.compare import isomorphic, to_canonical_graph
 from jsonschema import Draft202012Validator
 from pyld import jsonld
 
+from apps.api.datatype_policy import datatype_issue, assess_range, term_info, RANGE_POLICY
 from apps.api.shacl_cardinality import read_count, CardinalityError
 from apps.api.contracts import Contract
 from apps.api.profiles import checksum, canonical, Iri
 from apps.api.semantic_validation import locked_graph, validation_report, ENGINE as SHACL_ENGINE
 from apps.api.conversion import bounded_json, convert, tokens
 
-GENERATOR = 'technical-package/1.1.2'
+GENERATOR = 'technical-package/1.1.3'
 POLICY = 'shacl-tree-json-v1'
 SD_STANDARD = 'draft-ietf-oauth-sd-jwt-vc-19'
 STANDARDS = {'sdJwtVc': SD_STANDARD, 'vcdm': '2.0', 'jsonLd': '1.1', 'jsonSchema': '2020-12', 'mtvSemanticExtension': EXTENSION_VERSION}
@@ -33,7 +34,7 @@ RESERVED = {'id','type','issuer','credentialSubject','credentialStatus','validFr
 RESERVED |= {term for term in json.loads((FIXTURES/'credentials-v2.jsonld').read_text())['@context'] if not term.startswith('@')}
 ANNOTATIONS = {'name','description','order','group','message','severity','defaultValue'}
 NODE_ALLOWED = ANNOTATIONS | {'property','targetClass','closed','ignoredProperties'}
-PROP_ALLOWED = ANNOTATIONS | {'path','datatype','node','class','minCount','maxCount'}
+PROP_ALLOWED = ANNOTATIONS | {'path','datatype','node','class','nodeKind','minCount','maxCount'}
 
 
 class RepresentationName(Contract):
@@ -71,8 +72,9 @@ def technical_name(iri):
     return 'field_' + hashlib.sha256(iri.encode()).hexdigest()[:12]
 
 
-def inspect_profile(manifest, root_uri, names):
-    graph = locked_graph(manifest,preserve_turtle_lexical=True)
+def inspect_profile(manifest, root_uri, names, diagnostics=None):
+    source_locations={}
+    graph = locked_graph(manifest,preserve_turtle_lexical=True,source_locations=source_locations)
     root = URIRef(root_uri)
     if (root, RDF.type, SH.NodeShape) not in graph:fail('ROOT_SHAPE', root_uri, 'Valitse lähteessä oleva IRI-luokkamuoto')
     overrides = {tuple(row['semanticPath']):row['fieldName'] for row in names}
@@ -128,10 +130,26 @@ def inspect_profile(manifest, root_uri, names):
             except CardinalityError as error:fail(error.code,str(predicate),str(error))
             if high is not None and high<low:fail('CARDINALITY_CONFLICT',str(predicate),'Samalle polulle kohdistuvien määrärajoitteiden leikkaus on tyhjä: maxCount on minCountia pienempi.')
             datatype = read(SH.datatype); node = read(SH.node); obj_class = read(SH['class'])
-            if datatype is not None and not isinstance(datatype,URIRef):fail('DATATYPE_TERM',str(predicate),'sh:datatype tarvitsee IRI:n, ei literaalia. Esimerkiksi sh:datatype <http://www.w3.org/2001/XMLSchema#boolean> . Korjaa lähdeprofiili tai export ja tuo uusi Turtle-export.')
+            node_kind = read(SH.nodeKind)
+            ranges = sorted(set(graph.objects(predicate,URIRef(RANGE_POLICY['range']))),key=str)
+            def diagnostic(rule,category,message,suggestion=None,observed=datatype,predicate_uri=SH.datatype,owl_ranges=None):
+                finding={'ruleId':rule,'path':str(predicate),'message':message,'category':category,
+                         'rootShapeUri':root_uri,'nodeShapeUri':str(shape) if isinstance(shape,URIRef) else None,
+                         'predicate':str(predicate_uri),'observed':term_info(observed) if observed is not None else None,
+                         'expected':'IRI' if rule=='DATATYPE_TERM' else 'Yksiselitteinen tuettu SHACL-literaalityyppi',
+                         'propertyShapes':[{'uri':str(p) if isinstance(p,URIRef) else None,'kind':'iri' if isinstance(p,URIRef) else 'blankNode','localIndex':i+1,'sources':sorted(source_locations.get(p,set())),'labels':sorted(str(v) for pred in (SH.name,URIRef('http://www.w3.org/2000/01/rdf-schema#label')) for v in graph.objects(p,pred) if isinstance(v,Literal))} for i,p in enumerate(group)],
+                         'owlRanges':[term_info(r)|{'sources':sorted(source_locations.get(predicate,set()))} for r in (ranges if owl_ranges is None else owl_ranges)]}
+                if suggestion:finding['suggestion']=suggestion
+                if category!='warning':
+                    error=GenerationError(rule,str(predicate),message);error.finding=finding;raise error
+                if diagnostics is not None:diagnostics.append(finding)
+            issue=datatype_issue(datatype,node_kind,{str(XSD)+value for value in DATATYPES})
+            if issue:diagnostic(*issue,observed=datatype if datatype is not None else node_kind,predicate_uri=SH.datatype if datatype is not None else SH.nodeKind)
+            if node_kind is not None and (node_kind != SH.Literal or datatype is None):
+                fail('NODE_KIND_UNSUPPORTED',str(predicate),'Vain konkreettista literaalityyppiä täydentävä sh:nodeKind sh:Literal on tuettu')
             if datatype and (node or obj_class):fail('VALUE_AMBIGUOUS', str(predicate), 'Kenttä ei voi olla sekä literaali että olio')
-            if datatype and str(datatype) not in {str(XSD)+value for value in DATATYPES}:
-                fail('DATATYPE_UNSUPPORTED', str(predicate), 'Tukematon literaalityyppi: '+str(datatype))
+            if datatype is not None:
+                for owl_range in ranges:diagnostic(*assess_range(graph,datatype,owl_range),owl_ranges=[owl_range])
             if not datatype and node is None and obj_class:
                 candidates = list(graph.subjects(SH.targetClass,obj_class))
                 if len(candidates)==1:node=candidates[0]
@@ -179,8 +197,9 @@ def inspect_profile(manifest, root_uri, names):
 
 def proposal(manifest, data):
     try:
-        tree, rows=inspect_profile(manifest,data['rootShapeUri'],data.get('names',[]))
-        return {'status':'proposed','rootClassUri':tree['classUri'],'fields':rows,'results':[],
+        diagnostics=[]
+        tree, rows=inspect_profile(manifest,data['rootShapeUri'],data.get('names',[]),diagnostics)
+        return {'status':'proposed','rootClassUri':tree['classUri'],'fields':rows,'results':diagnostics,
                 'policy':POLICY,'scope':'Esitysehdotus; SHACL-tyypit ja kardinaliteetit ovat vain luettavia'}
     except GenerationError as error:return {'status':'invalid','fields':[],'results':[error.finding],'policy':POLICY}
 
