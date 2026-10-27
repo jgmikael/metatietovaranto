@@ -18,7 +18,7 @@ Todennus lopullisella toteutuksella:
 - Erillinen **HTTP-yhteensopivuuskoe** luki 136 olemassa olevaa julkaisuversiota; valittujen 12 tallennetun paketin 126 artefaktia vastasivat tietokannan alkuperäisiä tavuja ja SHA-256-tarkisteita. Ei vanhojen snapshotien uudelleenkirjoitusta.
 - **Ajamattomat:** koko backend-testisarja ja erillinen legacy-migraatiokoe (ei backend-/skeema-/migraatiomuutoksia; relevantit 78 regressiota ja olemassa olevan kannan startup-säilymiskoe yllä), Firefox/Safari, Windows Docker Desktop, Codespacesin oma käynnistys, fyysinen puhelin ja oikea ruudunlukija. Julkista Pages-deployta tai GitHub Actions -ajoa ei tehty PR-haarasta. Koko DigiOne-profiilin generointi ei ole hyväksytty tulos; aiemmat dokumentoidut generointirajoitteet säilyvät.
 
-Valmis PR-kuvaus docs/pull-request-local-shacl-repair.md. Toimituksen haara-/PR-tila kirjataan alle. Ei automaattista main-yhdistämistä.
+Toteutuscommit `12cd9c4`, haara `feat/local-shacl-repair` pushattu ajantasaisen mainin pohjalta; viimeinen fetch ei näyttänyt uusia main-committeja. Valmis PR-kuvaus docs/pull-request-local-shacl-repair.md. `gh pr create --base main --head feat/local-shacl-repair --body-file docs/pull-request-local-shacl-repair.md` sekä REST POST /repos/jgmikael/metatietovaranto/pulls estyivät molemmat GitHub API:n **Forbidden**-vastaukseen. PR:ää ei luotu tässä ympäristössä. Luontilinkki https://github.com/jgmikael/metatietovaranto/pull/new/feat/local-shacl-repair (base main, compare feat/local-shacl-repair); kopioi valmis kuvaus PR:n kuvauskenttään. Ei main-yhdistämistä tai julkista Pages-deployta.
 
 ---
 
