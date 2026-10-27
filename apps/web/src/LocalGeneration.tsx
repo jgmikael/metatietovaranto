@@ -1,23 +1,25 @@
+import {downloadLocal} from './localDownload';
+import {LocalRepair} from './LocalRepair';
 import {SourceFindings} from './SourceFindings';
 import {HelpLabel,TopicHelp} from './help/Help';
 import React,{useEffect,useRef,useState} from 'react';
 import {BrowserGenerationError,runWorker} from './browserGeneration/client';
 import {FILE_LIMIT,WORKER_LIMIT_MS,bytes,sha256,generationBinding,type SourceFile,type ImportedProfile,type GenerationSettings,type LocalPackage,type Row,type Finding} from './browserGeneration/model';
 import type {LocalProduct} from './experimentStore';
-export function downloadLocal(content:string,name:string,mediaType='application/json'){
- const url=URL.createObjectURL(new Blob([content],{type:mediaType})),link=document.createElement('a');link.href=url;link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
-}
 export function settingsFor(profileId:string):GenerationSettings{return {profileId,rootShapeUri:'',names:[],mappingVersion:'1.0.0',publicationBase:'',exampleContent:'',acceptRepresentation:false,acceptFormatPolicies:false,synthetic:false};}
-type Props={product:LocalProduct;profiles:ImportedProfile[];disabled:boolean;onProfile:(profile:ImportedProfile)=>void;onSettings:(settings:GenerationSettings)=>void;onPackage:(value:LocalPackage)=>void};
+type Props={product:LocalProduct;profiles:ImportedProfile[];disabled:boolean;onProfile:(profile:ImportedProfile,activate?:boolean)=>void;onSettings:(settings:GenerationSettings)=>void;onPackage:(value:LocalPackage)=>void};
 export function LocalGeneration({product,profiles,disabled,onProfile,onSettings,onPackage}:Props){
  const [sources,setSources]=useState<SourceFile[]>([]),[inspection,setInspection]=useState<any>(null),[uri,setUri]=useState(''),[version,setVersion]=useState(''),[proposal,setProposal]=useState<{rows:Row[]}|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState(''),[findings,setFindings]=useState<Finding[]>([]);
  const feedbackRef=useRef<HTMLDivElement|null>(null);
+ const pendingCheck=useRef<string|null>(null);
  const controller=useRef<AbortController|null>(null),mounted=useRef(true),fingerprint=useRef('');
  const settings=product.generation,profile=profiles.find(p=>p.id===settings?.profileId),pkg=settings?.package;
  const binding=profile&&settings?generationBinding(profile,product.metadata,settings):'';fingerprint.current=binding;
  const stale=!!pkg&&pkg.binding!==binding;
  useEffect(()=>()=>{mounted.current=false;controller.current?.abort();},[]);
  useEffect(()=>{setProposal(null);setFindings([]);},[profile?.sha256,settings?.rootShapeUri]);
+ useEffect(()=>{if(profile&&settings&&pendingCheck.current===profile.sha256){pendingCheck.current=null;if(settings.rootShapeUri)void run<any>({action:'proposal',profile,settings},result=>{setProposal(result);setFindings(result.findings||[]);setNotice('Valitun aineiston generointituki tarkistettu. Tämä ei ole SHACL-validointi.');});}},[profile?.sha256]);
+ function useCorrection(value:ImportedProfile){pendingCheck.current=value.sha256;setProposal(null);setError('');setFindings([]);onProfile(value);}
  useEffect(()=>{if(error){feedbackRef.current?.focus({preventScroll:true});feedbackRef.current?.scrollIntoView({block:'start'});}},[error]);
  async function run<T,>(request:unknown,done:(value:T)=>void){
   setBusy(true);setError('');setNotice('');setFindings([]);const abort=new AbortController();controller.current=abort;const before=fingerprint.current;
@@ -50,7 +52,7 @@ export function LocalGeneration({product,profiles,disabled,onProfile,onSettings,
  {inspection&&sources.length>0&&<><p>Turtle jäsennetty: {inspection.tripleCount} kolmikkoa. Tämä ei ole SHACL-validointi tai generointituen hyväksyntä.</p><details open><summary>Löydetyt luokkamuodot ja ominaisuudet</summary>{inspection.shapes.map((shape:any,i:number)=><div key={i}><code>{shape.iri||'(nimetön muoto)'}</code><p>Kohdeluokat: {shape.targets.join(', ')}</p><ul>{shape.properties.map((p:any,j:number)=><li key={j}>{p.shape||'(nimetön PropertyShape)'} → {p.paths.join(', ')}{p.datatypes?.map((t:any,k:number)=><small key={k}>sh:datatype: {t.value} · {t.termType}{t.datatype&&<> · literaalitermin oma tietotyyppi: {t.datatype}</>}{t.language&&<> · kieli: {t.language}</>}</small>)}{p.owlRanges?.map((t:any,k:number)=><small key={k}>OWL rdfs:range: {t.value} · {t.termType}</small>)}</li>)}</ul></div>)}</details><details><summary>Nimiavaruudet ja riippuvuusviitteet</summary><ul>{inspection.namespaces.map((ns:string)=><li key={ns}><code>{ns}</code></li>)}</ul><ul>{inspection.imports.map((d:any,i:number)=><li key={i}><code>{d.uri}</code> · {d.resolved?'IRI:stä on paikallisia lauseita (ei täydellisyysväitettä)':'ulkoinen / ei noudettu'} · {d.scope}</li>)}</ul></details>
  <HelpLabel>Lähdeprofiilin tunniste<input value={uri} maxLength={2048} onChange={e=>setUri(e.target.value)}/></HelpLabel><HelpLabel>Lähdeprofiilin versio (jos tiedossa)<input maxLength={200} value={version} onChange={e=>setVersion(e.target.value)}/></HelpLabel><p>Lähdeilmoitus on käyttäjän ilmoitus. Tiedostoa ei ole varmennettu Yhteentoimivuusalustalta.</p>
  <button disabled={!uri} onClick={()=>void run<ImportedProfile>({action:'prepare',sources,profileUri:uri,sourceVersion:version||null},value=>{onProfile(value);setSources([]);setInspection(null);setNotice('Profiili liitetty paikalliseen tuotteeseen. Valitse juurimuoto.');})}>Liitä tuotu profiili tuotteeseen</button></>}
- {!!profiles.length&&<HelpLabel>Käytä aiemmin tuotua profiilia<select value={profile?.id||''} onChange={e=>{const next=profiles.find(p=>p.id===e.target.value);if(next)onProfile(next);}}><option value="">Valitse paikallinen profiili</option>{profiles.map(p=><option key={p.id} value={p.id}>{p.profileUri} · {p.sourceVersion||'versio puuttuu'} · {p.sha256}</option>)}</select></HelpLabel>}
+ {!!profiles.length&&<HelpLabel>Käytä aiemmin tuotua profiilia<select value={profile?.id||''} onChange={e=>{const next=profiles.find(p=>p.id===e.target.value);if(next)onProfile(next);}}><option value="">Valitse paikallinen profiili</option>{profiles.map(p=><option key={p.id} value={p.id}>{p.repair?'Korjattu paikallinen kopio: ':'Alkuperäinen: '}{p.profileUri} · {p.sourceVersion||'versio puuttuu'} · {p.sha256}</option>)}</select></HelpLabel>}
  </fieldset>
  {!(profile&&settings)&&feedback}
  {profile&&settings&&<><p>Generoinnin paikallinen snapshot: <code>{profile.profileUri}</code> · {profile.sourceVersion||'versio puuttuu'} · <code>{profile.sha256}</code>. Lähdetiedostot säilyvät kokeilun JSON-viennissä.</p>
@@ -60,6 +62,7 @@ export function LocalGeneration({product,profiles,disabled,onProfile,onSettings,
  {inspection&&<HelpLabel>Valitse juurimuoto<select value={settings.rootShapeUri} onChange={e=>update({rootShapeUri:e.target.value,names:[]})}><option value="">Valitse yksi juuri</option>{inspection.shapes.filter((s:any)=>s.iri).map((s:any)=><option key={s.iri} value={s.iri}>{s.iri}</option>)}</select></HelpLabel>}
  <button disabled={!settings.rootShapeUri} onClick={()=>{setProposal(null);void run<any>({action:'proposal',profile,settings},result=>{setProposal(result);setFindings(result.findings||[]);setNotice('Generointituen tarkistus läpäisi selainversion rajauksen. Tämä ei ole SHACL-validointi.');});}}>Tarkista tuki ja muodosta mapping-ehdotus</button>
  {feedback}
+ <LocalRepair key={profile.sha256} profile={profile} enabled={findings.some(f=>f.ruleId==='DATATYPE_TERM')} disabled={disabled||busy} selected={settings.repairSelection||[]} onSelection={ids=>{setProposal(null);update({repairSelection:ids,acceptRepresentation:false,acceptFormatPolicies:false,synthetic:false});}} onStore={value=>onProfile(value,false)} onUse={useCorrection}/>
  {proposal&&<><p>Yhteinen esitys kaikille muodoille; W3C-kenttäpolun alku on /credentialSubject. Tyypit ja määrät tulevat muuttumattomasta SHACLista.</p>{proposal.rows.map(row=><fieldset key={row.mapping.semanticPath.join('|')}><legend>{row.mapping.semanticPath.join(' → ')}</legend><HelpLabel>Kenttänimi {row.mapping.semanticPath.join(' / ')}<input maxLength={100} value={settings.names.find(n=>JSON.stringify(n.semanticPath)===JSON.stringify(row.mapping.semanticPath))?.fieldName??row.name} onChange={e=>update({names:[...settings.names.filter(n=>JSON.stringify(n.semanticPath)!==JSON.stringify(row.mapping.semanticPath)),{semanticPath:row.mapping.semanticPath,fieldName:e.target.value}]})}/></HelpLabel><p>{row.mapping.datatype||row.mapping.classUri} · {row.mapping.minCount}…{row.mapping.maxCount??'∞'} · {row.mapping.fieldPath}</p></fieldset>)}</>}
  <HelpLabel>Mappingin paikallinen versio<input maxLength={100} value={settings.mappingVersion} onChange={e=>update({mappingVersion:e.target.value})}/></HelpLabel>
  <HelpLabel>Suunniteltu HTTPS-julkaisemisen perusosoite<input maxLength={2048} value={settings.publicationBase} placeholder="https://julkaisut.example.org" onChange={e=>update({publicationBase:e.target.value})}/></HelpLabel><p>Osoitteita ei julkaista tai tarkisteta verkosta. Älä käytä demon Pages-osoitetta. Perusosoitteen muuttaminen vaatii uuden paketin.</p>

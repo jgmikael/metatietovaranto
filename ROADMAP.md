@@ -166,3 +166,11 @@ Täsmällinen XSD-kokonaislukuperheen count-lukija ja yhteinen selain-/palvelins
 - Johdannaisten konkreettiset tietotyypit tulevat SHACLista; OWL:n yleinen rdfs:Literal ei estä tarkennusta.
 - RDF-termivirhe, tukematon tietotyyppi, avoin esitys ja eksplisiittinen owl:disjointWith-ristiriita erotetaan. Muut arvoalueet ovat arvioimattomia huomioita; ei täyttä OWL-päättelyä.
 - Jaettu rajattu käytäntö, lähdetietojen read-only-diagnostiikka ja selain-/palvelinregressiot. Ei kielitiedon hävittämistä, string-oletuksia tai vanhojen lähteiden/julkaisujen muokkausta. Nordic Signatory Rights -alkuperäistapauksen varmennus edellyttää alkuperäistä tiedostoa.
+
+
+## Paikallinen hyväksytty SHACL-tuontikorjaus
+
+- Versionhallittuun listaan perustuva rajattu sh:datatype-URI-literaalin termikorjaus. Käyttäjän valinta, esikatselu, erillinen korjattu kopio ja eksplisiittinen aineistovalinta; ei lähteen piilokorjausta.
+- Alkuperäiset tavut/hashit, korjattu aineisto ja korjausraportti säilyvät v1-kokeilussa. Worker toistaa sallitut muutokset, graafivertailun ja tarkisteiden tarkistuksen tuonnissa ja ennen käyttöä.
+- Asetus-/lähdemuutokset vanhentavat paketin ja tyhjentävät paikalliset hyväksynnät. Ei OWL-/SHACL-sisältömallin korvaamista, palvelintuonnin korjausta tai vanhojen julkaisujen muokkausta.
+- DigiOne OSAD muuttumattomana koeaineistona; 51 korjausehdotusta ja yksi käsin tarkastettava rdfs:Literal. Koko profiilin generointitukea ei luvata. Rajaus ja käyttö docs/browser-shacl-generation.md.

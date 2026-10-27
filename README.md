@@ -2,6 +2,8 @@
 
 ## Julkinen GitHub Pages -esittelydemo
 
+**Hyväksytty paikallinen tuontikorjaus:** DATATYPE_TERM-havainnon jälkeen voit tarkastella rajattuja korjausehdotuksia, valita muutokset ja luoda erillisen korjatun kopion. Valitse kopio erikseen generointiin ja tarkista tuki uudelleen. Alkuperäiset tavut/hashit säilyvät; korjaus ei ole SHACL-validointi tai alustan varmennus. [Työnkulku ja kentät](docs/pages-kayttoohje.md#12-shacl-tuonnin-kaikki-kentät-ja-valinnat).
+
 **OWL ja SHACL:** OWL:n `rdfs:range rdfs:Literal` sallii SHACLin konkreettisen literaalityypin tarkennuksen. Johdannaiset käyttävät SHACL-tyyppiä. Raportti erottaa RDF-termivirheen, tukemattoman tyypin, puuttuvan konkreettisen esitysratkaisun ja eksplisiittisesti todetun ristiriidan. Kielitietoa ei poisteta eikä avointa tyyppiä oleteta stringiksi. [Tarkat säännöt ja rajat](docs/browser-shacl-generation.md#owl-arvoalue-ja-shacl-tietotyyppi-22102026).
 
 **SHACL-tuonnin diagnostiikka:** määrärajoitteiden lukija tukee myös xsd:int-arvoja täsmällisesti. Tarkistuspainikkeen alla näkyvä raportti erottaa lähdevirheet, mappingin tukirajoitteet ja resurssirajat. Se ei korjaa lähdeaineistoa eikä korvaa täydellistä SHACL-validointia; palvelimen pySHACL tarkistaa erikseen myös parametrien xsd:integer-vaatimuksen. [Rajaus ja yhteensopivuus](docs/browser-shacl-generation.md#lähdeprofiilin-diagnostiikka-21102026).
