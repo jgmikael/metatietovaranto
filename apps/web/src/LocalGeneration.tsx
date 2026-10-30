@@ -1,3 +1,4 @@
+import {RepresentationChoices} from './RepresentationChoices';
 import {downloadLocal} from './localDownload';
 import {LocalRepair} from './LocalRepair';
 import {SourceFindings} from './SourceFindings';
@@ -60,6 +61,7 @@ export function LocalGeneration({product,profiles,disabled,onProfile,onSettings,
  <HelpLabel>Generoinnin juurimuodon IRI<input value={settings.rootShapeUri} maxLength={2048} onChange={e=>update({rootShapeUri:e.target.value,names:[]})}/></HelpLabel>
  <button onClick={()=>void run<any>({action:'inspect',sources:profile.sources},result=>{setInspection(result);setNotice('Juurimuodon voi valita alla olevasta listasta.');})}>Näytä tuodun profiilin luokkamuodot</button>
  {inspection&&<HelpLabel>Valitse juurimuoto<select value={settings.rootShapeUri} onChange={e=>update({rootShapeUri:e.target.value,names:[]})}><option value="">Valitse yksi juuri</option>{inspection.shapes.filter((s:any)=>s.iri).map((s:any)=><option key={s.iri} value={s.iri}>{s.iri}</option>)}</select></HelpLabel>}
+ <RepresentationChoices value={settings} disabled={disabled||busy} onChange={choices=>{setProposal(null);setFindings([]);setError('');setNotice('');const next={...settings,...choices,acceptRepresentation:false,acceptFormatPolicies:false,synthetic:false};if(!choices.languageRepresentation)delete next.languageRepresentation;if(!choices.references?.length)delete next.references;onSettings(next);}}/>
  <button disabled={!settings.rootShapeUri} onClick={()=>{setProposal(null);void run<any>({action:'proposal',profile,settings},result=>{setProposal(result);setFindings(result.findings||[]);setNotice('Generointituen tarkistus läpäisi selainversion rajauksen. Tämä ei ole SHACL-validointi.');});}}>Tarkista tuki ja muodosta mapping-ehdotus</button>
  {feedback}
  <LocalRepair key={profile.sha256} profile={profile} enabled={findings.some(f=>f.ruleId==='DATATYPE_TERM')} disabled={disabled||busy} selected={settings.repairSelection||[]} onSelection={ids=>{setProposal(null);update({repairSelection:ids,acceptRepresentation:false,acceptFormatPolicies:false,synthetic:false});}} onStore={value=>onProfile(value,false)} onUse={useCorrection}/>

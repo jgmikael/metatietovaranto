@@ -74,16 +74,16 @@ def test_allowlist_is_separate_from_rdf_parser_and_no_coercion(page,static_site,
     assert profile['sources']==[source(text)]
 
 
-def test_langstring_term_repair_retains_language_and_remains_unsupported(page,static_site):
+def test_langstring_term_repair_retains_language_and_requires_representation(page,static_site):
     lang='http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'
     text=PREFIX+f'ex:Name sh:path ex:label;sh:datatype "{lang}";sh:defaultValue "teksti"@fi . ex:Date sh:path ex:date;sh:datatype xsd:date .'
     profile=prepared(page,static_site,[source(text)]);c=proposals(page,static_site,profile)['changes'][0]
     result=apply(page,static_site,profile,[c['id']]);assert result['ok'],result
     fixed=result['value'];g=Graph().parse(data=fixed['sources'][0]['content'],format='turtle')
     assert next(g.objects(URIRef(P+'Name'),SH.defaultValue)).language=='fi'
-    assert 'ei ole tuettu' in c['limitation']
+    assert 'ei ole tuettu' in c['limitation']  # Historical repair-v1 report text must remain byte-compatible.
     response=worker(page,static_site,{'action':'proposal','profile':fixed,'settings':{'rootShapeUri':P+'Root','names':[]}})
-    assert not response['ok'] and response['error']['ruleId']=='DATATYPE_UNSUPPORTED'
+    assert not response['ok'] and response['error']['ruleId']=='LANGUAGE_REPRESENTATION_REQUIRED'
 
 
 @pytest.mark.parametrize('variant',['bom-crlf','blank-node','duplicate-triple','prefixed-redefinition','escaped-literal'])

@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Annotated, Literal, Union
 from urllib.parse import urlsplit
 from uuid import UUID
-from pydantic import BaseModel, ConfigDict, Field, HttpUrl, AfterValidator, model_validator, field_validator
+from pydantic import BaseModel, ConfigDict, Field, HttpUrl, AfterValidator, model_validator, field_validator, model_serializer
 from apps.api.metadata_urls import initiation_url
 
 class Metadata(BaseModel):
@@ -45,8 +45,15 @@ class FieldMapping(Metadata):
     minCount:int=Field(default=0,ge=0,le=10000)
     maxCount:int|None=Field(default=None,ge=0,le=10000)
     disclosure:Literal['selective','always']|None=None
+    representation:Literal['iriReference']|None=None
+    @model_serializer(mode='wrap')
+    def serialize_mapping(self,handler):
+        data=handler(self)
+        if self.representation is None:data.pop('representation',None)
+        return data
     @model_validator(mode='after')
     def consistent(self):
+        if self.representation and (self.valueKind!='object' or not self.classUri):raise ValueError('IRI-viittaus tarvitsee oliokartoituksen ja kohdeluokan')
         if self.maxCount is not None and self.minCount>self.maxCount:raise ValueError('minCount ei saa ylittää maxCount-arvoa')
         if self.valueKind=='literal' and (not self.datatype or self.classUri):raise ValueError('Literaalikartoitus tarvitsee tietotyypin, ei olion luokkaa')
         if self.valueKind=='object' and self.datatype:raise ValueError('Oliokartoitukseen ei kuulu literaalin tietotyyppiä')

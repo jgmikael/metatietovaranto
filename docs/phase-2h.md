@@ -1,3 +1,5 @@
+> Uusi rajattu laajennus: [kieli- ja viittausprofiilit](representation-profiles.md), generaattori 1.2.0. Alkuperäinen 1.0.0-toteutuskuvaus säilyy historiallisena alla.
+
 # Vaihe 2H — SHACL-pohjainen tekninen kuvauspaketti
 
 **Attribuuttisemantiikan jatko:** generaattorin 1.1.0 laajennukset, 12 artefaktin paketti ja uudet lähdeviitteet kuvataan erikseen [attribute-semantics.md](attribute-semantics.md). Alla oleva alkuperäinen 1.0.0-toteutuskuvaus säilyy sen version dokumentaationa.

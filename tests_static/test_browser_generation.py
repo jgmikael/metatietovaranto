@@ -138,7 +138,7 @@ def test_limits_and_real_unmodified_tietomallit_export(page,static_site):
     for root in [s['iri'] for s in info['value']['shapes'] if s['iri']]:
         result=worker(page,static_site,{'action':'proposal','profile':profile,'settings':{'rootShapeUri':root,'names':[]}})
         assert not result['ok']  # Do not repair or advertise this complete export as supported.
-        assert result['error']['ruleId'] in {'OBJECT_AMBIGUOUS','SHACL_UNSUPPORTED','UNRESOLVED_SHAPE','CLASS_REQUIRED','EMPTY_SHAPE','DATATYPE_UNSUPPORTED'}
+        assert result['error']['ruleId'] in {'OBJECT_AMBIGUOUS','SHACL_UNSUPPORTED','UNRESOLVED_SHAPE','CLASS_REQUIRED','EMPTY_SHAPE','DATATYPE_UNSUPPORTED','LANGUAGE_REPRESENTATION_REQUIRED','PATH_REQUIRED'}
     projection=(ROOT/'fixtures/tietomallit/webcor-0.0.2/family-name-test-projection.ttl').read_text()
     profile=prepared(page,static_site,[source(projection)])
     result=worker(page,static_site,{'action':'proposal','profile':profile,'settings':{'rootShapeUri':'https://iri.suomi.fi/model/webcor/Person','names':[]}})

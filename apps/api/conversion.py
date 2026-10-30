@@ -1,3 +1,4 @@
+from apps.api.representations import language_value,reference_value,RepresentationError
 """Offline, non-persistent synthetic JSON content laboratory; never decode credentials."""
 import hashlib
 import math
@@ -17,7 +18,8 @@ from apps.api.distributions import assess
 from apps.api.profiles import checksum
 from apps.api.semantic_validation import ENGINE, locked_graph, validation_report
 
-POLICY = 'synthetic-json-rdf-v1'
+POLICY = 'synthetic-json-rdf-v2'
+RDF_TRIPLE_LIMIT=2000
 
 
 class ConversionExample(Contract):
@@ -88,6 +90,9 @@ def bounded_json(content):
 
 
 def typed_literal(value, datatype, path):
+    if datatype==str(RDF.langString):
+        try:return language_value(value)
+        except RepresentationError as error:fail('JSON_LANGUAGE',str(error),path)
     name = datatype.removeprefix(str(XSD))
     if datatype != str(XSD) + name:
         fail('DATATYPE_UNSUPPORTED', 'Tätä literaalin tietotyyppiä ei tueta', path)
@@ -157,7 +162,14 @@ def convert(manifest, item, instance):
             for value, path in values:
                 if entry['valueKind'] == 'literal':
                     rdf_value = typed_literal(value, entry['datatype'], path)
+                    if entry['datatype']==str(RDF.langString):consumed.update({join(path,'value'),join(path,'language')})
                     if rdf_value in seen:fail('RDF_VALUE_LOSS', 'Toistuva literaali häviäisi RDF-joukossa', path)
+                    seen.add(rdf_value)
+                elif entry.get('representation')=='iriReference':
+                    try:rdf_value=reference_value(value,entry['classUri'])
+                    except RepresentationError as error:fail('JSON_REFERENCE',str(error),path)
+                    graph.add((rdf_value,RDF.type,URIRef(entry['classUri'])))
+                    if rdf_value in seen:fail('RDF_VALUE_LOSS','Toistuva IRI-viittaus häviäisi RDF-joukossa',path)
                     seen.add(rdf_value)
                 else:
                     if not isinstance(value, dict):fail('JSON_OBJECT', 'Sisäkkäisen arvon on oltava olio', path)
@@ -165,7 +177,7 @@ def convert(manifest, item, instance):
                     if entry['classUri']:graph.add((rdf_value, RDF.type, URIRef(entry['classUri'])))
                     visit(value, rdf_value, tuple(entry['semanticPath']), full, path)
                 graph.add((rdf_subject, URIRef(entry['semanticPath'][-1]), rdf_value))
-                if len(graph) > 2000:fail('RDF_RESOURCE_LIMIT', 'Muunnoksen 2000 kolmikon raja ylittyi')
+                if len(graph) > RDF_TRIPLE_LIMIT:fail('RDF_RESOURCE_LIMIT', 'Muunnoksen 2000 kolmikon raja ylittyi')
     visit(instance, subject)
 
     def covered(value, path=''):

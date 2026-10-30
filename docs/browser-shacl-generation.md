@@ -1,3 +1,5 @@
+> Nykyinen laajennus: selain 1.1.0 / palvelin 1.2.0, [kieliarvojen ja IRI-viittausten sopimus](representation-profiles.md). Alla olevat päivätyt toteutuskohdat kuvaavat myös aiempien versioiden rajoja.
+
 # Paikallinen SHACL-tuonti ja selaingenerointi
 
 [Käyttäjän ohje: ensikokeilu ja kaikkien kenttien selitteet](pages-kayttoohje.md). Alla on toteutuksen tekninen rajaus.

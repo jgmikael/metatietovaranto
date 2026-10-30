@@ -2,6 +2,8 @@
 
 ## Julkinen GitHub Pages -esittelydemo
 
+**Kieliarvot ja viittaukset:** rdf:langString voidaan esittää hyväksyttävänä value/language-parina. Rajattu assosiaatio voidaan valita IRI-viittaukseksi vain, jos lähde-SHACL sallii tyypitetyn kohdesolmun ilman pakollista kohdesisältöä. Nimi-/kieli-/viittausvalinnat ovat muokattavissa ennen onnistunutta ehdotusta. [Sopimus ja rajoitteet](docs/representation-profiles.md), [Ryhti-aineiston juurikohtainen koe](docs/ryhti-generation.md).
+
 **Hyväksytty paikallinen tuontikorjaus:** DATATYPE_TERM-havainnon jälkeen voit tarkastella rajattuja korjausehdotuksia, valita muutokset ja luoda erillisen korjatun kopion. Valitse kopio erikseen generointiin ja tarkista tuki uudelleen. Alkuperäiset tavut/hashit säilyvät; korjaus ei ole SHACL-validointi tai alustan varmennus. [Työnkulku ja kentät](docs/pages-kayttoohje.md#12-shacl-tuonnin-kaikki-kentät-ja-valinnat).
 
 **OWL ja SHACL:** OWL:n `rdfs:range rdfs:Literal` sallii SHACLin konkreettisen literaalityypin tarkennuksen. Johdannaiset käyttävät SHACL-tyyppiä. Raportti erottaa RDF-termivirheen, tukemattoman tyypin, puuttuvan konkreettisen esitysratkaisun ja eksplisiittisesti todetun ristiriidan. Kielitietoa ei poisteta eikä avointa tyyppiä oleteta stringiksi. [Tarkat säännöt ja rajat](docs/browser-shacl-generation.md#owl-arvoalue-ja-shacl-tietotyyppi-22102026).

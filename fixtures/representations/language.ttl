@@ -1,0 +1,11 @@
+# Synthetic test fixture, not a platform export.
+@prefix ex:<https://example.org/representation/> .
+@prefix sh:<http://www.w3.org/ns/shacl#> .
+@prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ex:Root a sh:NodeShape;sh:targetClass ex:Record;sh:property ex:Labels,ex:Home .
+ex:Labels sh:path ex:labels;sh:datatype rdf:langString;sh:minCount 1;sh:maxCount 3 .
+ex:Home sh:path ex:home;sh:node ex:Address;sh:maxCount 1 .
+ex:Address a sh:NodeShape;sh:targetClass ex:AddressClass;sh:property ex:Notes .
+ex:Notes sh:path ex:notes;sh:datatype rdf:langString;sh:maxCount 1 .
+
+ex:profile a <http://www.w3.org/2002/07/owl#Ontology> .

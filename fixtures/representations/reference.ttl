@@ -1,0 +1,9 @@
+# Synthetic cyclic class fixture. A typed target with no optional fields is sufficient.
+@prefix ex:<https://example.org/representation/> .
+@prefix sh:<http://www.w3.org/ns/shacl#> .
+@prefix xsd:<http://www.w3.org/2001/XMLSchema#> .
+ex:Root a sh:NodeShape;sh:targetClass ex:Entity;sh:property ex:Parent,ex:Label .
+ex:Parent sh:path ex:parent;sh:class ex:Entity;sh:maxCount 2 .
+ex:Label sh:path ex:label;sh:datatype xsd:string;sh:maxCount 1 .
+
+ex:profile a <http://www.w3.org/2002/07/owl#Ontology> .

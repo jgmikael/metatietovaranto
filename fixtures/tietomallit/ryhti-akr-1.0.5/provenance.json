@@ -1,0 +1,12 @@
+{
+  "receivedOn": "2026-10-30",
+  "source": "User-provided export/report; no independent platform fetch",
+  "profileUri": "https://iri.suomi.fi/model/ryhti-akr/",
+  "version": "1.0.5",
+  "sha256": "c41ae51575c63daca16fdbbc07cd619230c4db7be65ee4063b7e76342207ef02",
+  "bytes": 114957,
+  "reportSha256": "053507cd94313e11a7c0c02f228b611daad3aa18fb2bf865eecb87ca0c613100",
+  "correctedSha256": "74130d8b542ab11db403b88f393ac704d09334bda3bed93b6de2afe6891034c2",
+  "approvedTermCorrections": 62,
+  "publicDemoInclusion": false
+}

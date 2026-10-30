@@ -1,0 +1,285 @@
+[
+  {
+    "root": "https://iri.suomi.fi/model/ryhti-akr/AlueidenkaytonRajoituksenAsia",
+    "server": {
+      "status": "invalid",
+      "codes": [
+        "DATATYPE_TERM"
+      ]
+    },
+    "browser": {
+      "status": "invalid",
+      "codes": [
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "PATH_REQUIRED",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM"
+      ]
+    }
+  },
+  {
+    "root": "https://iri.suomi.fi/model/ryhti-akr/AlueidenkaytonRajoituksenAsianPaatos",
+    "server": {
+      "status": "invalid",
+      "codes": [
+        "DATATYPE_TERM"
+      ]
+    },
+    "browser": {
+      "status": "invalid",
+      "codes": [
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "PATH_REQUIRED",
+        "DATATYPE_TERM"
+      ]
+    }
+  },
+  {
+    "root": "https://iri.suomi.fi/model/ryhti-akr/AlueidenkaytonRajoituksenAsianVaihe",
+    "server": {
+      "status": "invalid",
+      "codes": [
+        "DATATYPE_TERM"
+      ]
+    },
+    "browser": {
+      "status": "invalid",
+      "codes": [
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "PATH_REQUIRED",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM"
+      ]
+    }
+  },
+  {
+    "root": "https://iri.suomi.fi/model/ryhti-akr/AlueidenkaytonRajoituksenKohde",
+    "server": {
+      "status": "invalid",
+      "codes": [
+        "RECURSION"
+      ]
+    },
+    "browser": {
+      "status": "invalid",
+      "codes": [
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "PATH_REQUIRED",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM"
+      ]
+    }
+  },
+  {
+    "root": "https://iri.suomi.fi/model/ryhti-akr/AlueidenkaytonRajoitus",
+    "server": {
+      "status": "invalid",
+      "codes": [
+        "RECURSION"
+      ]
+    },
+    "browser": {
+      "status": "invalid",
+      "codes": [
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "PATH_REQUIRED",
+        "DATATYPE_TERM"
+      ]
+    }
+  },
+  {
+    "root": "https://iri.suomi.fi/model/ryhti-akr/Asiakirja",
+    "server": {
+      "status": "invalid",
+      "codes": [
+        "DATATYPE_TERM"
+      ]
+    },
+    "browser": {
+      "status": "invalid",
+      "codes": [
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM",
+        "DATATYPE_TERM"
+      ]
+    }
+  },
+  {
+    "root": "https://iri.suomi.fi/model/ryhti-akr/Asiasana",
+    "server": {
+      "status": "proposed",
+      "codes": []
+    },
+    "browser": {
+      "status": "proposed",
+      "codes": []
+    }
+  },
+  {
+    "root": "https://iri.suomi.fi/model/ryhti-akr/Henkilo",
+    "server": {
+      "status": "proposed",
+      "codes": []
+    },
+    "browser": {
+      "status": "proposed",
+      "codes": []
+    }
+  },
+  {
+    "root": "https://iri.suomi.fi/model/ryhti-akr/Kaava",
+    "server": {
+      "status": "proposed",
+      "codes": []
+    },
+    "browser": {
+      "status": "proposed",
+      "codes": []
+    }
+  },
+  {
+    "root": "https://iri.suomi.fi/model/ryhti-akr/Kasittelytapahtuma",
+    "server": {
+      "status": "invalid",
+      "codes": [
+        "PATH_REQUIRED"
+      ]
+    },
+    "browser": {
+      "status": "invalid",
+      "codes": [
+        "PATH_REQUIRED",
+        "DATATYPE_TERM"
+      ]
+    }
+  },
+  {
+    "root": "https://iri.suomi.fi/model/ryhti-akr/Organisaatio",
+    "server": {
+      "status": "proposed",
+      "codes": []
+    },
+    "browser": {
+      "status": "proposed",
+      "codes": []
+    }
+  },
+  {
+    "root": "https://iri.suomi.fi/model/ryhti-akr/Saadosviite",
+    "server": {
+      "status": "proposed",
+      "codes": []
+    },
+    "browser": {
+      "status": "proposed",
+      "codes": []
+    }
+  },
+  {
+    "root": "https://iri.suomi.fi/model/ryhti-akr/Sijainti",
+    "server": {
+      "status": "invalid",
+      "codes": [
+        "DATATYPE_TERM"
+      ]
+    },
+    "browser": {
+      "status": "invalid",
+      "codes": [
+        "DATATYPE_TERM",
+        "DATATYPE_TERM"
+      ]
+    }
+  },
+  {
+    "root": "https://iri.suomi.fi/model/ryhti-akr/Tapahtuma",
+    "server": {
+      "status": "proposed",
+      "codes": []
+    },
+    "browser": {
+      "status": "proposed",
+      "codes": []
+    }
+  },
+  {
+    "root": "https://iri.suomi.fi/model/ryhti-akr/Toimija",
+    "server": {
+      "status": "proposed",
+      "codes": []
+    },
+    "browser": {
+      "status": "proposed",
+      "codes": []
+    }
+  }
+]

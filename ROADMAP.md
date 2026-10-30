@@ -174,3 +174,11 @@ Täsmällinen XSD-kokonaislukuperheen count-lukija ja yhteinen selain-/palvelins
 - Alkuperäiset tavut/hashit, korjattu aineisto ja korjausraportti säilyvät v1-kokeilussa. Worker toistaa sallitut muutokset, graafivertailun ja tarkisteiden tarkistuksen tuonnissa ja ennen käyttöä.
 - Asetus-/lähdemuutokset vanhentavat paketin ja tyhjentävät paikalliset hyväksynnät. Ei OWL-/SHACL-sisältömallin korvaamista, palvelintuonnin korjausta tai vanhojen julkaisujen muokkausta.
 - DigiOne OSAD muuttumattomana koeaineistona; 51 korjausehdotusta ja yksi käsin tarkastettava rdfs:Literal. Koko profiilin generointitukea ei luvata. Rajaus ja käyttö docs/browser-shacl-generation.md.
+
+
+## Kieliarvot ja rajattu assosiaatioviittaus
+
+- rdf:langStringin hyväksyttävä valueLanguage-v1-esitys, yhteinen JSON Schema, scoped JSON-LD-konteksti, JSON→RDF ja SD-JWT-mapping säilyttäen alkuperäinen ominaisuus ja kieli.
+- Eksplisiittinen classOnlyIri-v1-valinta assosiaatiolle; vain paikallisista SHACL-rajoitteista osoitettu tyypitetyn IRI-kohteen riittävyys. Ei pakollisen kohdesisällön tai sh:node-rajoitteen ohittamista.
+- Nimi-, kieli- ja viittausvalinnat käytettävissä ennen onnistunutta ehdotusta. Puuttuva polku ja avoin rdfs:Literal jäävät lähteen täsmennettäviksi. Ei rinnakkaista sisältömallia.
+- Ryhti AKR 1.0.5:n 15 juuren ennen/jälkeen-vertailu ja erilliset synteettiset onnistumiskokeet. Alkuperäiset lähteet/tuontikorjausraportti ja julkaisut säilyvät; koko mallin generointitukea ei väitetä.

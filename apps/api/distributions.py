@@ -22,7 +22,8 @@ def normalize_distributions(body,snapshot):
         item['profileSnapshotId']=str(snapshot.id) if snapshot else None
 
 
-def expected_fields(graph,manifest):
+def expected_fields(graph,manifest,references=None):
+    references=references or set()
     declared=manifest.get('entryShapeUris',[])
     roots=[URIRef(uri) for uri in declared] if declared else [node for node in graph.subjects(RDF.type,SH.NodeShape)
         if any(graph.objects(node,SH.targetClass)) or any(graph.objects(node,SH.targetNode))
@@ -40,7 +41,12 @@ def expected_fields(graph,manifest):
             if len(list(graph.objects(prop,SH.node)))>1:
                 problems.append('Usean sisäkkäisen muodon leikkaus vaatii erillisen mapping-profiilin')
             node=graph.value(prop,SH.node);object_class=graph.value(prop,SH['class'])
-            if node is None and object_class:
+            is_reference=(str(root),tuple(chain)) in references
+            if is_reference:
+                from apps.api.representations import reference_class
+                try:object_class=reference_class(graph,prop)
+                except ValueError as error:problems.append(str(error))
+            if not is_reference and node is None and object_class:
                 candidates=set(graph.subjects(SH.targetClass,object_class))
                 if len(candidates)==1:node=next(iter(candidates))
             if not datatype and not node and not object_class:
@@ -48,8 +54,8 @@ def expected_fields(graph,manifest):
             minimum=graph.value(prop,SH.minCount);maximum=graph.value(prop,SH.maxCount)
             result.append({'shapeUri':str(root),'semanticPath':chain,'valueKind':'literal' if datatype else 'object',
                 'datatype':str(datatype) if datatype else None,'classUri':str(object_class or graph.value(node,SH.targetClass)) if (object_class or node and graph.value(node,SH.targetClass)) else None,
-                'minCount':int(minimum) if minimum is not None else 0,'maxCount':int(maximum) if maximum is not None else None})
-            if node is not None:visit(root,node,chain,ancestors|{shape})
+                **({'representation':'iriReference'} if is_reference else {}),'minCount':int(minimum) if minimum is not None else 0,'maxCount':int(maximum) if maximum is not None else None})
+            if not is_reference and node is not None:visit(root,node,chain,ancestors|{shape})
     for root in set(roots):visit(root,root,[],set())
     return result,problems
 
@@ -71,11 +77,13 @@ def schema_mapping_paths(artifact,entries):
                 if schema.get('type')!='object':raise ValueError('Expected object')
                 schema=schema['properties'][token]
         schema=local_schema(doc,schema)
-        if entry['valueKind']=='object' and schema.get('type')!='object':raise ValueError('Expected object value')
+        if entry['valueKind']=='object' and schema.get('type')!=('string' if entry.get('representation')=='iriReference' else 'object'):raise ValueError('Expected object value')
 
 
 def assess(manifest,items):
-    graph=locked_graph(manifest);expected,unsupported=expected_fields(graph,manifest)
+    graph=locked_graph(manifest)
+    references={(e['shapeUri'],tuple(e['semanticPath'])) for item in items for e in item['mapping']['entries'] if e.get('representation')=='iriReference'}
+    expected,unsupported=expected_fields(graph,manifest,references)
     results=[];assessments=[]
     def problem(index,rule,message):results.append({'path':f'/distributions/{index}','ruleId':rule,'message':message})
     services={}
@@ -115,6 +123,7 @@ def assess(manifest,items):
             key=(field['shapeUri'],tuple(field['semanticPath']));expected_keys.add(key)
             entry=mapped.get(key)
             if not entry:problem(index,'MAPPING_MISSING','Profiilin kentän mapping puuttuu: '+' / '.join(field['semanticPath']));continue
+            if entry.get('representation')!=field.get('representation'):problem(index,'MAPPING_REPRESENTATION','Viittauksen esitys eroaa yhteisestä tarkastetusta valinnasta')
             if any(entry.get(key)!=field[key] for key in ('valueKind','datatype','classUri','minCount','maxCount')):
                 problem(index,'MAPPING_CONFLICT','Mappingin tietotyyppi, luokka tai kardinaliteetti poikkeaa jäädytetystä SHACL-profiilista')
         if not expected:problem(index,'MAPPING_MISSING','Profiilissa ei ole kohdistuvia kartoitettavia kenttiä')

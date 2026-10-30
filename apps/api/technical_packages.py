@@ -1,3 +1,4 @@
+from apps.api.representations import LANGUAGE_PROFILE,REFERENCE_PROFILE,LANG_SCHEMA,LANG_CONTEXT,IRI_PATTERN,reference_class,reference_nodes,RepresentationError
 """Deterministic, bounded SHACL-derived description packages. No credential issuance."""
 import copy
 import hashlib
@@ -21,7 +22,7 @@ from apps.api.profiles import checksum, canonical, Iri
 from apps.api.semantic_validation import locked_graph, validation_report, ENGINE as SHACL_ENGINE
 from apps.api.conversion import bounded_json, convert, tokens
 
-GENERATOR = 'technical-package/1.1.3'
+GENERATOR = 'technical-package/1.2.0'
 POLICY = 'shacl-tree-json-v1'
 SD_STANDARD = 'draft-ietf-oauth-sd-jwt-vc-19'
 STANDARDS = {'sdJwtVc': SD_STANDARD, 'vcdm': '2.0', 'jsonLd': '1.1', 'jsonSchema': '2020-12', 'mtvSemanticExtension': EXTENSION_VERSION}
@@ -45,6 +46,8 @@ class RepresentationName(Contract):
 class ProposalRequest(Contract):
     rootShapeUri: Iri = Field(min_length=1, max_length=2048)
     names: list[RepresentationName] = Field(default_factory=list, max_length=200)
+    languageRepresentation: Choice['valueLanguage-v1']|None=None
+    references: list[list[Iri]] = Field(default_factory=list,max_length=200)
 
 
 class PackageRequest(ProposalRequest):
@@ -72,13 +75,15 @@ def technical_name(iri):
     return 'field_' + hashlib.sha256(iri.encode()).hexdigest()[:12]
 
 
-def inspect_profile(manifest, root_uri, names, diagnostics=None):
+def inspect_profile(manifest, root_uri, names, diagnostics=None, choices=None):
     source_locations={}
     graph = locked_graph(manifest,preserve_turtle_lexical=True,source_locations=source_locations)
     root = URIRef(root_uri)
     if (root, RDF.type, SH.NodeShape) not in graph:fail('ROOT_SHAPE', root_uri, 'Valitse lähteessä oleva IRI-luokkamuoto')
     overrides = {tuple(row['semanticPath']):row['fieldName'] for row in names}
     if len(overrides) != len(names):fail('NAME_DUPLICATE', root_uri, 'Saman semanttisen polun valinta on annettu kahdesti')
+    choices=choices or {}; references={tuple(p) for p in choices.get('references',[])};used_references=set()
+    if any(not p or len(p)>8 for p in references):fail('REFERENCE_UNKNOWN',root_uri,'Viittaus tarvitsee 1–8 semanttista ominaisuus-IRI:tä')
     fields = []; used_overrides = set()
     def one(node, predicate, required=False):
         values = list(graph.objects(node, predicate))
@@ -102,6 +107,9 @@ def inspect_profile(manifest, root_uri, names, diagnostics=None):
         result = {'shapeUri':str(shape), 'classUri':str(cls), 'fields':[]}
         properties = {}
         for prop in graph.objects(shape, SH.property):
+            if not list(graph.objects(prop,SH.path)):
+                error=GenerationError('PATH_REQUIRED',str(prop),'sh:path puuttuu. Sisältöominaisuutta ei päätellä nimestä tai ylaluokkaviitteestä; korjaa lähdeprofiili.')
+                error.finding.update(category='sourceError',rootShapeUri=root_uri,nodeShapeUri=str(shape),predicate=str(SH.path),propertyShapes=[{'uri':str(prop) if isinstance(prop,URIRef) else None,'kind':'iri' if isinstance(prop,URIRef) else 'blankNode','localIndex':1,'sources':sorted(source_locations.get(prop,set())),'labels':[]}]);raise error
             predicate = one(prop, SH.path, True)
             properties.setdefault(predicate, []).append(prop)
         if not properties:fail('EMPTY_SHAPE', str(shape), 'Tyhjä sisältömuoto ei riitä valmiiksi kuvaukseksi')
@@ -131,29 +139,35 @@ def inspect_profile(manifest, root_uri, names, diagnostics=None):
             if high is not None and high<low:fail('CARDINALITY_CONFLICT',str(predicate),'Samalle polulle kohdistuvien määrärajoitteiden leikkaus on tyhjä: maxCount on minCountia pienempi.')
             datatype = read(SH.datatype); node = read(SH.node); obj_class = read(SH['class'])
             node_kind = read(SH.nodeKind)
+            is_reference=tuple(semantic) in references
             ranges = sorted(set(graph.objects(predicate,URIRef(RANGE_POLICY['range']))),key=str)
             def diagnostic(rule,category,message,suggestion=None,observed=datatype,predicate_uri=SH.datatype,owl_ranges=None):
                 finding={'ruleId':rule,'path':str(predicate),'message':message,'category':category,
                          'rootShapeUri':root_uri,'nodeShapeUri':str(shape) if isinstance(shape,URIRef) else None,
                          'predicate':str(predicate_uri),'observed':term_info(observed) if observed is not None else None,
-                         'expected':'IRI' if rule=='DATATYPE_TERM' else 'Yksiselitteinen tuettu SHACL-literaalityyppi',
+                         'expected':('IRI' if rule=='DATATYPE_TERM' else 'Hyväksytty valueLanguage-v1-esitys' if rule=='LANGUAGE_REPRESENTATION_REQUIRED' else 'Lähderajoitteet täyttävä kohde-esitys' if rule in ('REFERENCE_UNSUPPORTED','RECURSION') else 'Yksiselitteinen tuettu SHACL-literaalityyppi'),
                          'propertyShapes':[{'uri':str(p) if isinstance(p,URIRef) else None,'kind':'iri' if isinstance(p,URIRef) else 'blankNode','localIndex':i+1,'sources':sorted(source_locations.get(p,set())),'labels':sorted(str(v) for pred in (SH.name,URIRef('http://www.w3.org/2000/01/rdf-schema#label')) for v in graph.objects(p,pred) if isinstance(v,Literal))} for i,p in enumerate(group)],
                          'owlRanges':[term_info(r)|{'sources':sorted(source_locations.get(predicate,set()))} for r in (ranges if owl_ranges is None else owl_ranges)]}
                 if suggestion:finding['suggestion']=suggestion
                 if category!='warning':
                     error=GenerationError(rule,str(predicate),message);error.finding=finding;raise error
                 if diagnostics is not None:diagnostics.append(finding)
-            issue=datatype_issue(datatype,node_kind,{str(XSD)+value for value in DATATYPES})
+            issue=datatype_issue(datatype,node_kind,{str(XSD)+value for value in DATATYPES}|{str(RDF.langString)})
             if issue:diagnostic(*issue,observed=datatype if datatype is not None else node_kind,predicate_uri=SH.datatype if datatype is not None else SH.nodeKind)
-            if node_kind is not None and (node_kind != SH.Literal or datatype is None):
+            if datatype==RDF.langString and choices.get('languageRepresentation')!=LANGUAGE_PROFILE:diagnostic('LANGUAGE_REPRESENTATION_REQUIRED','decisionRequired','Hyväksy value/language-v1-kieliesitys ennen ehdotusta. Lähteen kielitietoa ei poisteta.')
+            if not is_reference and node_kind is not None and (node_kind != SH.Literal or datatype is None):
                 fail('NODE_KIND_UNSUPPORTED',str(predicate),'Vain konkreettista literaalityyppiä täydentävä sh:nodeKind sh:Literal on tuettu')
             if datatype and (node or obj_class):fail('VALUE_AMBIGUOUS', str(predicate), 'Kenttä ei voi olla sekä literaali että olio')
             if datatype is not None:
                 for owl_range in ranges:diagnostic(*assess_range(graph,datatype,owl_range),owl_ranges=[owl_range])
-            if not datatype and node is None and obj_class:
+            if is_reference:
+                try:obj_class=reference_class(graph,prop)
+                except (RepresentationError,ValueError) as error:diagnostic('REFERENCE_UNSUPPORTED','generatorLimit',str(error),observed=obj_class,predicate_uri=SH['class'])
+                used_references.add(tuple(semantic))
+            if not is_reference and not datatype and node is None and obj_class:
                 candidates = list(graph.subjects(SH.targetClass,obj_class))
                 if len(candidates)==1:node=candidates[0]
-            if not datatype and node is None:fail('OBJECT_AMBIGUOUS', str(predicate), 'Oliolle tarvitaan yksi lukittu sisäkkäinen muoto')
+            if not is_reference and not datatype and node is None:fail('OBJECT_AMBIGUOUS', str(predicate), 'Oliolle tarvitaan yksi lukittu sisäkkäinen muoto')
             explicit = list(group_values(URIRef('http://uri.suomi.fi/datamodel/ns/iow#localName')))
             explicit += [Literal(m['propertyName']) for a in manifest.get('derivedArtifacts',[]) for m in a.get('semanticMappings',[])
                          if m['shapeUri']==str(shape) and m['semanticUri']==str(predicate)]
@@ -171,12 +185,15 @@ def inspect_profile(manifest, root_uri, names, diagnostics=None):
             pointer = field_path+'/'+name+('/*' if multi else '')
             labels = sorted((str(v.language or 'und'),str(v)) for v in group_values(SH.name))
             entry = {'shapeUri':root_uri,'semanticPath':semantic,'fieldPath':pointer,'valueKind':'literal' if datatype else 'object',
-                     'datatype':str(datatype) if datatype else None,'classUri':None,'minCount':low,'maxCount':high,'disclosure':None}
+                     'datatype':str(datatype) if datatype else None,'classUri':str(obj_class) if is_reference else None,**({'representation':'iriReference'} if is_reference else {}),'minCount':low,'maxCount':high,'disclosure':None}
             locator=(constraint_path or [])+[{'nodeShapeUri':str(shape) if isinstance(shape,URIRef) else None,'propertyPath':str(predicate),'propertyShapeUri':str(prop) if isinstance(prop,URIRef) else None}]
             row = {'shacl':{'nodeShapeUri':str(shape) if isinstance(shape,URIRef) else None,'propertyShapeUri':str(prop) if isinstance(prop,URIRef) else None,'propertyShapeKind':'iri' if isinstance(prop,URIRef) else 'blankNode','constraintPath':locator},'name':name,'nameOrigin':origin,'labels':[{'locale':lang,'label':label} for lang,label in labels],
                    'mapping':entry,'multi':multi}
-            if node is not None:
-                child=visit(node,semantic,pointer,ancestors|{shape},obj_class,locator)
+            if not is_reference and node is not None:
+                try:child=visit(node,semantic,pointer,ancestors|{shape},obj_class,locator)
+                except GenerationError as error:
+                    if error.finding['ruleId']=='RECURSION' and not error.finding.get('propertyShapes'):diagnostic('RECURSION','generatorLimit','Rekursio ei kuulu sisäkkäiseen esitykseen. Tarkasta IRI-viittauksen mahdollisuus ennen ehdotusta; pakollista kohdesisältöä tai sh:node-rajoitetta ei voi ohittaa.',observed=node,predicate_uri=SH.node if read(SH.node) else SH['class'])
+                    raise
                 entry['classUri']=child['classUri'];row['child']=child
             if len(group)>1:
                 row['shacl']['contributingConstraints']=[{'nodeShapeUri':str(shape) if isinstance(shape,URIRef) else None,'propertyPath':str(predicate),'propertyShapeUri':str(member)} for member in group]
@@ -184,6 +201,7 @@ def inspect_profile(manifest, root_uri, names, diagnostics=None):
             if len(fields)>200:fail('FIELD_LIMIT', root_uri, 'Enintään 200 kenttää')
         return result
     tree = visit(root,[], '',set())
+    if references-used_references:fail('REFERENCE_UNKNOWN',root_uri,'Viittausvalinta ei kohdistu käsiteltyyn ominaisuuspolkuun')
     if set(overrides)-used_overrides:fail('NAME_UNKNOWN', root_uri, 'Nimivalinta viittaa puuttuvaan semanttiseen polkuun')
     # Flatten in parent-first semantic order, independently of graph iteration.
     def flatten(node):
@@ -198,7 +216,7 @@ def inspect_profile(manifest, root_uri, names, diagnostics=None):
 def proposal(manifest, data):
     try:
         diagnostics=[]
-        tree, rows=inspect_profile(manifest,data['rootShapeUri'],data.get('names',[]),diagnostics)
+        tree, rows=inspect_profile(manifest,data['rootShapeUri'],data.get('names',[]),diagnostics,data)
         return {'status':'proposed','rootClassUri':tree['classUri'],'fields':rows,'results':diagnostics,
                 'policy':POLICY,'scope':'Esitysehdotus; SHACL-tyypit ja kardinaliteetit ovat vain luettavia'}
     except GenerationError as error:return {'status':'invalid','fields':[],'results':[error.finding],'policy':POLICY}
@@ -218,6 +236,8 @@ def context_for(tree):
         entry=row['mapping'];term={'@id':entry['semanticPath'][-1]}
         if row['multi']:term['@container']='@set'
         if 'child' in row:term['@context']=context_for(row['child'])
+        elif entry.get('representation')=='iriReference':term['@type']='@id'
+        elif entry['datatype']==str(RDF.langString):term['@context']=LANG_CONTEXT
         else:term['@type']=entry['datatype']
         ctx[row['name']]=term
     return ctx
@@ -237,7 +257,9 @@ def schema_for(tree):
     schema={'type':'object','properties':{},'additionalProperties':False,'required':[]}
     for row in tree['fields']:
         entry=row['mapping']; dt=(entry['datatype'] or '').removeprefix(str(XSD))
-        if 'child' in row:value=schema_for(row['child'])
+        if entry.get('representation')=='iriReference':value={'type':'string','pattern':IRI_PATTERN}
+        elif entry['datatype']==str(RDF.langString):value=copy.deepcopy(LANG_SCHEMA)
+        elif 'child' in row:value=schema_for(row['child'])
         else:
             value={'type':{'boolean':'boolean','integer':'integer','nonNegativeInteger':'integer','positiveInteger':'integer','double':'number'}.get(dt,'string')}
             if dt in ('nonNegativeInteger','positiveInteger'):value['minimum']=1 if dt=='positiveInteger' else 0
@@ -246,7 +268,7 @@ def schema_for(tree):
         if row['multi']:
             value={'type':'array','items':value,'minItems':entry['minCount']}
             if entry['maxCount'] is not None:value['maxItems']=entry['maxCount']
-            if entry['valueKind']=='literal':value['uniqueItems']=True
+            if entry['valueKind']=='literal' or entry.get('representation')=='iriReference':value['uniqueItems']=True
         if 'semantic' in row:value.update({'x-term':row['semantic']['term'],'x-mtv-shacl':copy.deepcopy(row['semantic'])})
         schema['properties'][row['name']]=value
         if entry['minCount']>0:schema['required'].append(row['name'])
@@ -276,7 +298,7 @@ def generate(manifest, profile_hash, body, data, base_url, *, snapshot_url=None)
     if manifest.get('issues'):
         fail('SOURCE_NOT_READY','/profileSnapshotId','Lähdeprofiilissa on ratkaisemattomia puutteita: '+'; '.join(manifest['issues'])[:1500])
     if len(data['exampleContent'].encode())>100000:fail('EXAMPLE_LIMIT','/exampleContent','JSON-esimerkin UTF-8-raja on 100 kB')
-    tree, rows=inspect_profile(manifest,data['rootShapeUri'],data.get('names',[]))
+    tree, rows=inspect_profile(manifest,data['rootShapeUri'],data.get('names',[]),choices=data)
     refs=attach_references(tree,body['profileSnapshotId'],profile_hash,manifest,base_url,snapshot_url=snapshot_url)
     items=copy.deepcopy(body.get('distributions') or [])
     if len(items)!=3 or {item['type'] for item in items}!={'jsonApi','w3cVc','sdJwtVc'}:
@@ -324,7 +346,7 @@ def generate(manifest, profile_hash, body, data, base_url, *, snapshot_url=None)
     schema={'$schema':'https://json-schema.org/draft/2020-12/schema',**schema_for(tree)}
     Draft202012Validator.check_schema(schema);Draft202012Validator(schema).validate(example)
     bound_body=body|{'distributions':items}
-    inputs={'sourceSnapshotId':body['profileSnapshotId'],'sourceSnapshotSha256':profile_hash,
+    inputs={'representationProfiles':{'language':LANGUAGE_PROFILE,'reference':REFERENCE_PROFILE},'sourceSnapshotId':body['profileSnapshotId'],'sourceSnapshotSha256':profile_hash,
             'sourceGraphHash':manifest['graphHash'],'rootShapeUri':data['rootShapeUri'],
             'representation':[{k:row[k] for k in ('name','nameOrigin','mapping')} for row in rows],
             'choices':data,'distributions':items,'title':body['title'],'description':body['description'],
@@ -338,9 +360,11 @@ def generate(manifest, profile_hash, body, data, base_url, *, snapshot_url=None)
     context={'@context':context_for(tree)}
     context_url=prefix+'context.jsonld'
     subject=with_types(tree,example)
+    targets=reference_nodes(tree,example)
+    subjects=[subject]+targets if targets else subject
     documents={context_url:context,BASE_CONTEXT:json.loads((FIXTURES/'credentials-v2.jsonld').read_text())}
     loader=local_loader(documents)
-    rdf=jsonld.to_rdf({'@context':context_url,**subject},options={'documentLoader':loader,'format':'application/n-quads','processingMode':'json-ld-1.1'})
+    rdf=jsonld.to_rdf(({'@context':context_url,'@graph':subjects} if targets else {'@context':context_url,**subject}),options={'documentLoader':loader,'format':'application/n-quads','processingMode':'json-ld-1.1'})
     actual=Graph().parse(data=rdf,format='nt')
     # RDFLib canonicalizes numeric lexical forms on parsing; compare like with like.
     expected=Graph().parse(data=expected.serialize(format='nt'),format='nt')
@@ -349,7 +373,7 @@ def generate(manifest, profile_hash, body, data, base_url, *, snapshot_url=None)
     if report['status']!='conforms':fail('GENERATED_SHACL','/example',canonical(report['results'])[:2000])
     vc={'@context':[BASE_CONTEXT,context_url],'type':['VerifiableCredential']+[v for v in w3c['w3c']['vcTypes'] if v!='VerifiableCredential'],
         'issuer':'https://issuer.example.org/synthetic-unissued','description':'SYNTHETIC UNSIGNED STRUCTURE EXAMPLE — NOT ISSUED',
-        'credentialSubject':subject}
+        'credentialSubject':subjects}
     # Expand the whole VCDM envelope too, using only the same two locked documents.
     full_rdf=jsonld.to_rdf(vc,options={'documentLoader':loader,'format':'application/n-quads'})
     full_report=validation_report(selected,profile_hash,{'serialization':'turtle','content':Graph().parse(data=full_rdf,format='nt').serialize(format='turtle'),'synthetic':True})

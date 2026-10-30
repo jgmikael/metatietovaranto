@@ -135,7 +135,7 @@ def test_supported_literal_types_roundtrip_without_semantic_loss(datatype,value)
     ('demo:ProductShape sh:property [sh:path demo:issuer;sh:datatype xsd:string].','RESERVED_NAME'),
     ('demo:ProductShape sh:property [sh:path demo:description;sh:datatype xsd:string].','RESERVED_NAME'),
     ('demo:ProductShape sh:property [sh:path demo:unknown].','OBJECT_AMBIGUOUS'),
-    ('demo:ProductShape sh:property [sh:path demo:lang;sh:datatype <http://www.w3.org/1999/02/22-rdf-syntax-ns#langString>].','DATATYPE_UNSUPPORTED'),
+    ('demo:ProductShape sh:property [sh:path demo:lang;sh:datatype <http://www.w3.org/1999/02/22-rdf-syntax-ns#langString>].','LANGUAGE_REPRESENTATION_REQUIRED'),
 ])
 def test_unsupported_ambiguous_and_reserved_structures_fail_explicitly(extra,rule):
     result=proposal(unit_source(extra),{'rootShapeUri':P+'ProductShape','names':[]})

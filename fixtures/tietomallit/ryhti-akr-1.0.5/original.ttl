@@ -1,0 +1,1633 @@
+PREFIX dcap:       <http://purl.org/ws-mmi-dc/terms/>
+PREFIX dcterms:    <http://purl.org/dc/terms/>
+PREFIX edu:        <https://iri.suomi.fi/model/edu/>
+PREFIX geo:        <http://www.opengis.net/ont/geosparql#>
+PREFIX http:       <http://www.w3.org/2011/http#>
+PREFIX jhs:        <https://iri.suomi.fi/model/jhs/0.1.0/>
+PREFIX kmr:        <https://iri.suomi.fi/model/kmr/1.0.0/>
+PREFIX kss:        <https://iri.suomi.fi/model/kss/1.0.0/>
+PREFIX owl:        <http://www.w3.org/2002/07/owl#>
+PREFIX rak:        <https://iri.suomi.fi/model/rak/1.0.0/>
+PREFIX rdf:        <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:       <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX ryhti-akr:  <https://iri.suomi.fi/model/ryhti-akr/>
+PREFIX sh:         <http://www.w3.org/ns/shacl#>
+PREFIX skos:       <http://www.w3.org/2004/02/skos/core#>
+PREFIX suomi-meta: <https://iri.suomi.fi/model/suomi-meta/>
+PREFIX tihatos:    <https://iri.suomi.fi/model/tihatos/>
+PREFIX xsd:        <http://www.w3.org/2001/XMLSchema#>
+
+ryhti-akr:kumoutuvanalueidenkaytonrajoituksentunnus
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Beteckning på upphävd begränsning av områdesanvändningen"@sv , "Kumoutuvan alueidenkäytön rajoituksen tunnus"@fi;
+        dcterms:created               "2024-05-30T10:43:29.36Z"^^xsd:dateTime;
+        dcterms:identifier            "kumoutuvanalueidenkaytonrajoituksentunnus"^^xsd:NCName;
+        dcterms:modified              "2025-03-25T09:40:10.219Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#anyURI";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:kumoutuvanalueidenkaytonrajoituksentunnus;
+        suomi-meta:modifier           "a33fddce-0ae4-4439-9655-12e39c2a1db7";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:kumoutuvankohteentunnus
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Beteckning på objekt som hävningen gäller"@sv , "Kumoutuvan kohteen tunnus"@fi;
+        dcterms:created               "2024-05-30T10:43:26.39Z"^^xsd:dateTime;
+        dcterms:identifier            "kumoutuvankohteentunnus"^^xsd:NCName;
+        dcterms:modified              "2025-03-25T09:40:48.998Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#anyURI";
+        sh:minCount                   0;
+        sh:path                       rak:kumoutuvankohteentunnus;
+        suomi-meta:modifier           "a33fddce-0ae4-4439-9655-12e39c2a1db7";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:kumoaaalueidenkaytonrajoituksenkokonaan
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Upphäver begränsningen av områdesanvändningen helt"@sv , "Kumoaa alueidenkäytön rajoituksen kokonaan"@fi;
+        dcterms:created               "2024-05-30T10:43:17.97Z"^^xsd:dateTime;
+        dcterms:identifier            "kumoaaalueidenkaytonrajoituksenkokonaan"^^xsd:NCName;
+        dcterms:modified              "2025-03-25T09:40:28.616Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#boolean";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:kumoaaalueidenkaytonrajoituksenkokonaan;
+        suomi-meta:modifier           "a33fddce-0ae4-4439-9655-12e39c2a1db7";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:voimassaolonalkamispaivamaara
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Voimassaolon alkamispäivämäärä"@fi , "Tid när giltighetstiden börjar"@sv , "Valid from"@en;
+        dcterms:created               "2024-05-30T10:43:29.893Z"^^xsd:dateTime;
+        dcterms:identifier            "voimassaolonalkamispaivamaara"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:29:24.561Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:voimassaolonalkamispaivamaara;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:voimassaolonloppumispaivamaara-1
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Valid until"@en , "Tid när giltighetstiden upphör"@sv , "Voimassaolon loppumispäivämäärä"@fi;
+        dcterms:created               "2024-05-30T10:43:27.803Z"^^xsd:dateTime;
+        dcterms:identifier            "voimassaolonloppumispaivamaara-1"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:29:37.077Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:voimassaolonloppumispaivamaara;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:alueidenkaytonrajoituksenkohde-1
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Area use restriction object"@en , "Objekt som är föremål för begränsning av områdesanvändningen"@sv , "Alueidenkäytön rajoituksen kohde"@fi;
+        dcterms:created               "2024-05-30T10:43:26.695Z"^^xsd:dateTime;
+        dcterms:identifier            "alueidenkaytonrajoituksenkohde-1"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:30:29.761Z"^^xsd:dateTime;
+        sh:class                      rak:AlueidenkaytonRajoituksenKohde;
+        sh:minCount                   1;
+        sh:path                       rak:alueidenkaytonrajoituksenkohde_;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:hyvaksymispaivamaara
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Approval date"@en , "Datum för godkännande"@sv , "Hyväksymispäivämäärä"@fi;
+        dcterms:created               "2024-05-30T10:43:26.24Z"^^xsd:dateTime;
+        dcterms:identifier            "hyvaksymispaivamaara"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:29:10.53Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:hyvaksymispaivamaara;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:elinkaarentila-1
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Life-cycle status"@en , "Livscykelstatus"@sv , "Elinkaaren tila"@fi;
+        dcterms:created               "2024-05-30T10:43:22.309Z"^^xsd:dateTime;
+        dcterms:identifier            "elinkaarentila-1"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:28:53.058Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2000/01/rdf-schema#Literal";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:elinkaarentila;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/rytj/alueidenkaytonRajoituksenElinkaarenTila>;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:paatos  rdf:type            sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "viranomaisen ratkaisu asiakkaan asiassa"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Beslut"@sv , "Decision"@en , "Päätös"@fi;
+        dcterms:created               "2024-05-30T10:43:21.979Z"^^xsd:dateTime;
+        dcterms:identifier            "paatos"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:30:39.488Z"^^xsd:dateTime;
+        sh:class                      rak:AlueidenkaytonRajoituksenAsianPaatos;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:paatos_;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:laatija  rdf:type           sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "laatija/laadinnan määritelmä"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Laatija"@fi;
+        dcterms:created               "2024-05-30T10:43:21.707Z"^^xsd:dateTime;
+        dcterms:identifier            "laatija"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:21.707Z"^^xsd:dateTime;
+        sh:class                      rak:Toimija;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:laatija;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:alueidenkaytonrajoituksenavain
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Area use restriction key"@en , "Nyckel för begränsning av områdesanvändningen"@sv , "Alueidenkäytön rajoituksen avain"@fi;
+        dcterms:created               "2024-05-30T10:43:18.15Z"^^xsd:dateTime;
+        dcterms:identifier            "alueidenkaytonrajoituksenavain"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T12:50:39.126Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:AlueidenkaytonRajoitus
+        rdf:type                      sh:NodeShape;
+        rdfs:comment                  "suoraan laista johtuva tai viranomaisen kaavassa, rakennusjärjestyksessä tai erillisellä päätöksellä antama rajoitus, joka koskee alueidenkäytön järjestämistä tietyllä alueella"@fi , "begränsning som direkt beror på lag eller som utfärdats av myndighet i plan, byggnadsordning eller separat beslut och som gäller ordnandet av områdesanvändningen på ett visst område "@sv;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Alueidenkäytön rajoitus"@fi , "Begränsning av områdesanvändningen"@sv , "Area use restriction"@en;
+        dcterms:created               "2024-03-28T13:29:47.164Z";
+        dcterms:identifier            "AlueidenkaytonRajoitus"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:28:39.196Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/rakymp/c498>;
+        sh:property                   ryhti-akr:voimassaolonalkamispaivamaara , ryhti-akr:voimassaolonloppumispaivamaara-1 , ryhti-akr:alueidenkaytonrajoituksenavain , ryhti-akr:paatos , ryhti-akr:elinkaarentila-1 , ryhti-akr:hyvaksymispaivamaara , ryhti-akr:alueidenkaytonrajoituksenkohde-1;
+        sh:targetClass                rak:AlueidenkaytonRajoitus;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:tuottajankaavatunnus
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Producentens plankod"@sv , "Producers plan identifier"@en , "Tuottajan kaavatunnus"@fi;
+        dcterms:created               "2024-05-30T10:43:20.932Z"^^xsd:dateTime;
+        dcterms:identifier            "tuottajankaavatunnus"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T12:42:06.507Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:pysyvakaavatunnus
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "kaavan yksilöivä tunniste"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Permanent plankod"@sv , "Permanent plan identifier"@en , "Pysyvä kaavatunnus"@fi;
+        dcterms:created               "2024-05-30T10:43:19.245Z"^^xsd:dateTime;
+        dcterms:identifier            "pysyvakaavatunnus"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T12:41:45.135Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#anyURI";
+        sh:maxCount                   1;
+        sh:path                       rak:pysyvakaavatunnus;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:Kaava  rdf:type             sh:NodeShape;
+        rdfs:comment                  "kunnan tai maakunnan liiton hyväksymä, kaavoitusmenettelyyn perustuva alueidenkäytön suunnitelma, jolla ohjataan tietyn maantieteellisen alueen käyttöä ja rakentamista"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Liittyvä kaava"@fi , "Plan"@sv , "Plan"@en;
+        dcterms:created               "2024-03-25T08:30:37.218Z";
+        dcterms:identifier            "Kaava"^^xsd:NCName;
+        dcterms:modified              "2024-03-25T08:30:37.218Z";
+        dcterms:subject               <https://iri.suomi.fi/terminology/rakymp/c122>;
+        sh:property                   ryhti-akr:tuottajankaavatunnus , ryhti-akr:pysyvakaavatunnus;
+        sh:targetClass                rak:Kaava;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:liittyvaasiakirja
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Relaterat dokument"@sv , "Related document"@en , "Liittyvä asiakirja"@fi;
+        dcterms:created               "2024-10-08T15:46:35.034Z"^^xsd:dateTime;
+        dcterms:identifier            "liittyvaasiakirja"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:27:51.81Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/jhs/J83>;
+        sh:class                      rak:Asiakirja;
+        sh:path                       rak:liittyvaasiakirja;
+        suomi-meta:creator            "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:asiasana-2  rdf:type        sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "indeksointiin käytettävä sana tai sanaliitto, joka kuvaa tiettyä aihealuetta tai käsitettä"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Ämnesord"@sv , "Keyword"@en , "Asiasana"@fi;
+        dcterms:created               "2024-05-30T10:43:34.747Z"^^xsd:dateTime;
+        dcterms:identifier            "asiasana-2"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:34.747Z"^^xsd:dateTime;
+        sh:class                      rak:Asiasana;
+        sh:minCount                   0;
+        sh:path                       rak:asiasana_;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:laatija-1  rdf:type         sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "Asiakirjan laatija"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Utarbetat av"@sv , "Author"@en , "Laatija"@fi;
+        dcterms:created               "2024-05-30T10:43:34.028Z"^^xsd:dateTime;
+        dcterms:identifier            "laatija-1"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:34.028Z"^^xsd:dateTime;
+        sh:class                      rak:Toimija;
+        sh:minCount                   0;
+        sh:path                       rak:laatija;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:henkilotietosisalto
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Personal data content"@en , "Personuppgiftsinnehåll"@sv , "Henkilötietosisältö"@fi;
+        dcterms:created               "2024-05-30T10:43:31.007Z"^^xsd:dateTime;
+        dcterms:identifier            "henkilotietosisalto"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:31.007Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2000/01/rdf-schema#Literal";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:henkilotietosisalto;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/rytj/henkilotietosisalto>;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:julkisuusluokka
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Asiakirjan julkisuusluokka"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Offentlighetsklass"@sv , "Category of publicity"@en , "Julkisuusluokka"@fi;
+        dcterms:created               "2024-05-30T10:43:26.084Z"^^xsd:dateTime;
+        dcterms:identifier            "julkisuusluokka"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:26.084Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2000/01/rdf-schema#Literal";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:julkisuusluokka;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/rytj/julkisuus>;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:saavutettavuus
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Onko asiakirja saavutettava?"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Tillgänglighet"@sv , "Accessibility"@en , "Saavutettavuus"@fi;
+        dcterms:created               "2024-05-30T10:43:25.354Z"^^xsd:dateTime;
+        dcterms:identifier            "saavutettavuus"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:25.354Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#boolean";
+        sh:defaultValue               "true";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:saavutettavuus;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:tiedosto  rdf:type          sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "asiakirja tiedostona (esim. pdf)"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Fil"@sv , "File"@en , "Tiedosto"@fi;
+        dcterms:created               "2024-05-30T10:43:24.746Z"^^xsd:dateTime;
+        dcterms:identifier            "tiedosto"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:24.746Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:tiedosto;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:asiakirjanlajintarkenne
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tieto, joka täsmentää asiakirjan lajin luokittelua. Määritellään organisaatiokohtaisesti."@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Identifierare för slag av handling"@sv , "Document type extension"@en , "Asiakirjan lajin tarkenne"@fi;
+        dcterms:created               "2024-05-30T10:43:23.399Z"^^xsd:dateTime;
+        dcterms:identifier            "asiakirjanlajintarkenne"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:23.399Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   0;
+        sh:path                       rak:asiakirjanlajintarkenne;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:asiakirjantunnus
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Document identifier"@en , "Handlingens beteckning"@sv , "Asiakirjan tunnus"@fi;
+        dcterms:created               "2024-05-30T10:43:23.252Z"^^xsd:dateTime;
+        dcterms:identifier            "asiakirjantunnus"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:23.252Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:asiakirjantunnus;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:asiakirjanLaji
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tieto, joka kuvaa tuotettavan asiakirjan lajia. Asiakirjoja tuotetaan yleensä asiankäsittelyyn liittyvissä yksittäisissä toimissa tai tapahtumissa (toimenpide)."@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Slag av handling"@sv , "Document type"@en , "Asiakirjan laji"@fi;
+        dcterms:created               "2024-05-30T10:43:22.982Z"^^xsd:dateTime;
+        dcterms:identifier            "asiakirjanLaji"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:22.982Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2000/01/rdf-schema#Literal";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:asiakirjanLaji_;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/rytj/asiakirjanLaji>;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:paivamaara-1
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Päivämäärä, jolloin asiakirja tai dokumentti on saapunut"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Saapumispäivämäärä"@fi , "Mottagningsdatum"@sv , "Date of arrival"@en;
+        dcterms:created               "2024-05-30T10:43:21.85Z"^^xsd:dateTime;
+        dcterms:identifier            "paivamaara-1"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:21.85Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   1;
+        sh:minCount                   0;
+        sh:path                       rak:paivamaara;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:sailytysaika
+        rdf:type                      owl:DatatypeProperty , sh:PropertyShape;
+        rdfs:comment                  "Asiakirjan säilytysaika ennen sen hävittämistä"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Säilytysaika"@fi , "Retention time"@en , "Förvaringstid"@sv;
+        dcterms:created               "2024-05-30T10:43:21.121Z"^^xsd:dateTime;
+        dcterms:identifier            "sailytysaika"^^xsd:NCName;
+        dcterms:modified              "2025-06-10T12:12:32.292Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2000/01/rdf-schema#Literal";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:sailytysaika;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/rytj/sailytysaika>;
+        suomi-meta:modifier           "a33fddce-0ae4-4439-9655-12e39c2a1db7";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:kieli  rdf:type             sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Asiakirjan kieli"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Språk"@sv , "Language"@en , "Kieli"@fi;
+        dcterms:created               "2024-05-30T10:43:20.057Z"^^xsd:dateTime;
+        dcterms:identifier            "kieli"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:20.057Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2000/01/rdf-schema#Literal";
+        sh:minCount                   1;
+        sh:path                       rak:kieli;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/rytj/ryhtikielet>;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:asiakirjanavain
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Document key"@en , "Handlingens nyckel"@sv , "Asiakirjan avain"@fi;
+        dcterms:created               "2024-05-30T10:43:19.755Z"^^xsd:dateTime;
+        dcterms:identifier            "asiakirjanavain"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:24:46.811Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:vahvistuspaivamaara
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Päivämäärä jolloin asiakirja on viranomaisen vahvistama"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Confirmation date"@en , "Bekräftelsedatum"@sv , "Vahvistuspäivämäärä"@fi;
+        dcterms:created               "2024-05-30T10:43:19.523Z"^^xsd:dateTime;
+        dcterms:identifier            "vahvistuspaivamaara"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:19.523Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   1;
+        sh:minCount                   0;
+        sh:path                       rak:vahvistuspaivamaara;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:asiakirjanpaivamaara
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Asiakirjan päiväys"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Document date"@en , "Handlingens datum"@sv , "Asiakirjan päivämäärä"@fi;
+        dcterms:created               "2024-05-30T10:43:18.793Z"^^xsd:dateTime;
+        dcterms:identifier            "asiakirjanpaivamaara"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:18.793Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:asiakirjanpaivamaara;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:nimi  rdf:type              sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "A primary name, e.g. a legally recognized name"@en , "ainutkertaisen tarkoitteen nimitys"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Namn"@sv , "Name"@en , "Nimi"@fi;
+        dcterms:created               "2024-05-30T10:43:18.057Z"^^xsd:dateTime;
+        dcterms:identifier            "nimi"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:18.057Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       jhs:nimi;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:Asiakirja  rdf:type         sh:NodeShape;
+        rdfs:comment                  "kiistämätön, eheä ja todistusvoimainen, tietyn ajankohdan mukainen tietojoukko"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Handling"@sv , "Asiakirja"@fi , "Document"@en;
+        dcterms:created               "2024-03-22T12:04:39.459Z";
+        dcterms:identifier            "Asiakirja"^^xsd:NCName;
+        dcterms:modified              "2024-04-08T10:11:26.567Z";
+        dcterms:subject               <https://iri.suomi.fi/terminology/jhs/J83>;
+        sh:property                   ryhti-akr:liittyvaasiakirja , ryhti-akr:asiasana-2 , ryhti-akr:laatija-1 , ryhti-akr:henkilotietosisalto , ryhti-akr:julkisuusluokka , ryhti-akr:saavutettavuus , ryhti-akr:tiedosto , ryhti-akr:asiakirjanlajintarkenne , ryhti-akr:asiakirjantunnus , ryhti-akr:asiakirjanLaji , ryhti-akr:paivamaara-1 , ryhti-akr:nimi , ryhti-akr:asiakirjanpaivamaara , ryhti-akr:vahvistuspaivamaara , ryhti-akr:asiakirjanavain , ryhti-akr:kieli , ryhti-akr:sailytysaika;
+        sh:targetClass                rak:Asiakirja;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:paatosasiakirja1
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Beslutsdokument"@sv , "Päätösasiakirja"@fi , "Decision document"@en;
+        dcterms:created               "2024-05-30T10:43:32.532Z"^^xsd:dateTime;
+        dcterms:identifier            "paatosasiakirja1"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:37:59.792Z"^^xsd:dateTime;
+        sh:class                      rak:Asiakirja;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:paatosasiakirja1;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:paattajanlaji
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Slag av beslutsfattare"@sv , "Type of decision-maker"@en , "Päättäjän laji"@fi;
+        dcterms:created               "2024-05-30T10:43:32.341Z"^^xsd:dateTime;
+        dcterms:identifier            "paattajanlaji"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:32:15.574Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2000/01/rdf-schema#Literal";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:paattajanlaji;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/rytj/PaatoksenTekija>;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:alueidenkaytonrajoitus-2
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "suoraan laista johtuva tai viranomaisen kaavassa, rakennusjärjestyksessä tai erillisellä päätöksellä antama rajoitus, joka koskee alueidenkäytön järjestämistä tietyllä alueella"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Begränsning av omådesanvändningen"@sv , "Area use restriction"@en , "Alueidenkäytön rajoitus"@fi;
+        dcterms:created               "2024-05-30T10:43:31.439Z"^^xsd:dateTime;
+        dcterms:identifier            "alueidenkaytonrajoitus-2"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:34:28.194Z"^^xsd:dateTime;
+        sh:class                      rak:AlueidenkaytonRajoitus;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:alueidenkaytonrajoitus_;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:paatoksentekija1
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Decision-maker"@en , "Beslutsfattare"@sv , "Päätöksentekijä"@fi;
+        dcterms:created               "2024-05-30T10:43:29.696Z"^^xsd:dateTime;
+        dcterms:identifier            "paatoksentekija1"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:37:35.618Z"^^xsd:dateTime;
+        sh:class                      rak:Toimija;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:paatoksentekija1;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:ohjaavaSaados
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Styrande författning"@sv , "Guiding statute"@en , "Ohjaava säädös"@fi;
+        dcterms:created               "2024-05-30T10:43:29.522Z"^^xsd:dateTime;
+        dcterms:identifier            "ohjaavaSaados"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:35:05.601Z"^^xsd:dateTime;
+        sh:class                      rak:Saadosviite;
+        sh:maxCount                   1;
+        sh:minCount                   0;
+        sh:path                       rak:ohjaavaSaados_;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:paatostunnus
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Beslutsbeteckning"@sv , "Päätöstunnus"@fi , "Decision identifier"@en;
+        dcterms:created               "2024-05-30T10:43:28.992Z"^^xsd:dateTime;
+        dcterms:identifier            "paatostunnus"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:36:52.746Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#anyURI";
+        sh:maxCount                   1;
+        sh:minCount                   0;
+        sh:path                       rak:paatostunnus;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:alueidenkaytonrajoituksenasianpaatoksenavain
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Area use restriction matter decision key"@en , "Nyckel för beslut om ärende som rör begränsning av områdesanvändningen"@sv , "Alueidenkäytön rajoituksen asian päätöksen avain"@fi;
+        dcterms:created               "2024-05-30T10:43:27Z"^^xsd:dateTime;
+        dcterms:identifier            "alueidenkaytonrajoituksenasianpaatoksenavain"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:36:21.532Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       <https://iri.suomi.fi/model/rak/1.0.2/alueidenkaytonrajoituksenasianpaatoksenavain>;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:paatosteksti
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Beslutstext"@sv , "Decision text"@en , "Päätösteksti"@fi;
+        dcterms:created               "2024-05-30T10:43:26.543Z"^^xsd:dateTime;
+        dcterms:identifier            "paatosteksti"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:33:42.298Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   0;
+        sh:path                       rak:paatosteksti;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:paatoksenlainvoimaisuuspaivamaara
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Date of legal validity of decision"@en , "Datum när beslutet vinner laga kraft"@sv , "Päätöksen lainvoimaisuuspäivämäärä"@fi;
+        dcterms:created               "2024-05-30T10:43:25.668Z"^^xsd:dateTime;
+        dcterms:identifier            "paatoksenlainvoimaisuuspaivamaara"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:32:56.336Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   1;
+        sh:minCount                   0;
+        sh:path                       rak:paatoksenlainvoimaisuuspaivamaara;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:nimi-2  rdf:type            owl:DatatypeProperty , sh:PropertyShape;
+        rdfs:comment                  "ainutkertaisen tarkoitteen nimitys"@fi , "A primary name, e.g. a legally recognized name"@en;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Nimi"@fi , "Name"@en , "Namn"@sv;
+        dcterms:created               "2024-05-30T10:43:23.945Z"^^xsd:dateTime;
+        dcterms:identifier            "nimi-2"^^xsd:NCName;
+        dcterms:modified              "2025-05-14T14:09:54.133Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2000/01/rdf-schema#Literal";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       jhs:nimi;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/rytj/AlueidenkayttopaatoksenNimi>;
+        suomi-meta:modifier           "a33fddce-0ae4-4439-9655-12e39c2a1db7";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:paatoksenantopaivamaara
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Datum när beslutet meddelats"@sv , "Decision distributing date"@en , "Päätöksen antopäivämäärä"@fi;
+        dcterms:created               "2024-05-30T10:43:20.3Z"^^xsd:dateTime;
+        dcterms:identifier            "paatoksenantopaivamaara"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:32:42.884Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:paatoksenantopaivamaara;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:paatospykala
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Päätöksen pykälä kuntajärjestelmässä"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Beslutsparagraf"@sv , "Decision article"@en , "Päätöspykälä"@fi;
+        dcterms:created               "2024-05-30T10:43:20.181Z"^^xsd:dateTime;
+        dcterms:identifier            "paatospykala"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:33:14.547Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   0;
+        sh:path                       rak:paatospykala;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:vaihe  rdf:type             sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Stage"@en , "Skede"@sv , "Vaihe"@fi;
+        dcterms:created               "2024-05-30T10:43:18.697Z"^^xsd:dateTime;
+        dcterms:identifier            "vaihe"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:38:10.652Z"^^xsd:dateTime;
+        sh:class                      rak:AlueidenkaytonRajoituksenAsianVaihe;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:vaihe;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:paivamaara  rdf:type        sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "katso dc:date"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Beslutsdatum"@sv , "Decision date"@en , "Päätöspäivämäärä"@fi;
+        dcterms:created               "2024-05-30T10:43:18.432Z"^^xsd:dateTime;
+        dcterms:identifier            "paivamaara"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:33:29.261Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       jhs:paivamaara;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:AlueidenkaytonRajoituksenAsianPaatos
+        rdf:type                      sh:NodeShape;
+        rdfs:comment                  "kirjattavalle asialle, asiakirjalle tai välitoimenpiteelle diaarikaavan mukaan annettava numerotunnus"@fi , "sifferkod för ett ärende, en handling eller en interimistisk åtgärd som ges med diarieschemat"@sv;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Alueidenkäytön rajoituksen asian päätös"@fi , "Beslut om ärende som rör begränsning av områdesanvändningen"@sv , "Area use restriction matter decision"@en;
+        dcterms:created               "2024-03-28T13:32:05.825Z";
+        dcterms:identifier            "AlueidenkaytonRajoituksenAsianPaatos"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T12:53:10.267Z"^^xsd:dateTime;
+        sh:property                   ryhti-akr:paatosasiakirja1 , ryhti-akr:paattajanlaji , ryhti-akr:alueidenkaytonrajoitus-2 , ryhti-akr:paatoksentekija1 , ryhti-akr:ohjaavaSaados , ryhti-akr:paatostunnus , ryhti-akr:alueidenkaytonrajoituksenasianpaatoksenavain , ryhti-akr:paatosteksti , ryhti-akr:paivamaara , ryhti-akr:vaihe , ryhti-akr:paatospykala , ryhti-akr:paatoksenantopaivamaara , ryhti-akr:nimi-2 , ryhti-akr:paatoksenlainvoimaisuuspaivamaara;
+        sh:targetClass                rak:AlueidenkaytonRajoituksenAsianPaatos;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:uuid-258735aa-e709-46a6-810e-989059598641
+        rdf:type                      owl:DatatypeProperty , sh:PropertyShape;
+        rdfs:comment                  "pääasiallisesti sukuun viittaava rekisteröidyn henkilönnimen osa"@fi , "part of the registered name of a person referring to a [suku]"@en;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Sukunimi"@fi , "Family name"@en , "Efternamn"@sv;
+        dcterms:created               "2024-05-30T10:43:33.581Z"^^xsd:dateTime;
+        dcterms:identifier            "uuid-258735aa-e709-46a6-810e-989059598641"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:16:11.153Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       jhs:sukunimi;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:uuid-e7b56659-8703-4463-b325-6650a4a2f452
+        rdf:type                      owl:DatatypeProperty , sh:PropertyShape;
+        rdfs:comment                  "sukunimen lisänä käytettävä rekisteröidyn henkilönnimen osa, joka ei viittaa henkilön sukuun"@fi , "Also known as a personal name, first name, or forename. A given name identifies a specific person, and differentiates that person from other members of a group, such as a family or clan, with whom that person shares a common surname."@en;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Etunimi"@fi , "Given name"@en , "Förnamn"@sv;
+        dcterms:created               "2024-05-30T10:43:31.844Z"^^xsd:dateTime;
+        dcterms:identifier            "uuid-e7b56659-8703-4463-b325-6650a4a2f452"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:15:51.653Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       jhs:etunimi;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:ylaluokka-1
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "Yläluokka"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Upper category"@en , "Överkategori"@sv , "Yläluokka"@fi;
+        dcterms:created               "2024-05-30T10:43:24.442Z"^^xsd:dateTime;
+        dcterms:identifier            "ylaluokka-1"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T12:49:30.684Z"^^xsd:dateTime;
+        sh:class                      rak:Toimija;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       owl:topObjectProperty;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:nimike  rdf:type            sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Henkilön nimike esim. organisaatiossa."@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Beteckning"@sv , "Title"@en , "Nimike"@fi;
+        dcterms:created               "2024-05-30T10:43:19.644Z"^^xsd:dateTime;
+        dcterms:identifier            "nimike"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:19.644Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   0;
+        sh:path                       rak:nimike;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:Henkilo  rdf:type           sh:NodeShape;
+        rdfs:comment                  "A real person, alive or dead"@en , "Toimija, joka on ihminen. Henkilö on myös yleensä luonnollinen henkilö eli oikeussubjekti."@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Henkilö"@fi , "Person"@en , "Person"@sv;
+        dcterms:created               "2024-04-05T12:47:43.811Z";
+        dcterms:identifier            "Henkilo"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:15:43.873Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/jhs/J754>;
+        sh:property                   ryhti-akr:nimike , ryhti-akr:ylaluokka-1 , ryhti-akr:uuid-e7b56659-8703-4463-b325-6650a4a2f452 , ryhti-akr:uuid-258735aa-e709-46a6-810e-989059598641;
+        sh:targetClass                rak:Henkilo;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:koordinaattipisteet
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Kaikki koordinaattipisteet yhtenä merkkijonona."@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Koordinatpunkter"@sv , "Coordinate points"@en , "Koordinaattipisteet"@fi;
+        dcterms:created               "2024-05-30T10:43:32.932Z"^^xsd:dateTime;
+        dcterms:identifier            "koordinaattipisteet"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:32.932Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:minCount                   0;
+        sh:path                       rak:koordinaattipisteet;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:eTRS89koordinaattijarjestelma
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "ETRS89 koordinaattijärjestelmän tunnus (esim. ETRS89 / GK25FIN)"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "ETRS89 koordinatsystem"@sv , "ETRS89 coordinate system"@en , "ETRS89 koordinaattijärjestelmä"@fi;
+        dcterms:created               "2024-05-30T10:43:28.492Z"^^xsd:dateTime;
+        dcterms:identifier            "eTRS89koordinaattijarjestelma"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:28.492Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2000/01/rdf-schema#Literal";
+        sh:path                       rak:eTRS89koordinaattijarjestelma;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/rakrek/ETRS89>;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:geometriatyyppi
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Typ av geometri"@sv , "Geometry type"@en , "Geometriatyyppi"@fi;
+        dcterms:created               "2024-05-30T10:43:27.34Z"^^xsd:dateTime;
+        dcterms:identifier            "geometriatyyppi"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T12:48:27.994Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:geometriatyyppi;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:korkeuskoordinaattijarjestelma
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tiedon toimituksen yhteydessä tulee tallentaa tieto koordinaattijärjestelmästä ja korkeusjärjestelmästä, jossa tieto toimitettu."@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Höjdkoordinatsystem"@sv , "Height coordinate system"@en , "Korkeuskoordinaattijärjestelmä"@fi;
+        dcterms:created               "2024-05-30T10:43:18.59Z"^^xsd:dateTime;
+        dcterms:identifier            "korkeuskoordinaattijarjestelma"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:18.59Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2000/01/rdf-schema#Literal";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:korkeuskoordinaattijarjestelma;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/rytj/korkeuskoordinaattijarjestelma>;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:Sijainti  rdf:type          sh:NodeShape;
+        rdfs:comment                  "Kohteen sijainti, joka voidaan esittää mm. koordinaattitietona tai tietyn osoitejärjestelmän osoitteena."@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Location"@en , "Placering"@sv , "Sijainti"@fi;
+        dcterms:created               "2024-04-05T12:21:27.905Z";
+        dcterms:identifier            "Sijainti"^^xsd:NCName;
+        dcterms:modified              "2024-04-10T10:49:25.699Z";
+        dcterms:subject               <https://iri.suomi.fi/terminology/rakymp/concept-3001>;
+        sh:property                   ryhti-akr:koordinaattipisteet , ryhti-akr:eTRS89koordinaattijarjestelma , ryhti-akr:geometriatyyppi , ryhti-akr:korkeuskoordinaattijarjestelma;
+        sh:targetClass                rak:Sijainti;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:alueidenkaytonrajoituksenlaji
+        rdf:type                      owl:DatatypeProperty , sh:PropertyShape;
+        rdfs:comment                  "kohteen laji"@fi , "Slag av objekt"@sv;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Alueidenkäytön rajoituksen laji"@fi , "Slag av begränsning av områdesanvändning"@sv , "Type of area use restriction"@en;
+        dcterms:created               "2024-05-30T10:43:22.52Z"^^xsd:dateTime;
+        dcterms:identifier            "alueidenkaytonrajoituksenlaji"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T09:57:59.981Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2000/01/rdf-schema#Literal";
+        sh:minCount                   1;
+        sh:path                       <https://iri.suomi.fi/model/rak/1.0.2/Alueidenkaytonrajoituksenlaji>;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/rytj/alueidenkaytonRajoituksenLaji>;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:pysyvaalueidenkaytonrajoituksentunnus
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Permanent identifier for area use restriction"@en , "Beteckning på permanent begränsning av områdesanvändningen"@sv , "Pysyvä alueidenkäytön rajoituksen tunnus"@fi;
+        dcterms:created               "2024-05-30T10:43:32.737Z"^^xsd:dateTime;
+        dcterms:identifier            "pysyvaalueidenkaytonrajoituksentunnus"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:14:01.48Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:pysyvaalueidenkaytonrajoituksentunnus;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:kuvaus-1  rdf:type          sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "a textual description of the entity"@en , "kohteen sisällöstä kertova tieto"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Description"@en , "Beskrivning"@sv , "Kuvaus"@fi;
+        dcterms:created               "2024-05-30T10:43:32.07Z"^^xsd:dateTime;
+        dcterms:identifier            "kuvaus-1"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:13:14.986Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:minCount                   0;
+        sh:path                       jhs:kuvaus;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:vireilletulopaivamaara
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Date of initiation"@en , "Datum för anhängiggörande"@sv , "Vireilletulopäivämäärä"@fi;
+        dcterms:created               "2024-05-30T10:43:30.548Z"^^xsd:dateTime;
+        dcterms:identifier            "vireilletulopaivamaara"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:14:14.789Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#date";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:vireilletulopaivamaara;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:diaarinumero
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "kirjattavalle asialle, asiakirjalle tai välitoimenpiteelle diaarikaavan mukaan annettava numerotunnus"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Diarienummer"@sv , "Record number"@en , "Diaarinumero"@fi;
+        dcterms:created               "2024-05-30T10:43:29.19Z"^^xsd:dateTime;
+        dcterms:identifier            "diaarinumero"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:12:25.901Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:minCount                   0;
+        sh:path                       <https://iri.suomi.fi/model/rak/1.0.2/diaarinumero>;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:vastuutaho  rdf:type        sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Ansvarsinstans"@sv , "Responsible party"@en , "Vastuutaho"@fi;
+        dcterms:created               "2024-05-30T10:43:28.113Z"^^xsd:dateTime;
+        dcterms:identifier            "vastuutaho"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:14:54.446Z"^^xsd:dateTime;
+        sh:class                      rak:Toimija;
+        sh:maxCount                   1;
+        sh:minCount                   0;
+        sh:path                       rak:vastuutaho;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:liittyvaasia
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Related matter"@en , "Relaterat ärende"@sv , "Liittyvä asia"@fi;
+        dcterms:created               "2024-05-30T10:43:24.153Z"^^xsd:dateTime;
+        dcterms:identifier            "liittyvaasia"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:14:27.917Z"^^xsd:dateTime;
+        sh:class                      rak:AlueidenkaytonRajoituksenAsia;
+        sh:minCount                   0;
+        sh:path                       rak:liittyvaasia;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:hallinnollisenalueentunnus
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Kod för det administrativa området"@sv , "Administrative area identifier"@en , "Hallinnollisen alueen tunnus"@fi;
+        dcterms:created               "2024-05-30T10:43:23.564Z"^^xsd:dateTime;
+        dcterms:identifier            "hallinnollisenalueentunnus"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:13:03.428Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:hallinnollisenalueentunnus;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:asianhallintatunnus
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "kunnassa käytössä oleva asian yksilöivä ja pysyvä, keskitetysti myönnetty tunnus"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Ärendehanteringskod"@sv , "Asianhallintatunnus"@fi , "Matter management identifier"@en;
+        dcterms:created               "2024-05-30T10:43:23.116Z"^^xsd:dateTime;
+        dcterms:identifier            "asianhallintatunnus"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:12:10.297Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:minCount                   0;
+        sh:path                       rak:asianhallintatunnus;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:asianliite  rdf:type        sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Centralt beviljad permanent beteckning som används för att identifiera ärendet i kommunen. "@sv;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Attachment to the matter"@en , "Bilaga till ärendet "@sv , "Asian liite"@fi;
+        dcterms:created               "2024-05-30T10:43:22.108Z"^^xsd:dateTime;
+        dcterms:identifier            "asianliite"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:03:58.073Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2000/01/rdf-schema#Literal";
+        sh:minCount                   0;
+        sh:path                       rak:asianliite;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:digitaalinenalkupera
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Digital origin"@en , "Digitalt ursprung"@sv , "Digitaalinen alkuperä"@fi;
+        dcterms:created               "2024-05-30T10:43:21.574Z"^^xsd:dateTime;
+        dcterms:identifier            "digitaalinenalkupera"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:12:40.497Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2000/01/rdf-schema#Literal";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:digitaalinenalkupera;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/rytj/RY_DigitaalinenAlkupera>;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:nimi-1  rdf:type            owl:DatatypeProperty , sh:PropertyShape;
+        rdfs:comment                  "ainutkertaisen tarkoitteen nimitys"@fi , "A primary name, e.g. a legally recognized name"@en;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Nimi"@fi , "Name"@en , "Namn"@sv;
+        dcterms:created               "2024-05-30T10:43:20.791Z"^^xsd:dateTime;
+        dcterms:identifier            "nimi-1"^^xsd:NCName;
+        dcterms:modified              "2025-06-05T11:03:08.671Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       jhs:nimi;
+        suomi-meta:modifier           "a33fddce-0ae4-4439-9655-12e39c2a1db7";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:vaihe-1  rdf:type           sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Stage"@en , "Skede"@sv , "Vaihe"@fi;
+        dcterms:created               "2024-05-30T10:43:19.007Z"^^xsd:dateTime;
+        dcterms:identifier            "vaihe-1"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:14:40.945Z"^^xsd:dateTime;
+        sh:class                      rak:AlueidenkaytonRajoituksenAsianVaihe;
+        sh:minCount                   1;
+        sh:path                       rak:vaihe;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:AlueidenkaytonRajoituksenAsia
+        rdf:type                      sh:NodeShape;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Alueidenkäytön rajoituksen asia"@fi , "Ärende som rör begränsning av områdesanvändningen"@sv , "Area use restriction matter"@en;
+        dcterms:created               "2024-03-28T13:32:38.904Z";
+        dcterms:identifier            "AlueidenkaytonRajoituksenAsia"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:02:35.756Z"^^xsd:dateTime;
+        sh:property                   ryhti-akr:alueidenkaytonrajoituksenlaji , ryhti-akr:pysyvaalueidenkaytonrajoituksentunnus , ryhti-akr:kuvaus-1 , ryhti-akr:vireilletulopaivamaara , ryhti-akr:diaarinumero , ryhti-akr:vaihe-1 , ryhti-akr:nimi-1 , ryhti-akr:digitaalinenalkupera , ryhti-akr:asianliite , ryhti-akr:asianhallintatunnus , ryhti-akr:hallinnollisenalueentunnus , ryhti-akr:liittyvaasia , ryhti-akr:vastuutaho;
+        sh:targetClass                rak:AlueidenkaytonRajoituksenAsia;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:tapahtuma-aika
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Ajanhetki tai aikaväli, jolloin tapahtuma tapahtuu tai on tapahtunut"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Händelsetid"@sv , "Event timing"@en , "Tapahtuma-aika"@fi;
+        dcterms:created               "2024-05-30T10:43:31.623Z"^^xsd:dateTime;
+        dcterms:identifier            "tapahtuma-aika"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:31.623Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#dateTime";
+        sh:maxCount                   1;
+        sh:path                       rak:tapahtuma-aika;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:sijainti-1  rdf:type        sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Paikka, jossa jokin yksikäsitteisen järjestelmän avulla ilmaistuna sijaitsee"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Sijainti"@fi;
+        dcterms:created               "2024-05-30T10:43:30.75Z"^^xsd:dateTime;
+        dcterms:identifier            "sijainti-1"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:30.75Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:kuvaus  rdf:type            sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "a textual description of the entity"@en , "kohteen sisällöstä kertova tieto"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Description"@en , "Beskrivning"@sv , "Kuvaus"@fi;
+        dcterms:created               "2024-05-30T10:43:28.828Z"^^xsd:dateTime;
+        dcterms:identifier            "kuvaus"^^xsd:NCName;
+        dcterms:modified              "2025-05-14T14:11:32.521Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:minCount                   0;
+        sh:path                       jhs:kuvaus;
+        suomi-meta:modifier           "a33fddce-0ae4-4439-9655-12e39c2a1db7";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:nimi-3  rdf:type            owl:DatatypeProperty , sh:PropertyShape;
+        rdfs:comment                  "ainutkertaisen tarkoitteen nimitys"@fi , "A primary name, e.g. a legally recognized name"@en;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Nimi"@fi , "Name"@en , "Namn"@sv;
+        dcterms:created               "2024-05-30T10:43:24.6Z"^^xsd:dateTime;
+        dcterms:identifier            "nimi-3"^^xsd:NCName;
+        dcterms:modified              "2025-05-14T14:11:40.966Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   0;
+        sh:path                       jhs:nimi;
+        suomi-meta:modifier           "a33fddce-0ae4-4439-9655-12e39c2a1db7";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:lisatietolinkki
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Länk till ytterligare information"@sv , "Additional information link"@en , "Lisätietolinkki"@fi;
+        dcterms:created               "2024-05-30T10:43:24.291Z"^^xsd:dateTime;
+        dcterms:identifier            "lisatietolinkki"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:24.291Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#anyURI";
+        sh:maxCount                   1;
+        sh:minCount                   0;
+        sh:path                       rak:lisatietolinkki;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:peruttu  rdf:type           sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "tapahtuma on peruttu joko ennen sen tapahtumista tai sen oikeusvaikutus on mitätöity tapahtuman jälkeen"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Cancelled"@en , "Annullerad"@sv , "Peruttu"@fi;
+        dcterms:created               "2024-05-30T10:43:21.258Z"^^xsd:dateTime;
+        dcterms:identifier            "peruttu"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:21.258Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#boolean";
+        sh:defaultValue               "false";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:peruttu;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:liiteasiakirja
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Liiteasiakirja"@fi;
+        dcterms:created               "2024-05-30T10:43:19.115Z"^^xsd:dateTime;
+        dcterms:identifier            "liiteasiakirja"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:19.115Z"^^xsd:dateTime;
+        sh:class                      rak:Asiakirja;
+        sh:minCount                   0;
+        sh:path                       rak:liiteasiakirja;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:Tapahtuma  rdf:type         sh:NodeShape;
+        rdfs:comment                  "Asiankäsittelyyn liittyvä ajallinen tapahtuma"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Tapahtuma"@fi , "Händelse"@sv , "Event"@en;
+        dcterms:created               "2024-03-11T06:23:33.576Z";
+        dcterms:identifier            "Tapahtuma"^^xsd:NCName;
+        dcterms:modified              "2024-10-08T13:24:49.354Z"^^xsd:dateTime;
+        sh:property                   ryhti-akr:tapahtuma-aika , ryhti-akr:kuvaus , ryhti-akr:nimi-3;
+        sh:targetClass                rak:Tapahtuma;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:alakohta  rdf:type          sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Säädöksen alakohta"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Subparagraph"@en , "Underpunkt"@sv , "Alakohta"@fi;
+        dcterms:created               "2024-05-30T10:43:33.351Z"^^xsd:dateTime;
+        dcterms:identifier            "alakohta"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:33.351Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:minCount                   0;
+        sh:path                       rak:alakohta;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:saadoskokoelmannumero
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Number of statute collection"@en , "Författningssamlingens nummer"@sv , "Säädöskokoelman numero"@fi;
+        dcterms:created               "2024-05-30T10:43:30.086Z"^^xsd:dateTime;
+        dcterms:identifier            "saadoskokoelmannumero"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:30.086Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#integer";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:saadoskokoelmannumero;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:luku  rdf:type              sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Säädöksen luku"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Kapitel"@sv , "Chapter"@en , "Luku"@fi;
+        dcterms:created               "2024-05-30T10:43:28.276Z"^^xsd:dateTime;
+        dcterms:identifier            "luku"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:28.276Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#integer";
+        sh:maxCount                   1;
+        sh:minCount                   0;
+        sh:path                       rak:luku;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:pykala  rdf:type            sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Säädöksen pykälä"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Section"@en , "Paragraf"@sv , "Pykälä"@fi;
+        dcterms:created               "2024-05-30T10:43:27.956Z"^^xsd:dateTime;
+        dcterms:identifier            "pykala"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:27.956Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#integer";
+        sh:maxCount                   1;
+        sh:minCount                   0;
+        sh:path                       rak:pykala;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:kohta  rdf:type             sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Säädöskohta"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Paragraph"@en , "Punkt"@sv , "Kohta"@fi;
+        dcterms:created               "2024-05-30T10:43:26.844Z"^^xsd:dateTime;
+        dcterms:identifier            "kohta"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:26.844Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#integer";
+        sh:minCount                   0;
+        sh:path                       rak:kohta;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:saadoksennimi
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Name of statute"@en , "Författningens namn"@sv , "Säädöksen nimi"@fi;
+        dcterms:created               "2024-05-30T10:43:23.702Z"^^xsd:dateTime;
+        dcterms:identifier            "saadoksennimi"^^xsd:NCName;
+        dcterms:modified              "2025-05-14T14:10:15.848Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:saadoksennimi;
+        suomi-meta:modifier           "a33fddce-0ae4-4439-9655-12e39c2a1db7";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:saadoskokoelmanvuosi
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Year of statute collection"@en , "Författningssamlingens år"@sv , "Säädöskokoelman vuosi"@fi;
+        dcterms:created               "2024-05-30T10:43:21.387Z"^^xsd:dateTime;
+        dcterms:identifier            "saadoskokoelmanvuosi"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:21.387Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#integer";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:saadoskokoelmanvuosi;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:momentti  rdf:type          sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Säädöksen momentti"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Subsection"@en , "Moment"@sv , "Momentti"@fi;
+        dcterms:created               "2024-05-30T10:43:18.895Z"^^xsd:dateTime;
+        dcterms:identifier            "momentti"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:18.895Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#integer";
+        sh:minCount                   0;
+        sh:path                       rak:momentti;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:Saadosviite
+        rdf:type                      sh:NodeShape;
+        rdfs:comment                  "Säädös, johon esim. päätöksessä viitataan"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Författningshänvisning"@sv , "Säädösviite"@fi , "Statute"@en;
+        dcterms:created               "2024-03-11T06:19:40.337Z";
+        dcterms:identifier            "Saadosviite"^^xsd:NCName;
+        dcterms:modified              "2024-03-19T06:14:06.021Z";
+        sh:property                   ryhti-akr:alakohta , ryhti-akr:momentti , ryhti-akr:saadoskokoelmanvuosi , ryhti-akr:saadoksennimi , ryhti-akr:kohta , ryhti-akr:pykala , ryhti-akr:luku , ryhti-akr:saadoskokoelmannumero;
+        sh:targetClass                rak:Saadosviite;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:asiasana-1  rdf:type        sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Indeksointiin käytettävä sana tai sanaliitto, joka kuvaa tiettyä aihealuetta tai käsitettä.\n\nAsiasanojen käyttö suositellaan toteutettavaksi teknisesti  viittaamalla URI:na suoraan esimerkiksi FINTO:ssa julkaistuun ontologiaan."@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Ämnesord"@sv , "Keyword"@en , "Asiasana"@fi;
+        dcterms:created               "2024-05-30T10:43:25.835Z"^^xsd:dateTime;
+        dcterms:identifier            "asiasana-1"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:25.835Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   0;
+        sh:path                       tihatos:asiasana;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:asiasanantunnus
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Keyword identifier"@en , "Beteckning för ämnesord"@sv , "Asiasanan tunnus"@fi;
+        dcterms:created               "2024-05-30T10:43:25.207Z"^^xsd:dateTime;
+        dcterms:identifier            "asiasanantunnus"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:25.207Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#anyURI";
+        sh:maxCount                   1;
+        sh:minCount                   0;
+        sh:path                       rak:asiasanantunnus;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:asiasanasto
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Tiettyyn aihepiiriin koottu asiasanojen arvojoukko. Asiasana ja asiasanasto tulee esittää parina, jotta aina tiedetään mistä asiasanastosta kyseinen asiasana on poimittu.\n\nHuom! Asiasanasto on tarpeellinen metatieto vain tilanteissa, joissa EI käytetä Fintoon URI:lla viittaavaa \"asiasana\" -ominaisuutta."@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Ämnesordsregister"@sv , "Keyword list"@en , "Asiasanasto"@fi;
+        dcterms:created               "2024-05-30T10:43:19.874Z"^^xsd:dateTime;
+        dcterms:identifier            "asiasanasto"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:19.874Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   0;
+        sh:path                       tihatos:asiasanasto;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:Asiasana  rdf:type          sh:NodeShape;
+        rdfs:comment                  "indeksointiin käytettävä sana tai sanaliitto, joka kuvaa tiettyä aihealuetta tai käsitettä"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Ämnesord"@sv , "Keyword"@en , "Asiasana"@fi;
+        dcterms:created               "2024-03-11T05:20:20.775Z";
+        dcterms:identifier            "Asiasana"^^xsd:NCName;
+        dcterms:modified              "2024-03-11T05:20:20.775Z";
+        dcterms:subject               <https://iri.suomi.fi/terminology/jhs/J272>;
+        sh:property                   ryhti-akr:asiasana-1 , ryhti-akr:asiasanantunnus , ryhti-akr:asiasanasto;
+        sh:targetClass                rak:Asiasana;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:toimijaavain
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Toimijan avain"@fi , "Operator's key"@en , "Aktörens nyckel"@sv;
+        dcterms:created               "2024-05-30T10:43:30.353Z"^^xsd:dateTime;
+        dcterms:identifier            "toimijaavain"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T12:49:02.643Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:Toimija  rdf:type           sh:NodeShape;
+        rdfs:comment                  "The Agent class aggregates information about attributes or characteristics of agents (persons, organizations or software). Agent information serves to identify an agent unambiguously from all other Agent entities.\n<br>\n• May hold or grant one or more rights.\n<br>\n• May carry out, authorize, or compel one or more events.\n<br>\n• May create or act upon one or more objects through an event or with respect to a rights\nstatement."@en , "Keskinäisessä toiminnassa mukana oleva aktiivinen osallinen, joka voidaan yksilöidä."@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Operator"@en , "Aktör"@sv , "Toimija"@fi;
+        dcterms:created               "2024-03-11T06:27:23.981Z";
+        dcterms:identifier            "Toimija"^^xsd:NCName;
+        dcterms:modified              "2024-04-05T12:53:05.791Z";
+        dcterms:subject               <https://iri.suomi.fi/terminology/jhs/J231>;
+        sh:property                   ryhti-akr:toimijaavain;
+        sh:targetClass                rak:Toimija;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:kasittelytapahtumanlaji
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "käsittelytapahtuman laji"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Slag av behandlingshändelse"@sv , "Type of processing event"@en , "Käsittelytapahtuman laji"@fi;
+        dcterms:created               "2024-05-30T10:43:27.637Z"^^xsd:dateTime;
+        dcterms:identifier            "kasittelytapahtumanlaji"^^xsd:NCName;
+        dcterms:modified              "2025-05-14T14:01:59.673Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2000/01/rdf-schema#Literal";
+        sh:minCount                   1;
+        sh:path                       rak:kasittelytapahtumanlaji;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/rytj/AlueidenkayttopaatoksenNimi>;
+        suomi-meta:modifier           "a33fddce-0ae4-4439-9655-12e39c2a1db7";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:ylaluokka  rdf:type         sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "Yläluokka"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Upper category"@en , "Överkategori"@sv , "Yläluokka"@fi;
+        dcterms:created               "2024-05-30T10:43:22.78Z"^^xsd:dateTime;
+        dcterms:identifier            "ylaluokka"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:22.78Z"^^xsd:dateTime;
+        sh:class                      rak:Tapahtuma;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:Kasittelytapahtuma
+        rdf:type                      sh:NodeShape;
+        rdfs:comment                  "kaavan käsittelyprosessiin kuuluva tapahtuma, jonka johdosta elinkaaren tila tyypillisesti muuttuu"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Processing event"@en , "Behandlingshändelse"@sv , "Käsittelytapahtuma"@fi;
+        dcterms:created               "2024-03-11T05:21:42.169Z";
+        dcterms:identifier            "Kasittelytapahtuma"^^xsd:NCName;
+        dcterms:modified              "2024-04-08T05:26:39.501Z";
+        sh:property                   ryhti-akr:kasittelytapahtumanlaji , ryhti-akr:ylaluokka;
+        sh:targetClass                rak:Kasittelytapahtuma;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:alueidenkaytonrajoituksenasianvaiheenavain
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Key for area use restriction matter stage"@en , "Nyckel för skede i ärende som rör begränsning av områdesanvändningen"@sv , "Alueidenkäytön rajoituksen asian vaiheen avain"@fi;
+        dcterms:created               "2024-05-30T10:43:33.802Z"^^xsd:dateTime;
+        dcterms:identifier            "alueidenkaytonrajoituksenasianvaiheenavain"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T12:51:31.785Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:paatos-1  rdf:type          sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "viranomaisen ratkaisu asiakkaan asiassa"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Beslut"@sv , "Decision"@en , "Päätös"@fi;
+        dcterms:created               "2024-05-30T10:43:27.184Z"^^xsd:dateTime;
+        dcterms:identifier            "paatos-1"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T12:35:19.347Z"^^xsd:dateTime;
+        sh:class                      rak:AlueidenkaytonRajoituksenAsianPaatos;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:paatos_;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:asia  rdf:type              sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "käsiteltäväksi annettu tai otettu tehtävä, josta on saatava aikaan ratkaisu"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Asia"@fi;
+        dcterms:created               "2024-05-30T10:43:24.89Z"^^xsd:dateTime;
+        dcterms:identifier            "asia"^^xsd:NCName;
+        dcterms:modified              "2024-05-30T10:43:24.89Z"^^xsd:dateTime;
+        sh:class                      rak:AlueidenkaytonRajoituksenAsia;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       jhs:asia;
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:liittyvakasittelytapahtuma
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Relaterad behandlingshändelse"@sv , "Related processing event"@en , "Liittyvä käsittelytapahtuma"@fi;
+        dcterms:created               "2024-05-30T10:43:20.431Z"^^xsd:dateTime;
+        dcterms:identifier            "liittyvakasittelytapahtuma"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T12:35:08.286Z"^^xsd:dateTime;
+        sh:class                      rak:Kasittelytapahtuma;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:liittyvakasittelytapahtuma;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:elinkaarentila
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Life-cycle status"@en , "Livscykelstatus"@sv , "Elinkaaren tila"@fi;
+        dcterms:created               "2024-05-30T10:43:19.42Z"^^xsd:dateTime;
+        dcterms:identifier            "elinkaarentila"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T12:34:29.366Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2000/01/rdf-schema#Literal";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:elinkaarentila;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/rytj/alueidenkaytonRajoituksenElinkaarenTila>;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:AlueidenkaytonRajoituksenAsianVaihe
+        rdf:type                      sh:NodeShape;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Skede i ärende som rör begränsning av områdesanvändningen"@sv , "Area use restriction matter stage"@en , "Alueidenkäytön rajoituksen asian vaihe"@fi;
+        dcterms:created               "2024-03-28T13:31:23.852Z";
+        dcterms:identifier            "AlueidenkaytonRajoituksenAsianVaihe"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T12:52:31.525Z"^^xsd:dateTime;
+        sh:property                   ryhti-akr:alueidenkaytonrajoituksenasianvaiheenavain , ryhti-akr:paatos-1 , ryhti-akr:asia , ryhti-akr:liittyvakasittelytapahtuma , ryhti-akr:elinkaarentila;
+        sh:targetClass                rak:AlueidenkaytonRajoituksenAsianVaihe;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:liittyvatkiinteistot
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Related real-estates"@en , "Relaterade fastigheter"@sv , "Liittyvät kiinteistöt"@fi;
+        dcterms:created               "2025-05-14T13:54:50.03Z"^^xsd:dateTime;
+        dcterms:identifier            "liittyvatkiinteistot"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:50:55.082Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:minCount                   0;
+        sh:path                       <https://iri.suomi.fi/model/rak/1.0.2/liittyvatkiinteistot>;
+        suomi-meta:creator            "a33fddce-0ae4-4439-9655-12e39c2a1db7";
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:elinkaarentila-2
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Life-cycle status"@en , "Livscykelstatus"@sv , "Elinkaaren tila"@fi;
+        dcterms:created               "2024-05-30T10:43:34.548Z"^^xsd:dateTime;
+        dcterms:identifier            "elinkaarentila-2"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:47:01.649Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2000/01/rdf-schema#Literal";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:elinkaarentila;
+        suomi-meta:codeList           <http://uri.suomi.fi/codelist/rytj/alueidenkaytonRajoituksenElinkaarenTila>;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:geometriatieto
+        rdf:type                      owl:ObjectProperty , sh:PropertyShape;
+        rdfs:comment                  "kohteen muotoa kuvaava tieto"@fi , "data som beskriver objektets form"@sv;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Geometria"@fi , "Geometry"@en , "Geometri"@sv;
+        dcterms:created               "2024-05-30T10:43:34.248Z"^^xsd:dateTime;
+        dcterms:identifier            "geometriatieto"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T12:50:58.256Z"^^xsd:dateTime;
+        sh:class                      rak:Sijainti;
+        sh:maxCount                   1;
+        sh:minCount                   0;
+        sh:path                       rak:geometriatieto;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:voimassaolonalkamispaivamaara-1
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Voimassaolon alkamispäivämäärä"@fi , "Tid när giltighetstiden börjar"@sv , "Valid from"@en;
+        dcterms:created               "2024-05-30T10:43:33.139Z"^^xsd:dateTime;
+        dcterms:identifier            "voimassaolonalkamispaivamaara-1"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T12:47:35.563Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#dateTime";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:voimassaolonalkamispaivamaara;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:alueidenkaytonrajoituksenkohteenavain
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Key for area use restriction object"@en , "Nyckel för objekt som är föremål för begränsning av områdesanvändningen"@sv , "Alueidenkäytön rajoituksen kohteen avain"@fi;
+        dcterms:created               "2024-05-30T10:43:25.51Z"^^xsd:dateTime;
+        dcterms:identifier            "alueidenkaytonrajoituksenkohteenavain"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T12:53:29.305Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       owl:topDataProperty;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:alueidenkaytonrajoitus-1
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "suoraan laista johtuva tai viranomaisen kaavassa, rakennusjärjestyksessä tai erillisellä päätöksellä antama rajoitus, joka koskee alueidenkäytön järjestämistä tietyllä alueella"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Area use restriction"@en , "Begränsning av områdesanvändningen"@sv , "Alueidenkäytön rajoitus"@fi;
+        dcterms:created               "2024-05-30T10:43:22.651Z"^^xsd:dateTime;
+        dcterms:identifier            "alueidenkaytonrajoitus-1"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T12:47:11.283Z"^^xsd:dateTime;
+        sh:class                      rak:AlueidenkaytonRajoitus;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:alueidenkaytonrajoitus_;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:liittyvakaava
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Relaterade planer"@sv , "Related plans"@en , "Liittyvät kaavat"@fi;
+        dcterms:created               "2024-05-30T10:43:20.551Z"^^xsd:dateTime;
+        dcterms:identifier            "liittyvakaava"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T12:46:27.874Z"^^xsd:dateTime;
+        sh:class                      rak:Kaava;
+        sh:minCount                   0;
+        sh:path                       rak:liittyvakaava;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:voimassaolonloppumispaivamaara
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Valid until"@en , "Tid när giltighetstiden upphör"@sv , "Voimassaolon loppumispäivämäärä"@fi;
+        dcterms:created               "2024-05-30T10:43:18.248Z"^^xsd:dateTime;
+        dcterms:identifier            "voimassaolonloppumispaivamaara"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T12:47:49.689Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#dateTime";
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       rak:voimassaolonloppumispaivamaara;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:AlueidenkaytonRajoituksenKohde
+        rdf:type                      sh:NodeShape;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Alueidenkäytön rajoituksen kohde"@fi , "Objekt som är föremål för begränsning av områdesanvändningen"@sv , "Area use restriction object"@en;
+        dcterms:created               "2024-03-28T13:30:50.185Z";
+        dcterms:identifier            "AlueidenkaytonRajoituksenKohde"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:30:22.616Z"^^xsd:dateTime;
+        sh:property                   ryhti-akr:voimassaolonloppumispaivamaara , ryhti-akr:liittyvakaava , ryhti-akr:alueidenkaytonrajoitus-1 , ryhti-akr:alueidenkaytonrajoituksenkohteenavain , ryhti-akr:voimassaolonalkamispaivamaara-1 , ryhti-akr:geometriatieto , ryhti-akr:elinkaarentila-2 , ryhti-akr:liittyvatkiinteistot;
+        sh:targetClass                rak:AlueidenkaytonRajoituksenKohde;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:ylaluokka-2
+        rdf:type                      sh:PropertyShape , owl:ObjectProperty;
+        rdfs:comment                  "Yläluokka"@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Upper category"@en , "Överkategori"@sv , "Yläluokka"@fi;
+        dcterms:created               "2024-05-30T10:43:25.042Z"^^xsd:dateTime;
+        dcterms:identifier            "ylaluokka-2"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:24:06.795Z"^^xsd:dateTime;
+        sh:class                      rak:Toimija;
+        sh:maxCount                   1;
+        sh:minCount                   1;
+        sh:path                       owl:topObjectProperty;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:ytunnus  rdf:type           sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Organisaation yritys- ja yhteisötunnus."@fi;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "FO-nummer"@sv , "Business identity code"@en , "Y-tunnus"@fi;
+        dcterms:created               "2024-05-30T10:43:20.666Z"^^xsd:dateTime;
+        dcterms:identifier            "ytunnus"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:17:09.319Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:path                       jhs:ytunnus;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:uuid-53663115-2c01-491a-844f-68727581c79f
+        rdf:type                      sh:PropertyShape , owl:DatatypeProperty;
+        rdfs:comment                  "Organisaation nimi"@fi , "A primary name, e.g. a legally recognized name"@en;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Namn"@sv , "Name"@en , "Nimi"@fi;
+        dcterms:created               "2024-05-30T10:43:18.34Z"^^xsd:dateTime;
+        dcterms:identifier            "uuid-53663115-2c01-491a-844f-68727581c79f"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:16:52.279Z"^^xsd:dateTime;
+        sh:datatype                   "http://www.w3.org/2001/XMLSchema#string";
+        sh:path                       jhs:nimi;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:Organisaatio
+        rdf:type                      sh:NodeShape;
+        rdfs:comment                  "Organisaatiolla tarkoitetaan tiettyä toimintaa varten perustettua sosiaalista järjestelmää, jolla on määritellyt tavoitteet ja tarkoituksellisesti luotu rakenne. Organisaatio-luokka kattaa mm. kaikki yritysmuodot ja kaikki rekisteröidyt organisaatiot, jotka yleensä ovat oikeushenkilöitä, mutta myös löyhemmät ryhmittymät joilla ei ole virallista statusta."@fi , "a social system set up for a specific purpose/for a specific activity, which has defined objectives and a deliberately created structure"@en;
+        rdfs:isDefinedBy              ryhti-akr:;
+        rdfs:label                    "Organisaatio"@fi , "Organization"@en , "Organisation"@sv;
+        dcterms:created               "2024-04-05T12:50:06.884Z";
+        dcterms:identifier            "Organisaatio"^^xsd:NCName;
+        dcterms:modified              "2025-12-02T10:16:39.888Z"^^xsd:dateTime;
+        dcterms:subject               <https://iri.suomi.fi/terminology/jhs/J132>;
+        sh:property                   ryhti-akr:uuid-53663115-2c01-491a-844f-68727581c79f , ryhti-akr:ytunnus , ryhti-akr:ylaluokka-2;
+        sh:targetClass                rak:Organisaatio;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+ryhti-akr:  rdf:type                  owl:Ontology , suomi-meta:ApplicationProfile;
+        rdfs:comment                  "Tietomalli, jonka mukaisesti voi laatia koneluettavia ja yhteentoimivia alueidenkäytön rajoituksia eli rakentamisrajoituksia, rakennuskieltoja, toimenpidekieltoja ja suunnittelutarvealueita. Tietomallia käytetään rakennetun ympäristön tietojärjestelmän alueidenkäytön tietovarannon rakentamisen pohjana."@fi;
+        rdfs:label                    "Alueidenkäytön rajoitusten tietomalli"@fi , "Data model for restrictions on land use"@en , "Datamodell för begränsningar av områdesanvändningen"@sv;
+        dcterms:contributor           <urn:uuid:85cd3d52-5b61-49be-ab18-c316bb5eb77f>;
+        dcterms:created               "2024-03-11T05:16:29.979Z";
+        dcterms:identifier            "187539ca-aed4-44eb-b859-cdb92f578c54";
+        dcterms:isPartOf              <http://urn.fi/URN:NBN:fi:au:ptvl:v1007>;
+        dcterms:language              "fi" , "sv" , "en";
+        dcterms:modified              "2025-12-02T14:18:14.546Z"^^xsd:dateTime;
+        dcterms:requires              "https://iri.suomi.fi/terminology/jhs";
+        dcterms:requires              <http://uri.suomi.fi/codelist/rytj/alueidenkaytonRajoituksenKasittelytapahtumanLaji> , <http://uri.suomi.fi/codelist/rytj/AlueidenkaytonPaatoksenNimi> , <http://uri.suomi.fi/codelist/rytj/asiakirjanLaji> , <http://uri.suomi.fi/codelist/rytj/alueidenkaytonRajoituksenLaji> , <http://uri.suomi.fi/codelist/rytj/alueidenkaytonRajoituksenElinkaarenTila> , <http://uri.suomi.fi/codelist/rytj/AlueidenkayttopaatoksenNimi> , <http://uri.suomi.fi/codelist/rytj/RY_TonttijakosuunnitelmanKasittelytapahtumanLaji> , <http://uri.suomi.fi/codelist/rytj/kaavakastap> , <http://uri.suomi.fi/codelist/rytj/korkeuskoordinaattijarjestelma> , <http://uri.suomi.fi/codelist/rytj/RY_DigitaalinenAlkupera> , <http://uri.suomi.fi/codelist/rytj/PaatoksenTekija> , <http://uri.suomi.fi/codelist/rytj/henkilotietosisalto> , <http://uri.suomi.fi/codelist/rytj/ryhtikielet> , <http://uri.suomi.fi/codelist/rytj/sailytysaika> , <http://uri.suomi.fi/codelist/rytj/julkisuus> , <http://uri.suomi.fi/codelist/rakrek/ETRS89> , <https://iri.suomi.fi/terminology/jhs/> , kmr: , <https://iri.suomi.fi/terminology/rakymp/> , <https://iri.suomi.fi/model/rak/1.0.2/> , jhs: , rak: , edu: , tihatos:;
+        dcap:preferredXMLNamespace    "https://iri.suomi.fi/model/ryhti-akr/";
+        dcap:preferredXMLNamespacePrefix
+                "ryhti-akr";
+        owl:imports                   kss: , owl:;
+        owl:priorVersion              <https://iri.suomi.fi/model/ryhti-akr/1.0.4/>;
+        owl:versionIRI                <https://iri.suomi.fi/model/ryhti-akr/1.0.5/>;
+        owl:versionInfo               "1.0.5";
+        suomi-meta:contentModified    "2024-05-30T10:43:10.278Z"^^xsd:dateTime;
+        suomi-meta:documentation      "**Muutoshistoria**\n\n2.12.2025 - v. 1.0.5\n- Lisätty ruotsin- ja englanninkieliset käännökset ja julkaistu Ehdotus-tilassa versio 1.0.5. \n\n7.10.2025\n- Alueidenkäytön rajoituksen asia: Alueidenkäytön rajoituksen laji 1..1 -> 1..*\n\n9.1.2025\n- Alueidenkäytön rajoituksen asian päätös: Päivämäärä -> Päätöspäivämäärä\n\n9.10.2024 - v. 1.0.2\n- Alueidenkäytön rajoitusten kumoamistieto: Luokka poistettu\n\n8.10.2024 - v. 1.0.1\n- Tapahtuma: Poistettu attribuutit Lisätietolinkki, Peruttu ja Sijainti & assosiaatio Liiteasiakirja\n- Tapahtuma: Kuvaus 0..1\n- Alueidenkäytön rajoituksen asia: Kuvaus 0..1\n- Alueidenkäytön rajoituksen asian vaihe: Poistettu assosiaatio Alueidenkäytön rajoituksen kumoutumistieto\n- Alueidenkäytön rajoitus: Poistettu assosisaatio Laatija. Assosiaatio Alueidenkäytön rajoituksen kohde 1..*.\n- Asiakirja: Lisätty assosiaatio Liittyvä asiakirja\n"@fi , ""@sv , ""@en;
+        suomi-meta:modifier           "2090218f-2ef2-4c15-bab9-00ff65f5ad9d";
+        suomi-meta:publicationStatus  <http://yti-fuseki-v4:3031/core/VALID> .
+
+owl:    rdfs:label  "owl"@sv , "owl"@en , "owl"@fi;
+        dcap:preferredXMLNamespacePrefix
+                "owl" .

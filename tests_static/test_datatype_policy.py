@@ -81,7 +81,7 @@ def test_refinements_preserve_shacl_types_in_all_artifacts_and_real_jsonld(page,
     ('sh:datatype "http://www.w3.org/2001/XMLSchema#date"','DATATYPE_TERM','sourceError'),
     ('sh:datatype rdfs:Literal','DATATYPE_REPRESENTATION_REQUIRED','generatorLimit'),
     ('sh:nodeKind sh:Literal','DATATYPE_REPRESENTATION_REQUIRED','generatorLimit'),
-    ('sh:datatype <http://www.w3.org/1999/02/22-rdf-syntax-ns#langString>','DATATYPE_UNSUPPORTED','generatorLimit'),
+    ('sh:datatype <http://www.w3.org/1999/02/22-rdf-syntax-ns#langString>','LANGUAGE_REPRESENTATION_REQUIRED','decisionRequired'),
     ('sh:datatype xsd:duration','DATATYPE_UNSUPPORTED','generatorLimit'),
 ])
 def test_term_support_and_representation_errors_are_distinct(page,static_site,replacement,rule,category):
@@ -184,7 +184,7 @@ ex:dateOfIssue rdfs:range rdfs:Literal .'''
 
 @pytest.mark.parametrize('datatype,code,source_error',[
     ('"http://www.w3.org/2001/XMLSchema#date"','DATATYPE_TERM',True),
-    ('<http://www.w3.org/1999/02/22-rdf-syntax-ns#langString>','DATATYPE_UNSUPPORTED',False),
+    ('<http://www.w3.org/1999/02/22-rdf-syntax-ns#langString>','LANGUAGE_REPRESENTATION_REQUIRED',False),
 ])
 def test_ui_datatype_diagnostic_separates_source_error_and_support_limit(page,static_site,datatype,code,source_error):
     text=TEXT.replace('sh:datatype xsd:date','sh:datatype '+datatype)
@@ -206,7 +206,7 @@ def test_ui_datatype_diagnostic_separates_source_error_and_support_limit(page,st
         expect(region).to_contain_text('literaalitermin oma tietotyyppi: '+X+'string')
     else:
         expect(region).not_to_contain_text('Korjaa lähde ja tuo uusi Turtle-export.')
-        expect(region).to_contain_text('Generaattorin tukirajoite')
+        expect(region).to_contain_text('Puuttuva esityspäätös')
 
 
 def test_literal_nodekind_uri_does_not_become_a_namednode(page,static_site):

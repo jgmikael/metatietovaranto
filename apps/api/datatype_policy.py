@@ -26,7 +26,7 @@ def datatype_issue(datatype, node_kind, supported):
         import re
         suggestion = ('sh:datatype <'+value+'> .' if re.fullmatch(r'[A-Za-z][A-Za-z0-9+.-]*:[^\s<>"{}|^`\\]+', value)
                       else 'Anna sh:datatype-arvoksi tarkoitetun konkreettisen tietotyypin IRI.')
-        return 'DATATYPE_TERM', 'sourceError', 'sh:datatype tarvitsee IRI:n, ei literaalia.', suggestion
+        return 'DATATYPE_TERM', 'sourceError', 'sh:datatype tarvitsee IRI:n, ei literaalia.'+(' Lainattu rdfs:Literal ei myöskään määritä konkreettista tyyppiä; älä oleta xsd:stringiä.' if value==str(RDFS.Literal) else ''), suggestion
     if datatype == RDFS.Literal or datatype is None and isinstance(node_kind, URIRef) and str(node_kind) == 'http://www.w3.org/ns/shacl#Literal':
         return 'DATATYPE_REPRESENTATION_REQUIRED', 'generatorLimit', 'Konkreettinen literaalin esitysratkaisu puuttuu. sh:datatype rdfs:Literal ei tarkoita mitä tahansa literaalia; sh:nodeKind sh:Literal jättää konkreettisen tyypin avoimeksi.', None
     if datatype is not None and str(datatype) not in supported:
